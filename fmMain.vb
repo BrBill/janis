@@ -50,7 +50,7 @@ Public Class fmMain
     Private components As System.ComponentModel.IContainer
 
     'NOTE: The following procedure is required by the Windows Form Designer
-    'It can be modified using the Windows Form Designer.
+    'It can be modified using the Windows Form Designer.  
     'Do not modify it using the code editor.
     Friend WithEvents btnBlackout As System.Windows.Forms.Button
     Friend WithEvents tbLeftTeam As System.Windows.Forms.TextBox
@@ -224,6 +224,10 @@ Public Class fmMain
     Friend WithEvents tbHBfile7 As System.Windows.Forms.TextBox
     Friend WithEvents tbHBfile10 As System.Windows.Forms.TextBox
     Friend WithEvents tbHBfile9 As System.Windows.Forms.TextBox
+    Friend WithEvents btnClearTextRight As System.Windows.Forms.Button
+    Friend WithEvents btnClearTextLeft As System.Windows.Forms.Button
+    Friend WithEvents Label15 As System.Windows.Forms.Label
+    Friend WithEvents Button1 As System.Windows.Forms.Button
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Me.btnBlackout = New System.Windows.Forms.Button()
@@ -258,6 +262,10 @@ Public Class fmMain
         Me.btnRightScoreColor = New System.Windows.Forms.Button()
         Me.TabControl1 = New System.Windows.Forms.TabControl()
         Me.tpScreenText = New System.Windows.Forms.TabPage()
+        Me.Button1 = New System.Windows.Forms.Button()
+        Me.Label15 = New System.Windows.Forms.Label()
+        Me.btnClearTextRight = New System.Windows.Forms.Button()
+        Me.btnClearTextLeft = New System.Windows.Forms.Button()
         Me.btnLeftTextRight = New System.Windows.Forms.Button()
         Me.btnRightTextLeft = New System.Windows.Forms.Button()
         Me.btnBothTextScreens = New System.Windows.Forms.Button()
@@ -678,13 +686,57 @@ Public Class fmMain
         '
         'tpScreenText
         '
-        Me.tpScreenText.Controls.AddRange(New System.Windows.Forms.Control() {Me.btnLeftTextRight, Me.btnRightTextLeft, Me.btnBothTextScreens, Me.btnDocLoadBoth, Me.btnDocLoadRight, Me.btnDocLoadLeft, Me.Label11, Me.Label10, Me.btnLeftTextBoth, Me.btnShowLeftText, Me.tbLeftText, Me.tbRightFontSize, Me.grpRightColors, Me.btnRightTextBoth, Me.btnShowRightText, Me.tbRightText, Me.tbLeftFontSize, Me.grpLeftColors})
+        Me.tpScreenText.BackColor = System.Drawing.Color.Transparent
+        Me.tpScreenText.Controls.AddRange(New System.Windows.Forms.Control() {Me.Button1, Me.Label15, Me.btnClearTextRight, Me.btnClearTextLeft, Me.btnLeftTextRight, Me.btnRightTextLeft, Me.btnBothTextScreens, Me.btnDocLoadBoth, Me.btnDocLoadRight, Me.btnDocLoadLeft, Me.Label11, Me.Label10, Me.btnLeftTextBoth, Me.btnShowLeftText, Me.tbLeftText, Me.tbRightFontSize, Me.grpRightColors, Me.btnRightTextBoth, Me.btnShowRightText, Me.tbRightText, Me.tbLeftFontSize, Me.grpLeftColors})
         Me.tpScreenText.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.tpScreenText.Location = New System.Drawing.Point(4, 25)
         Me.tpScreenText.Name = "tpScreenText"
         Me.tpScreenText.Size = New System.Drawing.Size(764, 331)
         Me.tpScreenText.TabIndex = 0
         Me.tpScreenText.Text = "Screen Text"
+        '
+        'Button1
+        '
+        Me.Button1.BackColor = System.Drawing.Color.Transparent
+        Me.Button1.Font = New System.Drawing.Font("Wingdings", 15.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
+        Me.Button1.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.Button1.Location = New System.Drawing.Point(364, 56)
+        Me.Button1.Name = "Button1"
+        Me.Button1.Size = New System.Drawing.Size(36, 36)
+        Me.Button1.TabIndex = 56
+        Me.Button1.Text = "ó"
+        '
+        'Label15
+        '
+        Me.Label15.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label15.Location = New System.Drawing.Point(332, 100)
+        Me.Label15.Name = "Label15"
+        Me.Label15.Size = New System.Drawing.Size(96, 16)
+        Me.Label15.TabIndex = 55
+        Me.Label15.Text = "CLEAR TEXT"
+        Me.Label15.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
+        'btnClearTextRight
+        '
+        Me.btnClearTextRight.BackColor = System.Drawing.Color.Transparent
+        Me.btnClearTextRight.Font = New System.Drawing.Font("Wingdings", 15.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
+        Me.btnClearTextRight.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.btnClearTextRight.Location = New System.Drawing.Point(420, 56)
+        Me.btnClearTextRight.Name = "btnClearTextRight"
+        Me.btnClearTextRight.Size = New System.Drawing.Size(36, 36)
+        Me.btnClearTextRight.TabIndex = 54
+        Me.btnClearTextRight.Text = "ð"
+        '
+        'btnClearTextLeft
+        '
+        Me.btnClearTextLeft.BackColor = System.Drawing.Color.Transparent
+        Me.btnClearTextLeft.Font = New System.Drawing.Font("Wingdings", 15.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
+        Me.btnClearTextLeft.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.btnClearTextLeft.Location = New System.Drawing.Point(308, 56)
+        Me.btnClearTextLeft.Name = "btnClearTextLeft"
+        Me.btnClearTextLeft.Size = New System.Drawing.Size(36, 36)
+        Me.btnClearTextLeft.TabIndex = 53
+        Me.btnClearTextLeft.Text = "ï"
         '
         'btnLeftTextRight
         '
@@ -704,7 +756,7 @@ Public Class fmMain
         '
         'btnBothTextScreens
         '
-        Me.btnBothTextScreens.Location = New System.Drawing.Point(328, 132)
+        Me.btnBothTextScreens.Location = New System.Drawing.Point(328, 204)
         Me.btnBothTextScreens.Name = "btnBothTextScreens"
         Me.btnBothTextScreens.Size = New System.Drawing.Size(108, 40)
         Me.btnBothTextScreens.TabIndex = 39
@@ -782,7 +834,7 @@ Public Class fmMain
         Me.tbLeftText.Name = "tbLeftText"
         Me.tbLeftText.Size = New System.Drawing.Size(280, 210)
         Me.tbLeftText.TabIndex = 38
-        Me.tbLeftText.Text = "JANIS v1.14" & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "(Dual Display)" & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "by" & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "Bill Cernansky"
+        Me.tbLeftText.Text = "JANIS v1.15" & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "(Dual Display)" & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "by" & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "Bill Cernansky"
         Me.tbLeftText.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'tbRightFontSize
@@ -1935,7 +1987,7 @@ Public Class fmMain
         Me.TextBox1.TabIndex = 90
         Me.TextBox1.TabStop = False
         Me.TextBox1.Text = "ComedySportz JANIS" & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "(Just Another Nice Improv Scorekeeper)" & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "Dual Display version " & _
-        "1.14  Released Sep. 20, 2005" & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "by Bill Cernansky ( bill@easybeing.com )"
+        "1.15  Released Sep. 24, 2005" & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "by Bill Cernansky ( bill@easybeing.com )"
         Me.TextBox1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'SlideTimer
@@ -2146,6 +2198,16 @@ Public Class fmMain
         End If
     End Sub
 
+    Private Sub btnClearTextLeft_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnClearTextLeft.Click
+        Me.tbLeftText.Text = ""
+    End Sub
+    Private Sub btnClearTextRight_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnClearTextRight.Click
+        Me.tbRightText.Text = ""
+    End Sub
+    Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button1.Click
+        btnClearTextLeft_Click(sender, e)
+        btnClearTextRight_Click(sender, e)
+    End Sub
     Private Sub btnShowLeftText_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnShowLeftText.Click
         DisplayTextScreen(Me.LS, Me.tbLeftText.Text, Me.tbLeftText.BackColor, CSng(Me.tbLeftFontSize.Text) * Me.DisplayFontRatio)
     End Sub
@@ -2484,7 +2546,7 @@ Public Class fmMain
         '* Returns blank if you don't pick a legal file
         Dim fn As String = ""
         Dim of As New OpenFileDialog()
-        of.Filter = "Image Files(*.BMP;*.GIF;*.JPG;*.WMF)|*.BMP;*.GIF;*.JPG;*.WMF"
+        of.Filter = "Image Files(*.BMP;*.GIF;*.JPG;*.PNG;*.WMF)|*.BMP;*.GIF;*.JPG;*.PNG;*.WMF"
         of.InitialDirectory = ROOT_SUPPORT_DIR
         If of.ShowDialog(Me) = DialogResult.OK Then
             fn = of.FileName

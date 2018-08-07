@@ -1,3 +1,8 @@
+v1.15: 2005-09-24
+*  .PNG files now available from image dialogs
+*  "Clear Text" buttons added to text tab.
+*  Released to Portland only.
+
 v1.14: 2005-09-21
 *  Now supports resolutions higher than 800x600 on control display. Adjusts other windows to
    compensate.
