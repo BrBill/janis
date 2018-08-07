@@ -145,6 +145,14 @@
                     Lcid = "0"
                     WrapperTool = "primary"
                 />
+                <Reference
+                    Name = "stdole4"
+                    Guid = "{00020430-0000-0000-C000-000000000046}"
+                    VersionMajor = "2"
+                    VersionMinor = "0"
+                    Lcid = "0"
+                    WrapperTool = "primary"
+                />
             </References>
             <Imports>
                 <Import Namespace = "Microsoft.VisualBasic" />

@@ -116,7 +116,7 @@ Public Class fmScreen
         Me.AutoScaleBaseSize = New System.Drawing.Size(5, 13)
         Me.BackColor = System.Drawing.Color.FromArgb(CType(0, Byte), CType(0, Byte), CType(192, Byte))
         Me.ClientSize = New System.Drawing.Size(800, 600)
-        Me.Controls.AddRange(New System.Windows.Forms.Control() {Me.lblTeamNameLeft, Me.lblMsg, Me.picGraphic, Me.lblScoreLeft, Me.lblScoreRight, Me.lblTeamNameRight})
+        Me.Controls.AddRange(New System.Windows.Forms.Control() {Me.lblTeamNameLeft, Me.lblMsg, Me.picGraphic, Me.lblScoreLeft, Me.lblTeamNameRight, Me.lblScoreRight})
         Me.ForeColor = System.Drawing.Color.White
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None
         Me.Location = New System.Drawing.Point(800, 0)

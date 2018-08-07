@@ -678,7 +678,7 @@ Public Class fmMain
         Me.tbLeftText.Name = "tbLeftText"
         Me.tbLeftText.Size = New System.Drawing.Size(280, 210)
         Me.tbLeftText.TabIndex = 38
-        Me.tbLeftText.Text = "JANIS v1.13a" & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "(Single Display)" & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "by" & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "Bill Cernansky"
+        Me.tbLeftText.Text = "JANIS v1.14" & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "(Single Display)" & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "by" & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "Bill Cernansky"
         Me.tbLeftText.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'tbRightFontSize
@@ -1793,7 +1793,7 @@ Public Class fmMain
         Me.TextBox1.TabIndex = 90
         Me.TextBox1.TabStop = False
         Me.TextBox1.Text = "ComedySportz JANIS" & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "(Just Another Nice Improv Scorekeeper)" & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "Single Display versio" & _
-        "n 1.13a   Released Sep. 15, 2005" & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "by Bill Cernansky ( bill@easybeing.com )"
+        "n 1.14   Released Sep. 20, 2005" & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "by Bill Cernansky ( bill@easybeing.com )"
         Me.TextBox1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'SlideTimer
@@ -1929,10 +1929,11 @@ Public Class fmMain
 #End Region
 
     Private Sub Form1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
-        LeftDefaultColor = Me.tbLeftText.BackColor
-        RightDefaultColor = Me.tbRightText.BackColor
-        radioThingColorLeft.BackColor = LeftDefaultColor
-        radioThingColorRight.BackColor = RightDefaultColor
+        Me.Left = SystemInformation.PrimaryMonitorSize.Width - Me.Width
+        Me.LeftDefaultColor = Me.tbLeftText.BackColor
+        Me.RightDefaultColor = Me.tbRightText.BackColor
+        Me.radioThingColorLeft.BackColor = Me.LeftDefaultColor
+        Me.radioThingColorRight.BackColor = Me.RightDefaultColor
         Me.tbCurrentThing.Visible = False
         Me.tbSubstitutions.Visible = False
         Me.btnShowThingLeft.Visible = False
@@ -2135,7 +2136,7 @@ Public Class fmMain
             Me.tbRightText.Text = "TEST MODE"
             Me.Text = Me.Text + "   **** TEST MODE ****"
         Else
-            Me.LS.Left = 800  'Don't really need to set this, but I'm doing it anyway
+            Me.LS.Left = SystemInformation.PrimaryMonitorSize.Width
             Me.tbRightText.Text = "Arena Mode (Single)"
             Me.Text = Me.Text + " - Arena Mode (Single)"
         End If
