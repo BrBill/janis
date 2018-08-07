@@ -780,7 +780,7 @@ Public Class fmMain
         Me.tbLeftText.Name = "tbLeftText"
         Me.tbLeftText.Size = New System.Drawing.Size(280, 210)
         Me.tbLeftText.TabIndex = 38
-        Me.tbLeftText.Text = "JANIS v1.12" & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "by" & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "Bill Cernansky"
+        Me.tbLeftText.Text = "JANIS v1.13" & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "by" & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "Bill Cernansky"
         Me.tbLeftText.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'tbRightFontSize
@@ -1932,8 +1932,8 @@ Public Class fmMain
         Me.TextBox1.Size = New System.Drawing.Size(752, 104)
         Me.TextBox1.TabIndex = 90
         Me.TextBox1.TabStop = False
-        Me.TextBox1.Text = "ComedySportz JANIS" & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "(Just Another Nice Improv Scorekeeper)" & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "version 1.12   Releas" & _
-        "ed Nov. 04, 2004" & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "by Bill Cernansky ( bill@easybeing.com )"
+        Me.TextBox1.Text = "ComedySportz JANIS" & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "(Just Another Nice Improv Scorekeeper)" & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "version 1.13   Releas" & _
+        "ed Jul. 19, 2005" & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "by Bill Cernansky ( bill@easybeing.com )"
         Me.TextBox1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'SlideTimer
@@ -2102,7 +2102,7 @@ Public Class fmMain
         If MyDir = "" Then MkDir(ROOT_SUPPORT_DIR + DEFAULT_HOTBUTTON_DIR)
 
         Me.HotButtonsChanged = False
-        Me.cbHBActive.Checked = False    '* default to "can't see"
+        Me.cbHBActive.Checked = True    '* default to "can't see"
 
         '* The FolderTree control can't be selected programmatically
         '* (what the hell was the guy thinking), but we can expand it down to the
@@ -2628,6 +2628,7 @@ Public Class fmMain
     End Sub
 
     Private Sub btnList_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnListLeft.Click, btnListRight.Click, btnListBoth.Click
+        Dim ThingsFontSize As Single = 16
         Dim i As Integer
         Dim s As String
         For i = 0 To (Me.clbThings.Items.Count - 1)
@@ -2635,8 +2636,20 @@ Public Class fmMain
             If Me.clbThings.CheckedIndices.Contains(i) Then s = s + ChrW(&H25BA)
             s = s + (i + 1).ToString + ". " + Me.clbThings.Items.Item(i)
         Next
-        If sender.name <> "btnListRight" Then DisplayTextScreen(Me.LS, s, Me.clbThings.BackColor, 16)
-        If sender.name <> "btnListLeft" Then DisplayTextScreen(Me.RS, s, Me.clbThings.BackColor, 16)
+
+        If (Me.clbThings.Items.Count > 4) Then
+            If (s.Length > 200) Then
+                ThingsFontSize = 11
+            ElseIf (s.Length > 160) Or (Me.clbThings.Items.Count > 8) Then
+                ThingsFontSize = 12
+            ElseIf (s.Length > 130) Or (Me.clbThings.Items.Count > 6) Then
+                ThingsFontSize = 14
+            End If
+        End If
+        ' s = s + " " + s.Length.ToString
+
+        If sender.name <> "btnListRight" Then DisplayTextScreen(Me.LS, s, Me.clbThings.BackColor, ThingsFontSize)
+        If sender.name <> "btnListLeft" Then DisplayTextScreen(Me.RS, s, Me.clbThings.BackColor, ThingsFontSize)
     End Sub
     Private Sub btnShowThing_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnShowThingLeft.Click, btnShowThingRight.Click, btnShowThingBoth.Click
         Dim s As String
