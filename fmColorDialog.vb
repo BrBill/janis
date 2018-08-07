@@ -512,7 +512,7 @@ Public Class fmColorDialog
         '
         'Panel40
         '
-        Me.Panel40.BackColor = System.Drawing.Color.FromArgb(CType(0, Byte), CType(0, Byte), CType(192, Byte))
+        Me.Panel40.BackColor = System.Drawing.Color.FromArgb(CType(0, Byte), CType(0, Byte), CType(176, Byte))
         Me.Panel40.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.Panel40.Location = New System.Drawing.Point(152, 80)
         Me.Panel40.Name = "Panel40"

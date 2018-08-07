@@ -1,3 +1,22 @@
+v1.12: 2004-11-04
+*  HotButtons functionality added
+*  Fixed: Errors occurred if focus was in 5 Things "thing name" edit box and thing was deleted
+   by any method
+*  Enhancement: Create default program dirs if they are not there
+*  Put my name on startup screen 'cause I'm an attention slut
+*  Added test/Arena modes.
+*  Added monitor detection code.
+*  dual-screen only
+
+v1.11: 2004-10-10
+*  moved to a darker shade of red for red team
+*  added capability of text from either right or left side to be displayed right, left, or both monitors
+*  text simul-show added
+*  force the slide show folder selection tree into the default directory at program start
+*  double-click of slideshow list entry causes that slide to display
+*  reverse video on slideshow play button when slideshow is active
+*  dual-screen only
+
 v1.10: 2003-12-16
 *  text preview to audience monitor screen ratio decreased slightly
 *  easter egg added
