@@ -209,6 +209,10 @@ Public Class fmMain
     Friend WithEvents tbHBfile9 As System.Windows.Forms.TextBox
     Friend WithEvents btnShowRightText As System.Windows.Forms.Button
     Friend WithEvents btnShowLeftText As System.Windows.Forms.Button
+    Friend WithEvents Button1 As System.Windows.Forms.Button
+    Friend WithEvents Label15 As System.Windows.Forms.Label
+    Friend WithEvents btnClearTextRight As System.Windows.Forms.Button
+    Friend WithEvents btnClearTextLeft As System.Windows.Forms.Button
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Me.btnBlackout = New System.Windows.Forms.Button()
@@ -238,6 +242,10 @@ Public Class fmMain
         Me.btnRightScoreColor = New System.Windows.Forms.Button()
         Me.TabControl1 = New System.Windows.Forms.TabControl()
         Me.tpScreenText = New System.Windows.Forms.TabPage()
+        Me.Button1 = New System.Windows.Forms.Button()
+        Me.Label15 = New System.Windows.Forms.Label()
+        Me.btnClearTextRight = New System.Windows.Forms.Button()
+        Me.btnClearTextLeft = New System.Windows.Forms.Button()
         Me.btnDocLoadBoth = New System.Windows.Forms.Button()
         Me.btnDocLoadRight = New System.Windows.Forms.Button()
         Me.btnDocLoadLeft = New System.Windows.Forms.Button()
@@ -398,7 +406,7 @@ Public Class fmMain
         Me.tbLeftTeam.BackColor = System.Drawing.SystemColors.Window
         Me.tbLeftTeam.ForeColor = System.Drawing.SystemColors.WindowText
         Me.tbLeftTeam.Location = New System.Drawing.Point(88, 4)
-        Me.tbLeftTeam.MaxLength = 18
+        Me.tbLeftTeam.MaxLength = 20
         Me.tbLeftTeam.Name = "tbLeftTeam"
         Me.tbLeftTeam.Size = New System.Drawing.Size(136, 20)
         Me.tbLeftTeam.TabIndex = 1
@@ -410,7 +418,7 @@ Public Class fmMain
         Me.tbRightTeam.BackColor = System.Drawing.SystemColors.Window
         Me.tbRightTeam.ForeColor = System.Drawing.SystemColors.WindowText
         Me.tbRightTeam.Location = New System.Drawing.Point(544, 4)
-        Me.tbRightTeam.MaxLength = 18
+        Me.tbRightTeam.MaxLength = 20
         Me.tbRightTeam.Name = "tbRightTeam"
         Me.tbRightTeam.Size = New System.Drawing.Size(136, 20)
         Me.tbRightTeam.TabIndex = 8
@@ -606,13 +614,56 @@ Public Class fmMain
         '
         'tpScreenText
         '
-        Me.tpScreenText.Controls.AddRange(New System.Windows.Forms.Control() {Me.btnDocLoadBoth, Me.btnDocLoadRight, Me.btnDocLoadLeft, Me.Label11, Me.Label10, Me.btnShowLeftText, Me.tbLeftText, Me.tbRightFontSize, Me.grpRightColors, Me.btnShowRightText, Me.tbRightText, Me.tbLeftFontSize, Me.grpLeftColors})
+        Me.tpScreenText.Controls.AddRange(New System.Windows.Forms.Control() {Me.Button1, Me.Label15, Me.btnClearTextRight, Me.btnClearTextLeft, Me.btnDocLoadBoth, Me.btnDocLoadRight, Me.btnDocLoadLeft, Me.Label11, Me.Label10, Me.btnShowLeftText, Me.tbLeftText, Me.tbRightFontSize, Me.grpRightColors, Me.btnShowRightText, Me.tbRightText, Me.tbLeftFontSize, Me.grpLeftColors})
         Me.tpScreenText.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.tpScreenText.Location = New System.Drawing.Point(4, 25)
         Me.tpScreenText.Name = "tpScreenText"
         Me.tpScreenText.Size = New System.Drawing.Size(764, 331)
         Me.tpScreenText.TabIndex = 0
         Me.tpScreenText.Text = "Screen Text"
+        '
+        'Button1
+        '
+        Me.Button1.BackColor = System.Drawing.Color.Transparent
+        Me.Button1.Font = New System.Drawing.Font("Wingdings", 15.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
+        Me.Button1.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.Button1.Location = New System.Drawing.Point(364, 128)
+        Me.Button1.Name = "Button1"
+        Me.Button1.Size = New System.Drawing.Size(36, 36)
+        Me.Button1.TabIndex = 60
+        Me.Button1.Text = "ó"
+        '
+        'Label15
+        '
+        Me.Label15.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label15.Location = New System.Drawing.Point(332, 172)
+        Me.Label15.Name = "Label15"
+        Me.Label15.Size = New System.Drawing.Size(96, 16)
+        Me.Label15.TabIndex = 59
+        Me.Label15.Text = "CLEAR TEXT"
+        Me.Label15.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
+        'btnClearTextRight
+        '
+        Me.btnClearTextRight.BackColor = System.Drawing.Color.Transparent
+        Me.btnClearTextRight.Font = New System.Drawing.Font("Wingdings", 15.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
+        Me.btnClearTextRight.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.btnClearTextRight.Location = New System.Drawing.Point(420, 128)
+        Me.btnClearTextRight.Name = "btnClearTextRight"
+        Me.btnClearTextRight.Size = New System.Drawing.Size(36, 36)
+        Me.btnClearTextRight.TabIndex = 58
+        Me.btnClearTextRight.Text = "ð"
+        '
+        'btnClearTextLeft
+        '
+        Me.btnClearTextLeft.BackColor = System.Drawing.Color.Transparent
+        Me.btnClearTextLeft.Font = New System.Drawing.Font("Wingdings", 15.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
+        Me.btnClearTextLeft.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.btnClearTextLeft.Location = New System.Drawing.Point(308, 128)
+        Me.btnClearTextLeft.Name = "btnClearTextLeft"
+        Me.btnClearTextLeft.Size = New System.Drawing.Size(36, 36)
+        Me.btnClearTextLeft.TabIndex = 57
+        Me.btnClearTextLeft.Text = "ï"
         '
         'btnDocLoadBoth
         '
@@ -1981,15 +2032,28 @@ Public Class fmMain
         End If
     End Sub
     Private Sub btnRightScoreColor_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnRightScoreColor.Click
-        tbRightScore.BackColor = PickColor(sender.Left - 100, sender.Top, tbRightScore.BackColor)
-        radioThingColorRight.BackColor = tbRightScore.BackColor
-        If radioThingColorRight.Checked Then
+        Me.tbRightScore.BackColor = PickColor(sender.Left - 100, sender.Top, tbRightScore.BackColor)
+        Me.radioThingColorRight.BackColor = tbRightScore.BackColor
+        If Me.radioThingColorRight.Checked Then
             clbThings.BackColor = tbRightScore.BackColor
             tbSubstitutions.BackColor = tbRightScore.BackColor
-            Me.tbCurrentThing.BackColor = tbRightScore.BackColor
+            Me.tbCurrentThing.BackColor = Me.tbRightScore.BackColor
         End If
     End Sub
 
+    Private Sub btnClearTextLeft_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnClearTextLeft.Click
+        Me.tbLeftText.Text = ""
+        Me.tbLeftText.Focus()
+    End Sub
+    Private Sub btnClearTextRight_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnClearTextRight.Click
+        Me.tbRightText.Text = ""
+        Me.tbRightText.Focus()
+    End Sub
+    Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button1.Click
+        btnClearTextLeft_Click(sender, e)
+        btnClearTextRight_Click(sender, e)
+        Me.tbLeftText.Focus()
+    End Sub
     Private Sub btnShowLeftText_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnShowLeftText.Click
         DisplayTextScreen(Me.LS, Me.tbLeftText.Text, Me.tbLeftText.BackColor, CSng(Me.tbLeftFontSize.Text) * Me.DisplayFontRatio)
     End Sub
@@ -2295,7 +2359,7 @@ Public Class fmMain
         '* Returns blank if you don't pick a legal file
         Dim fn As String = ""
         Dim of As New OpenFileDialog()
-        of.Filter = "Image Files(*.BMP;*.GIF;*.JPG;*.WMF)|*.BMP;*.GIF;*.JPG;*.WMF"
+        of.Filter = "Image Files(*.BMP;*.GIF;*.JPG;*.PNG;*.WMF)|*.BMP;*.GIF;*.JPG;*.PNG;*.WMF"
         of.InitialDirectory = ROOT_SUPPORT_DIR
         If of.ShowDialog(Me) = DialogResult.OK Then
             fn = of.FileName
