@@ -6,15 +6,18 @@ Public Class fmMain
     '***************
     Const MAX_THINGS As Integer = 9
     Const EOL As String = Chr(13) + Chr(10)
-    Const FontMult As Single = 123 / 41  ' This is the size ratio of fonts in the display vs. in the textbox
+    Const FontMult As Single = 123 / 42  ' This is the size ratio of fonts in the display vs. in the textbox
     Const ROOT_SUPPORT_DIR As String = "C:\Program Files\Multiple_Display"
+    Const SLIDES_STOPPED As Integer = 0
+    Const SLIDES_PAUSED As Integer = 1
+    Const SLIDES_PLAYING As Integer = 2
 
     Dim LS As fmScreen      '* The left team screen
     Dim RS As fmScreen      '* The right team screen
     Dim LeftDefaultColor As System.Drawing.Color
     Dim RightDefaultColor As System.Drawing.Color
     Dim ThingSubs(MAX_THINGS) As String             '* Substitutions for 5 Things
-    Dim SlidesActive As Boolean = False             '* Keep track of whether Slideshow is running
+    Dim SlidesStatus As Integer = SLIDES_STOPPED    '* Keep track of whether Slideshow is running
 
 #Region " Windows Form Designer generated code "
 
@@ -92,7 +95,6 @@ Public Class fmMain
     Friend WithEvents pnlRightColor1 As System.Windows.Forms.Panel
     Friend WithEvents tbRightText As System.Windows.Forms.TextBox
     Friend WithEvents tbLeftText As System.Windows.Forms.TextBox
-    Friend WithEvents lblCurrentThing As System.Windows.Forms.Label
     Friend WithEvents btnListRight As System.Windows.Forms.Button
     Friend WithEvents btnListBoth As System.Windows.Forms.Button
     Friend WithEvents btnListLeft As System.Windows.Forms.Button
@@ -150,6 +152,11 @@ Public Class fmMain
     Friend WithEvents btnDocLoadBoth As System.Windows.Forms.Button
     Friend WithEvents btnDocLoadRight As System.Windows.Forms.Button
     Friend WithEvents btnDocLoadLeft As System.Windows.Forms.Button
+    Friend WithEvents EasterEgg1 As System.Windows.Forms.MenuItem
+    Friend WithEvents btnPrevSlide As System.Windows.Forms.Button
+    Friend WithEvents btnNextSlide As System.Windows.Forms.Button
+    Friend WithEvents btnPauseSlides As System.Windows.Forms.Button
+    Friend WithEvents tbCurrentThing As System.Windows.Forms.TextBox
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Me.btnBlackout = New System.Windows.Forms.Button()
@@ -174,6 +181,7 @@ Public Class fmMain
         Me.menuSubtract1Right = New System.Windows.Forms.MenuItem()
         Me.menuAdd5Right = New System.Windows.Forms.MenuItem()
         Me.menuSubtract5Right = New System.Windows.Forms.MenuItem()
+        Me.EasterEgg1 = New System.Windows.Forms.MenuItem()
         Me.picLeft = New System.Windows.Forms.PictureBox()
         Me.picRight = New System.Windows.Forms.PictureBox()
         Me.btnPictureLeft = New System.Windows.Forms.Button()
@@ -212,28 +220,10 @@ Public Class fmMain
         Me.pnlLeftColor3 = New System.Windows.Forms.Panel()
         Me.pnlLeftColor2 = New System.Windows.Forms.Panel()
         Me.pnlLeftColor1 = New System.Windows.Forms.Panel()
-        Me.tp5Things = New System.Windows.Forms.TabPage()
-        Me.Label12 = New System.Windows.Forms.Label()
-        Me.clbThings = New System.Windows.Forms.CheckedListBox()
-        Me.Label5 = New System.Windows.Forms.Label()
-        Me.grpThingsColor = New System.Windows.Forms.GroupBox()
-        Me.radioThingColorRight = New System.Windows.Forms.RadioButton()
-        Me.radioThingColorLeft = New System.Windows.Forms.RadioButton()
-        Me.btnClearThings = New System.Windows.Forms.Button()
-        Me.btnRemoveThing = New System.Windows.Forms.Button()
-        Me.lblCurrentThing = New System.Windows.Forms.Label()
-        Me.btnListRight = New System.Windows.Forms.Button()
-        Me.btnListBoth = New System.Windows.Forms.Button()
-        Me.btnListLeft = New System.Windows.Forms.Button()
-        Me.btnShowThingRight = New System.Windows.Forms.Button()
-        Me.btnShowThingBoth = New System.Windows.Forms.Button()
-        Me.btnShowThingLeft = New System.Windows.Forms.Button()
-        Me.tbSubstitutions = New System.Windows.Forms.TextBox()
-        Me.btnAddThing = New System.Windows.Forms.Button()
-        Me.tbNewThing = New System.Windows.Forms.TextBox()
-        Me.btnThingDown = New System.Windows.Forms.Button()
-        Me.btnThingUp = New System.Windows.Forms.Button()
         Me.tpSlides = New System.Windows.Forms.TabPage()
+        Me.btnPauseSlides = New System.Windows.Forms.Button()
+        Me.btnNextSlide = New System.Windows.Forms.Button()
+        Me.btnPrevSlide = New System.Windows.Forms.Button()
         Me.btnClearSlideList = New System.Windows.Forms.Button()
         Me.FolderTree1 = New HyperCoder.Win.FileSystemControls.FolderTree()
         Me.Label9 = New System.Windows.Forms.Label()
@@ -254,6 +244,27 @@ Public Class fmMain
         Me.btnFirstSlide = New System.Windows.Forms.Button()
         Me.lbSlideList = New System.Windows.Forms.ListBox()
         Me.picSlidePreview = New System.Windows.Forms.PictureBox()
+        Me.tp5Things = New System.Windows.Forms.TabPage()
+        Me.tbCurrentThing = New System.Windows.Forms.TextBox()
+        Me.Label12 = New System.Windows.Forms.Label()
+        Me.clbThings = New System.Windows.Forms.CheckedListBox()
+        Me.Label5 = New System.Windows.Forms.Label()
+        Me.grpThingsColor = New System.Windows.Forms.GroupBox()
+        Me.radioThingColorRight = New System.Windows.Forms.RadioButton()
+        Me.radioThingColorLeft = New System.Windows.Forms.RadioButton()
+        Me.btnClearThings = New System.Windows.Forms.Button()
+        Me.btnRemoveThing = New System.Windows.Forms.Button()
+        Me.btnListRight = New System.Windows.Forms.Button()
+        Me.btnListBoth = New System.Windows.Forms.Button()
+        Me.btnListLeft = New System.Windows.Forms.Button()
+        Me.btnShowThingRight = New System.Windows.Forms.Button()
+        Me.btnShowThingBoth = New System.Windows.Forms.Button()
+        Me.btnShowThingLeft = New System.Windows.Forms.Button()
+        Me.tbSubstitutions = New System.Windows.Forms.TextBox()
+        Me.btnAddThing = New System.Windows.Forms.Button()
+        Me.tbNewThing = New System.Windows.Forms.TextBox()
+        Me.btnThingDown = New System.Windows.Forms.Button()
+        Me.btnThingUp = New System.Windows.Forms.Button()
         Me.tpAbout = New System.Windows.Forms.TabPage()
         Me.TextBox2 = New System.Windows.Forms.TextBox()
         Me.TextBox1 = New System.Windows.Forms.TextBox()
@@ -262,10 +273,10 @@ Public Class fmMain
         Me.tpScreenText.SuspendLayout()
         Me.grpRightColors.SuspendLayout()
         Me.grpLeftColors.SuspendLayout()
-        Me.tp5Things.SuspendLayout()
-        Me.grpThingsColor.SuspendLayout()
         Me.tpSlides.SuspendLayout()
         CType(Me.nudDelay, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.tp5Things.SuspendLayout()
+        Me.grpThingsColor.SuspendLayout()
         Me.tpAbout.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -278,7 +289,7 @@ Public Class fmMain
         Me.btnBlackout.Name = "btnBlackout"
         Me.btnBlackout.Size = New System.Drawing.Size(108, 40)
         Me.btnBlackout.TabIndex = 13
-        Me.btnBlackout.Text = "BLACKOUT"
+        Me.btnBlackout.Text = "&BLACKOUT"
         '
         'tbLeftTeam
         '
@@ -326,7 +337,7 @@ Public Class fmMain
         '
         'tbLeftScore
         '
-        Me.tbLeftScore.BackColor = System.Drawing.Color.Blue
+        Me.tbLeftScore.BackColor = System.Drawing.Color.FromArgb(CType(0, Byte), CType(0, Byte), CType(192, Byte))
         Me.tbLeftScore.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.tbLeftScore.ForeColor = System.Drawing.Color.White
         Me.tbLeftScore.Location = New System.Drawing.Point(88, 40)
@@ -339,7 +350,7 @@ Public Class fmMain
         '
         'tbRightScore
         '
-        Me.tbRightScore.BackColor = System.Drawing.Color.FromArgb(CType(176, Byte), CType(0, Byte), CType(0, Byte))
+        Me.tbRightScore.BackColor = System.Drawing.Color.DarkRed
         Me.tbRightScore.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.tbRightScore.ForeColor = System.Drawing.Color.White
         Me.tbRightScore.Location = New System.Drawing.Point(636, 40)
@@ -401,7 +412,7 @@ Public Class fmMain
         'menuDummy
         '
         Me.menuDummy.Index = 0
-        Me.menuDummy.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.menuAdd1Left, Me.menuSubtract1Left, Me.menuAdd5Left, Me.menuSubtract5Left, Me.menuAdd1Right, Me.menuSubtract1Right, Me.menuAdd5Right, Me.menuSubtract5Right})
+        Me.menuDummy.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.menuAdd1Left, Me.menuSubtract1Left, Me.menuAdd5Left, Me.menuSubtract5Left, Me.menuAdd1Right, Me.menuSubtract1Right, Me.menuAdd5Right, Me.menuSubtract5Right, Me.EasterEgg1})
         Me.menuDummy.Text = "Dummy"
         Me.menuDummy.Visible = False
         '
@@ -452,6 +463,12 @@ Public Class fmMain
         Me.menuSubtract5Right.Index = 7
         Me.menuSubtract5Right.Shortcut = System.Windows.Forms.Shortcut.F8
         Me.menuSubtract5Right.Text = "-5 Right"
+        '
+        'EasterEgg1
+        '
+        Me.EasterEgg1.Index = 8
+        Me.EasterEgg1.Shortcut = System.Windows.Forms.Shortcut.CtrlShiftB
+        Me.EasterEgg1.Text = "Bill Loves Betse!"
         '
         'picLeft
         '
@@ -517,7 +534,7 @@ Public Class fmMain
         '
         'TabControl1
         '
-        Me.TabControl1.Controls.AddRange(New System.Windows.Forms.Control() {Me.tpScreenText, Me.tp5Things, Me.tpSlides, Me.tpAbout})
+        Me.TabControl1.Controls.AddRange(New System.Windows.Forms.Control() {Me.tpScreenText, Me.tpSlides, Me.tp5Things, Me.tpAbout})
         Me.TabControl1.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.TabControl1.ItemSize = New System.Drawing.Size(192, 21)
         Me.TabControl1.Location = New System.Drawing.Point(0, 216)
@@ -600,7 +617,7 @@ Public Class fmMain
         '
         'tbLeftText
         '
-        Me.tbLeftText.BackColor = System.Drawing.Color.Blue
+        Me.tbLeftText.BackColor = System.Drawing.Color.FromArgb(CType(0, Byte), CType(0, Byte), CType(192, Byte))
         Me.tbLeftText.Font = New System.Drawing.Font("Arial", 20.0!, System.Drawing.FontStyle.Bold)
         Me.tbLeftText.ForeColor = System.Drawing.Color.White
         Me.tbLeftText.Location = New System.Drawing.Point(24, 52)
@@ -608,7 +625,7 @@ Public Class fmMain
         Me.tbLeftText.Name = "tbLeftText"
         Me.tbLeftText.Size = New System.Drawing.Size(280, 210)
         Me.tbLeftText.TabIndex = 38
-        Me.tbLeftText.Text = "JANIS" & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "left"
+        Me.tbLeftText.Text = "JANIS 1.10" & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "by" & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "Bill Cernansky"
         Me.tbLeftText.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'tbRightFontSize
@@ -652,7 +669,7 @@ Public Class fmMain
         '
         'pnlRightColor5
         '
-        Me.pnlRightColor5.BackColor = System.Drawing.Color.DarkGreen
+        Me.pnlRightColor5.BackColor = System.Drawing.Color.FromArgb(CType(0, Byte), CType(64, Byte), CType(0, Byte))
         Me.pnlRightColor5.Location = New System.Drawing.Point(104, 16)
         Me.pnlRightColor5.Name = "pnlRightColor5"
         Me.pnlRightColor5.Size = New System.Drawing.Size(16, 16)
@@ -661,7 +678,7 @@ Public Class fmMain
         '
         'pnlRightColor4
         '
-        Me.pnlRightColor4.BackColor = System.Drawing.Color.FromArgb(CType(98, Byte), CType(67, Byte), CType(114, Byte))
+        Me.pnlRightColor4.BackColor = System.Drawing.Color.FromArgb(CType(64, Byte), CType(0, Byte), CType(64, Byte))
         Me.pnlRightColor4.Location = New System.Drawing.Point(80, 16)
         Me.pnlRightColor4.Name = "pnlRightColor4"
         Me.pnlRightColor4.Size = New System.Drawing.Size(16, 16)
@@ -670,7 +687,7 @@ Public Class fmMain
         '
         'pnlRightColor3
         '
-        Me.pnlRightColor3.BackColor = System.Drawing.Color.SaddleBrown
+        Me.pnlRightColor3.BackColor = System.Drawing.Color.FromArgb(CType(100, Byte), CType(50, Byte), CType(0, Byte))
         Me.pnlRightColor3.Location = New System.Drawing.Point(56, 16)
         Me.pnlRightColor3.Name = "pnlRightColor3"
         Me.pnlRightColor3.Size = New System.Drawing.Size(16, 16)
@@ -679,7 +696,7 @@ Public Class fmMain
         '
         'pnlRightColor2
         '
-        Me.pnlRightColor2.BackColor = System.Drawing.Color.FromArgb(CType(176, Byte), CType(0, Byte), CType(0, Byte))
+        Me.pnlRightColor2.BackColor = System.Drawing.Color.DarkRed
         Me.pnlRightColor2.Location = New System.Drawing.Point(32, 16)
         Me.pnlRightColor2.Name = "pnlRightColor2"
         Me.pnlRightColor2.Size = New System.Drawing.Size(16, 16)
@@ -688,7 +705,7 @@ Public Class fmMain
         '
         'pnlRightColor1
         '
-        Me.pnlRightColor1.BackColor = System.Drawing.Color.Blue
+        Me.pnlRightColor1.BackColor = System.Drawing.Color.FromArgb(CType(0, Byte), CType(0, Byte), CType(192, Byte))
         Me.pnlRightColor1.Location = New System.Drawing.Point(8, 16)
         Me.pnlRightColor1.Name = "pnlRightColor1"
         Me.pnlRightColor1.Size = New System.Drawing.Size(16, 16)
@@ -713,7 +730,7 @@ Public Class fmMain
         '
         'tbRightText
         '
-        Me.tbRightText.BackColor = System.Drawing.Color.FromArgb(CType(176, Byte), CType(0, Byte), CType(0, Byte))
+        Me.tbRightText.BackColor = System.Drawing.Color.DarkRed
         Me.tbRightText.Font = New System.Drawing.Font("Arial", 20.0!, System.Drawing.FontStyle.Bold)
         Me.tbRightText.ForeColor = System.Drawing.Color.White
         Me.tbRightText.Location = New System.Drawing.Point(460, 52)
@@ -721,7 +738,7 @@ Public Class fmMain
         Me.tbRightText.Name = "tbRightText"
         Me.tbRightText.Size = New System.Drawing.Size(280, 210)
         Me.tbRightText.TabIndex = 39
-        Me.tbRightText.Text = "JANIS" & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "right"
+        Me.tbRightText.Text = "for" & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "ComedySportz" & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "Portland"
         Me.tbRightText.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'tbLeftFontSize
@@ -765,7 +782,7 @@ Public Class fmMain
         '
         'pnlLeftColor5
         '
-        Me.pnlLeftColor5.BackColor = System.Drawing.Color.DarkGreen
+        Me.pnlLeftColor5.BackColor = System.Drawing.Color.FromArgb(CType(0, Byte), CType(64, Byte), CType(0, Byte))
         Me.pnlLeftColor5.Location = New System.Drawing.Point(104, 16)
         Me.pnlLeftColor5.Name = "pnlLeftColor5"
         Me.pnlLeftColor5.Size = New System.Drawing.Size(16, 16)
@@ -774,7 +791,7 @@ Public Class fmMain
         '
         'pnlLeftColor4
         '
-        Me.pnlLeftColor4.BackColor = System.Drawing.Color.FromArgb(CType(98, Byte), CType(67, Byte), CType(114, Byte))
+        Me.pnlLeftColor4.BackColor = System.Drawing.Color.FromArgb(CType(64, Byte), CType(0, Byte), CType(64, Byte))
         Me.pnlLeftColor4.Location = New System.Drawing.Point(80, 16)
         Me.pnlLeftColor4.Name = "pnlLeftColor4"
         Me.pnlLeftColor4.Size = New System.Drawing.Size(16, 16)
@@ -783,7 +800,7 @@ Public Class fmMain
         '
         'pnlLeftColor3
         '
-        Me.pnlLeftColor3.BackColor = System.Drawing.Color.FromArgb(CType(128, Byte), CType(64, Byte), CType(0, Byte))
+        Me.pnlLeftColor3.BackColor = System.Drawing.Color.FromArgb(CType(100, Byte), CType(50, Byte), CType(0, Byte))
         Me.pnlLeftColor3.Location = New System.Drawing.Point(56, 16)
         Me.pnlLeftColor3.Name = "pnlLeftColor3"
         Me.pnlLeftColor3.Size = New System.Drawing.Size(16, 16)
@@ -792,7 +809,7 @@ Public Class fmMain
         '
         'pnlLeftColor2
         '
-        Me.pnlLeftColor2.BackColor = System.Drawing.Color.FromArgb(CType(176, Byte), CType(0, Byte), CType(0, Byte))
+        Me.pnlLeftColor2.BackColor = System.Drawing.Color.DarkRed
         Me.pnlLeftColor2.Location = New System.Drawing.Point(32, 16)
         Me.pnlLeftColor2.Name = "pnlLeftColor2"
         Me.pnlLeftColor2.Size = New System.Drawing.Size(16, 16)
@@ -801,22 +818,274 @@ Public Class fmMain
         '
         'pnlLeftColor1
         '
-        Me.pnlLeftColor1.BackColor = System.Drawing.Color.Blue
+        Me.pnlLeftColor1.BackColor = System.Drawing.Color.FromArgb(CType(0, Byte), CType(0, Byte), CType(192, Byte))
         Me.pnlLeftColor1.Location = New System.Drawing.Point(8, 16)
         Me.pnlLeftColor1.Name = "pnlLeftColor1"
         Me.pnlLeftColor1.Size = New System.Drawing.Size(16, 16)
         Me.pnlLeftColor1.TabIndex = 21
         Me.pnlLeftColor1.TabStop = True
         '
+        'tpSlides
+        '
+        Me.tpSlides.Controls.AddRange(New System.Windows.Forms.Control() {Me.btnPauseSlides, Me.btnNextSlide, Me.btnPrevSlide, Me.btnClearSlideList, Me.FolderTree1, Me.Label9, Me.nudDelay, Me.Label8, Me.Label7, Me.btnSaveSlides, Me.btnLoadSlides, Me.FileListBox1, Me.btnRemoveSlides, Me.btnAddSlide, Me.Label6, Me.btnSlideDown, Me.btnSlideUp, Me.btnStopSlides, Me.btnLastSlide, Me.btnPlaySlides, Me.btnFirstSlide, Me.lbSlideList, Me.picSlidePreview})
+        Me.tpSlides.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.tpSlides.Location = New System.Drawing.Point(4, 25)
+        Me.tpSlides.Name = "tpSlides"
+        Me.tpSlides.Size = New System.Drawing.Size(764, 331)
+        Me.tpSlides.TabIndex = 2
+        Me.tpSlides.Text = "Slide Show"
+        '
+        'btnPauseSlides
+        '
+        Me.btnPauseSlides.Font = New System.Drawing.Font("Webdings", 15.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
+        Me.btnPauseSlides.ForeColor = System.Drawing.Color.Blue
+        Me.btnPauseSlides.Location = New System.Drawing.Point(620, 300)
+        Me.btnPauseSlides.Name = "btnPauseSlides"
+        Me.btnPauseSlides.Size = New System.Drawing.Size(28, 28)
+        Me.btnPauseSlides.TabIndex = 85
+        Me.btnPauseSlides.Text = ";"
+        '
+        'btnNextSlide
+        '
+        Me.btnNextSlide.Font = New System.Drawing.Font("Webdings", 14.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnNextSlide.Location = New System.Drawing.Point(692, 300)
+        Me.btnNextSlide.Name = "btnNextSlide"
+        Me.btnNextSlide.Size = New System.Drawing.Size(28, 28)
+        Me.btnNextSlide.TabIndex = 87
+        Me.btnNextSlide.Text = "8"
+        '
+        'btnPrevSlide
+        '
+        Me.btnPrevSlide.Font = New System.Drawing.Font("Webdings", 14.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnPrevSlide.Location = New System.Drawing.Point(548, 300)
+        Me.btnPrevSlide.Name = "btnPrevSlide"
+        Me.btnPrevSlide.Size = New System.Drawing.Size(28, 28)
+        Me.btnPrevSlide.TabIndex = 83
+        Me.btnPrevSlide.Text = "7"
+        '
+        'btnClearSlideList
+        '
+        Me.btnClearSlideList.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnClearSlideList.Location = New System.Drawing.Point(416, 176)
+        Me.btnClearSlideList.Name = "btnClearSlideList"
+        Me.btnClearSlideList.Size = New System.Drawing.Size(64, 28)
+        Me.btnClearSlideList.TabIndex = 77
+        Me.btnClearSlideList.Text = "Clear List"
+        '
+        'FolderTree1
+        '
+        Me.FolderTree1.Cursor = System.Windows.Forms.Cursors.Default
+        Me.FolderTree1.FullRowSelect = True
+        Me.FolderTree1.HideSelection = False
+        Me.FolderTree1.IconSize = HyperCoder.Win.FileSystemControls.FolderTree.IconSize2Display.Small
+        Me.FolderTree1.ImageIndex = -1
+        Me.FolderTree1.IncludeFiles = False
+        Me.FolderTree1.Location = New System.Drawing.Point(4, 4)
+        Me.FolderTree1.Name = "FolderTree1"
+        Me.FolderTree1.RootFolder = "Desktop"
+        Me.FolderTree1.SelectedImageIndex = -1
+        Me.FolderTree1.ShowHiddenItems = False
+        Me.FolderTree1.ShowRootLines = False
+        Me.FolderTree1.ShowSystemItems = False
+        Me.FolderTree1.Size = New System.Drawing.Size(192, 320)
+        Me.FolderTree1.TabIndex = 67
+        Me.FolderTree1.Text = "FolderTree"
+        '
+        'Label9
+        '
+        Me.Label9.BackColor = System.Drawing.Color.Transparent
+        Me.Label9.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label9.Location = New System.Drawing.Point(388, 300)
+        Me.Label9.Name = "Label9"
+        Me.Label9.Size = New System.Drawing.Size(56, 24)
+        Me.Label9.TabIndex = 80
+        Me.Label9.Text = "Seconds:"
+        Me.Label9.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        '
+        'nudDelay
+        '
+        Me.nudDelay.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.nudDelay.Location = New System.Drawing.Point(448, 300)
+        Me.nudDelay.Maximum = New Decimal(New Integer() {60, 0, 0, 0})
+        Me.nudDelay.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
+        Me.nudDelay.Name = "nudDelay"
+        Me.nudDelay.Size = New System.Drawing.Size(56, 26)
+        Me.nudDelay.TabIndex = 81
+        Me.nudDelay.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+        Me.nudDelay.Value = New Decimal(New Integer() {15, 0, 0, 0})
+        '
+        'Label8
+        '
+        Me.Label8.BackColor = System.Drawing.Color.Transparent
+        Me.Label8.Location = New System.Drawing.Point(532, 4)
+        Me.Label8.Name = "Label8"
+        Me.Label8.Size = New System.Drawing.Size(224, 16)
+        Me.Label8.TabIndex = 71
+        Me.Label8.Text = "Slide List"
+        Me.Label8.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
+        'Label7
+        '
+        Me.Label7.BackColor = System.Drawing.Color.Transparent
+        Me.Label7.Location = New System.Drawing.Point(200, 4)
+        Me.Label7.Name = "Label7"
+        Me.Label7.Size = New System.Drawing.Size(120, 16)
+        Me.Label7.TabIndex = 67
+        Me.Label7.Text = "Preview"
+        Me.Label7.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
+        'btnSaveSlides
+        '
+        Me.btnSaveSlides.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnSaveSlides.Location = New System.Drawing.Point(400, 260)
+        Me.btnSaveSlides.Name = "btnSaveSlides"
+        Me.btnSaveSlides.Size = New System.Drawing.Size(96, 28)
+        Me.btnSaveSlides.TabIndex = 79
+        Me.btnSaveSlides.Text = "Save Slideshow"
+        '
+        'btnLoadSlides
+        '
+        Me.btnLoadSlides.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnLoadSlides.Location = New System.Drawing.Point(400, 224)
+        Me.btnLoadSlides.Name = "btnLoadSlides"
+        Me.btnLoadSlides.Size = New System.Drawing.Size(96, 28)
+        Me.btnLoadSlides.TabIndex = 78
+        Me.btnLoadSlides.Text = "Load Slideshow"
+        '
+        'FileListBox1
+        '
+        Me.FileListBox1.Location = New System.Drawing.Point(200, 112)
+        Me.FileListBox1.Name = "FileListBox1"
+        Me.FileListBox1.Pattern = "*.jpg;*.gif;*.bmp;*.wmf"
+        Me.FileListBox1.Size = New System.Drawing.Size(184, 212)
+        Me.FileListBox1.TabIndex = 69
+        '
+        'btnRemoveSlides
+        '
+        Me.btnRemoveSlides.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnRemoveSlides.Location = New System.Drawing.Point(416, 128)
+        Me.btnRemoveSlides.Name = "btnRemoveSlides"
+        Me.btnRemoveSlides.Size = New System.Drawing.Size(64, 32)
+        Me.btnRemoveSlides.TabIndex = 76
+        Me.btnRemoveSlides.Text = "Remove"
+        '
+        'btnAddSlide
+        '
+        Me.btnAddSlide.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnAddSlide.Location = New System.Drawing.Point(324, 36)
+        Me.btnAddSlide.Name = "btnAddSlide"
+        Me.btnAddSlide.Size = New System.Drawing.Size(60, 48)
+        Me.btnAddSlide.TabIndex = 70
+        Me.btnAddSlide.Text = "Add To List"
+        '
+        'Label6
+        '
+        Me.Label6.BackColor = System.Drawing.Color.Transparent
+        Me.Label6.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label6.Location = New System.Drawing.Point(420, 60)
+        Me.Label6.Name = "Label6"
+        Me.Label6.Size = New System.Drawing.Size(56, 15)
+        Me.Label6.TabIndex = 74
+        Me.Label6.Text = "ORDER"
+        Me.Label6.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
+        'btnSlideDown
+        '
+        Me.btnSlideDown.Font = New System.Drawing.Font("Webdings", 20.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnSlideDown.Location = New System.Drawing.Point(432, 80)
+        Me.btnSlideDown.Name = "btnSlideDown"
+        Me.btnSlideDown.Size = New System.Drawing.Size(32, 28)
+        Me.btnSlideDown.TabIndex = 75
+        Me.btnSlideDown.Text = "6"
+        '
+        'btnSlideUp
+        '
+        Me.btnSlideUp.Font = New System.Drawing.Font("Webdings", 20.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnSlideUp.Location = New System.Drawing.Point(432, 28)
+        Me.btnSlideUp.Name = "btnSlideUp"
+        Me.btnSlideUp.Size = New System.Drawing.Size(32, 28)
+        Me.btnSlideUp.TabIndex = 73
+        Me.btnSlideUp.Text = "5"
+        '
+        'btnStopSlides
+        '
+        Me.btnStopSlides.Font = New System.Drawing.Font("Webdings", 14.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnStopSlides.ForeColor = System.Drawing.Color.Red
+        Me.btnStopSlides.Location = New System.Drawing.Point(656, 300)
+        Me.btnStopSlides.Name = "btnStopSlides"
+        Me.btnStopSlides.Size = New System.Drawing.Size(28, 28)
+        Me.btnStopSlides.TabIndex = 86
+        Me.btnStopSlides.Text = "<"
+        '
+        'btnLastSlide
+        '
+        Me.btnLastSlide.Font = New System.Drawing.Font("Webdings", 14.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnLastSlide.Location = New System.Drawing.Point(728, 300)
+        Me.btnLastSlide.Name = "btnLastSlide"
+        Me.btnLastSlide.Size = New System.Drawing.Size(28, 28)
+        Me.btnLastSlide.TabIndex = 88
+        Me.btnLastSlide.Text = ":"
+        '
+        'btnPlaySlides
+        '
+        Me.btnPlaySlides.Font = New System.Drawing.Font("Webdings", 14.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnPlaySlides.ForeColor = System.Drawing.Color.Green
+        Me.btnPlaySlides.Location = New System.Drawing.Point(584, 300)
+        Me.btnPlaySlides.Name = "btnPlaySlides"
+        Me.btnPlaySlides.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.btnPlaySlides.Size = New System.Drawing.Size(28, 28)
+        Me.btnPlaySlides.TabIndex = 84
+        Me.btnPlaySlides.Text = "4"
+        '
+        'btnFirstSlide
+        '
+        Me.btnFirstSlide.Font = New System.Drawing.Font("Webdings", 14.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnFirstSlide.Location = New System.Drawing.Point(512, 300)
+        Me.btnFirstSlide.Name = "btnFirstSlide"
+        Me.btnFirstSlide.Size = New System.Drawing.Size(28, 28)
+        Me.btnFirstSlide.TabIndex = 82
+        Me.btnFirstSlide.Text = "9"
+        '
+        'lbSlideList
+        '
+        Me.lbSlideList.HorizontalScrollbar = True
+        Me.lbSlideList.Location = New System.Drawing.Point(508, 20)
+        Me.lbSlideList.Name = "lbSlideList"
+        Me.lbSlideList.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended
+        Me.lbSlideList.Size = New System.Drawing.Size(252, 277)
+        Me.lbSlideList.TabIndex = 72
+        '
+        'picSlidePreview
+        '
+        Me.picSlidePreview.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+        Me.picSlidePreview.Location = New System.Drawing.Point(200, 20)
+        Me.picSlidePreview.Name = "picSlidePreview"
+        Me.picSlidePreview.Size = New System.Drawing.Size(120, 90)
+        Me.picSlidePreview.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
+        Me.picSlidePreview.TabIndex = 4
+        Me.picSlidePreview.TabStop = False
+        '
         'tp5Things
         '
-        Me.tp5Things.Controls.AddRange(New System.Windows.Forms.Control() {Me.Label12, Me.clbThings, Me.Label5, Me.grpThingsColor, Me.btnClearThings, Me.btnRemoveThing, Me.lblCurrentThing, Me.btnListRight, Me.btnListBoth, Me.btnListLeft, Me.btnShowThingRight, Me.btnShowThingBoth, Me.btnShowThingLeft, Me.tbSubstitutions, Me.btnAddThing, Me.tbNewThing, Me.btnThingDown, Me.btnThingUp})
+        Me.tp5Things.Controls.AddRange(New System.Windows.Forms.Control() {Me.tbCurrentThing, Me.Label12, Me.clbThings, Me.Label5, Me.grpThingsColor, Me.btnClearThings, Me.btnRemoveThing, Me.btnListRight, Me.btnListBoth, Me.btnListLeft, Me.btnShowThingRight, Me.btnShowThingBoth, Me.btnShowThingLeft, Me.tbSubstitutions, Me.btnAddThing, Me.tbNewThing, Me.btnThingDown, Me.btnThingUp})
         Me.tp5Things.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.tp5Things.Location = New System.Drawing.Point(4, 25)
         Me.tp5Things.Name = "tp5Things"
         Me.tp5Things.Size = New System.Drawing.Size(764, 331)
         Me.tp5Things.TabIndex = 1
         Me.tp5Things.Text = "5/6 Things"
+        '
+        'tbCurrentThing
+        '
+        Me.tbCurrentThing.BackColor = System.Drawing.Color.FromArgb(CType(0, Byte), CType(0, Byte), CType(192, Byte))
+        Me.tbCurrentThing.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.tbCurrentThing.ForeColor = System.Drawing.Color.White
+        Me.tbCurrentThing.Location = New System.Drawing.Point(464, 108)
+        Me.tbCurrentThing.Name = "tbCurrentThing"
+        Me.tbCurrentThing.Size = New System.Drawing.Size(232, 24)
+        Me.tbCurrentThing.TabIndex = 62
+        Me.tbCurrentThing.Text = "Substitutions"
+        Me.tbCurrentThing.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'Label12
         '
@@ -828,7 +1097,7 @@ Public Class fmMain
         '
         'clbThings
         '
-        Me.clbThings.BackColor = System.Drawing.Color.Blue
+        Me.clbThings.BackColor = System.Drawing.Color.FromArgb(CType(0, Byte), CType(0, Byte), CType(192, Byte))
         Me.clbThings.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.clbThings.ForeColor = System.Drawing.Color.White
         Me.clbThings.Location = New System.Drawing.Point(68, 96)
@@ -862,7 +1131,7 @@ Public Class fmMain
         '
         'radioThingColorRight
         '
-        Me.radioThingColorRight.BackColor = System.Drawing.Color.FromArgb(CType(176, Byte), CType(0, Byte), CType(0, Byte))
+        Me.radioThingColorRight.BackColor = System.Drawing.Color.DarkRed
         Me.radioThingColorRight.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.radioThingColorRight.ForeColor = System.Drawing.Color.White
         Me.radioThingColorRight.Location = New System.Drawing.Point(172, 16)
@@ -874,7 +1143,7 @@ Public Class fmMain
         '
         'radioThingColorLeft
         '
-        Me.radioThingColorLeft.BackColor = System.Drawing.Color.Blue
+        Me.radioThingColorLeft.BackColor = System.Drawing.Color.FromArgb(CType(0, Byte), CType(0, Byte), CType(192, Byte))
         Me.radioThingColorLeft.CheckAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.radioThingColorLeft.Checked = True
         Me.radioThingColorLeft.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -902,17 +1171,6 @@ Public Class fmMain
         Me.btnRemoveThing.Size = New System.Drawing.Size(80, 40)
         Me.btnRemoveThing.TabIndex = 54
         Me.btnRemoveThing.Text = "Remove Selected"
-        '
-        'lblCurrentThing
-        '
-        Me.lblCurrentThing.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
-        Me.lblCurrentThing.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblCurrentThing.Location = New System.Drawing.Point(464, 108)
-        Me.lblCurrentThing.Name = "lblCurrentThing"
-        Me.lblCurrentThing.Size = New System.Drawing.Size(232, 24)
-        Me.lblCurrentThing.TabIndex = 62
-        Me.lblCurrentThing.Text = "Substitutions:"
-        Me.lblCurrentThing.TextAlign = System.Drawing.ContentAlignment.BottomCenter
         '
         'btnListRight
         '
@@ -964,7 +1222,7 @@ Public Class fmMain
         '
         'tbSubstitutions
         '
-        Me.tbSubstitutions.BackColor = System.Drawing.Color.Blue
+        Me.tbSubstitutions.BackColor = System.Drawing.Color.FromArgb(CType(0, Byte), CType(0, Byte), CType(192, Byte))
         Me.tbSubstitutions.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.tbSubstitutions.ForeColor = System.Drawing.Color.White
         Me.tbSubstitutions.Location = New System.Drawing.Point(464, 132)
@@ -1010,217 +1268,6 @@ Public Class fmMain
         Me.btnThingUp.TabIndex = 51
         Me.btnThingUp.Text = "5"
         '
-        'tpSlides
-        '
-        Me.tpSlides.Controls.AddRange(New System.Windows.Forms.Control() {Me.btnClearSlideList, Me.FolderTree1, Me.Label9, Me.nudDelay, Me.Label8, Me.Label7, Me.btnSaveSlides, Me.btnLoadSlides, Me.FileListBox1, Me.btnRemoveSlides, Me.btnAddSlide, Me.Label6, Me.btnSlideDown, Me.btnSlideUp, Me.btnStopSlides, Me.btnLastSlide, Me.btnPlaySlides, Me.btnFirstSlide, Me.lbSlideList, Me.picSlidePreview})
-        Me.tpSlides.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.tpSlides.Location = New System.Drawing.Point(4, 25)
-        Me.tpSlides.Name = "tpSlides"
-        Me.tpSlides.Size = New System.Drawing.Size(764, 331)
-        Me.tpSlides.TabIndex = 2
-        Me.tpSlides.Text = "Slide Show"
-        '
-        'btnClearSlideList
-        '
-        Me.btnClearSlideList.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnClearSlideList.Location = New System.Drawing.Point(416, 204)
-        Me.btnClearSlideList.Name = "btnClearSlideList"
-        Me.btnClearSlideList.Size = New System.Drawing.Size(64, 28)
-        Me.btnClearSlideList.TabIndex = 77
-        Me.btnClearSlideList.Text = "Clear List"
-        '
-        'FolderTree1
-        '
-        Me.FolderTree1.Cursor = System.Windows.Forms.Cursors.Default
-        Me.FolderTree1.FullRowSelect = True
-        Me.FolderTree1.HideSelection = False
-        Me.FolderTree1.IconSize = HyperCoder.Win.FileSystemControls.FolderTree.IconSize2Display.Small
-        Me.FolderTree1.ImageIndex = -1
-        Me.FolderTree1.IncludeFiles = False
-        Me.FolderTree1.Location = New System.Drawing.Point(4, 4)
-        Me.FolderTree1.Name = "FolderTree1"
-        Me.FolderTree1.RootFolder = "Desktop"
-        Me.FolderTree1.SelectedImageIndex = -1
-        Me.FolderTree1.ShowHiddenItems = False
-        Me.FolderTree1.ShowRootLines = False
-        Me.FolderTree1.ShowSystemItems = False
-        Me.FolderTree1.Size = New System.Drawing.Size(192, 320)
-        Me.FolderTree1.TabIndex = 67
-        Me.FolderTree1.Text = "FolderTree"
-        '
-        'Label9
-        '
-        Me.Label9.BackColor = System.Drawing.Color.Transparent
-        Me.Label9.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label9.Location = New System.Drawing.Point(504, 300)
-        Me.Label9.Name = "Label9"
-        Me.Label9.Size = New System.Drawing.Size(56, 24)
-        Me.Label9.TabIndex = 80
-        Me.Label9.Text = "Seconds:"
-        Me.Label9.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-        '
-        'nudDelay
-        '
-        Me.nudDelay.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.nudDelay.Location = New System.Drawing.Point(564, 300)
-        Me.nudDelay.Maximum = New Decimal(New Integer() {60, 0, 0, 0})
-        Me.nudDelay.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
-        Me.nudDelay.Name = "nudDelay"
-        Me.nudDelay.Size = New System.Drawing.Size(56, 26)
-        Me.nudDelay.TabIndex = 81
-        Me.nudDelay.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
-        Me.nudDelay.Value = New Decimal(New Integer() {8, 0, 0, 0})
-        '
-        'Label8
-        '
-        Me.Label8.BackColor = System.Drawing.Color.Transparent
-        Me.Label8.Location = New System.Drawing.Point(532, 4)
-        Me.Label8.Name = "Label8"
-        Me.Label8.Size = New System.Drawing.Size(224, 16)
-        Me.Label8.TabIndex = 71
-        Me.Label8.Text = "Slide List"
-        Me.Label8.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        '
-        'Label7
-        '
-        Me.Label7.BackColor = System.Drawing.Color.Transparent
-        Me.Label7.Location = New System.Drawing.Point(200, 4)
-        Me.Label7.Name = "Label7"
-        Me.Label7.Size = New System.Drawing.Size(120, 16)
-        Me.Label7.TabIndex = 67
-        Me.Label7.Text = "Preview"
-        Me.Label7.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        '
-        'btnSaveSlides
-        '
-        Me.btnSaveSlides.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnSaveSlides.Location = New System.Drawing.Point(400, 296)
-        Me.btnSaveSlides.Name = "btnSaveSlides"
-        Me.btnSaveSlides.Size = New System.Drawing.Size(96, 28)
-        Me.btnSaveSlides.TabIndex = 79
-        Me.btnSaveSlides.Text = "Save Slideshow"
-        '
-        'btnLoadSlides
-        '
-        Me.btnLoadSlides.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnLoadSlides.Location = New System.Drawing.Point(400, 260)
-        Me.btnLoadSlides.Name = "btnLoadSlides"
-        Me.btnLoadSlides.Size = New System.Drawing.Size(96, 28)
-        Me.btnLoadSlides.TabIndex = 78
-        Me.btnLoadSlides.Text = "Load Slideshow"
-        '
-        'FileListBox1
-        '
-        Me.FileListBox1.Location = New System.Drawing.Point(200, 112)
-        Me.FileListBox1.Name = "FileListBox1"
-        Me.FileListBox1.Pattern = "*.jpg;*.gif;*.bmp;*.wmf"
-        Me.FileListBox1.Size = New System.Drawing.Size(184, 212)
-        Me.FileListBox1.TabIndex = 69
-        '
-        'btnRemoveSlides
-        '
-        Me.btnRemoveSlides.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnRemoveSlides.Location = New System.Drawing.Point(412, 148)
-        Me.btnRemoveSlides.Name = "btnRemoveSlides"
-        Me.btnRemoveSlides.Size = New System.Drawing.Size(72, 36)
-        Me.btnRemoveSlides.TabIndex = 76
-        Me.btnRemoveSlides.Text = "Remove Selected"
-        '
-        'btnAddSlide
-        '
-        Me.btnAddSlide.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnAddSlide.Location = New System.Drawing.Point(324, 36)
-        Me.btnAddSlide.Name = "btnAddSlide"
-        Me.btnAddSlide.Size = New System.Drawing.Size(60, 48)
-        Me.btnAddSlide.TabIndex = 70
-        Me.btnAddSlide.Text = "Add To List"
-        '
-        'Label6
-        '
-        Me.Label6.BackColor = System.Drawing.Color.Transparent
-        Me.Label6.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label6.Location = New System.Drawing.Point(420, 60)
-        Me.Label6.Name = "Label6"
-        Me.Label6.Size = New System.Drawing.Size(56, 15)
-        Me.Label6.TabIndex = 74
-        Me.Label6.Text = "ORDER"
-        Me.Label6.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        '
-        'btnSlideDown
-        '
-        Me.btnSlideDown.Font = New System.Drawing.Font("Webdings", 20.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnSlideDown.Location = New System.Drawing.Point(432, 80)
-        Me.btnSlideDown.Name = "btnSlideDown"
-        Me.btnSlideDown.Size = New System.Drawing.Size(32, 28)
-        Me.btnSlideDown.TabIndex = 75
-        Me.btnSlideDown.Text = "6"
-        '
-        'btnSlideUp
-        '
-        Me.btnSlideUp.Font = New System.Drawing.Font("Webdings", 20.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnSlideUp.Location = New System.Drawing.Point(432, 28)
-        Me.btnSlideUp.Name = "btnSlideUp"
-        Me.btnSlideUp.Size = New System.Drawing.Size(32, 28)
-        Me.btnSlideUp.TabIndex = 73
-        Me.btnSlideUp.Text = "5"
-        '
-        'btnStopSlides
-        '
-        Me.btnStopSlides.Font = New System.Drawing.Font("Webdings", 14.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnStopSlides.ForeColor = System.Drawing.Color.Red
-        Me.btnStopSlides.Location = New System.Drawing.Point(696, 300)
-        Me.btnStopSlides.Name = "btnStopSlides"
-        Me.btnStopSlides.Size = New System.Drawing.Size(28, 28)
-        Me.btnStopSlides.TabIndex = 84
-        Me.btnStopSlides.Text = "<"
-        '
-        'btnLastSlide
-        '
-        Me.btnLastSlide.Font = New System.Drawing.Font("Webdings", 14.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnLastSlide.Location = New System.Drawing.Point(732, 300)
-        Me.btnLastSlide.Name = "btnLastSlide"
-        Me.btnLastSlide.Size = New System.Drawing.Size(28, 28)
-        Me.btnLastSlide.TabIndex = 85
-        Me.btnLastSlide.Text = ":"
-        '
-        'btnPlaySlides
-        '
-        Me.btnPlaySlides.Font = New System.Drawing.Font("Webdings", 14.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnPlaySlides.ForeColor = System.Drawing.Color.Green
-        Me.btnPlaySlides.Location = New System.Drawing.Point(660, 300)
-        Me.btnPlaySlides.Name = "btnPlaySlides"
-        Me.btnPlaySlides.Size = New System.Drawing.Size(28, 28)
-        Me.btnPlaySlides.TabIndex = 83
-        Me.btnPlaySlides.Text = "4"
-        '
-        'btnFirstSlide
-        '
-        Me.btnFirstSlide.Font = New System.Drawing.Font("Webdings", 14.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnFirstSlide.Location = New System.Drawing.Point(624, 300)
-        Me.btnFirstSlide.Name = "btnFirstSlide"
-        Me.btnFirstSlide.Size = New System.Drawing.Size(28, 28)
-        Me.btnFirstSlide.TabIndex = 82
-        Me.btnFirstSlide.Text = "9"
-        '
-        'lbSlideList
-        '
-        Me.lbSlideList.HorizontalScrollbar = True
-        Me.lbSlideList.Location = New System.Drawing.Point(508, 20)
-        Me.lbSlideList.Name = "lbSlideList"
-        Me.lbSlideList.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended
-        Me.lbSlideList.Size = New System.Drawing.Size(252, 277)
-        Me.lbSlideList.TabIndex = 72
-        '
-        'picSlidePreview
-        '
-        Me.picSlidePreview.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
-        Me.picSlidePreview.Location = New System.Drawing.Point(200, 20)
-        Me.picSlidePreview.Name = "picSlidePreview"
-        Me.picSlidePreview.Size = New System.Drawing.Size(120, 90)
-        Me.picSlidePreview.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
-        Me.picSlidePreview.TabIndex = 4
-        Me.picSlidePreview.TabStop = False
-        '
         'tpAbout
         '
         Me.tpAbout.BackColor = System.Drawing.SystemColors.Window
@@ -1242,7 +1289,7 @@ Public Class fmMain
         Me.TextBox2.Name = "TextBox2"
         Me.TextBox2.ReadOnly = True
         Me.TextBox2.Size = New System.Drawing.Size(752, 208)
-        Me.TextBox2.TabIndex = 87
+        Me.TextBox2.TabIndex = 90
         Me.TextBox2.Text = "I humbly present this program as a gift to ComedySportz Portland, as" & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "a token of " & _
         "my thanks for giving me so much enjoyment and fulfillment." & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "This program may b" & _
         "e used with explicit permission of the author, Bill Cernansky." & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "Special thanks" & _
@@ -1264,9 +1311,9 @@ Public Class fmMain
         Me.TextBox1.Name = "TextBox1"
         Me.TextBox1.ReadOnly = True
         Me.TextBox1.Size = New System.Drawing.Size(752, 104)
-        Me.TextBox1.TabIndex = 86
-        Me.TextBox1.Text = "ComedySportz JANIS" & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "(Just Another Nice Improv Scorekeeper)" & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "version 1.04   Releas" & _
-        "ed August 31, 2003" & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "by Bill Cernansky"
+        Me.TextBox1.TabIndex = 89
+        Me.TextBox1.Text = "ComedySportz JANIS" & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "(Just Another Nice Improv Scorekeeper)" & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "version 1.10   Releas" & _
+        "ed December 16, 2003" & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "by Bill Cernansky"
         Me.TextBox1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'Timer1
@@ -1276,7 +1323,7 @@ Public Class fmMain
         'fmMain
         '
         Me.AutoScaleBaseSize = New System.Drawing.Size(5, 13)
-        Me.ClientSize = New System.Drawing.Size(772, 553)
+        Me.ClientSize = New System.Drawing.Size(772, 565)
         Me.Controls.AddRange(New System.Windows.Forms.Control() {Me.btnBlackout, Me.TabControl1, Me.btnRightScoreColor, Me.btnLeftScoreColor, Me.btnPictureBoth, Me.btnPictureRight, Me.btnPictureLeft, Me.picRight, Me.picLeft, Me.btnScoreBoth, Me.btnScoreRight, Me.btnScoreLeft, Me.Label4, Me.Label3, Me.tbRightScore, Me.tbLeftScore, Me.Label2, Me.Label1, Me.tbRightTeam, Me.tbLeftTeam})
         Me.ForeColor = System.Drawing.SystemColors.WindowText
         Me.Location = New System.Drawing.Point(20, 0)
@@ -1288,10 +1335,10 @@ Public Class fmMain
         Me.tpScreenText.ResumeLayout(False)
         Me.grpRightColors.ResumeLayout(False)
         Me.grpLeftColors.ResumeLayout(False)
-        Me.tp5Things.ResumeLayout(False)
-        Me.grpThingsColor.ResumeLayout(False)
         Me.tpSlides.ResumeLayout(False)
         CType(Me.nudDelay, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.tp5Things.ResumeLayout(False)
+        Me.grpThingsColor.ResumeLayout(False)
         Me.tpAbout.ResumeLayout(False)
         Me.ResumeLayout(False)
 
@@ -1304,7 +1351,7 @@ Public Class fmMain
         RightDefaultColor = Me.tbRightText.BackColor
         radioThingColorLeft.BackColor = LeftDefaultColor
         radioThingColorRight.BackColor = RightDefaultColor
-        Me.lblCurrentThing.Visible = False
+        Me.tbCurrentThing.Visible = False
         Me.tbSubstitutions.Visible = False
         Me.btnShowThingLeft.Visible = False
         Me.btnShowThingRight.Visible = False
@@ -1348,8 +1395,9 @@ Public Class fmMain
         tbLeftScore.BackColor = PickColor(sender.Left, sender.Top, tbLeftScore.BackColor)
         radioThingColorLeft.BackColor = tbLeftScore.BackColor
         If radioThingColorLeft.Checked Then
-            clbThings.BackColor = radioThingColorLeft.BackColor
-            tbSubstitutions.BackColor = radioThingColorLeft.BackColor
+            clbThings.BackColor = tbLeftScore.BackColor
+            tbSubstitutions.BackColor = tbLeftScore.BackColor
+            Me.tbCurrentThing.BackColor = tbLeftScore.BackColor
         End If
     End Sub
     Private Sub btnRightScoreColor_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnRightScoreColor.Click
@@ -1358,6 +1406,7 @@ Public Class fmMain
         If radioThingColorRight.Checked Then
             clbThings.BackColor = tbRightScore.BackColor
             tbSubstitutions.BackColor = tbRightScore.BackColor
+            Me.tbCurrentThing.BackColor = tbRightScore.BackColor
         End If
     End Sub
 
@@ -1378,11 +1427,13 @@ Public Class fmMain
 
     Private Sub btnDocLoad_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnDocLoadLeft.Click, btnDocLoadRight.Click, btnDocLoadBoth.Click
         Dim Doc As String = LoadDoc()
-        If sender.Tag <> "Left" Then  '* This will work for Right and Both
-            Me.tbRightText.Text = Doc
-        End If
-        If sender.Tag <> "Right" Then '* This will work for Left and Both
-            Me.tbLeftText.Text = Doc
+        If Doc <> "" Then
+            If sender.Tag <> "Left" Then  '* This will work for Right and Both
+                Me.tbRightText.Text = Doc
+            End If
+            If sender.Tag <> "Right" Then '* This will work for Left and Both
+                Me.tbLeftText.Text = Doc
+            End If
         End If
         AllScreensToFront()
     End Sub
@@ -1651,14 +1702,16 @@ Public Class fmMain
     '* BEGIN 5 THINGS STUFF
 
     Private Sub btnAddThing_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnAddThing.Click
-        If Me.clbThings.Items.Count < MAX_THINGS Then
-            Me.clbThings.Items.Add(Me.tbNewThing.Text)
-            Me.tbNewThing.ResetText()
-        Else
-            MessageBox.Show("The list has already reached its max number of Things (" + CStr(MAX_THINGS) + "). If you need to add an item, remove another item first.", "Too many Things", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly)
+        If Me.tbNewThing.Text <> "" Then
+            If Me.clbThings.Items.Count < MAX_THINGS Then
+                Me.clbThings.Items.Add(Me.tbNewThing.Text)
+                Me.tbNewThing.ResetText()
+            Else
+                MessageBox.Show("The list has already reached its max number of Things (" + CStr(MAX_THINGS) + "). If you need to add an item, remove another item first.", "Too many Things", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly)
+            End If
+            Me.tbNewThing.Focus()
+            Me.clbThings.SelectedIndex = -1
         End If
-        Me.tbNewThing.Focus()
-        Me.clbThings.SelectedIndex = -1
     End Sub
     Private Sub btnClearThings_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnClearThings.Click
         If AskIfSure("Are you sure you want to remove all the Things from the list?") Then
@@ -1667,7 +1720,7 @@ Public Class fmMain
                 ThingSubs(i) = ""
             Next
             Me.clbThings.Items.Clear()
-            Me.lblCurrentThing.Visible = False
+            Me.tbCurrentThing.Visible = False
             Me.tbSubstitutions.Visible = False
             Me.btnShowThingLeft.Visible = False
             Me.btnShowThingRight.Visible = False
@@ -1691,18 +1744,19 @@ Public Class fmMain
 
     Private Sub clbThings_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles clbThings.SelectedIndexChanged
         If sender.SelectedIndex >= 0 Then
-            Me.lblCurrentThing.Text = sender.SelectedItem
+            Me.tbCurrentThing.Text = sender.SelectedItem
             Me.tbSubstitutions.Text = ThingSubs(sender.SelectedIndex)
-            Me.lblCurrentThing.Visible = True
+            Me.tbCurrentThing.Visible = True
             Me.tbSubstitutions.Visible = True
             Me.btnShowThingLeft.Visible = True
             Me.btnShowThingRight.Visible = True
             Me.btnShowThingBoth.Visible = True
-            Me.clbThings.Refresh()
+            Me.clbThings.Hide()
             Me.tbSubstitutions.Select(Me.tbSubstitutions.TextLength, 0)  '* deselect all text here
+            Me.clbThings.Show()
             Me.tbSubstitutions.Focus()
         Else
-            Me.lblCurrentThing.Visible = False
+            Me.tbCurrentThing.Visible = False
             Me.tbSubstitutions.Visible = False
             Me.btnShowThingLeft.Visible = False
             Me.btnShowThingRight.Visible = False
@@ -1744,6 +1798,13 @@ Public Class fmMain
         ThingSubs(Me.clbThings.SelectedIndex) = sender.Text
     End Sub
 
+    Private Sub tbCurrentThing_Leave(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tbCurrentThing.Leave
+        Dim sel As Integer = Me.clbThings.SelectedIndex
+        If sel >= 0 Then
+            Me.clbThings.Items(sel) = sender.Text
+        End If
+    End Sub
+
     Private Sub btnList_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnListLeft.Click, btnListRight.Click, btnListBoth.Click
         Dim i As Integer
         Dim s As String
@@ -1757,13 +1818,14 @@ Public Class fmMain
     End Sub
     Private Sub btnShowThing_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnShowThingLeft.Click, btnShowThingRight.Click, btnShowThingBoth.Click
         Dim s As String
-        s = Me.lblCurrentThing.Text + EOL + EOL + Me.tbSubstitutions.Text
+        s = Me.tbCurrentThing.Text + EOL + EOL + Me.tbSubstitutions.Text
         If sender.name <> "btnShowThingRight" Then DisplayTextScreen(Me.LS, s, clbThings.BackColor, 16)
         If sender.name <> "btnShowThingLeft" Then DisplayTextScreen(Me.RS, s, clbThings.BackColor, 16)
     End Sub
     Private Sub radioThingColor_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles radioThingColorLeft.CheckedChanged, radioThingColorRight.CheckedChanged
         Me.clbThings.BackColor = sender.BackColor
         Me.tbSubstitutions.BackColor = sender.BackColor
+        Me.tbCurrentThing.BackColor = sender.BackColor
     End Sub
 
     Private Sub tbNewThing_Enter(ByVal sender As Object, ByVal e As System.EventArgs) Handles tbNewThing.Enter
@@ -1825,10 +1887,8 @@ Public Class fmMain
         If Me.lbSlideList.SelectedIndices.Count > 0 Then
             Dim i As Integer
             For i = (Me.lbSlideList.SelectedIndices.Count - 1) To 0 Step -1
-                Dim idx As Integer = Me.lbSlideList.Items.IndexOf(Me.lbSlideList.SelectedItems.Item(i))
-                If (idx < (Me.lbSlideList.Items.Count)) And (idx >= 0) Then
-                    Me.lbSlideList.Items.RemoveAt(idx)
-                End If
+                Dim idx As Integer = Me.lbSlideList.SelectedIndices(i)
+                Me.lbSlideList.Items.RemoveAt(idx)
             Next
         End If
         If Me.lbSlideList.Items.Count < 1 Then   '* stop the timing cycle
@@ -1965,8 +2025,19 @@ Public Class fmMain
     End Sub
     Private Sub StopSlideShow()
         Me.Timer1.Stop()
-        SlidesActive = False
+        SlidesStatus = SLIDES_STOPPED
+        SetPauseButtonColor(False)
         Me.lbSlideList.SelectionMode = SelectionMode.MultiExtended
+    End Sub
+    Private Sub SetPauseButtonColor(ByVal pause_on As Boolean)
+        Dim backclr As System.Drawing.Color = btnPlaySlides.BackColor
+        If pause_on Then
+            btnPauseSlides.BackColor = System.Drawing.Color.Blue
+            btnPauseSlides.ForeColor = backclr
+        Else
+            btnPauseSlides.BackColor = backclr
+            btnPauseSlides.ForeColor = System.Drawing.Color.Blue
+        End If
     End Sub
     Private Sub nudDelay_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles nudDelay.ValueChanged
         SetTimerInterval()
@@ -1986,30 +2057,62 @@ Public Class fmMain
     End Sub
 
     Private Sub btnPlaySlides_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnPlaySlides.Click
-        If SlidesActive Then Return
+        If SlidesStatus = SLIDES_PLAYING Then Return
         If Me.lbSlideList.Items.Count < 1 Then Return
         Me.lbSlideList.SelectionMode = SelectionMode.One
-        Me.lbSlideList.SelectedIndex = 0
+        If SlidesStatus <> SLIDES_PAUSED Then Me.lbSlideList.SelectedIndex = 0
         DisplayBothImages(Me.lbSlideList.SelectedItem)
-        SlidesActive = True
+        SetPauseButtonColor(False)
+        SlidesStatus = SLIDES_PLAYING
         StartTimer()
     End Sub
     Private Sub btnStopSlides_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnStopSlides.Click
         StopSlideShow()
     End Sub
-    Private Sub btnChangeSlide_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnFirstSlide.Click, btnLastSlide.Click
-        If Not SlidesActive Then Return
-        Me.Timer1.Stop()   '* temporary stoppage
+    Private Sub btnPauseSlides_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnPauseSlides.Click
+        If SlidesStatus = SLIDES_STOPPED Then Return
+        If SlidesStatus = SLIDES_PAUSED Then
+            SlidesStatus = SLIDES_PLAYING
+            SetPauseButtonColor(False)
+            StartTimer()
+            Return
+        End If
+        '** If we get here, Slides Status must be PLAYING
+        Me.Timer1.Stop()
+        SlidesStatus = SLIDES_PAUSED
+        SetPauseButtonColor(True)
+    End Sub
+    Private Sub btnChangeSlide_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnFirstSlide.Click, btnNextSlide.Click, btnPrevSlide.Click, btnLastSlide.Click
+        If SlidesStatus = SLIDES_STOPPED Then Return
+        If SlidesStatus = SLIDES_PLAYING Then Me.Timer1.Stop() '* temporary stoppage
         Select Case sender.Name
             Case "btnFirstSlide"
                 Me.lbSlideList.SelectedIndex = 0
+            Case "btnPrevSlide"
+                If Me.lbSlideList.SelectedIndex > 0 Then
+                    Me.lbSlideList.SelectedIndex = Me.lbSlideList.SelectedIndex - 1
+                Else
+                    '** Roll over before the beginning
+                    Me.lbSlideList.SelectedIndex = Me.lbSlideList.Items.Count - 1
+                End If
+            Case "btnNextSlide"
+                If Me.lbSlideList.SelectedIndex < (Me.lbSlideList.Items.Count - 1) Then
+                    Me.lbSlideList.SelectedIndex = Me.lbSlideList.SelectedIndex + 1
+                Else
+                    '** Roll over past the end
+                    Me.lbSlideList.SelectedIndex = 0
+                End If
             Case "btnLastSlide"
                 Me.lbSlideList.SelectedIndex = Me.lbSlideList.Items.Count - 1
         End Select
         DisplayBothImages(Me.lbSlideList.SelectedItem)
-        StartTimer()
+        If SlidesStatus = SLIDES_PLAYING Then StartTimer()
     End Sub
 
     '=================================================================================================
+
+    Private Sub EasterEgg1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles EasterEgg1.Click
+        MessageBox.Show("Pass it on...", "BILL LOVES BETSE", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly)
+    End Sub
 
 End Class

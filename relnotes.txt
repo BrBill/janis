@@ -1,3 +1,12 @@
+v1.10: 2003-12-16
+*  text preview to audience monitor screen ratio decreased slightly
+*  easter egg added
+*  slide show buttons added: prev, next, pause
+*  added ALT-B hotkey for blackout button
+*  team colors hardwired to be same throughout system
+*  when focus moves away from 5 things substitutions entry box, changes are saved
+*  dual-screen only
+
 v1.04: 2003-08-31
 *  5 Things module added
 *  earliest archived source, but not initial release

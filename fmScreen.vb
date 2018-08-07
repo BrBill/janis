@@ -52,9 +52,10 @@ Public Class fmScreen
         '
         Me.lblMsg.BackColor = System.Drawing.Color.Transparent
         Me.lblMsg.Font = New System.Drawing.Font("Arial", 123.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblMsg.Location = New System.Drawing.Point(0, 40)
         Me.lblMsg.Name = "lblMsg"
         Me.lblMsg.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.lblMsg.Size = New System.Drawing.Size(800, 600)
+        Me.lblMsg.Size = New System.Drawing.Size(800, 560)
         Me.lblMsg.TabIndex = 1
         Me.lblMsg.Text = "Welcome to JANIS"
         Me.lblMsg.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -85,7 +86,7 @@ Public Class fmScreen
         'fmScreen
         '
         Me.AutoScaleBaseSize = New System.Drawing.Size(5, 13)
-        Me.BackColor = System.Drawing.Color.MediumBlue
+        Me.BackColor = System.Drawing.Color.FromArgb(CType(0, Byte), CType(0, Byte), CType(192, Byte))
         Me.ClientSize = New System.Drawing.Size(800, 600)
         Me.Controls.AddRange(New System.Windows.Forms.Control() {Me.lblTeamName, Me.lblMsg, Me.picGraphic, Me.lblScore})
         Me.ForeColor = System.Drawing.Color.White
