@@ -13,7 +13,9 @@ Public Class fmMain
     Const SLIDES_PAUSED As Integer = 1
     Const SLIDES_PLAYING As Integer = 2
 
-    Dim FontMult As Single = 123 / 42  ' This is the size ratio of fonts in the display vs. in the textbox
+    Dim DisplayToEntryFontRatio As Single = 123 / 42  ' This is the size ratio of fonts in the display vs. in the textbox
+    Dim DisplayFontRatio As Single = 15 / 44 ' This is the "should be" size ratio of display to what we thought it was.
+    Dim TestMode As Boolean = False
     Dim LS As fmScreen      '* The left team screen
     Dim RS As fmScreen      '* The right team screen
     Dim LeftDefaultColor As System.Drawing.Color
@@ -780,7 +782,7 @@ Public Class fmMain
         Me.tbLeftText.Name = "tbLeftText"
         Me.tbLeftText.Size = New System.Drawing.Size(280, 210)
         Me.tbLeftText.TabIndex = 38
-        Me.tbLeftText.Text = "JANIS v1.13" & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "by" & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "Bill Cernansky"
+        Me.tbLeftText.Text = "JANIS v1.13a" & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "(Dual Display)" & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "by" & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "Bill Cernansky"
         Me.tbLeftText.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'tbRightFontSize
@@ -1912,11 +1914,11 @@ Public Class fmMain
         Me.TextBox2.Text = "I humbly present this program as a gift to ComedySportz Portland, as" & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "a token of " & _
         "my thanks for giving me so much enjoyment and fulfillment." & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "This program may o" & _
         "nly be used with explicit permission of the author, Bill Cernansky." & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "Special t" & _
-        "hanks to:" & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "Jay and MaryAnn Rambo, the ultimate bug spotters" & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "Jamie Montgomery, w" & _
-        "ho helped me conceive most of the new ideas presented herein." & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "Andrew Berkowitz," & _
-        " for helping me with the rest of the new ideas" & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "Patrick Short, who trusts me wit" & _
-        "h his prized computer equipment" & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "Portland Brewery, for MacTarnahan's Scottish Al" & _
-        "e, which refreshed me during intense bug fighting."
+        "hanks to:" & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "Jay and MaryAnn Rambo, the ultimate bug spotters." & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "Jamie Montgomery a" & _
+        "nd Andrew Berkowitz for their ideas." & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "Wade Minter, whose ""Mr. Voice"" software wa" & _
+        "s an inspiration." & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "Patrick Short, who trusts me with electronics." & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "Portland Brew" & _
+        "ery, for MacTarnahan's Scottish Ale, which refreshed me during intense bug fight" & _
+        "ing."
         Me.TextBox2.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'TextBox1
@@ -1932,8 +1934,8 @@ Public Class fmMain
         Me.TextBox1.Size = New System.Drawing.Size(752, 104)
         Me.TextBox1.TabIndex = 90
         Me.TextBox1.TabStop = False
-        Me.TextBox1.Text = "ComedySportz JANIS" & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "(Just Another Nice Improv Scorekeeper)" & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "version 1.13   Releas" & _
-        "ed Jul. 19, 2005" & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "by Bill Cernansky ( bill@easybeing.com )"
+        Me.TextBox1.Text = "ComedySportz JANIS" & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "(Just Another Nice Improv Scorekeeper)" & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "Dual Display version " & _
+        "1.13a  Released Sep. 15, 2005" & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "by Bill Cernansky ( bill@easybeing.com )"
         Me.TextBox1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'SlideTimer
@@ -2083,13 +2085,13 @@ Public Class fmMain
         Me.RS = New fmScreen()
 
         '* Here's the wacky way you change font sizes in VB.NET. Piece of crap.
-        Me.tbLeftText.Font = New Font(Me.tbLeftText.Font.Name, CSng(Val(Me.tbLeftFontSize.Text) / FontMult), Me.tbLeftText.Font.Style)
-        Me.tbRightText.Font = New Font(Me.tbRightText.Font.Name, CSng(Val(Me.tbRightFontSize.Text) / FontMult), Me.tbRightText.Font.Style)
+        Me.tbLeftText.Font = New Font(Me.tbLeftText.Font.Name, CSng(Val(Me.tbLeftFontSize.Text) / DisplayToEntryFontRatio), Me.tbLeftText.Font.Style)
+        Me.tbRightText.Font = New Font(Me.tbRightText.Font.Name, CSng(Val(Me.tbRightFontSize.Text) / DisplayToEntryFontRatio), Me.tbRightText.Font.Style)
 
         Me.SetMonitorDisplayMode()
 
-        DisplayTextScreen(Me.LS, Me.tbLeftText.Text, Me.tbLeftText.BackColor, Me.tbLeftText.Font.Size)
-        DisplayTextScreen(Me.RS, Me.tbRightText.Text, Me.tbRightText.BackColor, Me.tbRightText.Font.Size)
+        DisplayTextScreen(Me.LS, Me.tbLeftText.Text, Me.tbLeftText.BackColor, CSng(Me.tbLeftFontSize.Text) * Me.DisplayFontRatio)
+        DisplayTextScreen(Me.RS, Me.tbRightText.Text, Me.tbRightText.BackColor, CSng(Me.tbRightFontSize.Text) * Me.DisplayFontRatio)
         Me.LS.Show()
         Me.RS.Show()
 
@@ -2143,28 +2145,28 @@ Public Class fmMain
     End Sub
 
     Private Sub btnShowLeftText_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnShowLeftText.Click
-        DisplayTextScreen(Me.LS, Me.tbLeftText.Text, Me.tbLeftText.BackColor, Me.tbLeftText.Font.Size)
+        DisplayTextScreen(Me.LS, Me.tbLeftText.Text, Me.tbLeftText.BackColor, CSng(Me.tbLeftFontSize.Text) * Me.DisplayFontRatio)
     End Sub
     Private Sub btnShowRightText_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnShowRightText.Click
-        DisplayTextScreen(Me.RS, Me.tbRightText.Text, Me.tbRightText.BackColor, Me.tbRightText.Font.Size)
+        DisplayTextScreen(Me.RS, Me.tbRightText.Text, Me.tbRightText.BackColor, CSng(Me.tbRightFontSize.Text) * Me.DisplayFontRatio)
     End Sub
     Private Sub btnLeftTextRight_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnLeftTextRight.Click
-        DisplayTextScreen(Me.RS, Me.tbLeftText.Text, Me.tbLeftText.BackColor, Me.tbLeftText.Font.Size)
+        DisplayTextScreen(Me.RS, Me.tbLeftText.Text, Me.tbLeftText.BackColor, CSng(Me.tbLeftFontSize.Text) * Me.DisplayFontRatio)
     End Sub
     Private Sub btnRightTextLeft_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnRightTextLeft.Click
-        DisplayTextScreen(Me.LS, Me.tbRightText.Text, Me.tbRightText.BackColor, Me.tbRightText.Font.Size)
+        DisplayTextScreen(Me.LS, Me.tbRightText.Text, Me.tbRightText.BackColor, CSng(Me.tbRightFontSize.Text) * Me.DisplayFontRatio)
     End Sub
     Private Sub btnLeftTextBoth_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnLeftTextBoth.Click
-        DisplayTextScreen(Me.LS, Me.tbLeftText.Text, Me.tbLeftText.BackColor, Me.tbLeftText.Font.Size)
-        DisplayTextScreen(Me.RS, Me.tbLeftText.Text, Me.tbLeftText.BackColor, Me.tbLeftText.Font.Size)
+        DisplayTextScreen(Me.LS, Me.tbLeftText.Text, Me.tbLeftText.BackColor, CSng(Me.tbLeftFontSize.Text) * Me.DisplayFontRatio)
+        DisplayTextScreen(Me.RS, Me.tbLeftText.Text, Me.tbLeftText.BackColor, CSng(Me.tbLeftFontSize.Text) * Me.DisplayFontRatio)
     End Sub
     Private Sub btnRightTextBoth_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnRightTextBoth.Click
-        DisplayTextScreen(Me.LS, Me.tbRightText.Text, Me.tbRightText.BackColor, Me.tbRightText.Font.Size)
-        DisplayTextScreen(Me.RS, Me.tbRightText.Text, Me.tbRightText.BackColor, Me.tbRightText.Font.Size)
+        DisplayTextScreen(Me.LS, Me.tbRightText.Text, Me.tbRightText.BackColor, CSng(Me.tbRightFontSize.Text) * Me.DisplayFontRatio)
+        DisplayTextScreen(Me.RS, Me.tbRightText.Text, Me.tbRightText.BackColor, CSng(Me.tbRightFontSize.Text) * Me.DisplayFontRatio)
     End Sub
     Private Sub btnBothTextScreens_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnBothTextScreens.Click
-        DisplayTextScreen(Me.LS, Me.tbLeftText.Text, Me.tbLeftText.BackColor, Me.tbLeftText.Font.Size)
-        DisplayTextScreen(Me.RS, Me.tbRightText.Text, Me.tbRightText.BackColor, Me.tbRightText.Font.Size)
+        DisplayTextScreen(Me.LS, Me.tbLeftText.Text, Me.tbLeftText.BackColor, CSng(Me.tbLeftFontSize.Text) * Me.DisplayFontRatio)
+        DisplayTextScreen(Me.RS, Me.tbRightText.Text, Me.tbRightText.BackColor, CSng(Me.tbRightFontSize.Text) * Me.DisplayFontRatio)
     End Sub
 
     Private Sub btnDocLoad_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnDocLoadLeft.Click, btnDocLoadRight.Click, btnDocLoadBoth.Click
@@ -2249,9 +2251,9 @@ Public Class fmMain
         End If
         If fsiz < 1 Then fsiz = 1
         If sender.Name = "tbLeftFontSize" Then
-            Me.tbLeftText.Font = New Font(Me.tbLeftText.Font.Name, (fsiz / FontMult), Me.tbLeftText.Font.Style)
+            Me.tbLeftText.Font = New Font(Me.tbLeftText.Font.Name, (fsiz / DisplayToEntryFontRatio), Me.tbLeftText.Font.Style)
         Else  ' must be tbRightFontSize
-            Me.tbRightText.Font = New Font(Me.tbRightText.Font.Name, (fsiz / FontMult), Me.tbRightText.Font.Style)
+            Me.tbRightText.Font = New Font(Me.tbRightText.Font.Name, (fsiz / DisplayToEntryFontRatio), Me.tbRightText.Font.Style)
         End If
     End Sub
     Private Sub tbFontSize_KeyPress(ByVal sender As System.Object, ByVal e As System.Windows.Forms.KeyPressEventArgs) Handles tbLeftFontSize.KeyPress, tbRightFontSize.KeyPress
@@ -2271,7 +2273,8 @@ Public Class fmMain
 
     Private Sub SetMonitorDisplayMode()
         If SystemInformation.MonitorCount = 1 Then        '* We're in single monitor/test mode
-            'Me.FontMult = Me.FontMult / 5
+            Me.TestMode = True
+            Me.DisplayToEntryFontRatio = Me.DisplayToEntryFontRatio / 25  '* = 5w x 5h
             Me.LS.Left = Me.Left
             Me.LS.Top = Me.Height
             Me.LS.Height = Me.LS.Height / 5
@@ -2353,11 +2356,11 @@ Public Class fmMain
             Me.picRight.Image = Nothing
         End If
 
-        If SystemInformation.MonitorCount = 1 Then fontsize = fontsize / 4.5
+        If TestMode Then fontsize = fontsize * 5
         Scr.lblScore.Visible = False
         Scr.lblTeamName.Visible = False
         Scr.picGraphic.Visible = False
-        Scr.lblMsg.Font = New Font(Scr.lblMsg.Font.Name, CSng(FontMult * fontsize), Scr.lblMsg.Font.Style)
+        Scr.lblMsg.Font = New Font(Scr.lblMsg.Font.Name, CSng(DisplayToEntryFontRatio * fontsize), Scr.lblMsg.Font.Style)
         Scr.lblMsg.Visible = True
         Scr.lblMsg.Text = translation
         Scr.BackColor = hue

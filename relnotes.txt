@@ -1,3 +1,11 @@
+v1.13a: 2005-09-15
+*  Fixed incorrect text display font size bug.
+*  Added Test mode boolean instead of checking monitor count all over the place, to ease testing.
+*  Created Single-Screen version for configurations using only one audience monitor.
+   *  Added "Single Display" to internal description.
+*  Dual-Screen only:
+   *  Added "Dual Display" to internal description.
+
 v1.13: 2005-07-24
 *  Turned HotButtons visible by default.
 *  5/6 Things monitor display fonts now dynamically sized to account for amount of text displayed.
