@@ -1,7 +1,7 @@
 <VisualStudioProject>
     <VisualBasic>
         <Build>
-            <Settings ReferencePath = "c:\dev\janis\;C:\Documents and Settings\Portland\My Documents\Visual Studio Projects\JANIS\" >
+            <Settings ReferencePath = "C:\dev\JANIS\SingleDisplay\;C:\Documents and Settings\Portland\My Documents\Visual Studio Projects\JANIS\" >
                 <Config
                     Name = "Debug"
                     EnableASPDebugging = "false"

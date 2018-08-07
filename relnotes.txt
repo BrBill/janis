@@ -1,3 +1,9 @@
+v2.1: 2006-11-13
+*  Double-click on any slideshow filename and it displays *even if slideshow not running*.
+*  Preferences for preloading and running slideshows at startup now work.
+*  Searchable image library functionality added.
+*  Created working installer for program.
+
 v2.0 beta: 2006-02-16
 *  All image stretches now proportional instead of 800x600, to avoid weird distorted displays
    of very narrow or wide initial images.

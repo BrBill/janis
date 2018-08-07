@@ -1,6 +1,8 @@
 Microsoft Visual Studio Solution File, Format Version 7.00
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "JANIS", "JANIS.vbproj", "{C05E3E3B-82AD-4E50-9BCD-D78C8F0C4866}"
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "JANIS_Setup", "JANIS_Setup\JANIS_Setup.vdproj", "{0811C1E0-0FF9-468C-923C-3B4953D396F4}"
+EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		ConfigName.0 = Debug
@@ -13,6 +15,9 @@ Global
 		{C05E3E3B-82AD-4E50-9BCD-D78C8F0C4866}.Debug.Build.0 = Debug|.NET
 		{C05E3E3B-82AD-4E50-9BCD-D78C8F0C4866}.Release.ActiveCfg = Release|.NET
 		{C05E3E3B-82AD-4E50-9BCD-D78C8F0C4866}.Release.Build.0 = Release|.NET
+		{0811C1E0-0FF9-468C-923C-3B4953D396F4}.Debug.ActiveCfg = Debug
+		{0811C1E0-0FF9-468C-923C-3B4953D396F4}.Release.ActiveCfg = Release
+		{0811C1E0-0FF9-468C-923C-3B4953D396F4}.Release.Build.0 = Release
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection
