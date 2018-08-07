@@ -1,3 +1,13 @@
+v2.0 beta: 2006-02-16
+*  All image stretches now proportional instead of 800x600, to avoid weird distorted displays
+   of very narrow or wide initial images.
+*  Add preferences and saved defaults capabilities.
+*  Fix size of display windows in fmScreen
+*  Upon closing, check if prefs have changed; if so, prompt to save them before quitting.
+*  Fix test mode size bug.
+*  Stop the "black blink" on audience monitors when showing images to screens.
+*  Add secret 30 minute countdown timer to support the 30/30 long form format <CTRL-SHIFT-T>.
+
 v1.15: 2005-09-24
 *  .PNG files now available from image dialogs
 *  "Clear Text" buttons added to text tab.

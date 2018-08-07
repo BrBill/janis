@@ -27,7 +27,7 @@ Public Class fmScreen
     Private components As System.ComponentModel.IContainer
 
     'NOTE: The following procedure is required by the Windows Form Designer
-    'It can be modified using the Windows Form Designer.  
+    'It can be modified using the Windows Form Designer.
     'Do not modify it using the code editor.
     Friend WithEvents picGraphic As System.Windows.Forms.PictureBox
     Friend WithEvents lblMsg As System.Windows.Forms.Label
@@ -52,10 +52,9 @@ Public Class fmScreen
         '
         Me.lblMsg.BackColor = System.Drawing.Color.Transparent
         Me.lblMsg.Font = New System.Drawing.Font("Arial", 123.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblMsg.Location = New System.Drawing.Point(0, 40)
         Me.lblMsg.Name = "lblMsg"
         Me.lblMsg.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.lblMsg.Size = New System.Drawing.Size(800, 560)
+        Me.lblMsg.Size = New System.Drawing.Size(800, 600)
         Me.lblMsg.TabIndex = 1
         Me.lblMsg.Text = "Welcome to JANIS"
         Me.lblMsg.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -64,10 +63,10 @@ Public Class fmScreen
         '
         Me.lblScore.BackColor = System.Drawing.Color.Transparent
         Me.lblScore.Font = New System.Drawing.Font("Arial", 280.0!, System.Drawing.FontStyle.Bold)
-        Me.lblScore.Location = New System.Drawing.Point(0, 100)
+        Me.lblScore.Location = New System.Drawing.Point(0, 150)
         Me.lblScore.Name = "lblScore"
         Me.lblScore.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.lblScore.Size = New System.Drawing.Size(800, 700)
+        Me.lblScore.Size = New System.Drawing.Size(800, 650)
         Me.lblScore.TabIndex = 3
         Me.lblScore.TextAlign = System.Drawing.ContentAlignment.TopCenter
         Me.lblScore.Visible = False
@@ -105,15 +104,18 @@ Public Class fmScreen
 
 #End Region
 
+    Public Sub fmScreen_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+    End Sub
+
+    Public Sub fmScreen_MouseEnter(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.MouseEnter, lblMsg.MouseEnter, lblScore.MouseEnter, lblTeamName.MouseEnter, picGraphic.MouseEnter
+        '* Prevent the cursor from moving into the fmScreen. If it does, move it to the
+        '* immediate left of this form (keep Y coord). This works unbelievably well.
+        System.Windows.Forms.Cursor.Position = New Point(Me.Left - 1, MousePosition.Y)
+    End Sub
+
     Public Function MyLeft()
+        '* Shareable function for public return of leftmost coordinate of this form.
         Return Me.Left
     End Function
 
-    Public Sub fmScreen_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
-
-    End Sub
-
-    Private Sub PictureBox1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles picGraphic.Click
-
-    End Sub
 End Class
