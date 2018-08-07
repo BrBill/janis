@@ -1,3 +1,8 @@
+v1.14: 2005-09-21
+*  Now supports resolutions higher than 800x600 on control display. Adjusts other windows to
+   compensate.
+*  Affects single- and dual-screen versions.
+
 v1.13a: 2005-09-15
 *  Fixed incorrect text display font size bug.
 *  Added Test mode boolean instead of checking monitor count all over the place, to ease testing.

@@ -6,7 +6,7 @@ Public Class fmMain
     '***************
     Const MAX_THINGS As Integer = 9
     Const EOL As String = Chr(13) + Chr(10)
-    Const ROOT_SUPPORT_DIR As String = "C:\Program Files\Multiple_Display"
+    Const ROOT_SUPPORT_DIR As String = "C:\Program Files\JANIS"
     Const DEFAULT_SLIDESHOW_DIR As String = "\SlideShows"
     Const DEFAULT_HOTBUTTON_DIR As String = "\HotButtons"
     Const SLIDES_STOPPED As Integer = 0
@@ -50,7 +50,7 @@ Public Class fmMain
     Private components As System.ComponentModel.IContainer
 
     'NOTE: The following procedure is required by the Windows Form Designer
-    'It can be modified using the Windows Form Designer.  
+    'It can be modified using the Windows Form Designer.
     'Do not modify it using the code editor.
     Friend WithEvents btnBlackout As System.Windows.Forms.Button
     Friend WithEvents tbLeftTeam As System.Windows.Forms.TextBox
@@ -782,7 +782,7 @@ Public Class fmMain
         Me.tbLeftText.Name = "tbLeftText"
         Me.tbLeftText.Size = New System.Drawing.Size(280, 210)
         Me.tbLeftText.TabIndex = 38
-        Me.tbLeftText.Text = "JANIS v1.13a" & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "(Dual Display)" & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "by" & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "Bill Cernansky"
+        Me.tbLeftText.Text = "JANIS v1.14" & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "(Dual Display)" & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "by" & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "Bill Cernansky"
         Me.tbLeftText.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'tbRightFontSize
@@ -1935,7 +1935,7 @@ Public Class fmMain
         Me.TextBox1.TabIndex = 90
         Me.TextBox1.TabStop = False
         Me.TextBox1.Text = "ComedySportz JANIS" & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "(Just Another Nice Improv Scorekeeper)" & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "Dual Display version " & _
-        "1.13a  Released Sep. 15, 2005" & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "by Bill Cernansky ( bill@easybeing.com )"
+        "1.14  Released Sep. 20, 2005" & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "by Bill Cernansky ( bill@easybeing.com )"
         Me.TextBox1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'SlideTimer
@@ -2049,6 +2049,7 @@ Public Class fmMain
         Me.Controls.AddRange(New System.Windows.Forms.Control() {Me.btnHot10, Me.btnHot9, Me.btnHot8, Me.btnHot7, Me.btnHot6, Me.btnHot5, Me.btnHot4, Me.btnHot3, Me.btnHot2, Me.btnHot1, Me.btnBlackout, Me.TabControl1, Me.btnRightScoreColor, Me.btnLeftScoreColor, Me.btnPictureBoth, Me.btnPictureRight, Me.btnPictureLeft, Me.picRight, Me.picLeft, Me.btnScoreBoth, Me.btnScoreRight, Me.btnScoreLeft, Me.Label4, Me.Label3, Me.tbRightScore, Me.tbLeftScore, Me.Label2, Me.Label1, Me.tbRightTeam, Me.tbLeftTeam})
         Me.ForeColor = System.Drawing.SystemColors.WindowText
         Me.Location = New System.Drawing.Point(20, 0)
+        Me.MaximizeBox = False
         Me.Menu = Me.MainMenu1
         Me.Name = "fmMain"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.Manual
@@ -2071,10 +2072,11 @@ Public Class fmMain
 #End Region
 
     Private Sub Form1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
-        LeftDefaultColor = Me.tbLeftText.BackColor
-        RightDefaultColor = Me.tbRightText.BackColor
-        radioThingColorLeft.BackColor = LeftDefaultColor
-        radioThingColorRight.BackColor = RightDefaultColor
+        Me.Left = SystemInformation.PrimaryMonitorSize.Width - Me.Size.Width
+        Me.LeftDefaultColor = Me.tbLeftText.BackColor
+        Me.RightDefaultColor = Me.tbRightText.BackColor
+        Me.radioThingColorLeft.BackColor = Me.LeftDefaultColor
+        Me.radioThingColorRight.BackColor = Me.RightDefaultColor
         Me.tbCurrentThing.Visible = False
         Me.tbSubstitutions.Visible = False
         Me.btnShowThingLeft.Visible = False
@@ -2110,7 +2112,7 @@ Public Class fmMain
         '* (what the hell was the guy thinking), but we can expand it down to the
         '* directory we want to see at the start. However, since we can't select it,
         '* the FileListBox's path will be empty.
-        Me.FTreeAutoExpand_C("Program Files\Multiple_Display")
+        Me.FTreeAutoExpand_C("Program Files\JANIS")
         Me.FileListBox1.Path = ""
     End Sub
 
@@ -2325,8 +2327,8 @@ Public Class fmMain
             Me.tbRightText.Text = "TEST MODE"
             Me.Text = Me.Text + "   **** TEST MODE ****"
         Else
-            Me.LS.Left = 800  'Don't really need to set this, but I'm doing it anyway
-            Me.RS.Left = 1600 'Because we copied another object that uses 800
+            Me.LS.Left = SystemInformation.PrimaryMonitorSize.Width  'Don't really need to set this, but I'm doing it anyway
+            Me.RS.Left = Me.LS.Left + 800 'Because we copied another object that uses 800
             Me.tbRightText.Text = "Arena Mode"
             Me.Text = Me.Text + " - Arena Mode"
         End If
