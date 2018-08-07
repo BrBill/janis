@@ -7,7 +7,7 @@
     >
         <Build>
             <Settings
-                ApplicationIcon = "MONITR01.ICO"
+                ApplicationIcon = "JANIS.ICO"
                 AssemblyKeyContainerName = ""
                 AssemblyName = "JANIS"
                 AssemblyOriginatorKeyFile = ""
@@ -153,6 +153,14 @@
                     Lcid = "0"
                     WrapperTool = "primary"
                 />
+                <Reference
+                    Name = "stdole5"
+                    Guid = "{00020430-0000-0000-C000-000000000046}"
+                    VersionMajor = "2"
+                    VersionMinor = "0"
+                    Lcid = "0"
+                    WrapperTool = "primary"
+                />
             </References>
             <Imports>
                 <Import Namespace = "Microsoft.VisualBasic" />
@@ -182,6 +190,16 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
+                    RelPath = "fmDirDialog.vb"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "fmDirDialog.resx"
+                    DependentUpon = "fmDirDialog.vb"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "fmMain.vb"
                     SubType = "Form"
                     BuildAction = "Compile"
@@ -202,7 +220,7 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
-                    RelPath = "MONITR01.ICO"
+                    RelPath = "JANIS.ICO"
                     BuildAction = "Content"
                 />
             </Include>

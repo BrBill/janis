@@ -7,21 +7,25 @@ Public Class fmMain
     Const MAX_THINGS As Integer = 9
     Const EOL As String = Chr(13) + Chr(10)
     Const ROOT_SUPPORT_DIR As String = "C:\Program Files\JANIS"
+    Const PREFS_FILE As String = ROOT_SUPPORT_DIR + "\JANIS.ini"
     Const DEFAULT_SLIDESHOW_DIR As String = "\SlideShows"
     Const DEFAULT_HOTBUTTON_DIR As String = "\HotButtons"
     Const SLIDES_STOPPED As Integer = 0
     Const SLIDES_PAUSED As Integer = 1
     Const SLIDES_PLAYING As Integer = 2
 
-    Dim DisplayToEntryFontRatio As Single = 123 / 42  ' This is the size ratio of fonts in the display vs. in the textbox
-    Dim DisplayFontRatio As Single = 15 / 44 ' This is the "should be" size ratio of display to what we thought it was.
     Dim TestMode As Boolean = False
+    Dim DisplayModeAdjustment As Single = 1.0 ' Divide font setting by this for display. Differs for test/arena mode.
+    Dim DisplayToEntryFontRatio As Single = 123 / 42  ' This is the size ratio of fonts in the display vs. in the textbox
+    Dim DisplayFontRatio As Single = 15 / 44 ' This is the "should be" size ratio of display to what I once thought it was.
+
     Dim LS As fmScreen      '* The left team screen
-    Dim LeftDefaultColor As System.Drawing.Color
-    Dim RightDefaultColor As System.Drawing.Color
+
     Dim ThingSubs(MAX_THINGS) As String             '* Substitutions for 5 Things
     Dim SlidesStatus As Integer = SLIDES_STOPPED    '* Keep track of whether Slideshow is running
     Dim HotButtonsChanged As Boolean                '* Have we changed the hot buttons?
+    Dim CountdownSeconds As Integer
+
 
 #Region " Windows Form Designer generated code "
 
@@ -76,22 +80,22 @@ Public Class fmMain
     Friend WithEvents TabControl1 As System.Windows.Forms.TabControl
     Friend WithEvents tbLeftFontSize As System.Windows.Forms.TextBox
     Friend WithEvents grpLeftColors As System.Windows.Forms.GroupBox
-    Friend WithEvents btnLeftTextColor As System.Windows.Forms.Button
-    Friend WithEvents pnlLeftColor6 As System.Windows.Forms.Panel
-    Friend WithEvents pnlLeftColor5 As System.Windows.Forms.Panel
-    Friend WithEvents pnlLeftColor4 As System.Windows.Forms.Panel
-    Friend WithEvents pnlLeftColor3 As System.Windows.Forms.Panel
-    Friend WithEvents pnlLeftColor2 As System.Windows.Forms.Panel
-    Friend WithEvents pnlLeftColor1 As System.Windows.Forms.Panel
+    Friend WithEvents btnChooseTextColorLeft As System.Windows.Forms.Button
+    Friend WithEvents pnlTextColorLeft6 As System.Windows.Forms.Panel
+    Friend WithEvents pnlTextColorLeft5 As System.Windows.Forms.Panel
+    Friend WithEvents pnlTextColorLeft4 As System.Windows.Forms.Panel
+    Friend WithEvents pnlTextColorLeft3 As System.Windows.Forms.Panel
+    Friend WithEvents pnlTextColorLeft2 As System.Windows.Forms.Panel
+    Friend WithEvents pnlTextColorLeft1 As System.Windows.Forms.Panel
     Friend WithEvents tbRightFontSize As System.Windows.Forms.TextBox
     Friend WithEvents grpRightColors As System.Windows.Forms.GroupBox
-    Friend WithEvents btnRightTextColor As System.Windows.Forms.Button
-    Friend WithEvents pnlRightColor6 As System.Windows.Forms.Panel
-    Friend WithEvents pnlRightColor5 As System.Windows.Forms.Panel
-    Friend WithEvents pnlRightColor4 As System.Windows.Forms.Panel
-    Friend WithEvents pnlRightColor3 As System.Windows.Forms.Panel
-    Friend WithEvents pnlRightColor2 As System.Windows.Forms.Panel
-    Friend WithEvents pnlRightColor1 As System.Windows.Forms.Panel
+    Friend WithEvents btnChooseTextColorRight As System.Windows.Forms.Button
+    Friend WithEvents pnlTextColorRight6 As System.Windows.Forms.Panel
+    Friend WithEvents pnlTextColorRight5 As System.Windows.Forms.Panel
+    Friend WithEvents pnlTextColorRight4 As System.Windows.Forms.Panel
+    Friend WithEvents pnlTextColorRight3 As System.Windows.Forms.Panel
+    Friend WithEvents pnlTextColorRight2 As System.Windows.Forms.Panel
+    Friend WithEvents pnlTextColorRight1 As System.Windows.Forms.Panel
     Friend WithEvents tbRightText As System.Windows.Forms.TextBox
     Friend WithEvents tbLeftText As System.Windows.Forms.TextBox
     Friend WithEvents btnListLeft As System.Windows.Forms.Button
@@ -105,6 +109,8 @@ Public Class fmMain
     Friend WithEvents tpScreenText As System.Windows.Forms.TabPage
     Friend WithEvents tp5Things As System.Windows.Forms.TabPage
     Friend WithEvents tpSlides As System.Windows.Forms.TabPage
+    Friend WithEvents tpHotButtons As System.Windows.Forms.TabPage
+    Friend WithEvents tpPrefs As System.Windows.Forms.TabPage
     Friend WithEvents tpAbout As System.Windows.Forms.TabPage
     Friend WithEvents btnAddThing As System.Windows.Forms.Button
     Friend WithEvents btnRemoveThing As System.Windows.Forms.Button
@@ -158,7 +164,6 @@ Public Class fmMain
     Friend WithEvents btnHot8 As System.Windows.Forms.Button
     Friend WithEvents btnHot9 As System.Windows.Forms.Button
     Friend WithEvents btnHot10 As System.Windows.Forms.Button
-    Friend WithEvents tpHotButtons As System.Windows.Forms.TabPage
     Friend WithEvents cbHBActive As System.Windows.Forms.CheckBox
     Friend WithEvents tbHBtext3 As System.Windows.Forms.TextBox
     Friend WithEvents tbHBtext2 As System.Windows.Forms.TextBox
@@ -209,12 +214,58 @@ Public Class fmMain
     Friend WithEvents tbHBfile9 As System.Windows.Forms.TextBox
     Friend WithEvents btnShowRightText As System.Windows.Forms.Button
     Friend WithEvents btnShowLeftText As System.Windows.Forms.Button
-    Friend WithEvents Button1 As System.Windows.Forms.Button
+    Friend WithEvents btnClearTextBoth As System.Windows.Forms.Button
     Friend WithEvents Label15 As System.Windows.Forms.Label
     Friend WithEvents btnClearTextRight As System.Windows.Forms.Button
     Friend WithEvents btnClearTextLeft As System.Windows.Forms.Button
+    Friend WithEvents Label16 As System.Windows.Forms.Label
+    Friend WithEvents pnlPicBackLeft As System.Windows.Forms.Panel
+    Friend WithEvents tbDefaultSlideShow As System.Windows.Forms.TextBox
+    Friend WithEvents tbDefaultHBFile As System.Windows.Forms.TextBox
+    Friend WithEvents tbDefaultImageFile As System.Windows.Forms.TextBox
+    Friend WithEvents btnRevertPrefs As System.Windows.Forms.Button
+    Friend WithEvents btnSavePrefs As System.Windows.Forms.Button
+    Friend WithEvents GroupBox2 As System.Windows.Forms.GroupBox
+    Friend WithEvents lblDefaultColorLeft As System.Windows.Forms.Label
+    Friend WithEvents lblDefaultColorRight As System.Windows.Forms.Label
+    Friend WithEvents Label17 As System.Windows.Forms.Label
+    Friend WithEvents tbDefaultFontSize As System.Windows.Forms.TextBox
+    Friend WithEvents Label18 As System.Windows.Forms.Label
+    Friend WithEvents btnDefaultPrefs As System.Windows.Forms.Button
+    Friend WithEvents grpDefaultColorsRight As System.Windows.Forms.GroupBox
+    Friend WithEvents grpDefaultColorsLeft As System.Windows.Forms.GroupBox
+    Friend WithEvents cbDisplayDefaultImage As System.Windows.Forms.CheckBox
+    Friend WithEvents btnChooseDefaultImageDir As System.Windows.Forms.Button
+    Friend WithEvents btnChooseDefaultTextColorRight As System.Windows.Forms.Button
+    Friend WithEvents pnlDefaultTextColorRight6 As System.Windows.Forms.Panel
+    Friend WithEvents pnlDefaultTextColorRight5 As System.Windows.Forms.Panel
+    Friend WithEvents pnlDefaultTextColorRight4 As System.Windows.Forms.Panel
+    Friend WithEvents pnlDefaultTextColorRight3 As System.Windows.Forms.Panel
+    Friend WithEvents pnlDefaultTextColorRight2 As System.Windows.Forms.Panel
+    Friend WithEvents pnlDefaultTextColorRight1 As System.Windows.Forms.Panel
+    Friend WithEvents btnChooseDefaultTextColorLeft As System.Windows.Forms.Button
+    Friend WithEvents pnlDefaultTextColorLeft6 As System.Windows.Forms.Panel
+    Friend WithEvents pnlDefaultTextColorLeft5 As System.Windows.Forms.Panel
+    Friend WithEvents pnlDefaultTextColorLeft4 As System.Windows.Forms.Panel
+    Friend WithEvents pnlDefaultTextColorLeft3 As System.Windows.Forms.Panel
+    Friend WithEvents pnlDefaultTextColorLeft2 As System.Windows.Forms.Panel
+    Friend WithEvents pnlDefaultTextColorLeft1 As System.Windows.Forms.Panel
+    Friend WithEvents cbPlaySlidesAtStart As System.Windows.Forms.CheckBox
+    Friend WithEvents nudDefaultSlideDelay As System.Windows.Forms.NumericUpDown
+    Friend WithEvents btnChooseDefaultSlideShow As System.Windows.Forms.Button
+    Friend WithEvents btnChooseDefaultHB As System.Windows.Forms.Button
+    Friend WithEvents btnChooseDefaultImage As System.Windows.Forms.Button
+    Friend WithEvents cbLoadDefaultSlides As System.Windows.Forms.CheckBox
+    Friend WithEvents cbLoadDefaultHB As System.Windows.Forms.CheckBox
+    Friend WithEvents tbDefaultImageDir As System.Windows.Forms.TextBox
+    Friend WithEvents CountdownTimer As System.Windows.Forms.Timer
+    Friend WithEvents MenuCountdownToggle As System.Windows.Forms.MenuItem
+    Friend WithEvents btnStartCountdown As System.Windows.Forms.Button
+    Friend WithEvents cbExpandPicLeft As System.Windows.Forms.CheckBox
+
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
+        Dim resources As System.Resources.ResourceManager = New System.Resources.ResourceManager(GetType(fmMain))
         Me.btnBlackout = New System.Windows.Forms.Button()
         Me.tbLeftTeam = New System.Windows.Forms.TextBox()
         Me.tbRightTeam = New System.Windows.Forms.TextBox()
@@ -236,13 +287,15 @@ Public Class fmMain
         Me.menuAdd5Right = New System.Windows.Forms.MenuItem()
         Me.menuSubtract5Right = New System.Windows.Forms.MenuItem()
         Me.EasterEgg1 = New System.Windows.Forms.MenuItem()
+        Me.MenuCountdownToggle = New System.Windows.Forms.MenuItem()
         Me.picLeft = New System.Windows.Forms.PictureBox()
         Me.btnPictureLeft = New System.Windows.Forms.Button()
         Me.btnLeftScoreColor = New System.Windows.Forms.Button()
         Me.btnRightScoreColor = New System.Windows.Forms.Button()
         Me.TabControl1 = New System.Windows.Forms.TabControl()
         Me.tpScreenText = New System.Windows.Forms.TabPage()
-        Me.Button1 = New System.Windows.Forms.Button()
+        Me.btnStartCountdown = New System.Windows.Forms.Button()
+        Me.btnClearTextBoth = New System.Windows.Forms.Button()
         Me.Label15 = New System.Windows.Forms.Label()
         Me.btnClearTextRight = New System.Windows.Forms.Button()
         Me.btnClearTextLeft = New System.Windows.Forms.Button()
@@ -255,24 +308,24 @@ Public Class fmMain
         Me.tbLeftText = New System.Windows.Forms.TextBox()
         Me.tbRightFontSize = New System.Windows.Forms.TextBox()
         Me.grpRightColors = New System.Windows.Forms.GroupBox()
-        Me.btnRightTextColor = New System.Windows.Forms.Button()
-        Me.pnlRightColor6 = New System.Windows.Forms.Panel()
-        Me.pnlRightColor5 = New System.Windows.Forms.Panel()
-        Me.pnlRightColor4 = New System.Windows.Forms.Panel()
-        Me.pnlRightColor3 = New System.Windows.Forms.Panel()
-        Me.pnlRightColor2 = New System.Windows.Forms.Panel()
-        Me.pnlRightColor1 = New System.Windows.Forms.Panel()
+        Me.btnChooseTextColorRight = New System.Windows.Forms.Button()
+        Me.pnlTextColorRight6 = New System.Windows.Forms.Panel()
+        Me.pnlTextColorRight5 = New System.Windows.Forms.Panel()
+        Me.pnlTextColorRight4 = New System.Windows.Forms.Panel()
+        Me.pnlTextColorRight3 = New System.Windows.Forms.Panel()
+        Me.pnlTextColorRight2 = New System.Windows.Forms.Panel()
+        Me.pnlTextColorRight1 = New System.Windows.Forms.Panel()
         Me.btnShowRightText = New System.Windows.Forms.Button()
         Me.tbRightText = New System.Windows.Forms.TextBox()
         Me.tbLeftFontSize = New System.Windows.Forms.TextBox()
         Me.grpLeftColors = New System.Windows.Forms.GroupBox()
-        Me.btnLeftTextColor = New System.Windows.Forms.Button()
-        Me.pnlLeftColor6 = New System.Windows.Forms.Panel()
-        Me.pnlLeftColor5 = New System.Windows.Forms.Panel()
-        Me.pnlLeftColor4 = New System.Windows.Forms.Panel()
-        Me.pnlLeftColor3 = New System.Windows.Forms.Panel()
-        Me.pnlLeftColor2 = New System.Windows.Forms.Panel()
-        Me.pnlLeftColor1 = New System.Windows.Forms.Panel()
+        Me.btnChooseTextColorLeft = New System.Windows.Forms.Button()
+        Me.pnlTextColorLeft6 = New System.Windows.Forms.Panel()
+        Me.pnlTextColorLeft5 = New System.Windows.Forms.Panel()
+        Me.pnlTextColorLeft4 = New System.Windows.Forms.Panel()
+        Me.pnlTextColorLeft3 = New System.Windows.Forms.Panel()
+        Me.pnlTextColorLeft2 = New System.Windows.Forms.Panel()
+        Me.pnlTextColorLeft1 = New System.Windows.Forms.Panel()
         Me.tp5Things = New System.Windows.Forms.TabPage()
         Me.tbCurrentThing = New System.Windows.Forms.TextBox()
         Me.Label12 = New System.Windows.Forms.Label()
@@ -363,6 +416,46 @@ Public Class fmMain
         Me.btnFirstSlide = New System.Windows.Forms.Button()
         Me.lbSlideList = New System.Windows.Forms.ListBox()
         Me.picSlidePreview = New System.Windows.Forms.PictureBox()
+        Me.tpPrefs = New System.Windows.Forms.TabPage()
+        Me.btnDefaultPrefs = New System.Windows.Forms.Button()
+        Me.tbDefaultImageDir = New System.Windows.Forms.TextBox()
+        Me.btnChooseDefaultImageDir = New System.Windows.Forms.Button()
+        Me.Label18 = New System.Windows.Forms.Label()
+        Me.tbDefaultFontSize = New System.Windows.Forms.TextBox()
+        Me.Label17 = New System.Windows.Forms.Label()
+        Me.GroupBox2 = New System.Windows.Forms.GroupBox()
+        Me.lblDefaultColorRight = New System.Windows.Forms.Label()
+        Me.lblDefaultColorLeft = New System.Windows.Forms.Label()
+        Me.grpDefaultColorsRight = New System.Windows.Forms.GroupBox()
+        Me.btnChooseDefaultTextColorRight = New System.Windows.Forms.Button()
+        Me.pnlDefaultTextColorRight6 = New System.Windows.Forms.Panel()
+        Me.pnlDefaultTextColorRight5 = New System.Windows.Forms.Panel()
+        Me.pnlDefaultTextColorRight4 = New System.Windows.Forms.Panel()
+        Me.pnlDefaultTextColorRight3 = New System.Windows.Forms.Panel()
+        Me.pnlDefaultTextColorRight2 = New System.Windows.Forms.Panel()
+        Me.pnlDefaultTextColorRight1 = New System.Windows.Forms.Panel()
+        Me.grpDefaultColorsLeft = New System.Windows.Forms.GroupBox()
+        Me.btnChooseDefaultTextColorLeft = New System.Windows.Forms.Button()
+        Me.pnlDefaultTextColorLeft6 = New System.Windows.Forms.Panel()
+        Me.pnlDefaultTextColorLeft5 = New System.Windows.Forms.Panel()
+        Me.pnlDefaultTextColorLeft4 = New System.Windows.Forms.Panel()
+        Me.pnlDefaultTextColorLeft3 = New System.Windows.Forms.Panel()
+        Me.pnlDefaultTextColorLeft2 = New System.Windows.Forms.Panel()
+        Me.pnlDefaultTextColorLeft1 = New System.Windows.Forms.Panel()
+        Me.btnSavePrefs = New System.Windows.Forms.Button()
+        Me.btnRevertPrefs = New System.Windows.Forms.Button()
+        Me.cbPlaySlidesAtStart = New System.Windows.Forms.CheckBox()
+        Me.Label16 = New System.Windows.Forms.Label()
+        Me.nudDefaultSlideDelay = New System.Windows.Forms.NumericUpDown()
+        Me.tbDefaultSlideShow = New System.Windows.Forms.TextBox()
+        Me.btnChooseDefaultSlideShow = New System.Windows.Forms.Button()
+        Me.tbDefaultHBFile = New System.Windows.Forms.TextBox()
+        Me.btnChooseDefaultHB = New System.Windows.Forms.Button()
+        Me.tbDefaultImageFile = New System.Windows.Forms.TextBox()
+        Me.btnChooseDefaultImage = New System.Windows.Forms.Button()
+        Me.cbDisplayDefaultImage = New System.Windows.Forms.CheckBox()
+        Me.cbLoadDefaultSlides = New System.Windows.Forms.CheckBox()
+        Me.cbLoadDefaultHB = New System.Windows.Forms.CheckBox()
         Me.tpAbout = New System.Windows.Forms.TabPage()
         Me.TextBox2 = New System.Windows.Forms.TextBox()
         Me.TextBox1 = New System.Windows.Forms.TextBox()
@@ -377,6 +470,9 @@ Public Class fmMain
         Me.btnHot8 = New System.Windows.Forms.Button()
         Me.btnHot9 = New System.Windows.Forms.Button()
         Me.btnHot10 = New System.Windows.Forms.Button()
+        Me.pnlPicBackLeft = New System.Windows.Forms.Panel()
+        Me.CountdownTimer = New System.Windows.Forms.Timer(Me.components)
+        Me.cbExpandPicLeft = New System.Windows.Forms.CheckBox()
         Me.TabControl1.SuspendLayout()
         Me.tpScreenText.SuspendLayout()
         Me.grpRightColors.SuspendLayout()
@@ -387,7 +483,13 @@ Public Class fmMain
         Me.gbHB.SuspendLayout()
         Me.tpSlides.SuspendLayout()
         CType(Me.nudDelay, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.tpPrefs.SuspendLayout()
+        Me.GroupBox2.SuspendLayout()
+        Me.grpDefaultColorsRight.SuspendLayout()
+        Me.grpDefaultColorsLeft.SuspendLayout()
+        CType(Me.nudDefaultSlideDelay, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.tpAbout.SuspendLayout()
+        Me.pnlPicBackLeft.SuspendLayout()
         Me.SuspendLayout()
         '
         'btnBlackout
@@ -506,7 +608,7 @@ Public Class fmMain
         'menuDummy
         '
         Me.menuDummy.Index = 0
-        Me.menuDummy.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.menuAdd1Left, Me.menuSubtract1Left, Me.menuAdd5Left, Me.menuSubtract5Left, Me.menuAdd1Right, Me.menuSubtract1Right, Me.menuAdd5Right, Me.menuSubtract5Right, Me.EasterEgg1})
+        Me.menuDummy.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.menuAdd1Left, Me.menuSubtract1Left, Me.menuAdd5Left, Me.menuSubtract5Left, Me.menuAdd1Right, Me.menuSubtract1Right, Me.menuAdd5Right, Me.menuSubtract5Right, Me.EasterEgg1, Me.MenuCountdownToggle})
         Me.menuDummy.Text = "Dummy"
         Me.menuDummy.Visible = False
         '
@@ -564,11 +666,15 @@ Public Class fmMain
         Me.EasterEgg1.Shortcut = System.Windows.Forms.Shortcut.CtrlShiftB
         Me.EasterEgg1.Text = "Bill Loves Betse!"
         '
+        'MenuCountdownToggle
+        '
+        Me.MenuCountdownToggle.Index = 9
+        Me.MenuCountdownToggle.Shortcut = System.Windows.Forms.Shortcut.CtrlShiftT
+        Me.MenuCountdownToggle.Text = "CountdownTimer"
+        '
         'picLeft
         '
         Me.picLeft.BackColor = System.Drawing.Color.Transparent
-        Me.picLeft.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
-        Me.picLeft.Location = New System.Drawing.Point(28, 60)
         Me.picLeft.Name = "picLeft"
         Me.picLeft.Size = New System.Drawing.Size(160, 120)
         Me.picLeft.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
@@ -601,10 +707,10 @@ Public Class fmMain
         '
         'TabControl1
         '
-        Me.TabControl1.Controls.AddRange(New System.Windows.Forms.Control() {Me.tpScreenText, Me.tp5Things, Me.tpHotButtons, Me.tpSlides, Me.tpAbout})
+        Me.TabControl1.Controls.AddRange(New System.Windows.Forms.Control() {Me.tpScreenText, Me.tp5Things, Me.tpHotButtons, Me.tpSlides, Me.tpPrefs, Me.tpAbout})
         Me.TabControl1.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.TabControl1.HotTrack = True
-        Me.TabControl1.ItemSize = New System.Drawing.Size(153, 21)
+        Me.TabControl1.ItemSize = New System.Drawing.Size(128, 21)
         Me.TabControl1.Location = New System.Drawing.Point(0, 216)
         Me.TabControl1.Name = "TabControl1"
         Me.TabControl1.SelectedIndex = 0
@@ -614,24 +720,33 @@ Public Class fmMain
         '
         'tpScreenText
         '
-        Me.tpScreenText.Controls.AddRange(New System.Windows.Forms.Control() {Me.Button1, Me.Label15, Me.btnClearTextRight, Me.btnClearTextLeft, Me.btnDocLoadBoth, Me.btnDocLoadRight, Me.btnDocLoadLeft, Me.Label11, Me.Label10, Me.btnShowLeftText, Me.tbLeftText, Me.tbRightFontSize, Me.grpRightColors, Me.btnShowRightText, Me.tbRightText, Me.tbLeftFontSize, Me.grpLeftColors})
+        Me.tpScreenText.Controls.AddRange(New System.Windows.Forms.Control() {Me.btnStartCountdown, Me.btnClearTextBoth, Me.Label15, Me.btnClearTextRight, Me.btnClearTextLeft, Me.btnDocLoadBoth, Me.btnDocLoadRight, Me.btnDocLoadLeft, Me.Label11, Me.Label10, Me.btnShowLeftText, Me.tbLeftText, Me.tbRightFontSize, Me.grpRightColors, Me.btnShowRightText, Me.tbRightText, Me.tbLeftFontSize, Me.grpLeftColors})
         Me.tpScreenText.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.tpScreenText.Location = New System.Drawing.Point(4, 25)
         Me.tpScreenText.Name = "tpScreenText"
         Me.tpScreenText.Size = New System.Drawing.Size(764, 331)
         Me.tpScreenText.TabIndex = 0
-        Me.tpScreenText.Text = "Screen Text"
+        Me.tpScreenText.Text = "Text Display"
         '
-        'Button1
+        'btnStartCountdown
         '
-        Me.Button1.BackColor = System.Drawing.Color.Transparent
-        Me.Button1.Font = New System.Drawing.Font("Wingdings", 15.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
-        Me.Button1.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.Button1.Location = New System.Drawing.Point(364, 128)
-        Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(36, 36)
-        Me.Button1.TabIndex = 60
-        Me.Button1.Text = "ó"
+        Me.btnStartCountdown.Location = New System.Drawing.Point(332, 16)
+        Me.btnStartCountdown.Name = "btnStartCountdown"
+        Me.btnStartCountdown.Size = New System.Drawing.Size(100, 24)
+        Me.btnStartCountdown.TabIndex = 57
+        Me.btnStartCountdown.Text = "START TIMER"
+        Me.btnStartCountdown.Visible = False
+        '
+        'btnClearTextBoth
+        '
+        Me.btnClearTextBoth.BackColor = System.Drawing.Color.Transparent
+        Me.btnClearTextBoth.Font = New System.Drawing.Font("Wingdings", 15.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
+        Me.btnClearTextBoth.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.btnClearTextBoth.Location = New System.Drawing.Point(364, 128)
+        Me.btnClearTextBoth.Name = "btnClearTextBoth"
+        Me.btnClearTextBoth.Size = New System.Drawing.Size(36, 36)
+        Me.btnClearTextBoth.TabIndex = 60
+        Me.btnClearTextBoth.Text = "ó"
         '
         'Label15
         '
@@ -729,7 +844,7 @@ Public Class fmMain
         Me.tbLeftText.Name = "tbLeftText"
         Me.tbLeftText.Size = New System.Drawing.Size(280, 210)
         Me.tbLeftText.TabIndex = 38
-        Me.tbLeftText.Text = "JANIS v1.14" & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "(Single Display)" & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "by" & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "Bill Cernansky"
+        Me.tbLeftText.Text = "JANIS v2.0 Beta" & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "(Single Display)" & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "by" & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "Bill Cernansky"
         Me.tbLeftText.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'tbRightFontSize
@@ -746,7 +861,7 @@ Public Class fmMain
         'grpRightColors
         '
         Me.grpRightColors.BackColor = System.Drawing.Color.Transparent
-        Me.grpRightColors.Controls.AddRange(New System.Windows.Forms.Control() {Me.btnRightTextColor, Me.pnlRightColor6, Me.pnlRightColor5, Me.pnlRightColor4, Me.pnlRightColor3, Me.pnlRightColor2, Me.pnlRightColor1})
+        Me.grpRightColors.Controls.AddRange(New System.Windows.Forms.Control() {Me.btnChooseTextColorRight, Me.pnlTextColorRight6, Me.pnlTextColorRight5, Me.pnlTextColorRight4, Me.pnlTextColorRight3, Me.pnlTextColorRight2, Me.pnlTextColorRight1})
         Me.grpRightColors.Location = New System.Drawing.Point(512, 12)
         Me.grpRightColors.Name = "grpRightColors"
         Me.grpRightColors.Size = New System.Drawing.Size(228, 40)
@@ -754,67 +869,67 @@ Public Class fmMain
         Me.grpRightColors.TabStop = False
         Me.grpRightColors.Text = "Background"
         '
-        'btnRightTextColor
+        'btnChooseTextColorRight
         '
-        Me.btnRightTextColor.Location = New System.Drawing.Point(152, 12)
-        Me.btnRightTextColor.Name = "btnRightTextColor"
-        Me.btnRightTextColor.Size = New System.Drawing.Size(68, 24)
-        Me.btnRightTextColor.TabIndex = 37
-        Me.btnRightTextColor.Text = "Choose..."
+        Me.btnChooseTextColorRight.Location = New System.Drawing.Point(152, 12)
+        Me.btnChooseTextColorRight.Name = "btnChooseTextColorRight"
+        Me.btnChooseTextColorRight.Size = New System.Drawing.Size(68, 24)
+        Me.btnChooseTextColorRight.TabIndex = 37
+        Me.btnChooseTextColorRight.Text = "Choose..."
         '
-        'pnlRightColor6
+        'pnlTextColorRight6
         '
-        Me.pnlRightColor6.BackColor = System.Drawing.Color.Black
-        Me.pnlRightColor6.Location = New System.Drawing.Point(128, 16)
-        Me.pnlRightColor6.Name = "pnlRightColor6"
-        Me.pnlRightColor6.Size = New System.Drawing.Size(16, 16)
-        Me.pnlRightColor6.TabIndex = 36
-        Me.pnlRightColor6.TabStop = True
+        Me.pnlTextColorRight6.BackColor = System.Drawing.Color.Black
+        Me.pnlTextColorRight6.Location = New System.Drawing.Point(128, 16)
+        Me.pnlTextColorRight6.Name = "pnlTextColorRight6"
+        Me.pnlTextColorRight6.Size = New System.Drawing.Size(16, 16)
+        Me.pnlTextColorRight6.TabIndex = 36
+        Me.pnlTextColorRight6.TabStop = True
         '
-        'pnlRightColor5
+        'pnlTextColorRight5
         '
-        Me.pnlRightColor5.BackColor = System.Drawing.Color.FromArgb(CType(0, Byte), CType(64, Byte), CType(0, Byte))
-        Me.pnlRightColor5.Location = New System.Drawing.Point(104, 16)
-        Me.pnlRightColor5.Name = "pnlRightColor5"
-        Me.pnlRightColor5.Size = New System.Drawing.Size(16, 16)
-        Me.pnlRightColor5.TabIndex = 35
-        Me.pnlRightColor5.TabStop = True
+        Me.pnlTextColorRight5.BackColor = System.Drawing.Color.FromArgb(CType(0, Byte), CType(64, Byte), CType(0, Byte))
+        Me.pnlTextColorRight5.Location = New System.Drawing.Point(104, 16)
+        Me.pnlTextColorRight5.Name = "pnlTextColorRight5"
+        Me.pnlTextColorRight5.Size = New System.Drawing.Size(16, 16)
+        Me.pnlTextColorRight5.TabIndex = 35
+        Me.pnlTextColorRight5.TabStop = True
         '
-        'pnlRightColor4
+        'pnlTextColorRight4
         '
-        Me.pnlRightColor4.BackColor = System.Drawing.Color.FromArgb(CType(64, Byte), CType(0, Byte), CType(64, Byte))
-        Me.pnlRightColor4.Location = New System.Drawing.Point(80, 16)
-        Me.pnlRightColor4.Name = "pnlRightColor4"
-        Me.pnlRightColor4.Size = New System.Drawing.Size(16, 16)
-        Me.pnlRightColor4.TabIndex = 34
-        Me.pnlRightColor4.TabStop = True
+        Me.pnlTextColorRight4.BackColor = System.Drawing.Color.FromArgb(CType(64, Byte), CType(0, Byte), CType(64, Byte))
+        Me.pnlTextColorRight4.Location = New System.Drawing.Point(80, 16)
+        Me.pnlTextColorRight4.Name = "pnlTextColorRight4"
+        Me.pnlTextColorRight4.Size = New System.Drawing.Size(16, 16)
+        Me.pnlTextColorRight4.TabIndex = 34
+        Me.pnlTextColorRight4.TabStop = True
         '
-        'pnlRightColor3
+        'pnlTextColorRight3
         '
-        Me.pnlRightColor3.BackColor = System.Drawing.Color.FromArgb(CType(100, Byte), CType(50, Byte), CType(0, Byte))
-        Me.pnlRightColor3.Location = New System.Drawing.Point(56, 16)
-        Me.pnlRightColor3.Name = "pnlRightColor3"
-        Me.pnlRightColor3.Size = New System.Drawing.Size(16, 16)
-        Me.pnlRightColor3.TabIndex = 33
-        Me.pnlRightColor3.TabStop = True
+        Me.pnlTextColorRight3.BackColor = System.Drawing.Color.FromArgb(CType(100, Byte), CType(50, Byte), CType(0, Byte))
+        Me.pnlTextColorRight3.Location = New System.Drawing.Point(56, 16)
+        Me.pnlTextColorRight3.Name = "pnlTextColorRight3"
+        Me.pnlTextColorRight3.Size = New System.Drawing.Size(16, 16)
+        Me.pnlTextColorRight3.TabIndex = 33
+        Me.pnlTextColorRight3.TabStop = True
         '
-        'pnlRightColor2
+        'pnlTextColorRight2
         '
-        Me.pnlRightColor2.BackColor = System.Drawing.Color.Maroon
-        Me.pnlRightColor2.Location = New System.Drawing.Point(32, 16)
-        Me.pnlRightColor2.Name = "pnlRightColor2"
-        Me.pnlRightColor2.Size = New System.Drawing.Size(16, 16)
-        Me.pnlRightColor2.TabIndex = 32
-        Me.pnlRightColor2.TabStop = True
+        Me.pnlTextColorRight2.BackColor = System.Drawing.Color.Maroon
+        Me.pnlTextColorRight2.Location = New System.Drawing.Point(32, 16)
+        Me.pnlTextColorRight2.Name = "pnlTextColorRight2"
+        Me.pnlTextColorRight2.Size = New System.Drawing.Size(16, 16)
+        Me.pnlTextColorRight2.TabIndex = 32
+        Me.pnlTextColorRight2.TabStop = True
         '
-        'pnlRightColor1
+        'pnlTextColorRight1
         '
-        Me.pnlRightColor1.BackColor = System.Drawing.Color.FromArgb(CType(0, Byte), CType(0, Byte), CType(176, Byte))
-        Me.pnlRightColor1.Location = New System.Drawing.Point(8, 16)
-        Me.pnlRightColor1.Name = "pnlRightColor1"
-        Me.pnlRightColor1.Size = New System.Drawing.Size(16, 16)
-        Me.pnlRightColor1.TabIndex = 31
-        Me.pnlRightColor1.TabStop = True
+        Me.pnlTextColorRight1.BackColor = System.Drawing.Color.FromArgb(CType(0, Byte), CType(0, Byte), CType(176, Byte))
+        Me.pnlTextColorRight1.Location = New System.Drawing.Point(8, 16)
+        Me.pnlTextColorRight1.Name = "pnlTextColorRight1"
+        Me.pnlTextColorRight1.Size = New System.Drawing.Size(16, 16)
+        Me.pnlTextColorRight1.TabIndex = 31
+        Me.pnlTextColorRight1.TabStop = True
         '
         'btnShowRightText
         '
@@ -853,7 +968,7 @@ Public Class fmMain
         'grpLeftColors
         '
         Me.grpLeftColors.BackColor = System.Drawing.Color.Transparent
-        Me.grpLeftColors.Controls.AddRange(New System.Windows.Forms.Control() {Me.btnLeftTextColor, Me.pnlLeftColor6, Me.pnlLeftColor5, Me.pnlLeftColor4, Me.pnlLeftColor3, Me.pnlLeftColor2, Me.pnlLeftColor1})
+        Me.grpLeftColors.Controls.AddRange(New System.Windows.Forms.Control() {Me.btnChooseTextColorLeft, Me.pnlTextColorLeft6, Me.pnlTextColorLeft5, Me.pnlTextColorLeft4, Me.pnlTextColorLeft3, Me.pnlTextColorLeft2, Me.pnlTextColorLeft1})
         Me.grpLeftColors.Location = New System.Drawing.Point(76, 12)
         Me.grpLeftColors.Name = "grpLeftColors"
         Me.grpLeftColors.Size = New System.Drawing.Size(228, 40)
@@ -861,67 +976,67 @@ Public Class fmMain
         Me.grpLeftColors.TabStop = False
         Me.grpLeftColors.Text = "Background"
         '
-        'btnLeftTextColor
+        'btnChooseTextColorLeft
         '
-        Me.btnLeftTextColor.Location = New System.Drawing.Point(152, 12)
-        Me.btnLeftTextColor.Name = "btnLeftTextColor"
-        Me.btnLeftTextColor.Size = New System.Drawing.Size(68, 24)
-        Me.btnLeftTextColor.TabIndex = 27
-        Me.btnLeftTextColor.Text = "Choose..."
+        Me.btnChooseTextColorLeft.Location = New System.Drawing.Point(152, 12)
+        Me.btnChooseTextColorLeft.Name = "btnChooseTextColorLeft"
+        Me.btnChooseTextColorLeft.Size = New System.Drawing.Size(68, 24)
+        Me.btnChooseTextColorLeft.TabIndex = 27
+        Me.btnChooseTextColorLeft.Text = "Choose..."
         '
-        'pnlLeftColor6
+        'pnlTextColorLeft6
         '
-        Me.pnlLeftColor6.BackColor = System.Drawing.Color.Black
-        Me.pnlLeftColor6.Location = New System.Drawing.Point(128, 16)
-        Me.pnlLeftColor6.Name = "pnlLeftColor6"
-        Me.pnlLeftColor6.Size = New System.Drawing.Size(16, 16)
-        Me.pnlLeftColor6.TabIndex = 26
-        Me.pnlLeftColor6.TabStop = True
+        Me.pnlTextColorLeft6.BackColor = System.Drawing.Color.Black
+        Me.pnlTextColorLeft6.Location = New System.Drawing.Point(128, 16)
+        Me.pnlTextColorLeft6.Name = "pnlTextColorLeft6"
+        Me.pnlTextColorLeft6.Size = New System.Drawing.Size(16, 16)
+        Me.pnlTextColorLeft6.TabIndex = 26
+        Me.pnlTextColorLeft6.TabStop = True
         '
-        'pnlLeftColor5
+        'pnlTextColorLeft5
         '
-        Me.pnlLeftColor5.BackColor = System.Drawing.Color.FromArgb(CType(0, Byte), CType(64, Byte), CType(0, Byte))
-        Me.pnlLeftColor5.Location = New System.Drawing.Point(104, 16)
-        Me.pnlLeftColor5.Name = "pnlLeftColor5"
-        Me.pnlLeftColor5.Size = New System.Drawing.Size(16, 16)
-        Me.pnlLeftColor5.TabIndex = 25
-        Me.pnlLeftColor5.TabStop = True
+        Me.pnlTextColorLeft5.BackColor = System.Drawing.Color.FromArgb(CType(0, Byte), CType(64, Byte), CType(0, Byte))
+        Me.pnlTextColorLeft5.Location = New System.Drawing.Point(104, 16)
+        Me.pnlTextColorLeft5.Name = "pnlTextColorLeft5"
+        Me.pnlTextColorLeft5.Size = New System.Drawing.Size(16, 16)
+        Me.pnlTextColorLeft5.TabIndex = 25
+        Me.pnlTextColorLeft5.TabStop = True
         '
-        'pnlLeftColor4
+        'pnlTextColorLeft4
         '
-        Me.pnlLeftColor4.BackColor = System.Drawing.Color.FromArgb(CType(64, Byte), CType(0, Byte), CType(64, Byte))
-        Me.pnlLeftColor4.Location = New System.Drawing.Point(80, 16)
-        Me.pnlLeftColor4.Name = "pnlLeftColor4"
-        Me.pnlLeftColor4.Size = New System.Drawing.Size(16, 16)
-        Me.pnlLeftColor4.TabIndex = 24
-        Me.pnlLeftColor4.TabStop = True
+        Me.pnlTextColorLeft4.BackColor = System.Drawing.Color.FromArgb(CType(64, Byte), CType(0, Byte), CType(64, Byte))
+        Me.pnlTextColorLeft4.Location = New System.Drawing.Point(80, 16)
+        Me.pnlTextColorLeft4.Name = "pnlTextColorLeft4"
+        Me.pnlTextColorLeft4.Size = New System.Drawing.Size(16, 16)
+        Me.pnlTextColorLeft4.TabIndex = 24
+        Me.pnlTextColorLeft4.TabStop = True
         '
-        'pnlLeftColor3
+        'pnlTextColorLeft3
         '
-        Me.pnlLeftColor3.BackColor = System.Drawing.Color.FromArgb(CType(100, Byte), CType(50, Byte), CType(0, Byte))
-        Me.pnlLeftColor3.Location = New System.Drawing.Point(56, 16)
-        Me.pnlLeftColor3.Name = "pnlLeftColor3"
-        Me.pnlLeftColor3.Size = New System.Drawing.Size(16, 16)
-        Me.pnlLeftColor3.TabIndex = 23
-        Me.pnlLeftColor3.TabStop = True
+        Me.pnlTextColorLeft3.BackColor = System.Drawing.Color.FromArgb(CType(100, Byte), CType(50, Byte), CType(0, Byte))
+        Me.pnlTextColorLeft3.Location = New System.Drawing.Point(56, 16)
+        Me.pnlTextColorLeft3.Name = "pnlTextColorLeft3"
+        Me.pnlTextColorLeft3.Size = New System.Drawing.Size(16, 16)
+        Me.pnlTextColorLeft3.TabIndex = 23
+        Me.pnlTextColorLeft3.TabStop = True
         '
-        'pnlLeftColor2
+        'pnlTextColorLeft2
         '
-        Me.pnlLeftColor2.BackColor = System.Drawing.Color.Maroon
-        Me.pnlLeftColor2.Location = New System.Drawing.Point(32, 16)
-        Me.pnlLeftColor2.Name = "pnlLeftColor2"
-        Me.pnlLeftColor2.Size = New System.Drawing.Size(16, 16)
-        Me.pnlLeftColor2.TabIndex = 22
-        Me.pnlLeftColor2.TabStop = True
+        Me.pnlTextColorLeft2.BackColor = System.Drawing.Color.Maroon
+        Me.pnlTextColorLeft2.Location = New System.Drawing.Point(32, 16)
+        Me.pnlTextColorLeft2.Name = "pnlTextColorLeft2"
+        Me.pnlTextColorLeft2.Size = New System.Drawing.Size(16, 16)
+        Me.pnlTextColorLeft2.TabIndex = 22
+        Me.pnlTextColorLeft2.TabStop = True
         '
-        'pnlLeftColor1
+        'pnlTextColorLeft1
         '
-        Me.pnlLeftColor1.BackColor = System.Drawing.Color.FromArgb(CType(0, Byte), CType(0, Byte), CType(176, Byte))
-        Me.pnlLeftColor1.Location = New System.Drawing.Point(8, 16)
-        Me.pnlLeftColor1.Name = "pnlLeftColor1"
-        Me.pnlLeftColor1.Size = New System.Drawing.Size(16, 16)
-        Me.pnlLeftColor1.TabIndex = 21
-        Me.pnlLeftColor1.TabStop = True
+        Me.pnlTextColorLeft1.BackColor = System.Drawing.Color.FromArgb(CType(0, Byte), CType(0, Byte), CType(176, Byte))
+        Me.pnlTextColorLeft1.Location = New System.Drawing.Point(8, 16)
+        Me.pnlTextColorLeft1.Name = "pnlTextColorLeft1"
+        Me.pnlTextColorLeft1.Size = New System.Drawing.Size(16, 16)
+        Me.pnlTextColorLeft1.TabIndex = 21
+        Me.pnlTextColorLeft1.TabStop = True
         '
         'tp5Things
         '
@@ -1020,7 +1135,7 @@ Public Class fmMain
         Me.btnClearThings.Name = "btnClearThings"
         Me.btnClearThings.Size = New System.Drawing.Size(80, 32)
         Me.btnClearThings.TabIndex = 56
-        Me.btnClearThings.Text = "Clear List"
+        Me.btnClearThings.Text = "CLEAR LIST"
         '
         'btnRemoveThing
         '
@@ -1028,7 +1143,7 @@ Public Class fmMain
         Me.btnRemoveThing.Name = "btnRemoveThing"
         Me.btnRemoveThing.Size = New System.Drawing.Size(80, 40)
         Me.btnRemoveThing.TabIndex = 55
-        Me.btnRemoveThing.Text = "Remove Selected"
+        Me.btnRemoveThing.Text = "REMOVE SELECTION"
         '
         'btnListLeft
         '
@@ -1063,9 +1178,9 @@ Public Class fmMain
         '
         Me.btnAddThing.Location = New System.Drawing.Point(296, 48)
         Me.btnAddThing.Name = "btnAddThing"
-        Me.btnAddThing.Size = New System.Drawing.Size(76, 32)
+        Me.btnAddThing.Size = New System.Drawing.Size(80, 32)
         Me.btnAddThing.TabIndex = 50
-        Me.btnAddThing.Text = "Add Thing"
+        Me.btnAddThing.Text = "ADD THING"
         '
         'tbNewThing
         '
@@ -1797,6 +1912,407 @@ Public Class fmMain
         Me.picSlidePreview.TabIndex = 4
         Me.picSlidePreview.TabStop = False
         '
+        'tpPrefs
+        '
+        Me.tpPrefs.Controls.AddRange(New System.Windows.Forms.Control() {Me.btnDefaultPrefs, Me.tbDefaultImageDir, Me.btnChooseDefaultImageDir, Me.Label18, Me.tbDefaultFontSize, Me.Label17, Me.GroupBox2, Me.btnSavePrefs, Me.btnRevertPrefs, Me.cbPlaySlidesAtStart, Me.Label16, Me.nudDefaultSlideDelay, Me.tbDefaultSlideShow, Me.btnChooseDefaultSlideShow, Me.tbDefaultHBFile, Me.btnChooseDefaultHB, Me.tbDefaultImageFile, Me.btnChooseDefaultImage, Me.cbDisplayDefaultImage, Me.cbLoadDefaultSlides, Me.cbLoadDefaultHB})
+        Me.tpPrefs.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.tpPrefs.Location = New System.Drawing.Point(4, 25)
+        Me.tpPrefs.Name = "tpPrefs"
+        Me.tpPrefs.Size = New System.Drawing.Size(764, 331)
+        Me.tpPrefs.TabIndex = 5
+        Me.tpPrefs.Text = "Preferences"
+        '
+        'btnDefaultPrefs
+        '
+        Me.btnDefaultPrefs.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnDefaultPrefs.Location = New System.Drawing.Point(8, 288)
+        Me.btnDefaultPrefs.Name = "btnDefaultPrefs"
+        Me.btnDefaultPrefs.Size = New System.Drawing.Size(172, 28)
+        Me.btnDefaultPrefs.TabIndex = 97
+        Me.btnDefaultPrefs.Text = "FACTORY DEFAULTS"
+        '
+        'tbDefaultImageDir
+        '
+        Me.tbDefaultImageDir.BackColor = System.Drawing.SystemColors.Control
+        Me.tbDefaultImageDir.Location = New System.Drawing.Point(224, 100)
+        Me.tbDefaultImageDir.Name = "tbDefaultImageDir"
+        Me.tbDefaultImageDir.ReadOnly = True
+        Me.tbDefaultImageDir.Size = New System.Drawing.Size(464, 20)
+        Me.tbDefaultImageDir.TabIndex = 96
+        Me.tbDefaultImageDir.Text = "C:\Program Files\JANIS"
+        '
+        'btnChooseDefaultImageDir
+        '
+        Me.btnChooseDefaultImageDir.Location = New System.Drawing.Point(692, 100)
+        Me.btnChooseDefaultImageDir.Name = "btnChooseDefaultImageDir"
+        Me.btnChooseDefaultImageDir.Size = New System.Drawing.Size(64, 23)
+        Me.btnChooseDefaultImageDir.TabIndex = 95
+        Me.btnChooseDefaultImageDir.Tag = "0"
+        Me.btnChooseDefaultImageDir.Text = "Select..."
+        '
+        'Label18
+        '
+        Me.Label18.BackColor = System.Drawing.Color.Transparent
+        Me.Label18.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label18.Location = New System.Drawing.Point(8, 100)
+        Me.Label18.Name = "Label18"
+        Me.Label18.Size = New System.Drawing.Size(212, 20)
+        Me.Label18.TabIndex = 94
+        Me.Label18.Text = "Default image search directory:"
+        Me.Label18.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'tbDefaultFontSize
+        '
+        Me.tbDefaultFontSize.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!)
+        Me.tbDefaultFontSize.Location = New System.Drawing.Point(224, 68)
+        Me.tbDefaultFontSize.MaxLength = 3
+        Me.tbDefaultFontSize.Name = "tbDefaultFontSize"
+        Me.tbDefaultFontSize.Size = New System.Drawing.Size(52, 23)
+        Me.tbDefaultFontSize.TabIndex = 93
+        Me.tbDefaultFontSize.Tag = "0"
+        Me.tbDefaultFontSize.Text = "60"
+        Me.tbDefaultFontSize.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+        '
+        'Label17
+        '
+        Me.Label17.BackColor = System.Drawing.Color.Transparent
+        Me.Label17.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label17.Location = New System.Drawing.Point(8, 68)
+        Me.Label17.Name = "Label17"
+        Me.Label17.Size = New System.Drawing.Size(212, 20)
+        Me.Label17.TabIndex = 92
+        Me.Label17.Text = "Default font size for ""Text Display"":"
+        Me.Label17.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'GroupBox2
+        '
+        Me.GroupBox2.Controls.AddRange(New System.Windows.Forms.Control() {Me.lblDefaultColorRight, Me.lblDefaultColorLeft, Me.grpDefaultColorsRight, Me.grpDefaultColorsLeft})
+        Me.GroupBox2.Location = New System.Drawing.Point(8, 4)
+        Me.GroupBox2.Name = "GroupBox2"
+        Me.GroupBox2.Size = New System.Drawing.Size(748, 60)
+        Me.GroupBox2.TabIndex = 91
+        Me.GroupBox2.TabStop = False
+        Me.GroupBox2.Text = "Default team colors at startup:"
+        '
+        'lblDefaultColorRight
+        '
+        Me.lblDefaultColorRight.BackColor = System.Drawing.Color.Maroon
+        Me.lblDefaultColorRight.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+        Me.lblDefaultColorRight.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblDefaultColorRight.ForeColor = System.Drawing.Color.White
+        Me.lblDefaultColorRight.Location = New System.Drawing.Point(388, 20)
+        Me.lblDefaultColorRight.Name = "lblDefaultColorRight"
+        Me.lblDefaultColorRight.Size = New System.Drawing.Size(100, 28)
+        Me.lblDefaultColorRight.TabIndex = 94
+        Me.lblDefaultColorRight.Text = "Right Team"
+        Me.lblDefaultColorRight.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
+        'lblDefaultColorLeft
+        '
+        Me.lblDefaultColorLeft.BackColor = System.Drawing.Color.FromArgb(CType(0, Byte), CType(0, Byte), CType(176, Byte))
+        Me.lblDefaultColorLeft.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+        Me.lblDefaultColorLeft.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblDefaultColorLeft.ForeColor = System.Drawing.Color.White
+        Me.lblDefaultColorLeft.Location = New System.Drawing.Point(260, 20)
+        Me.lblDefaultColorLeft.Name = "lblDefaultColorLeft"
+        Me.lblDefaultColorLeft.Size = New System.Drawing.Size(100, 28)
+        Me.lblDefaultColorLeft.TabIndex = 93
+        Me.lblDefaultColorLeft.Text = "Left Team"
+        Me.lblDefaultColorLeft.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
+        'grpDefaultColorsRight
+        '
+        Me.grpDefaultColorsRight.BackColor = System.Drawing.Color.Transparent
+        Me.grpDefaultColorsRight.Controls.AddRange(New System.Windows.Forms.Control() {Me.btnChooseDefaultTextColorRight, Me.pnlDefaultTextColorRight6, Me.pnlDefaultTextColorRight5, Me.pnlDefaultTextColorRight4, Me.pnlDefaultTextColorRight3, Me.pnlDefaultTextColorRight2, Me.pnlDefaultTextColorRight1})
+        Me.grpDefaultColorsRight.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.grpDefaultColorsRight.Location = New System.Drawing.Point(508, 12)
+        Me.grpDefaultColorsRight.Name = "grpDefaultColorsRight"
+        Me.grpDefaultColorsRight.Size = New System.Drawing.Size(228, 40)
+        Me.grpDefaultColorsRight.TabIndex = 92
+        Me.grpDefaultColorsRight.TabStop = False
+        '
+        'btnChooseDefaultTextColorRight
+        '
+        Me.btnChooseDefaultTextColorRight.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnChooseDefaultTextColorRight.Location = New System.Drawing.Point(152, 12)
+        Me.btnChooseDefaultTextColorRight.Name = "btnChooseDefaultTextColorRight"
+        Me.btnChooseDefaultTextColorRight.Size = New System.Drawing.Size(68, 24)
+        Me.btnChooseDefaultTextColorRight.TabIndex = 27
+        Me.btnChooseDefaultTextColorRight.Text = "Choose..."
+        '
+        'pnlDefaultTextColorRight6
+        '
+        Me.pnlDefaultTextColorRight6.BackColor = System.Drawing.Color.Black
+        Me.pnlDefaultTextColorRight6.Location = New System.Drawing.Point(128, 16)
+        Me.pnlDefaultTextColorRight6.Name = "pnlDefaultTextColorRight6"
+        Me.pnlDefaultTextColorRight6.Size = New System.Drawing.Size(16, 16)
+        Me.pnlDefaultTextColorRight6.TabIndex = 26
+        Me.pnlDefaultTextColorRight6.TabStop = True
+        '
+        'pnlDefaultTextColorRight5
+        '
+        Me.pnlDefaultTextColorRight5.BackColor = System.Drawing.Color.FromArgb(CType(0, Byte), CType(64, Byte), CType(0, Byte))
+        Me.pnlDefaultTextColorRight5.Location = New System.Drawing.Point(104, 16)
+        Me.pnlDefaultTextColorRight5.Name = "pnlDefaultTextColorRight5"
+        Me.pnlDefaultTextColorRight5.Size = New System.Drawing.Size(16, 16)
+        Me.pnlDefaultTextColorRight5.TabIndex = 25
+        Me.pnlDefaultTextColorRight5.TabStop = True
+        '
+        'pnlDefaultTextColorRight4
+        '
+        Me.pnlDefaultTextColorRight4.BackColor = System.Drawing.Color.FromArgb(CType(64, Byte), CType(0, Byte), CType(64, Byte))
+        Me.pnlDefaultTextColorRight4.Location = New System.Drawing.Point(80, 16)
+        Me.pnlDefaultTextColorRight4.Name = "pnlDefaultTextColorRight4"
+        Me.pnlDefaultTextColorRight4.Size = New System.Drawing.Size(16, 16)
+        Me.pnlDefaultTextColorRight4.TabIndex = 24
+        Me.pnlDefaultTextColorRight4.TabStop = True
+        '
+        'pnlDefaultTextColorRight3
+        '
+        Me.pnlDefaultTextColorRight3.BackColor = System.Drawing.Color.FromArgb(CType(100, Byte), CType(50, Byte), CType(0, Byte))
+        Me.pnlDefaultTextColorRight3.Location = New System.Drawing.Point(56, 16)
+        Me.pnlDefaultTextColorRight3.Name = "pnlDefaultTextColorRight3"
+        Me.pnlDefaultTextColorRight3.Size = New System.Drawing.Size(16, 16)
+        Me.pnlDefaultTextColorRight3.TabIndex = 23
+        Me.pnlDefaultTextColorRight3.TabStop = True
+        '
+        'pnlDefaultTextColorRight2
+        '
+        Me.pnlDefaultTextColorRight2.BackColor = System.Drawing.Color.Maroon
+        Me.pnlDefaultTextColorRight2.Location = New System.Drawing.Point(32, 16)
+        Me.pnlDefaultTextColorRight2.Name = "pnlDefaultTextColorRight2"
+        Me.pnlDefaultTextColorRight2.Size = New System.Drawing.Size(16, 16)
+        Me.pnlDefaultTextColorRight2.TabIndex = 22
+        Me.pnlDefaultTextColorRight2.TabStop = True
+        '
+        'pnlDefaultTextColorRight1
+        '
+        Me.pnlDefaultTextColorRight1.BackColor = System.Drawing.Color.FromArgb(CType(0, Byte), CType(0, Byte), CType(176, Byte))
+        Me.pnlDefaultTextColorRight1.Location = New System.Drawing.Point(8, 16)
+        Me.pnlDefaultTextColorRight1.Name = "pnlDefaultTextColorRight1"
+        Me.pnlDefaultTextColorRight1.Size = New System.Drawing.Size(16, 16)
+        Me.pnlDefaultTextColorRight1.TabIndex = 21
+        Me.pnlDefaultTextColorRight1.TabStop = True
+        '
+        'grpDefaultColorsLeft
+        '
+        Me.grpDefaultColorsLeft.BackColor = System.Drawing.Color.Transparent
+        Me.grpDefaultColorsLeft.Controls.AddRange(New System.Windows.Forms.Control() {Me.btnChooseDefaultTextColorLeft, Me.pnlDefaultTextColorLeft6, Me.pnlDefaultTextColorLeft5, Me.pnlDefaultTextColorLeft4, Me.pnlDefaultTextColorLeft3, Me.pnlDefaultTextColorLeft2, Me.pnlDefaultTextColorLeft1})
+        Me.grpDefaultColorsLeft.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.grpDefaultColorsLeft.Location = New System.Drawing.Point(12, 12)
+        Me.grpDefaultColorsLeft.Name = "grpDefaultColorsLeft"
+        Me.grpDefaultColorsLeft.Size = New System.Drawing.Size(228, 40)
+        Me.grpDefaultColorsLeft.TabIndex = 91
+        Me.grpDefaultColorsLeft.TabStop = False
+        '
+        'btnChooseDefaultTextColorLeft
+        '
+        Me.btnChooseDefaultTextColorLeft.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnChooseDefaultTextColorLeft.Location = New System.Drawing.Point(152, 12)
+        Me.btnChooseDefaultTextColorLeft.Name = "btnChooseDefaultTextColorLeft"
+        Me.btnChooseDefaultTextColorLeft.Size = New System.Drawing.Size(68, 24)
+        Me.btnChooseDefaultTextColorLeft.TabIndex = 27
+        Me.btnChooseDefaultTextColorLeft.Text = "Choose..."
+        '
+        'pnlDefaultTextColorLeft6
+        '
+        Me.pnlDefaultTextColorLeft6.BackColor = System.Drawing.Color.Black
+        Me.pnlDefaultTextColorLeft6.Location = New System.Drawing.Point(128, 16)
+        Me.pnlDefaultTextColorLeft6.Name = "pnlDefaultTextColorLeft6"
+        Me.pnlDefaultTextColorLeft6.Size = New System.Drawing.Size(16, 16)
+        Me.pnlDefaultTextColorLeft6.TabIndex = 26
+        Me.pnlDefaultTextColorLeft6.TabStop = True
+        '
+        'pnlDefaultTextColorLeft5
+        '
+        Me.pnlDefaultTextColorLeft5.BackColor = System.Drawing.Color.FromArgb(CType(0, Byte), CType(64, Byte), CType(0, Byte))
+        Me.pnlDefaultTextColorLeft5.Location = New System.Drawing.Point(104, 16)
+        Me.pnlDefaultTextColorLeft5.Name = "pnlDefaultTextColorLeft5"
+        Me.pnlDefaultTextColorLeft5.Size = New System.Drawing.Size(16, 16)
+        Me.pnlDefaultTextColorLeft5.TabIndex = 25
+        Me.pnlDefaultTextColorLeft5.TabStop = True
+        '
+        'pnlDefaultTextColorLeft4
+        '
+        Me.pnlDefaultTextColorLeft4.BackColor = System.Drawing.Color.FromArgb(CType(64, Byte), CType(0, Byte), CType(64, Byte))
+        Me.pnlDefaultTextColorLeft4.Location = New System.Drawing.Point(80, 16)
+        Me.pnlDefaultTextColorLeft4.Name = "pnlDefaultTextColorLeft4"
+        Me.pnlDefaultTextColorLeft4.Size = New System.Drawing.Size(16, 16)
+        Me.pnlDefaultTextColorLeft4.TabIndex = 24
+        Me.pnlDefaultTextColorLeft4.TabStop = True
+        '
+        'pnlDefaultTextColorLeft3
+        '
+        Me.pnlDefaultTextColorLeft3.BackColor = System.Drawing.Color.FromArgb(CType(100, Byte), CType(50, Byte), CType(0, Byte))
+        Me.pnlDefaultTextColorLeft3.Location = New System.Drawing.Point(56, 16)
+        Me.pnlDefaultTextColorLeft3.Name = "pnlDefaultTextColorLeft3"
+        Me.pnlDefaultTextColorLeft3.Size = New System.Drawing.Size(16, 16)
+        Me.pnlDefaultTextColorLeft3.TabIndex = 23
+        Me.pnlDefaultTextColorLeft3.TabStop = True
+        '
+        'pnlDefaultTextColorLeft2
+        '
+        Me.pnlDefaultTextColorLeft2.BackColor = System.Drawing.Color.Maroon
+        Me.pnlDefaultTextColorLeft2.Location = New System.Drawing.Point(32, 16)
+        Me.pnlDefaultTextColorLeft2.Name = "pnlDefaultTextColorLeft2"
+        Me.pnlDefaultTextColorLeft2.Size = New System.Drawing.Size(16, 16)
+        Me.pnlDefaultTextColorLeft2.TabIndex = 22
+        Me.pnlDefaultTextColorLeft2.TabStop = True
+        '
+        'pnlDefaultTextColorLeft1
+        '
+        Me.pnlDefaultTextColorLeft1.BackColor = System.Drawing.Color.FromArgb(CType(0, Byte), CType(0, Byte), CType(176, Byte))
+        Me.pnlDefaultTextColorLeft1.Location = New System.Drawing.Point(8, 16)
+        Me.pnlDefaultTextColorLeft1.Name = "pnlDefaultTextColorLeft1"
+        Me.pnlDefaultTextColorLeft1.Size = New System.Drawing.Size(16, 16)
+        Me.pnlDefaultTextColorLeft1.TabIndex = 21
+        Me.pnlDefaultTextColorLeft1.TabStop = True
+        '
+        'btnSavePrefs
+        '
+        Me.btnSavePrefs.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnSavePrefs.Location = New System.Drawing.Point(296, 288)
+        Me.btnSavePrefs.Name = "btnSavePrefs"
+        Me.btnSavePrefs.Size = New System.Drawing.Size(172, 28)
+        Me.btnSavePrefs.TabIndex = 87
+        Me.btnSavePrefs.Text = "SAVE PREFS"
+        '
+        'btnRevertPrefs
+        '
+        Me.btnRevertPrefs.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnRevertPrefs.Location = New System.Drawing.Point(584, 288)
+        Me.btnRevertPrefs.Name = "btnRevertPrefs"
+        Me.btnRevertPrefs.Size = New System.Drawing.Size(172, 28)
+        Me.btnRevertPrefs.TabIndex = 86
+        Me.btnRevertPrefs.Text = "UNDO CHANGES"
+        '
+        'cbPlaySlidesAtStart
+        '
+        Me.cbPlaySlidesAtStart.BackColor = System.Drawing.Color.Transparent
+        Me.cbPlaySlidesAtStart.Enabled = False
+        Me.cbPlaySlidesAtStart.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cbPlaySlidesAtStart.Location = New System.Drawing.Point(40, 252)
+        Me.cbPlaySlidesAtStart.Name = "cbPlaySlidesAtStart"
+        Me.cbPlaySlidesAtStart.Size = New System.Drawing.Size(228, 24)
+        Me.cbPlaySlidesAtStart.TabIndex = 85
+        Me.cbPlaySlidesAtStart.Text = "Play this Slideshow when program starts"
+        '
+        'Label16
+        '
+        Me.Label16.BackColor = System.Drawing.Color.Transparent
+        Me.Label16.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label16.Location = New System.Drawing.Point(8, 196)
+        Me.Label16.Name = "Label16"
+        Me.Label16.Size = New System.Drawing.Size(212, 20)
+        Me.Label16.TabIndex = 83
+        Me.Label16.Text = "Default seconds between slides:"
+        Me.Label16.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'nudDefaultSlideDelay
+        '
+        Me.nudDefaultSlideDelay.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte), True)
+        Me.nudDefaultSlideDelay.Location = New System.Drawing.Point(224, 192)
+        Me.nudDefaultSlideDelay.Maximum = New Decimal(New Integer() {60, 0, 0, 0})
+        Me.nudDefaultSlideDelay.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
+        Me.nudDefaultSlideDelay.Name = "nudDefaultSlideDelay"
+        Me.nudDefaultSlideDelay.Size = New System.Drawing.Size(56, 26)
+        Me.nudDefaultSlideDelay.TabIndex = 84
+        Me.nudDefaultSlideDelay.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+        Me.nudDefaultSlideDelay.Value = New Decimal(New Integer() {15, 0, 0, 0})
+        '
+        'tbDefaultSlideShow
+        '
+        Me.tbDefaultSlideShow.BackColor = System.Drawing.SystemColors.ControlDark
+        Me.tbDefaultSlideShow.Enabled = False
+        Me.tbDefaultSlideShow.Location = New System.Drawing.Point(224, 224)
+        Me.tbDefaultSlideShow.Name = "tbDefaultSlideShow"
+        Me.tbDefaultSlideShow.ReadOnly = True
+        Me.tbDefaultSlideShow.Size = New System.Drawing.Size(464, 20)
+        Me.tbDefaultSlideShow.TabIndex = 52
+        Me.tbDefaultSlideShow.Text = ""
+        '
+        'btnChooseDefaultSlideShow
+        '
+        Me.btnChooseDefaultSlideShow.Enabled = False
+        Me.btnChooseDefaultSlideShow.Location = New System.Drawing.Point(692, 224)
+        Me.btnChooseDefaultSlideShow.Name = "btnChooseDefaultSlideShow"
+        Me.btnChooseDefaultSlideShow.Size = New System.Drawing.Size(64, 23)
+        Me.btnChooseDefaultSlideShow.TabIndex = 51
+        Me.btnChooseDefaultSlideShow.Tag = "0"
+        Me.btnChooseDefaultSlideShow.Text = "Select..."
+        '
+        'tbDefaultHBFile
+        '
+        Me.tbDefaultHBFile.BackColor = System.Drawing.SystemColors.ControlDark
+        Me.tbDefaultHBFile.Enabled = False
+        Me.tbDefaultHBFile.Location = New System.Drawing.Point(224, 148)
+        Me.tbDefaultHBFile.Name = "tbDefaultHBFile"
+        Me.tbDefaultHBFile.ReadOnly = True
+        Me.tbDefaultHBFile.Size = New System.Drawing.Size(464, 20)
+        Me.tbDefaultHBFile.TabIndex = 50
+        Me.tbDefaultHBFile.Text = ""
+        '
+        'btnChooseDefaultHB
+        '
+        Me.btnChooseDefaultHB.Enabled = False
+        Me.btnChooseDefaultHB.Location = New System.Drawing.Point(692, 148)
+        Me.btnChooseDefaultHB.Name = "btnChooseDefaultHB"
+        Me.btnChooseDefaultHB.Size = New System.Drawing.Size(64, 23)
+        Me.btnChooseDefaultHB.TabIndex = 49
+        Me.btnChooseDefaultHB.Tag = "0"
+        Me.btnChooseDefaultHB.Text = "Select..."
+        '
+        'tbDefaultImageFile
+        '
+        Me.tbDefaultImageFile.BackColor = System.Drawing.SystemColors.ControlDark
+        Me.tbDefaultImageFile.Enabled = False
+        Me.tbDefaultImageFile.Location = New System.Drawing.Point(224, 124)
+        Me.tbDefaultImageFile.Name = "tbDefaultImageFile"
+        Me.tbDefaultImageFile.ReadOnly = True
+        Me.tbDefaultImageFile.Size = New System.Drawing.Size(464, 20)
+        Me.tbDefaultImageFile.TabIndex = 48
+        Me.tbDefaultImageFile.Text = ""
+        '
+        'btnChooseDefaultImage
+        '
+        Me.btnChooseDefaultImage.Enabled = False
+        Me.btnChooseDefaultImage.Location = New System.Drawing.Point(692, 124)
+        Me.btnChooseDefaultImage.Name = "btnChooseDefaultImage"
+        Me.btnChooseDefaultImage.Size = New System.Drawing.Size(64, 23)
+        Me.btnChooseDefaultImage.TabIndex = 47
+        Me.btnChooseDefaultImage.Tag = "0"
+        Me.btnChooseDefaultImage.Text = "Select..."
+        '
+        'cbDisplayDefaultImage
+        '
+        Me.cbDisplayDefaultImage.BackColor = System.Drawing.Color.Transparent
+        Me.cbDisplayDefaultImage.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cbDisplayDefaultImage.Location = New System.Drawing.Point(8, 120)
+        Me.cbDisplayDefaultImage.Name = "cbDisplayDefaultImage"
+        Me.cbDisplayDefaultImage.Size = New System.Drawing.Size(216, 24)
+        Me.cbDisplayDefaultImage.TabIndex = 2
+        Me.cbDisplayDefaultImage.Text = "Display image when program starts:"
+        '
+        'cbLoadDefaultSlides
+        '
+        Me.cbLoadDefaultSlides.BackColor = System.Drawing.Color.Transparent
+        Me.cbLoadDefaultSlides.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cbLoadDefaultSlides.Location = New System.Drawing.Point(8, 224)
+        Me.cbLoadDefaultSlides.Name = "cbLoadDefaultSlides"
+        Me.cbLoadDefaultSlides.Size = New System.Drawing.Size(216, 24)
+        Me.cbLoadDefaultSlides.TabIndex = 1
+        Me.cbLoadDefaultSlides.Text = "Load a SlideShow file as default:"
+        '
+        'cbLoadDefaultHB
+        '
+        Me.cbLoadDefaultHB.BackColor = System.Drawing.Color.Transparent
+        Me.cbLoadDefaultHB.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cbLoadDefaultHB.Location = New System.Drawing.Point(8, 144)
+        Me.cbLoadDefaultHB.Name = "cbLoadDefaultHB"
+        Me.cbLoadDefaultHB.Size = New System.Drawing.Size(216, 24)
+        Me.cbLoadDefaultHB.TabIndex = 0
+        Me.cbLoadDefaultHB.Text = "Load a HotButtons file at startup:"
+        '
         'tpAbout
         '
         Me.tpAbout.BackColor = System.Drawing.SystemColors.Window
@@ -1812,7 +2328,7 @@ Public Class fmMain
         Me.TextBox2.BackColor = System.Drawing.SystemColors.Window
         Me.TextBox2.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.TextBox2.Font = New System.Drawing.Font("Comic Sans MS", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.TextBox2.ForeColor = System.Drawing.SystemColors.ActiveCaption
+        Me.TextBox2.ForeColor = System.Drawing.Color.FromArgb(CType(0, Byte), CType(0, Byte), CType(64, Byte))
         Me.TextBox2.Location = New System.Drawing.Point(8, 120)
         Me.TextBox2.Multiline = True
         Me.TextBox2.Name = "TextBox2"
@@ -1820,14 +2336,12 @@ Public Class fmMain
         Me.TextBox2.Size = New System.Drawing.Size(752, 208)
         Me.TextBox2.TabIndex = 91
         Me.TextBox2.TabStop = False
-        Me.TextBox2.Text = "I humbly present this program as a gift to ComedySportz Portland, as" & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "a token of " & _
-        "my thanks for giving me so much enjoyment and fulfillment." & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "This program may o" & _
-        "nly be used with explicit permission of the author, Bill Cernansky." & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "Special t" & _
-        "hanks to:" & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "Jay and MaryAnn Rambo, the ultimate bug spotters." & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "Jamie Montgomery a" & _
-        "nd Andrew Berkowitz for their ideas." & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "Wade Minter, whose ""Mr. Voice"" software wa" & _
-        "s an inspiration." & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "Patrick Short, who trusts me with electronics." & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "Portland Brew" & _
-        "ery, for MacTarnahan's Scottish Ale, which refreshed me during intense bug fight" & _
-        "ing."
+        Me.TextBox2.Text = "This program may only be used with explicit permission of the author, Bill Cernan" & _
+        "sky." & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "Special thanks to:" & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "Jay and MaryAnn Rambo, Andrew Berkowitz, Patrick S" & _
+        "hort, Eric Wood and ComedySportz-Portland;" & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "Wade Minter, whose ""Mr. Voice"" sof" & _
+        "tware is an inspiration;" & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "Portland Brewery, for MacTarnahan's Scottish Ale, wh" & _
+        "ich refreshed me during intense bug fighting;" & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "WARNING: Do not press CTRL-SHIF" & _
+        "T-B !"
         Me.TextBox2.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'TextBox1
@@ -1835,7 +2349,7 @@ Public Class fmMain
         Me.TextBox1.BackColor = System.Drawing.SystemColors.Window
         Me.TextBox1.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.TextBox1.Font = New System.Drawing.Font("Comic Sans MS", 12.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.TextBox1.ForeColor = System.Drawing.SystemColors.ActiveCaption
+        Me.TextBox1.ForeColor = System.Drawing.Color.FromArgb(CType(0, Byte), CType(0, Byte), CType(64, Byte))
         Me.TextBox1.Location = New System.Drawing.Point(8, 8)
         Me.TextBox1.Multiline = True
         Me.TextBox1.Name = "TextBox1"
@@ -1843,8 +2357,8 @@ Public Class fmMain
         Me.TextBox1.Size = New System.Drawing.Size(752, 104)
         Me.TextBox1.TabIndex = 90
         Me.TextBox1.TabStop = False
-        Me.TextBox1.Text = "ComedySportz JANIS" & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "(Just Another Nice Improv Scorekeeper)" & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "Single Display versio" & _
-        "n 1.14   Released Sep. 20, 2005" & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "by Bill Cernansky ( bill@easybeing.com )"
+        Me.TextBox1.Text = "JANIS Single Display" & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "Version 2.0 Beta 3  Released Feb. 15, 2006" & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "by Bill Cernans" & _
+        "ky ( bill@easybeing.com )" & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "© 2004-2006 Easy Being Productions"
         Me.TextBox1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'SlideTimer
@@ -1951,12 +2465,34 @@ Public Class fmMain
         Me.btnHot10.TabIndex = 40
         Me.btnHot10.Text = "Hot 10"
         '
+        'pnlPicBackLeft
+        '
+        Me.pnlPicBackLeft.BackColor = System.Drawing.Color.Black
+        Me.pnlPicBackLeft.Controls.AddRange(New System.Windows.Forms.Control() {Me.picLeft})
+        Me.pnlPicBackLeft.Location = New System.Drawing.Point(28, 60)
+        Me.pnlPicBackLeft.Name = "pnlPicBackLeft"
+        Me.pnlPicBackLeft.Size = New System.Drawing.Size(160, 120)
+        Me.pnlPicBackLeft.TabIndex = 41
+        '
+        'CountdownTimer
+        '
+        Me.CountdownTimer.Interval = 10
+        '
+        'cbExpandPicLeft
+        '
+        Me.cbExpandPicLeft.Location = New System.Drawing.Point(192, 64)
+        Me.cbExpandPicLeft.Name = "cbExpandPicLeft"
+        Me.cbExpandPicLeft.Size = New System.Drawing.Size(64, 16)
+        Me.cbExpandPicLeft.TabIndex = 43
+        Me.cbExpandPicLeft.Text = "Expand"
+        '
         'fmMain
         '
         Me.AutoScaleBaseSize = New System.Drawing.Size(5, 13)
         Me.ClientSize = New System.Drawing.Size(772, 565)
-        Me.Controls.AddRange(New System.Windows.Forms.Control() {Me.btnHot10, Me.btnHot9, Me.btnHot8, Me.btnHot7, Me.btnHot6, Me.btnHot5, Me.btnHot4, Me.btnHot3, Me.btnHot2, Me.btnHot1, Me.btnBlackout, Me.TabControl1, Me.btnRightScoreColor, Me.btnLeftScoreColor, Me.btnPictureLeft, Me.picLeft, Me.btnScoreBoth, Me.Label4, Me.Label3, Me.tbRightScore, Me.tbLeftScore, Me.Label2, Me.Label1, Me.tbRightTeam, Me.tbLeftTeam})
+        Me.Controls.AddRange(New System.Windows.Forms.Control() {Me.cbExpandPicLeft, Me.pnlPicBackLeft, Me.btnHot10, Me.btnHot9, Me.btnHot8, Me.btnHot7, Me.btnHot6, Me.btnHot5, Me.btnHot4, Me.btnHot3, Me.btnHot2, Me.btnHot1, Me.btnBlackout, Me.TabControl1, Me.btnRightScoreColor, Me.btnLeftScoreColor, Me.btnPictureLeft, Me.btnScoreBoth, Me.Label4, Me.Label3, Me.tbRightScore, Me.tbLeftScore, Me.Label2, Me.Label1, Me.tbRightTeam, Me.tbLeftTeam})
         Me.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Location = New System.Drawing.Point(20, 0)
         Me.Menu = Me.MainMenu1
         Me.Name = "fmMain"
@@ -1972,7 +2508,13 @@ Public Class fmMain
         Me.gbHB.ResumeLayout(False)
         Me.tpSlides.ResumeLayout(False)
         CType(Me.nudDelay, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.tpPrefs.ResumeLayout(False)
+        Me.GroupBox2.ResumeLayout(False)
+        Me.grpDefaultColorsRight.ResumeLayout(False)
+        Me.grpDefaultColorsLeft.ResumeLayout(False)
+        CType(Me.nudDefaultSlideDelay, System.ComponentModel.ISupportInitialize).EndInit()
         Me.tpAbout.ResumeLayout(False)
+        Me.pnlPicBackLeft.ResumeLayout(False)
         Me.ResumeLayout(False)
 
     End Sub
@@ -1981,15 +2523,14 @@ Public Class fmMain
 
     Private Sub Form1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
         Me.Left = SystemInformation.PrimaryMonitorSize.Width - Me.Width
-        Me.LeftDefaultColor = Me.tbLeftText.BackColor
-        Me.RightDefaultColor = Me.tbRightText.BackColor
-        Me.radioThingColorLeft.BackColor = Me.LeftDefaultColor
-        Me.radioThingColorRight.BackColor = Me.RightDefaultColor
         Me.tbCurrentThing.Visible = False
         Me.tbSubstitutions.Visible = False
         Me.btnShowThingLeft.Visible = False
 
         Me.LS = New fmScreen()
+
+        LoadPrefsFromFile(PREFS_FILE)
+        ApplyPrefs()
 
         '* Here's the wacky way you change font sizes in VB.NET. Piece of crap.
         Me.tbLeftText.Font = New Font(Me.tbLeftText.Font.Name, CSng(Val(Me.tbLeftFontSize.Text) / DisplayToEntryFontRatio), Me.tbLeftText.Font.Style)
@@ -1997,7 +2538,10 @@ Public Class fmMain
 
         Me.SetMonitorDisplayMode()
 
-        DisplayTextScreen(Me.LS, Me.tbLeftText.Text, Me.tbLeftText.BackColor, CSng(Me.tbLeftFontSize.Text) * Me.DisplayFontRatio)
+        If (Not Me.cbDisplayDefaultImage.Checked) Then
+            DisplayTextScreen(Me.LS, Me.tbLeftText.Text, Me.tbLeftText.BackColor, CSng(Me.tbLeftFontSize.Text) * Me.DisplayFontRatio)
+        End If
+
         Me.LS.Show()
 
         '* If the default support dirs aren't there, create them
@@ -2009,35 +2553,53 @@ Public Class fmMain
         If MyDir = "" Then MkDir(ROOT_SUPPORT_DIR + DEFAULT_HOTBUTTON_DIR)
 
         Me.HotButtonsChanged = False
-        Me.cbHBActive.Checked = True    '* default to "can't see"
+        Me.cbHBActive.Checked = True    '* default to "can see"
 
         '* The FolderTree control can't be selected programmatically
         '* (what the hell was the guy thinking), but we can expand it down to the
         '* directory we want to see at the start. However, since we can't select it,
         '* the FileListBox's path will be empty.
-        Me.FTreeAutoExpand_C("Program Files\JANIS")
+        '* Me.FTreeAutoExpand_C("Program Files\JANIS")
+        Me.FTreeAutoExpand_C(Me.FolderTree1, Me.tbDefaultImageDir.Text.Substring(3)) '* skip the c:\ part
         Me.FileListBox1.Path = ""
+    End Sub
+
+    Private Sub Form1_Closing(ByVal sender As System.Object, ByVal e As System.ComponentModel.CancelEventArgs) Handles MyBase.Closing
+        Dim Ans As DialogResult
+        If Me.PrefsChanged() Then
+            Ans = MessageBox.Show("Modifications to preferences have not been saved. Save them before closing?", "Preferences Have Changed", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button3, MessageBoxOptions.DefaultDesktopOnly)
+            If Ans = DialogResult.Cancel Then
+                e.Cancel = True
+                Return
+            ElseIf Ans = DialogResult.Yes Then
+                Me.SavePrefsToFile(PREFS_FILE)
+            End If
+        End If
     End Sub
 
     Private Sub btnScoreBoth_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnScoreBoth.Click
         DisplayScores()  ' Clears the local pic images itself.
     End Sub
     Private Sub btnLeftScoreColor_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnLeftScoreColor.Click
-        tbLeftScore.BackColor = PickColor(sender.Left, sender.Top, tbLeftScore.BackColor)
-        radioThingColorLeft.BackColor = tbLeftScore.BackColor
-        If radioThingColorLeft.Checked Then
-            clbThings.BackColor = tbLeftScore.BackColor
-            tbSubstitutions.BackColor = tbLeftScore.BackColor
-            Me.tbCurrentThing.BackColor = tbLeftScore.BackColor
-        End If
+        Dim newcolor As Color = PickColor(sender.Left, sender.Top, tbLeftScore.BackColor)
+        SetTeamColor("Left", newcolor)
     End Sub
     Private Sub btnRightScoreColor_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnRightScoreColor.Click
-        Me.tbRightScore.BackColor = PickColor(sender.Left - 100, sender.Top, tbRightScore.BackColor)
-        Me.radioThingColorRight.BackColor = tbRightScore.BackColor
-        If Me.radioThingColorRight.Checked Then
-            clbThings.BackColor = tbRightScore.BackColor
-            tbSubstitutions.BackColor = tbRightScore.BackColor
-            Me.tbCurrentThing.BackColor = Me.tbRightScore.BackColor
+        Dim newcolor As Color = PickColor(sender.Left - 100, sender.Top, tbRightScore.BackColor)
+        SetTeamColor("Right", newcolor)
+    End Sub
+    Private Sub SetTeamColor(ByVal side As String, ByVal newcolor As Color)
+        If side = "Left" Then
+            Me.tbLeftScore.BackColor = newcolor
+            Me.radioThingColorLeft.BackColor = newcolor
+        Else
+            Me.tbRightScore.BackColor = newcolor
+            Me.radioThingColorRight.BackColor = newcolor
+        End If
+        If (Me.radioThingColorLeft.Checked And (side = "Left")) Or (Me.radioThingColorRight.Checked And (side = "Right")) Then
+            Me.clbThings.BackColor = newcolor
+            Me.tbSubstitutions.BackColor = newcolor
+            Me.tbCurrentThing.BackColor = newcolor
         End If
     End Sub
 
@@ -2049,7 +2611,7 @@ Public Class fmMain
         Me.tbRightText.Text = ""
         Me.tbRightText.Focus()
     End Sub
-    Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button1.Click
+    Private Sub btnClearTextBoth_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnClearTextBoth.Click
         btnClearTextLeft_Click(sender, e)
         btnClearTextRight_Click(sender, e)
         Me.tbLeftText.Focus()
@@ -2097,16 +2659,16 @@ Public Class fmMain
         Return Doc
     End Function
 
-    Private Sub pnlLeftColor_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles pnlLeftColor1.Click, pnlLeftColor2.Click, pnlLeftColor3.Click, pnlLeftColor4.Click, pnlLeftColor5.Click, pnlLeftColor6.Click
+    Private Sub pnlTextColorLeft_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles pnlTextColorLeft1.Click, pnlTextColorLeft2.Click, pnlTextColorLeft3.Click, pnlTextColorLeft4.Click, pnlTextColorLeft5.Click, pnlTextColorLeft6.Click
         Me.tbLeftText.BackColor = sender.BackColor
     End Sub
-    Private Sub pnlRightColor_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles pnlRightColor1.Click, pnlRightColor2.Click, pnlRightColor3.Click, pnlRightColor4.Click, pnlRightColor5.Click, pnlRightColor6.Click
+    Private Sub pnlTextColorRight_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles pnlTextColorRight1.Click, pnlTextColorRight2.Click, pnlTextColorRight3.Click, pnlTextColorRight4.Click, pnlTextColorRight5.Click, pnlTextColorRight6.Click
         Me.tbRightText.BackColor = sender.BackColor
     End Sub
-    Private Sub btnLeftTextColor_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnLeftTextColor.Click
+    Private Sub btnChooseTextColorLeft_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnChooseTextColorLeft.Click
         tbLeftText.BackColor = PickColor(50, 300, tbLeftText.BackColor)
     End Sub
-    Private Sub btnRightTextColor_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnRightTextColor.Click
+    Private Sub btnChooseTextColorRight_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnChooseTextColorRight.Click
         tbRightText.BackColor = PickColor(450, 300, tbRightText.BackColor)
         'tbRightText.BackColor = ChooseColor(tbRightText.BackColor)
     End Sub
@@ -2127,7 +2689,7 @@ Public Class fmMain
 
     End Sub
 
-    Private Sub tbFontSize_KeyUp(ByVal sender As System.Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles tbLeftFontSize.KeyUp, tbRightFontSize.KeyUp
+    Private Sub tbFontSize_KeyUp(ByVal sender As System.Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles tbLeftFontSize.KeyUp, tbRightFontSize.KeyUp, tbDefaultFontSize.KeyUp
         Dim fsiz As Single
         'tbLeftText.Text = "KeyCode: " + CStr(e.KeyCode) + Chr(13) + "KeyData: " + CStr(e.KeyData) + Chr(13) + "KeyValue: " + CStr(e.KeyValue)
 
@@ -2140,11 +2702,11 @@ Public Class fmMain
         If fsiz < 1 Then fsiz = 1
         If sender.Name = "tbLeftFontSize" Then
             Me.tbLeftText.Font = New Font(Me.tbLeftText.Font.Name, (fsiz / DisplayToEntryFontRatio), Me.tbLeftText.Font.Style)
-        Else  ' must be tbRightFontSize
+        ElseIf sender.Name = "tbRightFontSize" Then
             Me.tbRightText.Font = New Font(Me.tbRightText.Font.Name, (fsiz / DisplayToEntryFontRatio), Me.tbRightText.Font.Style)
-        End If
+        End If '* don't do anything for tbDefaultFontSize - that's a startup setting
     End Sub
-    Private Sub tbFontSize_KeyPress(ByVal sender As System.Object, ByVal e As System.Windows.Forms.KeyPressEventArgs) Handles tbLeftFontSize.KeyPress, tbRightFontSize.KeyPress
+    Private Sub tbFontSize_KeyPress(ByVal sender As System.Object, ByVal e As System.Windows.Forms.KeyPressEventArgs) Handles tbLeftFontSize.KeyPress, tbRightFontSize.KeyPress, tbDefaultFontSize.KeyPress
         ' Chr(8) is BackSpace
         If (e.KeyChar <> Chr(8)) And ((e.KeyChar < "0") Or (e.KeyChar > "9")) Then
             'tbLeftText.Text = CStr(Asc(e.KeyChar))
@@ -2162,7 +2724,7 @@ Public Class fmMain
     Private Sub SetMonitorDisplayMode()
         If SystemInformation.MonitorCount = 1 Then        '* We're in single monitor/test mode
             Me.TestMode = True
-            Me.DisplayToEntryFontRatio = Me.DisplayToEntryFontRatio / 25
+            Me.DisplayModeAdjustment = 25.0  '* = 5w x 5h
             Me.LS.Left = Me.Left
             Me.LS.Top = Me.Height
             Me.LS.Height = Me.LS.Height / 5
@@ -2232,7 +2794,7 @@ Public Class fmMain
         Scr.lblScoreRight.Visible = False
         Scr.lblTeamNameRight.Visible = False
         Scr.picGraphic.Visible = False
-        Scr.lblMsg.Font = New Font(Scr.lblMsg.Font.Name, CSng(DisplayToEntryFontRatio * fontsize), Scr.lblMsg.Font.Style)
+        Scr.lblMsg.Font = New Font(Scr.lblMsg.Font.Name, CSng(DisplayToEntryFontRatio * fontsize / Me.DisplayModeAdjustment), Scr.lblMsg.Font.Style)
         Scr.lblMsg.Visible = True
         Scr.lblMsg.Text = translation
         Scr.BackColor = hue
@@ -2258,16 +2820,78 @@ Public Class fmMain
         Scr.lblTeamNameRight.Visible = True
     End Sub
 
-    Private Sub DisplayImage(ByVal Scr As fmScreen, ByVal Img As Image)
+    Private Sub DisplayImage(ByVal Scr As fmScreen, ByVal Img As Image, ByVal Expand As Boolean)
+        Dim monitor_width_height_ratio As Single = CSng(Scr.Width) / CSng(Scr.Height)
+        Dim image_width_height_ratio As Single = CSng(Img.Width) / CSng(Img.Height)
+        Dim ratio_compare As Single = image_width_height_ratio / monitor_width_height_ratio
+        Dim new_height, new_width As Integer
+
         Scr.BackColor = System.Drawing.Color.Black
         Scr.lblScoreLeft.Visible = False
         Scr.lblTeamNameLeft.Visible = False
         Scr.lblScoreRight.Visible = False
         Scr.lblTeamNameRight.Visible = False
         Scr.lblMsg.Visible = False
+
+        If Expand Or (ratio_compare < 1.15 And ratio_compare > 0.85) Then     '* close enough to equal
+            new_width = Scr.Width
+            new_height = Scr.Height
+        ElseIf ratio_compare > 1 Then   '* wider/shorter
+            new_width = Scr.Width
+            new_height = CInt(new_width / image_width_height_ratio)
+        Else    '* narrower/taller
+            new_height = Scr.Height
+            new_width = CInt(new_height * image_width_height_ratio)
+        End If
+        If new_width <> Scr.picGraphic.Width Then
+            '* put the picture in the middle
+            Scr.picGraphic.Left = (Scr.Width - new_width) / 2
+            Scr.picGraphic.Width = new_width
+        End If
+        If new_height <> Scr.picGraphic.Height Then
+            '* put the picture in the middle
+            Scr.picGraphic.Top = (Scr.Height - new_height) / 2
+            Scr.picGraphic.Height = new_height
+        End If
+
         Scr.picGraphic.Image = Img
         Scr.picGraphic.Visible = True
     End Sub
+
+    Private Sub PreviewImage(ByVal picture As PictureBox, ByVal Img As Image, ByVal Expand As Boolean)
+        Dim backpanel As Panel = Me.pnlPicBackLeft
+        Dim panel_width_height_ratio As Single = CSng(backpanel.Width) / CSng(backpanel.Height)
+        Dim image_width_height_ratio As Single = CSng(Img.Width) / CSng(Img.Height)
+        Dim ratio_compare As Single = image_width_height_ratio / panel_width_height_ratio
+        Dim new_height, new_width As Integer
+
+        'picture.Visible = False
+        backpanel.BackColor = System.Drawing.Color.Black
+        If Expand Or (ratio_compare < 1.15 And ratio_compare > 0.85) Then     '* close enough to equal
+            new_width = backpanel.Width
+            new_height = backpanel.Height
+        ElseIf ratio_compare > 1 Then   '* wider/shorter
+            new_width = backpanel.Width
+            new_height = CInt(new_width / image_width_height_ratio)
+        Else    '* narrower/taller
+            new_height = backpanel.Height
+            new_width = CInt(new_height * image_width_height_ratio)
+        End If
+        If new_width <> picture.Width Then
+            '* put the picture in the middle
+            picture.Left = (backpanel.Width - new_width) / 2
+            picture.Width = new_width
+        End If
+        If new_height <> picture.Height Then
+            '* put the picture in the middle
+            picture.Top = (backpanel.Height - new_height) / 2
+            picture.Height = new_height
+        End If
+
+        picture.Image = Img
+        picture.Visible = True
+    End Sub
+
 
     Private Sub DisplayBothImages(ByVal fnam As String)
         Dim img As Image
@@ -2277,7 +2901,8 @@ Public Class fmMain
             img = Nothing
         End Try
         Me.picLeft.Image = img
-        DisplayImage(Me.LS, img)
+        DisplayImage(Me.LS, img, Me.cbExpandPicLeft.Checked)
+        PreviewImage(Me.picLeft, img, Me.cbExpandPicLeft.Checked)
     End Sub
 
 
@@ -2311,6 +2936,8 @@ Public Class fmMain
 
     Private Function PickColor(ByVal X As Integer, ByVal Y As Integer, ByVal hue As Color) As Color
         Dim choose As New fmColorDialog()
+        X = X + Me.Left
+        Y = Y + Me.Top
         choose.pnlSelected.BackColor = hue
         choose.Location = New Point(X, Y)
         If choose.ShowDialog(Me) = DialogResult.OK Then
@@ -2360,7 +2987,7 @@ Public Class fmMain
         Dim fn As String = ""
         Dim of As New OpenFileDialog()
         of.Filter = "Image Files(*.BMP;*.GIF;*.JPG;*.PNG;*.WMF)|*.BMP;*.GIF;*.JPG;*.PNG;*.WMF"
-        of.InitialDirectory = ROOT_SUPPORT_DIR
+        of.InitialDirectory = Me.tbDefaultImageDir.Text
         If of.ShowDialog(Me) = DialogResult.OK Then
             fn = of.FileName
         End If
@@ -2376,8 +3003,10 @@ Public Class fmMain
         Dim fn As String = SelectImageFilename()
         If fn <> "" Then
             Dim img As Image = Image.FromFile(fn)
+            '* Do the displays before the previews for speed
             Me.picLeft.Image = img
-            DisplayImage(Me.LS, img)
+            DisplayImage(Me.LS, img, Me.cbExpandPicLeft.Checked)
+            PreviewImage(Me.picLeft, img, Me.cbExpandPicLeft.Checked)
         End If
         AllScreensToFront()
     End Sub
@@ -2539,18 +3168,18 @@ Public Class fmMain
     '=================================================================================================
     '* BEGIN SLIDESHOW STUFF
 
-    Private Sub FTreeAutoExpand_C(ByVal fpath As String)
+    Private Sub FTreeAutoExpand_C(ByVal ftree As HyperCoder.Win.FileSystemControls.FolderTree, ByVal fpath As String)
         '* This subroutine takes the path given, expands the foldertree nodes down
         '* the path as far as the subdirectories keep matching, from left to right
         '* in the backslash-separated string.
         '* The drive is assumed to be C:, so drive info should NOT be included!
         Dim idx As Integer = fpath.IndexOf("\")
         Dim nextchunk As String
-        Dim n1 As System.Windows.Forms.TreeNode = Me.FolderTree1.Nodes(0).Nodes(1).Nodes(1)
+        Dim n1 As System.Windows.Forms.TreeNode = ftree.Nodes(0).Nodes(1).Nodes(1)
         Dim n2 As System.Windows.Forms.TreeNode
 
-        Me.FolderTree1.Nodes(0).Nodes(1).Expand()
-        Me.FolderTree1.Nodes(0).Nodes(1).Nodes(1).Expand()
+        ftree.Nodes(0).Nodes(1).Expand()
+        ftree.Nodes(0).Nodes(1).Nodes(1).Expand()
 
         While fpath.Length > 0
             Dim found As Boolean = False
@@ -2572,7 +3201,7 @@ Public Class fmMain
             End If
         End While
         '* n1 still contains the name of the last thing we expanded. Activate it!
-        '* Me.FolderTree1.SelectItem(n1.Index)
+        '* ftree.SelectItem(n1.Index)
     End Sub
 
 
@@ -2668,23 +3297,31 @@ Public Class fmMain
             End If
         End If
     End Sub
+
+    Private Function SelectSlideShowFileName() As String
+        Dim fn As String
+        Dim of As New OpenFileDialog()
+        of.Filter = "JANIS SlideShow(*.JSL)|*.JSL"
+        of.InitialDirectory = ROOT_SUPPORT_DIR + DEFAULT_SLIDESHOW_DIR
+        If of.ShowDialog(Me) = DialogResult.OK Then fn = of.FileName Else fn = ""
+        of.Dispose()
+        Return fn
+    End Function
     Private Sub btnLoadSlides_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnLoadSlides.Click
         If Me.lbSlideList.Items.Count > 0 Then
             'There are already slides in the list - ask if we want to continue and overwrite
             If Not Me.AskIfSure("Replace the current Slideshow list?") Then Return
         End If
-        Dim of As New OpenFileDialog()
-        of.Filter = "JANIS Slideshow(*.JSL)|*.JSL"
-        of.InitialDirectory = ROOT_SUPPORT_DIR + DEFAULT_SLIDESHOW_DIR
-        If of.ShowDialog(Me) = DialogResult.OK Then
+        Dim slidefile As String = SelectSlideShowFileName()
+        If slidefile <> "" Then
             Me.lbSlideList.Items.Clear()     '** Empty the list first
             Dim fn As Integer = FreeFile()
             Dim FileErr As Boolean
             Try
-                FileOpen(fn, of.FileName, OpenMode.Input)
+                FileOpen(fn, slidefile, OpenMode.Input)
             Catch ex As Exception
                 FileErr = True
-                MessageBox.Show("An error occurred opening file '" + of.FileName + "'.", "File Error")
+                MessageBox.Show("An error occurred opening file '" + slidefile + "'.", "File Error")
             End Try
             If Not FileErr Then
                 Dim s As String
@@ -2695,7 +3332,6 @@ Public Class fmMain
                 FileClose(fn)
             End If
         End If
-        of.Dispose()
         AllScreensToFront()
     End Sub
     Private Sub btnSaveSlides_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnSaveSlides.Click
@@ -2858,42 +3494,40 @@ Public Class fmMain
         Next
     End Sub
 
-    Private Sub LoadHotButtons()
-        If Me.HotButtonsChanged Then
-            'Ask if we want to continue and overwrite
-            If MessageBox.Show("Replace the current Hot Buttons without saving?", "Hot Button Definitions Changed", MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2, MessageBoxOptions.DefaultDesktopOnly) <> DialogResult.OK Then
-                Return
-            End If
-        End If
+    Private Function SelectHotButtonsFileName() As String
+        Dim fn As String
         Dim of As New OpenFileDialog()
         of.Filter = "JANIS HotButtons File(*.JHB)|*.JHB"
         of.InitialDirectory = ROOT_SUPPORT_DIR + DEFAULT_HOTBUTTON_DIR
-        If of.ShowDialog(Me) = DialogResult.OK Then
-            Dim fn As Integer = FreeFile()
-            Dim FileErr As Boolean
-            Try
-                FileOpen(fn, of.FileName, OpenMode.Input)
-            Catch ex As Exception
-                FileErr = True
-                MessageBox.Show("An error occurred opening file '" + of.FileName + "'.", "File Error")
-            End Try
-            If Not FileErr Then
-                Dim i As Integer = 0
-                While Not EOF(fn)
-                    Dim s As String
-                    Input(fn, s)
-                    Dim info() As String = Split(s, "¶")
-                    HotButton(i).Text = info(0)
-                    HotText(i).Text = info(0)
-                    HotButton(i).Tag = info(1)
-                    HotImage(i).Text = info(1)
-                    i = i + 1
-                End While
-                FileClose(fn)
-                Me.HotButtonsChanged = False
-            End If
-        End If
+        If of.ShowDialog(Me) = DialogResult.OK Then fn = of.FileName Else fn = ""
         of.Dispose()
+        Return fn
+    End Function
+
+    Private Sub LoadHotButtons(ByVal hbfile As String)
+        Dim fn As Integer = FreeFile()
+        Dim FileErr As Boolean
+        Try
+            FileOpen(fn, hbfile, OpenMode.Input)
+        Catch ex As Exception
+            FileErr = True
+            MessageBox.Show("An error occurred opening HotButtons file '" + hbfile + "'.", "File Error")
+        End Try
+        If Not FileErr Then
+            Dim i As Integer = 0
+            While Not EOF(fn)
+                Dim s As String
+                Input(fn, s)
+                Dim info() As String = Split(s, "¶")
+                HotButton(i).Text = info(0)
+                HotText(i).Text = info(0)
+                HotButton(i).Tag = info(1)
+                HotImage(i).Text = info(1)
+                i = i + 1
+            End While
+            FileClose(fn)
+            Me.HotButtonsChanged = False
+        End If
         AllScreensToFront()
     End Sub
 
@@ -2923,7 +3557,14 @@ Public Class fmMain
     End Sub
 
     Private Sub btnLoadHB_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnLoadHB.Click
-        LoadHotButtons()
+        If Me.HotButtonsChanged Then
+            'Ask if we want to continue and overwrite
+            If MessageBox.Show("Replace the current Hot Buttons without saving?", "Hot Button Definitions Changed", MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2, MessageBoxOptions.DefaultDesktopOnly) <> DialogResult.OK Then
+                Return
+            End If
+        End If
+        Dim hbfile As String = SelectHotButtonsFileName()
+        If hbfile <> "" Then LoadHotButtons(hbfile)
     End Sub
 
     Private Sub btnClearHB_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnClearHB.Click
@@ -2967,6 +3608,298 @@ Public Class fmMain
             StopSlideShow()
             Me.DisplayBothImages(img_name)
         End If
+    End Sub
+
+    '=================================================================================================
+    '* BEGIN PREFERENCES STUFF
+
+    Private Sub pnlDefaultTextColorLeft_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles pnlDefaultTextColorLeft1.Click, pnlDefaultTextColorLeft2.Click, pnlDefaultTextColorLeft3.Click, pnlDefaultTextColorLeft4.Click, pnlDefaultTextColorLeft5.Click, pnlDefaultTextColorLeft6.Click
+        Me.lblDefaultColorLeft.BackColor = sender.BackColor
+    End Sub
+    Private Sub pnlDefaultTextColorRight_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles pnlDefaultTextColorRight1.Click, pnlDefaultTextColorRight2.Click, pnlDefaultTextColorRight3.Click, pnlDefaultTextColorRight4.Click, pnlDefaultTextColorRight5.Click, pnlDefaultTextColorRight6.Click
+        Me.lblDefaultColorRight.BackColor = sender.BackColor
+    End Sub
+    Private Sub btnChooseDefaultTextColorLeft_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnChooseDefaultTextColorLeft.Click
+        Me.lblDefaultColorLeft.BackColor = PickColor(50, 300, Me.lblDefaultColorLeft.BackColor)
+    End Sub
+    Private Sub btnChooseDefaultTextColorRight_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnChooseDefaultTextColorRight.Click
+        Me.lblDefaultColorRight.BackColor = PickColor(450, 300, Me.lblDefaultColorRight.BackColor)
+    End Sub
+
+    Private Sub btnChooseDefaultImageDir_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnChooseDefaultImageDir.Click
+        Me.tbDefaultImageDir.Text = SelectDir(Me.tbDefaultImageDir.Text)
+    End Sub
+
+    Private Sub cbDisplayDefaultImage_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbDisplayDefaultImage.CheckedChanged
+        Me.tbDefaultImageFile.Enabled = sender.Checked
+        Me.btnChooseDefaultImage.Enabled = sender.Checked
+        If sender.Checked Then
+            Me.tbDefaultImageFile.BackColor = Color.FromName("Control")
+        Else
+            Me.tbDefaultImageFile.BackColor = Color.FromName("ControlDark")
+        End If
+    End Sub
+    Private Sub btnChooseDefaultImage_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnChooseDefaultImage.Click
+        Dim fn As String = SelectImageFilename()
+        If fn <> "" Then Me.tbDefaultImageFile.Text = fn
+    End Sub
+
+    Private Sub cbLoadDefaultHB_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbLoadDefaultHB.CheckedChanged
+        Me.tbDefaultHBFile.Enabled = sender.Checked
+        Me.btnChooseDefaultHB.Enabled = sender.Checked
+        If sender.Checked Then
+            Me.tbDefaultHBFile.BackColor = Color.FromName("Control")
+        Else
+            Me.tbDefaultHBFile.BackColor = Color.FromName("ControlDark")
+        End If
+    End Sub
+    Private Sub btnChooseDefaultHB_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnChooseDefaultHB.Click
+        Dim fn As String = SelectHotButtonsFileName()
+        If fn <> "" Then Me.tbDefaultHBFile.Text = fn
+    End Sub
+
+    Private Sub cbLoadDefaultSlides_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbLoadDefaultSlides.CheckedChanged
+        Me.tbDefaultSlideShow.Enabled = sender.Checked
+        Me.btnChooseDefaultSlideShow.Enabled = sender.Checked
+        Me.cbPlaySlidesAtStart.Enabled = sender.Checked
+        If sender.Checked Then
+            Me.tbDefaultSlideShow.BackColor = Color.FromName("Control")
+        Else
+            Me.tbDefaultSlideShow.BackColor = Color.FromName("ControlDark")
+        End If
+    End Sub
+    Private Sub btnChooseDefaultSlideShow_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnChooseDefaultSlideShow.Click
+        Dim fn As String = SelectSlideShowFileName()
+        If fn <> "" Then Me.tbDefaultSlideShow.Text = fn
+    End Sub
+
+    Private Sub btnDefaultPrefs_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnDefaultPrefs.Click
+        Me.SetDefaultPrefs()
+    End Sub
+    Private Sub btnSavePrefs_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnSavePrefs.Click
+        '* Write the prefs off to a file (JANIS.ini).
+        '*
+        SavePrefsToFile(PREFS_FILE)
+    End Sub
+    Private Sub btnRevertPrefs_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnRevertPrefs.Click
+        '* The last saved values are stored in the TAG properties of all the controls on this tab.
+        '* Use them to put everything back.
+        Me.lblDefaultColorLeft.BackColor = Color.FromArgb(Me.lblDefaultColorLeft.Tag)
+        Me.lblDefaultColorRight.BackColor = Color.FromArgb(Me.lblDefaultColorRight.Tag)
+        Me.tbDefaultFontSize.Text = Me.tbDefaultFontSize.Tag
+        Me.tbDefaultImageDir.Text = Me.tbDefaultImageDir.Tag
+        Me.tbDefaultImageFile.Text = Me.tbDefaultImageFile.Tag
+        Me.cbDisplayDefaultImage.Checked = Me.cbDisplayDefaultImage.Tag
+        Me.tbDefaultHBFile.Text = Me.tbDefaultHBFile.Tag
+        Me.cbLoadDefaultHB.Checked = Me.cbLoadDefaultHB.Tag
+        Me.nudDefaultSlideDelay.Value = CInt(Me.nudDefaultSlideDelay.Tag)
+        Me.tbDefaultSlideShow.Text = Me.tbDefaultSlideShow.Tag
+        Me.cbPlaySlidesAtStart.Checked = Me.cbPlaySlidesAtStart.Tag
+        Me.cbLoadDefaultSlides.Checked = Me.cbLoadDefaultSlides.Tag
+    End Sub
+
+    Private Function PrefsChanged()
+        If Me.lblDefaultColorLeft.BackColor.ToArgb <> Me.lblDefaultColorLeft.Tag Then Return True
+        If Me.lblDefaultColorRight.BackColor.ToArgb <> Me.lblDefaultColorRight.Tag Then Return True
+        If Me.tbDefaultFontSize.Text <> Me.tbDefaultFontSize.Tag Then Return True
+        If Me.tbDefaultImageDir.Text <> Me.tbDefaultImageDir.Tag Then Return True
+        If Me.tbDefaultImageFile.Text <> Me.tbDefaultImageFile.Tag Then Return True
+        If Me.cbDisplayDefaultImage.Checked <> Me.cbDisplayDefaultImage.Tag Then Return True
+        If Me.tbDefaultHBFile.Text <> Me.tbDefaultHBFile.Tag Then Return True
+        If Me.cbLoadDefaultHB.Checked <> Me.cbLoadDefaultHB.Tag Then Return True
+        If Me.nudDefaultSlideDelay.Value <> Me.nudDefaultSlideDelay.Tag Then Return True
+        If Me.tbDefaultSlideShow.Text <> Me.tbDefaultSlideShow.Tag Then Return True
+        If Me.cbPlaySlidesAtStart.Checked <> Me.cbPlaySlidesAtStart.Tag Then Return True
+        If Me.cbLoadDefaultSlides.Checked <> Me.cbLoadDefaultSlides.Tag Then Return True
+        Return False
+    End Function
+
+    Private Sub LoadPrefsFromFile(ByVal filename As String)
+        '* Determine if the file exists
+        Dim MyPrefsFile As New System.IO.FileInfo(filename)
+        If MyPrefsFile.Exists Then
+            Dim fn As Integer = FreeFile()
+            Dim s As String
+            Dim FileErr As Boolean
+            Try
+                FileOpen(fn, filename, OpenMode.Input)
+            Catch ex As Exception
+                FileErr = True
+                MessageBox.Show("An error occurred opening file '" + filename + "'.", "File Error")
+            End Try
+            If Not FileErr Then
+                Input(fn, s)
+                Me.lblDefaultColorLeft.BackColor = Color.FromArgb(CInt(s))
+                Input(fn, s)
+                Me.lblDefaultColorRight.BackColor = Color.FromArgb(CInt(s))
+                Input(fn, Me.tbDefaultFontSize.Text)
+                Input(fn, Me.tbDefaultImageDir.Text)
+                Input(fn, s)
+                Me.cbDisplayDefaultImage.Checked = (s = "True")
+                Input(fn, Me.tbDefaultImageFile.Text)
+                Input(fn, s)
+                Me.cbLoadDefaultHB.Checked = (s = "True")
+                Input(fn, Me.tbDefaultHBFile.Text)
+                Input(fn, s)
+                Me.nudDefaultSlideDelay.Value = CInt(s)
+                Input(fn, s)
+                Me.cbLoadDefaultSlides.Checked = (s = "True")
+                Input(fn, Me.tbDefaultSlideShow.Text)
+                Input(fn, s)
+                Me.cbPlaySlidesAtStart.Checked = (s = "True")
+                FileClose(fn)
+                StorePrefs()
+            End If
+        Else
+            '* OK, the prefs file was not found. So load defaults and
+            '* write the prefs file with those defaults.
+            SetDefaultPrefs()
+            SavePrefsToFile(filename)
+        End If
+        AllScreensToFront()
+    End Sub
+    Private Sub SavePrefsToFile(ByVal filename As String)
+        If Not PrefsChanged() Then Exit Sub
+        Dim fn As Integer = FreeFile()
+        FileOpen(fn, filename, OpenMode.Output)
+        PrintLine(fn, Me.lblDefaultColorLeft.BackColor.ToArgb.ToString)
+        PrintLine(fn, Me.lblDefaultColorRight.BackColor.ToArgb.ToString)
+        PrintLine(fn, Me.tbDefaultFontSize.Text)
+        PrintLine(fn, Me.tbDefaultImageDir.Text)
+        PrintLine(fn, Me.cbDisplayDefaultImage.Checked.ToString)
+        PrintLine(fn, Me.tbDefaultImageFile.Text)
+        PrintLine(fn, Me.cbLoadDefaultHB.Checked.ToString)
+        PrintLine(fn, Me.tbDefaultHBFile.Text)
+        PrintLine(fn, Me.nudDefaultSlideDelay.Value.ToString)
+        PrintLine(fn, Me.cbLoadDefaultSlides.Checked.ToString)
+        PrintLine(fn, Me.tbDefaultSlideShow.Text)
+        PrintLine(fn, Me.cbPlaySlidesAtStart.Checked.ToString)
+        FileClose(fn)
+        StorePrefs()
+        AllScreensToFront()
+    End Sub
+    Private Sub SetDefaultPrefs()
+        '* Reset the Preferences screen settings to factory defaults
+        Me.lblDefaultColorLeft.BackColor = Me.pnlDefaultTextColorLeft1.BackColor
+        Me.lblDefaultColorRight.BackColor = Me.pnlDefaultTextColorLeft2.BackColor
+        Me.tbDefaultFontSize.Text = "60"
+        Me.tbDefaultImageDir.Text = ROOT_SUPPORT_DIR
+        Me.tbDefaultImageFile.Text = ""
+        Me.cbDisplayDefaultImage.Checked = False
+        Me.tbDefaultHBFile.Text = ""
+        Me.cbLoadDefaultHB.Checked = False
+        Me.nudDefaultSlideDelay.Value = 15
+        Me.tbDefaultSlideShow.Text = ""
+        Me.cbPlaySlidesAtStart.Checked = False
+        Me.cbLoadDefaultSlides.Checked = False
+    End Sub
+    Private Sub StorePrefs()
+        '* Stores whatever the current set of preferences is in the TAG properties of the controls on the
+        '* preferences tab. Compare later to see if things have changed or to restore to last happy prefs.
+        Me.lblDefaultColorLeft.Tag = Me.lblDefaultColorLeft.BackColor.ToArgb
+        Me.lblDefaultColorRight.Tag = Me.lblDefaultColorRight.BackColor.ToArgb
+        Me.tbDefaultFontSize.Tag = Me.tbDefaultFontSize.Text
+        Me.tbDefaultImageDir.Tag = Me.tbDefaultImageDir.Text
+        Me.tbDefaultImageFile.Tag = Me.tbDefaultImageFile.Text
+        Me.cbDisplayDefaultImage.Tag = Me.cbDisplayDefaultImage.Checked
+        Me.tbDefaultHBFile.Tag = Me.tbDefaultHBFile.Text
+        Me.cbLoadDefaultHB.Tag = Me.cbLoadDefaultHB.Checked
+        Me.nudDefaultSlideDelay.Tag = Me.nudDefaultSlideDelay.Value
+        Me.tbDefaultSlideShow.Tag = Me.tbDefaultSlideShow.Text
+        Me.cbPlaySlidesAtStart.Tag = Me.cbPlaySlidesAtStart.Checked
+        Me.cbLoadDefaultSlides.Tag = Me.cbLoadDefaultSlides.Checked
+    End Sub
+    Private Sub ApplyPrefs()
+        SetTeamColor("Left", Me.lblDefaultColorLeft.BackColor)
+        SetTeamColor("Right", Me.lblDefaultColorRight.BackColor)
+        Me.tbLeftText.BackColor = Me.lblDefaultColorLeft.BackColor
+        Me.tbRightText.BackColor = Me.lblDefaultColorRight.BackColor
+        Me.tbLeftFontSize.Text = Me.tbDefaultFontSize.Text
+        Me.tbRightFontSize.Text = Me.tbDefaultFontSize.Text
+        If Me.cbDisplayDefaultImage.Checked Then DisplayBothImages(Me.tbDefaultImageFile.Text)
+        If Me.cbLoadDefaultHB.Checked Then
+            If Me.tbDefaultHBFile.Text <> "" Then LoadHotButtons(Me.tbDefaultHBFile.Text)
+        End If
+        Me.radioThingColorLeft.BackColor = Me.lblDefaultColorLeft.BackColor
+        Me.radioThingColorRight.BackColor = Me.lblDefaultColorRight.BackColor
+        Me.nudDelay.Value = Me.nudDefaultSlideDelay.Value
+        If Me.cbLoadDefaultSlides.Checked Then
+            '* Load SlideShow
+            If Me.cbPlaySlidesAtStart.Checked Then
+                '* Play SlideShow
+            End If
+        End If
+        StorePrefs()
+    End Sub
+    Private Function SelectDir(ByVal startdir As String) As String
+        Dim pickdir As String = startdir
+        Dim choose As New fmDirDialog()
+        '* The FolderTree control can't be selected programmatically
+        '* (what the hell was the guy thinking), but we can expand it down to the
+        '* directory we want to see at the start. However, since we can't select it,
+        '* the FileListBox's path will be empty.
+        Me.FTreeAutoExpand_C(choose.FolderTree1, startdir.Substring(3)) '* skip the c:\ part
+        If choose.ShowDialog(Me) = DialogResult.OK Then
+            pickdir = choose.FolderTree1.SelectedNode.FilePath
+        End If
+        choose.Dispose()
+        Return pickdir
+    End Function
+
+    '=================================================================================================
+    '* BEGIN COUNTDOWN TIMER STUFF
+
+    Private Sub MenuCountdownToggle_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuCountdownToggle.Click
+        Me.btnStartCountdown.Visible = Not (Me.btnStartCountdown.Visible)
+    End Sub
+    Private Sub btnStartCountdown_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnStartCountdown.Click
+        Me.CountdownSeconds = 1800 ' = 30 * 60
+        Me.CountdownTimer.Interval = 1000
+
+        Me.CountdownTimer.Enabled = True
+        MsgBox("Click OK to end the countdown and return to JANIS.", MsgBoxStyle.ApplicationModal Or MsgBoxStyle.OKOnly Or MsgBoxStyle.MsgBoxSetForeground, "COUNTDOWN MODE")
+        Me.CountdownTimer.Enabled = False
+    End Sub
+    Private Sub CountdownTimer_Tick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CountdownTimer.Tick
+        Dim CountdownBackground As System.Drawing.Color
+        Dim CountdownSize As Integer
+        Dim minutes As Integer = CInt(Fix(Me.CountdownSeconds / 60))
+        Dim seconds As Integer = Me.CountdownSeconds Mod 60
+
+        If Me.CountdownSeconds > 120 Then
+            CountdownBackground = System.Drawing.Color.DarkGreen
+            CountdownSize = 200 - CInt(0.09524! * (Me.CountdownSeconds - 120))
+        ElseIf Me.CountdownSeconds <= 120 And Me.CountdownSeconds > 30 Then
+            CountdownBackground = System.Drawing.Color.Maroon
+            CountdownSize = 250 - CInt(5.0! / 9.0! * (Me.CountdownSeconds - 30))
+        ElseIf CountdownSeconds > 10 Then
+            CountdownBackground = System.Drawing.Color.Maroon
+            CountdownSize = 300 - CInt(5.0! / 2.0! * (Me.CountdownSeconds - 10))
+        ElseIf seconds >= 0 Then
+            CountdownBackground = System.Drawing.Color.Maroon
+            CountdownSize = 300
+        Else
+            If Me.CountdownTimer.Interval <> 250 Then Me.CountdownTimer.Interval = 250
+            minutes = 0
+            seconds = 0
+            CountdownSize = 300
+            If Fix(Me.CountdownSeconds / 2.0!) * 2 = Me.CountdownSeconds Then
+                CountdownBackground = System.Drawing.Color.Black
+            Else
+                CountdownBackground = System.Drawing.Color.Maroon
+            End If
+        End If
+
+        Dim TimeText As String
+        If minutes > 0 Then TimeText = minutes.ToString
+        TimeText = TimeText + ":"
+        If seconds < 10 Then TimeText = TimeText + "0"
+        TimeText = TimeText + seconds.ToString
+
+        Me.CountdownSeconds = Me.CountdownSeconds - 1
+
+        DisplayTextScreen(Me.LS, TimeText, CountdownBackground, CountdownSize * Me.DisplayFontRatio)
+
     End Sub
 
     '=================================================================================================
