@@ -1,3 +1,8 @@
+v2.2: 2007-09-11
+*  Added configurable audience-visible countdown timer and all supporting functionality
+   changes, per request of CSz-Chicago.
+*  SINGLE DISPLAY ONLY.
+
 v2.1: 2006-11-13
 *  Double-click on any slideshow filename and it displays *even if slideshow not running*.
 *  Preferences for preloading and running slideshows at startup now work.

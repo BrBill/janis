@@ -114,6 +114,9 @@
   <data name="lblTeamNameRight.Modifiers" type="System.CodeDom.MemberAttributes, System, Version=1.0.3300.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>Assembly</value>
   </data>
+  <data name="lblCountdown.Modifiers" type="System.CodeDom.MemberAttributes, System, Version=1.0.3300.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>Assembly</value>
+  </data>
   <data name="$this.Name">
     <value>fmScreen</value>
   </data>

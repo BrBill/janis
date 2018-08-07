@@ -9,7 +9,7 @@
             <Settings
                 ApplicationIcon = "JANIS.ICO"
                 AssemblyKeyContainerName = ""
-                AssemblyName = "JANIS_v2.1"
+                AssemblyName = "JANIS_v2.2"
                 AssemblyOriginatorKeyFile = ""
                 AssemblyOriginatorKeyMode = "None"
                 DefaultClientScript = "JScript"

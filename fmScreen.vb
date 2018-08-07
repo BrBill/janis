@@ -35,6 +35,7 @@ Public Class fmScreen
     Friend WithEvents lblScoreRight As System.Windows.Forms.Label
     Friend WithEvents lblTeamNameLeft As System.Windows.Forms.Label
     Friend WithEvents lblTeamNameRight As System.Windows.Forms.Label
+    Friend WithEvents lblCountdown As System.Windows.Forms.Label
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
         Me.picGraphic = New System.Windows.Forms.PictureBox()
         Me.lblMsg = New System.Windows.Forms.Label()
@@ -42,6 +43,7 @@ Public Class fmScreen
         Me.lblTeamNameLeft = New System.Windows.Forms.Label()
         Me.lblScoreRight = New System.Windows.Forms.Label()
         Me.lblTeamNameRight = New System.Windows.Forms.Label()
+        Me.lblCountdown = New System.Windows.Forms.Label()
         Me.SuspendLayout()
         '
         'picGraphic
@@ -111,12 +113,25 @@ Public Class fmScreen
         Me.lblTeamNameRight.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         Me.lblTeamNameRight.Visible = False
         '
+        'lblCountdown
+        '
+        Me.lblCountdown.BackColor = System.Drawing.Color.Black
+        Me.lblCountdown.Font = New System.Drawing.Font("Arial Black", 70.0!, System.Drawing.FontStyle.Bold)
+        Me.lblCountdown.Location = New System.Drawing.Point(0, 480)
+        Me.lblCountdown.Name = "lblCountdown"
+        Me.lblCountdown.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.lblCountdown.Size = New System.Drawing.Size(800, 120)
+        Me.lblCountdown.TabIndex = 6
+        Me.lblCountdown.Text = "00:00:00"
+        Me.lblCountdown.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        Me.lblCountdown.Visible = False
+        '
         'fmScreen
         '
         Me.AutoScaleBaseSize = New System.Drawing.Size(5, 13)
         Me.BackColor = System.Drawing.Color.FromArgb(CType(0, Byte), CType(0, Byte), CType(192, Byte))
         Me.ClientSize = New System.Drawing.Size(800, 600)
-        Me.Controls.AddRange(New System.Windows.Forms.Control() {Me.lblTeamNameLeft, Me.lblMsg, Me.picGraphic, Me.lblScoreLeft, Me.lblTeamNameRight, Me.lblScoreRight})
+        Me.Controls.AddRange(New System.Windows.Forms.Control() {Me.lblCountdown, Me.lblTeamNameLeft, Me.lblMsg, Me.picGraphic, Me.lblScoreLeft, Me.lblTeamNameRight, Me.lblScoreRight})
         Me.ForeColor = System.Drawing.Color.White
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None
         Me.Location = New System.Drawing.Point(800, 0)
