@@ -31,13 +31,17 @@ Public Class fmScreen
     'Do not modify it using the code editor.
     Friend WithEvents picGraphic As System.Windows.Forms.PictureBox
     Friend WithEvents lblMsg As System.Windows.Forms.Label
-    Friend WithEvents lblScore As System.Windows.Forms.Label
-    Friend WithEvents lblTeamName As System.Windows.Forms.Label
+    Friend WithEvents lblScoreLeft As System.Windows.Forms.Label
+    Friend WithEvents lblScoreRight As System.Windows.Forms.Label
+    Friend WithEvents lblTeamNameLeft As System.Windows.Forms.Label
+    Friend WithEvents lblTeamNameRight As System.Windows.Forms.Label
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
         Me.picGraphic = New System.Windows.Forms.PictureBox()
         Me.lblMsg = New System.Windows.Forms.Label()
-        Me.lblScore = New System.Windows.Forms.Label()
-        Me.lblTeamName = New System.Windows.Forms.Label()
+        Me.lblScoreLeft = New System.Windows.Forms.Label()
+        Me.lblTeamNameLeft = New System.Windows.Forms.Label()
+        Me.lblScoreRight = New System.Windows.Forms.Label()
+        Me.lblTeamNameRight = New System.Windows.Forms.Label()
         Me.SuspendLayout()
         '
         'picGraphic
@@ -60,35 +64,59 @@ Public Class fmScreen
         Me.lblMsg.Text = "Welcome to JANIS"
         Me.lblMsg.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
-        'lblScore
+        'lblScoreLeft
         '
-        Me.lblScore.BackColor = System.Drawing.Color.Transparent
-        Me.lblScore.Font = New System.Drawing.Font("Arial", 280.0!, System.Drawing.FontStyle.Bold)
-        Me.lblScore.Location = New System.Drawing.Point(0, 100)
-        Me.lblScore.Name = "lblScore"
-        Me.lblScore.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.lblScore.Size = New System.Drawing.Size(800, 700)
-        Me.lblScore.TabIndex = 3
-        Me.lblScore.TextAlign = System.Drawing.ContentAlignment.TopCenter
-        Me.lblScore.Visible = False
+        Me.lblScoreLeft.BackColor = System.Drawing.Color.Transparent
+        Me.lblScoreLeft.Font = New System.Drawing.Font("Arial", 160.0!, System.Drawing.FontStyle.Bold)
+        Me.lblScoreLeft.Location = New System.Drawing.Point(0, 100)
+        Me.lblScoreLeft.Name = "lblScoreLeft"
+        Me.lblScoreLeft.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.lblScoreLeft.Size = New System.Drawing.Size(400, 500)
+        Me.lblScoreLeft.TabIndex = 3
+        Me.lblScoreLeft.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        Me.lblScoreLeft.Visible = False
         '
-        'lblTeamName
+        'lblTeamNameLeft
         '
-        Me.lblTeamName.BackColor = System.Drawing.Color.Transparent
-        Me.lblTeamName.Font = New System.Drawing.Font("Arial", 54.0!, System.Drawing.FontStyle.Bold)
-        Me.lblTeamName.Name = "lblTeamName"
-        Me.lblTeamName.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.lblTeamName.Size = New System.Drawing.Size(800, 150)
-        Me.lblTeamName.TabIndex = 3
-        Me.lblTeamName.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        Me.lblTeamName.Visible = False
+        Me.lblTeamNameLeft.BackColor = System.Drawing.Color.Transparent
+        Me.lblTeamNameLeft.Font = New System.Drawing.Font("Arial Black", 30.0!, System.Drawing.FontStyle.Bold)
+        Me.lblTeamNameLeft.Name = "lblTeamNameLeft"
+        Me.lblTeamNameLeft.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.lblTeamNameLeft.Size = New System.Drawing.Size(400, 150)
+        Me.lblTeamNameLeft.TabIndex = 3
+        Me.lblTeamNameLeft.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        Me.lblTeamNameLeft.Visible = False
+        '
+        'lblScoreRight
+        '
+        Me.lblScoreRight.BackColor = System.Drawing.Color.Maroon
+        Me.lblScoreRight.Font = New System.Drawing.Font("Arial", 160.0!, System.Drawing.FontStyle.Bold)
+        Me.lblScoreRight.Location = New System.Drawing.Point(400, 100)
+        Me.lblScoreRight.Name = "lblScoreRight"
+        Me.lblScoreRight.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.lblScoreRight.Size = New System.Drawing.Size(400, 500)
+        Me.lblScoreRight.TabIndex = 4
+        Me.lblScoreRight.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        Me.lblScoreRight.Visible = False
+        '
+        'lblTeamNameRight
+        '
+        Me.lblTeamNameRight.BackColor = System.Drawing.Color.Maroon
+        Me.lblTeamNameRight.Font = New System.Drawing.Font("Arial Black", 30.0!, System.Drawing.FontStyle.Bold)
+        Me.lblTeamNameRight.Location = New System.Drawing.Point(400, 0)
+        Me.lblTeamNameRight.Name = "lblTeamNameRight"
+        Me.lblTeamNameRight.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.lblTeamNameRight.Size = New System.Drawing.Size(400, 150)
+        Me.lblTeamNameRight.TabIndex = 5
+        Me.lblTeamNameRight.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        Me.lblTeamNameRight.Visible = False
         '
         'fmScreen
         '
         Me.AutoScaleBaseSize = New System.Drawing.Size(5, 13)
         Me.BackColor = System.Drawing.Color.FromArgb(CType(0, Byte), CType(0, Byte), CType(192, Byte))
         Me.ClientSize = New System.Drawing.Size(800, 600)
-        Me.Controls.AddRange(New System.Windows.Forms.Control() {Me.lblTeamName, Me.lblMsg, Me.picGraphic, Me.lblScore})
+        Me.Controls.AddRange(New System.Windows.Forms.Control() {Me.lblTeamNameLeft, Me.lblMsg, Me.picGraphic, Me.lblScoreLeft, Me.lblScoreRight, Me.lblTeamNameRight})
         Me.ForeColor = System.Drawing.Color.White
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None
         Me.Location = New System.Drawing.Point(800, 0)

@@ -6,7 +6,7 @@ Public Class fmMain
     '***************
     Const MAX_THINGS As Integer = 9
     Const EOL As String = Chr(13) + Chr(10)
-    Const ROOT_SUPPORT_DIR As String = "C:\Program Files\Multiple_Display"
+    Const ROOT_SUPPORT_DIR As String = "C:\Program Files\JANIS"
     Const DEFAULT_SLIDESHOW_DIR As String = "\SlideShows"
     Const DEFAULT_HOTBUTTON_DIR As String = "\HotButtons"
     Const SLIDES_STOPPED As Integer = 0
@@ -17,7 +17,6 @@ Public Class fmMain
     Dim DisplayFontRatio As Single = 15 / 44 ' This is the "should be" size ratio of display to what we thought it was.
     Dim TestMode As Boolean = False
     Dim LS As fmScreen      '* The left team screen
-    Dim RS As fmScreen      '* The right team screen
     Dim LeftDefaultColor As System.Drawing.Color
     Dim RightDefaultColor As System.Drawing.Color
     Dim ThingSubs(MAX_THINGS) As String             '* Substitutions for 5 Things
@@ -61,8 +60,6 @@ Public Class fmMain
     Friend WithEvents tbRightScore As System.Windows.Forms.TextBox
     Friend WithEvents Label3 As System.Windows.Forms.Label
     Friend WithEvents Label4 As System.Windows.Forms.Label
-    Friend WithEvents btnScoreLeft As System.Windows.Forms.Button
-    Friend WithEvents btnScoreRight As System.Windows.Forms.Button
     Friend WithEvents btnScoreBoth As System.Windows.Forms.Button
     Friend WithEvents MainMenu1 As System.Windows.Forms.MainMenu
     Friend WithEvents menuSubtract1Left As System.Windows.Forms.MenuItem
@@ -73,10 +70,7 @@ Public Class fmMain
     Friend WithEvents menuAdd5Right As System.Windows.Forms.MenuItem
     Friend WithEvents menuSubtract5Right As System.Windows.Forms.MenuItem
     Friend WithEvents picLeft As System.Windows.Forms.PictureBox
-    Friend WithEvents picRight As System.Windows.Forms.PictureBox
     Friend WithEvents btnPictureLeft As System.Windows.Forms.Button
-    Friend WithEvents btnPictureRight As System.Windows.Forms.Button
-    Friend WithEvents btnPictureBoth As System.Windows.Forms.Button
     Friend WithEvents btnLeftScoreColor As System.Windows.Forms.Button
     Friend WithEvents btnRightScoreColor As System.Windows.Forms.Button
     Friend WithEvents TabControl1 As System.Windows.Forms.TabControl
@@ -100,11 +94,7 @@ Public Class fmMain
     Friend WithEvents pnlRightColor1 As System.Windows.Forms.Panel
     Friend WithEvents tbRightText As System.Windows.Forms.TextBox
     Friend WithEvents tbLeftText As System.Windows.Forms.TextBox
-    Friend WithEvents btnListRight As System.Windows.Forms.Button
-    Friend WithEvents btnListBoth As System.Windows.Forms.Button
     Friend WithEvents btnListLeft As System.Windows.Forms.Button
-    Friend WithEvents btnShowThingRight As System.Windows.Forms.Button
-    Friend WithEvents btnShowThingBoth As System.Windows.Forms.Button
     Friend WithEvents btnShowThingLeft As System.Windows.Forms.Button
     Friend WithEvents tbSubstitutions As System.Windows.Forms.TextBox
     Friend WithEvents tbNewThing As System.Windows.Forms.TextBox
@@ -150,10 +140,6 @@ Public Class fmMain
     Friend WithEvents TextBox2 As System.Windows.Forms.TextBox
     Friend WithEvents Label12 As System.Windows.Forms.Label
     Friend WithEvents btnClearSlideList As System.Windows.Forms.Button
-    Friend WithEvents btnLeftTextBoth As System.Windows.Forms.Button
-    Friend WithEvents btnShowLeftText As System.Windows.Forms.Button
-    Friend WithEvents btnRightTextBoth As System.Windows.Forms.Button
-    Friend WithEvents btnShowRightText As System.Windows.Forms.Button
     Friend WithEvents btnDocLoadBoth As System.Windows.Forms.Button
     Friend WithEvents btnDocLoadRight As System.Windows.Forms.Button
     Friend WithEvents btnDocLoadLeft As System.Windows.Forms.Button
@@ -162,9 +148,6 @@ Public Class fmMain
     Friend WithEvents btnNextSlide As System.Windows.Forms.Button
     Friend WithEvents btnPauseSlides As System.Windows.Forms.Button
     Friend WithEvents tbCurrentThing As System.Windows.Forms.TextBox
-    Friend WithEvents btnBothTextScreens As System.Windows.Forms.Button
-    Friend WithEvents btnRightTextLeft As System.Windows.Forms.Button
-    Friend WithEvents btnLeftTextRight As System.Windows.Forms.Button
     Friend WithEvents btnHot1 As System.Windows.Forms.Button
     Friend WithEvents btnHot2 As System.Windows.Forms.Button
     Friend WithEvents btnHot3 As System.Windows.Forms.Button
@@ -224,6 +207,8 @@ Public Class fmMain
     Friend WithEvents tbHBfile7 As System.Windows.Forms.TextBox
     Friend WithEvents tbHBfile10 As System.Windows.Forms.TextBox
     Friend WithEvents tbHBfile9 As System.Windows.Forms.TextBox
+    Friend WithEvents btnShowRightText As System.Windows.Forms.Button
+    Friend WithEvents btnShowLeftText As System.Windows.Forms.Button
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Me.btnBlackout = New System.Windows.Forms.Button()
@@ -235,8 +220,6 @@ Public Class fmMain
         Me.tbRightScore = New System.Windows.Forms.TextBox()
         Me.Label3 = New System.Windows.Forms.Label()
         Me.Label4 = New System.Windows.Forms.Label()
-        Me.btnScoreLeft = New System.Windows.Forms.Button()
-        Me.btnScoreRight = New System.Windows.Forms.Button()
         Me.btnScoreBoth = New System.Windows.Forms.Button()
         Me.MainMenu1 = New System.Windows.Forms.MainMenu()
         Me.menuDummy = New System.Windows.Forms.MenuItem()
@@ -250,23 +233,16 @@ Public Class fmMain
         Me.menuSubtract5Right = New System.Windows.Forms.MenuItem()
         Me.EasterEgg1 = New System.Windows.Forms.MenuItem()
         Me.picLeft = New System.Windows.Forms.PictureBox()
-        Me.picRight = New System.Windows.Forms.PictureBox()
         Me.btnPictureLeft = New System.Windows.Forms.Button()
-        Me.btnPictureRight = New System.Windows.Forms.Button()
-        Me.btnPictureBoth = New System.Windows.Forms.Button()
         Me.btnLeftScoreColor = New System.Windows.Forms.Button()
         Me.btnRightScoreColor = New System.Windows.Forms.Button()
         Me.TabControl1 = New System.Windows.Forms.TabControl()
         Me.tpScreenText = New System.Windows.Forms.TabPage()
-        Me.btnLeftTextRight = New System.Windows.Forms.Button()
-        Me.btnRightTextLeft = New System.Windows.Forms.Button()
-        Me.btnBothTextScreens = New System.Windows.Forms.Button()
         Me.btnDocLoadBoth = New System.Windows.Forms.Button()
         Me.btnDocLoadRight = New System.Windows.Forms.Button()
         Me.btnDocLoadLeft = New System.Windows.Forms.Button()
         Me.Label11 = New System.Windows.Forms.Label()
         Me.Label10 = New System.Windows.Forms.Label()
-        Me.btnLeftTextBoth = New System.Windows.Forms.Button()
         Me.btnShowLeftText = New System.Windows.Forms.Button()
         Me.tbLeftText = New System.Windows.Forms.TextBox()
         Me.tbRightFontSize = New System.Windows.Forms.TextBox()
@@ -278,7 +254,6 @@ Public Class fmMain
         Me.pnlRightColor3 = New System.Windows.Forms.Panel()
         Me.pnlRightColor2 = New System.Windows.Forms.Panel()
         Me.pnlRightColor1 = New System.Windows.Forms.Panel()
-        Me.btnRightTextBoth = New System.Windows.Forms.Button()
         Me.btnShowRightText = New System.Windows.Forms.Button()
         Me.tbRightText = New System.Windows.Forms.TextBox()
         Me.tbLeftFontSize = New System.Windows.Forms.TextBox()
@@ -300,11 +275,7 @@ Public Class fmMain
         Me.radioThingColorLeft = New System.Windows.Forms.RadioButton()
         Me.btnClearThings = New System.Windows.Forms.Button()
         Me.btnRemoveThing = New System.Windows.Forms.Button()
-        Me.btnListRight = New System.Windows.Forms.Button()
-        Me.btnListBoth = New System.Windows.Forms.Button()
         Me.btnListLeft = New System.Windows.Forms.Button()
-        Me.btnShowThingRight = New System.Windows.Forms.Button()
-        Me.btnShowThingBoth = New System.Windows.Forms.Button()
         Me.btnShowThingLeft = New System.Windows.Forms.Button()
         Me.tbSubstitutions = New System.Windows.Forms.TextBox()
         Me.btnAddThing = New System.Windows.Forms.Button()
@@ -416,7 +387,7 @@ Public Class fmMain
         Me.btnBlackout.BackColor = System.Drawing.SystemColors.Control
         Me.btnBlackout.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btnBlackout.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.btnBlackout.Location = New System.Drawing.Point(332, 72)
+        Me.btnBlackout.Location = New System.Drawing.Point(560, 100)
         Me.btnBlackout.Name = "btnBlackout"
         Me.btnBlackout.Size = New System.Drawing.Size(108, 40)
         Me.btnBlackout.TabIndex = 13
@@ -512,29 +483,13 @@ Public Class fmMain
         Me.Label4.Text = "Score"
         Me.Label4.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
-        'btnScoreLeft
-        '
-        Me.btnScoreLeft.Location = New System.Drawing.Point(236, 8)
-        Me.btnScoreLeft.Name = "btnScoreLeft"
-        Me.btnScoreLeft.Size = New System.Drawing.Size(76, 40)
-        Me.btnScoreLeft.TabIndex = 5
-        Me.btnScoreLeft.Text = "SCORE LEFT"
-        '
-        'btnScoreRight
-        '
-        Me.btnScoreRight.Location = New System.Drawing.Point(456, 8)
-        Me.btnScoreRight.Name = "btnScoreRight"
-        Me.btnScoreRight.Size = New System.Drawing.Size(76, 40)
-        Me.btnScoreRight.TabIndex = 7
-        Me.btnScoreRight.Text = "SCORE RIGHT"
-        '
         'btnScoreBoth
         '
-        Me.btnScoreBoth.Location = New System.Drawing.Point(344, 8)
+        Me.btnScoreBoth.Location = New System.Drawing.Point(244, 8)
         Me.btnScoreBoth.Name = "btnScoreBoth"
-        Me.btnScoreBoth.Size = New System.Drawing.Size(84, 40)
+        Me.btnScoreBoth.Size = New System.Drawing.Size(280, 40)
         Me.btnScoreBoth.TabIndex = 6
-        Me.btnScoreBoth.Text = "SCORE BOTH"
+        Me.btnScoreBoth.Text = "SHOW SCORE"
         '
         'MainMenu1
         '
@@ -612,40 +567,13 @@ Public Class fmMain
         Me.picLeft.TabIndex = 28
         Me.picLeft.TabStop = False
         '
-        'picRight
-        '
-        Me.picRight.BackColor = System.Drawing.Color.Transparent
-        Me.picRight.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
-        Me.picRight.Location = New System.Drawing.Point(580, 60)
-        Me.picRight.Name = "picRight"
-        Me.picRight.Size = New System.Drawing.Size(160, 120)
-        Me.picRight.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
-        Me.picRight.TabIndex = 29
-        Me.picRight.TabStop = False
-        '
         'btnPictureLeft
         '
-        Me.btnPictureLeft.Location = New System.Drawing.Point(216, 132)
+        Me.btnPictureLeft.Location = New System.Drawing.Point(236, 100)
         Me.btnPictureLeft.Name = "btnPictureLeft"
         Me.btnPictureLeft.Size = New System.Drawing.Size(84, 40)
         Me.btnPictureLeft.TabIndex = 14
-        Me.btnPictureLeft.Text = "PICTURE LEFT"
-        '
-        'btnPictureRight
-        '
-        Me.btnPictureRight.Location = New System.Drawing.Point(468, 132)
-        Me.btnPictureRight.Name = "btnPictureRight"
-        Me.btnPictureRight.Size = New System.Drawing.Size(84, 40)
-        Me.btnPictureRight.TabIndex = 16
-        Me.btnPictureRight.Text = "PICTURE RIGHT"
-        '
-        'btnPictureBoth
-        '
-        Me.btnPictureBoth.Location = New System.Drawing.Point(340, 132)
-        Me.btnPictureBoth.Name = "btnPictureBoth"
-        Me.btnPictureBoth.Size = New System.Drawing.Size(92, 40)
-        Me.btnPictureBoth.TabIndex = 15
-        Me.btnPictureBoth.Text = "PICTURE BOTH"
+        Me.btnPictureLeft.Text = "SHOW PICTURE"
         '
         'btnLeftScoreColor
         '
@@ -678,38 +606,13 @@ Public Class fmMain
         '
         'tpScreenText
         '
-        Me.tpScreenText.Controls.AddRange(New System.Windows.Forms.Control() {Me.btnLeftTextRight, Me.btnRightTextLeft, Me.btnBothTextScreens, Me.btnDocLoadBoth, Me.btnDocLoadRight, Me.btnDocLoadLeft, Me.Label11, Me.Label10, Me.btnLeftTextBoth, Me.btnShowLeftText, Me.tbLeftText, Me.tbRightFontSize, Me.grpRightColors, Me.btnRightTextBoth, Me.btnShowRightText, Me.tbRightText, Me.tbLeftFontSize, Me.grpLeftColors})
+        Me.tpScreenText.Controls.AddRange(New System.Windows.Forms.Control() {Me.btnDocLoadBoth, Me.btnDocLoadRight, Me.btnDocLoadLeft, Me.Label11, Me.Label10, Me.btnShowLeftText, Me.tbLeftText, Me.tbRightFontSize, Me.grpRightColors, Me.btnShowRightText, Me.tbRightText, Me.tbLeftFontSize, Me.grpLeftColors})
         Me.tpScreenText.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.tpScreenText.Location = New System.Drawing.Point(4, 25)
         Me.tpScreenText.Name = "tpScreenText"
         Me.tpScreenText.Size = New System.Drawing.Size(764, 331)
         Me.tpScreenText.TabIndex = 0
         Me.tpScreenText.Text = "Screen Text"
-        '
-        'btnLeftTextRight
-        '
-        Me.btnLeftTextRight.Location = New System.Drawing.Point(216, 268)
-        Me.btnLeftTextRight.Name = "btnLeftTextRight"
-        Me.btnLeftTextRight.Size = New System.Drawing.Size(88, 24)
-        Me.btnLeftTextRight.TabIndex = 49
-        Me.btnLeftTextRight.Text = "SHOW RIGHT"
-        '
-        'btnRightTextLeft
-        '
-        Me.btnRightTextLeft.Location = New System.Drawing.Point(460, 268)
-        Me.btnRightTextLeft.Name = "btnRightTextLeft"
-        Me.btnRightTextLeft.Size = New System.Drawing.Size(88, 24)
-        Me.btnRightTextLeft.TabIndex = 48
-        Me.btnRightTextLeft.Text = "SHOW LEFT"
-        '
-        'btnBothTextScreens
-        '
-        Me.btnBothTextScreens.Location = New System.Drawing.Point(328, 132)
-        Me.btnBothTextScreens.Name = "btnBothTextScreens"
-        Me.btnBothTextScreens.Size = New System.Drawing.Size(108, 40)
-        Me.btnBothTextScreens.TabIndex = 39
-        Me.btnBothTextScreens.Tag = "Both"
-        Me.btnBothTextScreens.Text = "SIMUL-SHOW BOTH"
         '
         'btnDocLoadBoth
         '
@@ -756,21 +659,14 @@ Public Class fmMain
         Me.Label10.Text = "Font Size"
         Me.Label10.TextAlign = System.Drawing.ContentAlignment.BottomCenter
         '
-        'btnLeftTextBoth
-        '
-        Me.btnLeftTextBoth.Location = New System.Drawing.Point(120, 268)
-        Me.btnLeftTextBoth.Name = "btnLeftTextBoth"
-        Me.btnLeftTextBoth.Size = New System.Drawing.Size(92, 24)
-        Me.btnLeftTextBoth.TabIndex = 42
-        Me.btnLeftTextBoth.Text = "SHOW BOTH"
-        '
         'btnShowLeftText
         '
-        Me.btnShowLeftText.Location = New System.Drawing.Point(24, 268)
+        Me.btnShowLeftText.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.btnShowLeftText.Location = New System.Drawing.Point(120, 268)
         Me.btnShowLeftText.Name = "btnShowLeftText"
         Me.btnShowLeftText.Size = New System.Drawing.Size(92, 24)
         Me.btnShowLeftText.TabIndex = 41
-        Me.btnShowLeftText.Text = "SHOW LEFT"
+        Me.btnShowLeftText.Text = "SHOW TEXT"
         '
         'tbLeftText
         '
@@ -782,7 +678,7 @@ Public Class fmMain
         Me.tbLeftText.Name = "tbLeftText"
         Me.tbLeftText.Size = New System.Drawing.Size(280, 210)
         Me.tbLeftText.TabIndex = 38
-        Me.tbLeftText.Text = "JANIS v1.13a" & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "(Dual Display)" & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "by" & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "Bill Cernansky"
+        Me.tbLeftText.Text = "JANIS v1.13a" & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "(Single Display)" & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "by" & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "Bill Cernansky"
         Me.tbLeftText.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'tbRightFontSize
@@ -869,21 +765,15 @@ Public Class fmMain
         Me.pnlRightColor1.TabIndex = 31
         Me.pnlRightColor1.TabStop = True
         '
-        'btnRightTextBoth
-        '
-        Me.btnRightTextBoth.Location = New System.Drawing.Point(552, 268)
-        Me.btnRightTextBoth.Name = "btnRightTextBoth"
-        Me.btnRightTextBoth.Size = New System.Drawing.Size(92, 24)
-        Me.btnRightTextBoth.TabIndex = 46
-        Me.btnRightTextBoth.Text = "SHOW BOTH"
-        '
         'btnShowRightText
         '
-        Me.btnShowRightText.Location = New System.Drawing.Point(648, 268)
+        Me.btnShowRightText.AllowDrop = True
+        Me.btnShowRightText.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.btnShowRightText.Location = New System.Drawing.Point(552, 268)
         Me.btnShowRightText.Name = "btnShowRightText"
         Me.btnShowRightText.Size = New System.Drawing.Size(92, 24)
         Me.btnShowRightText.TabIndex = 45
-        Me.btnShowRightText.Text = "SHOW RIGHT"
+        Me.btnShowRightText.Text = "SHOW TEXT"
         '
         'tbRightText
         '
@@ -984,7 +874,7 @@ Public Class fmMain
         '
         'tp5Things
         '
-        Me.tp5Things.Controls.AddRange(New System.Windows.Forms.Control() {Me.tbCurrentThing, Me.Label12, Me.clbThings, Me.Label5, Me.grpThingsColor, Me.btnClearThings, Me.btnRemoveThing, Me.btnListRight, Me.btnListBoth, Me.btnListLeft, Me.btnShowThingRight, Me.btnShowThingBoth, Me.btnShowThingLeft, Me.tbSubstitutions, Me.btnAddThing, Me.tbNewThing, Me.btnThingDown, Me.btnThingUp})
+        Me.tp5Things.Controls.AddRange(New System.Windows.Forms.Control() {Me.tbCurrentThing, Me.Label12, Me.clbThings, Me.Label5, Me.grpThingsColor, Me.btnClearThings, Me.btnRemoveThing, Me.btnListLeft, Me.btnShowThingLeft, Me.tbSubstitutions, Me.btnAddThing, Me.tbNewThing, Me.btnThingDown, Me.btnThingUp})
         Me.tp5Things.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.tp5Things.Location = New System.Drawing.Point(4, 25)
         Me.tp5Things.Name = "tp5Things"
@@ -1089,53 +979,21 @@ Public Class fmMain
         Me.btnRemoveThing.TabIndex = 55
         Me.btnRemoveThing.Text = "Remove Selected"
         '
-        'btnListRight
-        '
-        Me.btnListRight.Location = New System.Drawing.Point(232, 268)
-        Me.btnListRight.Name = "btnListRight"
-        Me.btnListRight.Size = New System.Drawing.Size(88, 32)
-        Me.btnListRight.TabIndex = 59
-        Me.btnListRight.Text = "List Right"
-        '
-        'btnListBoth
-        '
-        Me.btnListBoth.Location = New System.Drawing.Point(120, 268)
-        Me.btnListBoth.Name = "btnListBoth"
-        Me.btnListBoth.Size = New System.Drawing.Size(88, 32)
-        Me.btnListBoth.TabIndex = 58
-        Me.btnListBoth.Text = "List Both"
-        '
         'btnListLeft
         '
-        Me.btnListLeft.Location = New System.Drawing.Point(8, 268)
+        Me.btnListLeft.Location = New System.Drawing.Point(120, 268)
         Me.btnListLeft.Name = "btnListLeft"
         Me.btnListLeft.Size = New System.Drawing.Size(88, 32)
         Me.btnListLeft.TabIndex = 57
-        Me.btnListLeft.Text = "List Left"
-        '
-        'btnShowThingRight
-        '
-        Me.btnShowThingRight.Location = New System.Drawing.Point(648, 268)
-        Me.btnShowThingRight.Name = "btnShowThingRight"
-        Me.btnShowThingRight.Size = New System.Drawing.Size(88, 32)
-        Me.btnShowThingRight.TabIndex = 67
-        Me.btnShowThingRight.Text = "Show Right"
-        '
-        'btnShowThingBoth
-        '
-        Me.btnShowThingBoth.Location = New System.Drawing.Point(536, 268)
-        Me.btnShowThingBoth.Name = "btnShowThingBoth"
-        Me.btnShowThingBoth.Size = New System.Drawing.Size(88, 32)
-        Me.btnShowThingBoth.TabIndex = 66
-        Me.btnShowThingBoth.Text = "Show Both"
+        Me.btnListLeft.Text = "SHOW LIST"
         '
         'btnShowThingLeft
         '
-        Me.btnShowThingLeft.Location = New System.Drawing.Point(424, 268)
+        Me.btnShowThingLeft.Location = New System.Drawing.Point(520, 268)
         Me.btnShowThingLeft.Name = "btnShowThingLeft"
-        Me.btnShowThingLeft.Size = New System.Drawing.Size(88, 32)
+        Me.btnShowThingLeft.Size = New System.Drawing.Size(116, 32)
         Me.btnShowThingLeft.TabIndex = 65
-        Me.btnShowThingLeft.Text = "Show Left"
+        Me.btnShowThingLeft.Text = "SHOW THIS THING"
         '
         'tbSubstitutions
         '
@@ -1934,8 +1792,8 @@ Public Class fmMain
         Me.TextBox1.Size = New System.Drawing.Size(752, 104)
         Me.TextBox1.TabIndex = 90
         Me.TextBox1.TabStop = False
-        Me.TextBox1.Text = "ComedySportz JANIS" & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "(Just Another Nice Improv Scorekeeper)" & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "Dual Display version " & _
-        "1.13a  Released Sep. 15, 2005" & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "by Bill Cernansky ( bill@easybeing.com )"
+        Me.TextBox1.Text = "ComedySportz JANIS" & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "(Just Another Nice Improv Scorekeeper)" & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "Single Display versio" & _
+        "n 1.13a   Released Sep. 15, 2005" & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "by Bill Cernansky ( bill@easybeing.com )"
         Me.TextBox1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'SlideTimer
@@ -2046,7 +1904,7 @@ Public Class fmMain
         '
         Me.AutoScaleBaseSize = New System.Drawing.Size(5, 13)
         Me.ClientSize = New System.Drawing.Size(772, 565)
-        Me.Controls.AddRange(New System.Windows.Forms.Control() {Me.btnHot10, Me.btnHot9, Me.btnHot8, Me.btnHot7, Me.btnHot6, Me.btnHot5, Me.btnHot4, Me.btnHot3, Me.btnHot2, Me.btnHot1, Me.btnBlackout, Me.TabControl1, Me.btnRightScoreColor, Me.btnLeftScoreColor, Me.btnPictureBoth, Me.btnPictureRight, Me.btnPictureLeft, Me.picRight, Me.picLeft, Me.btnScoreBoth, Me.btnScoreRight, Me.btnScoreLeft, Me.Label4, Me.Label3, Me.tbRightScore, Me.tbLeftScore, Me.Label2, Me.Label1, Me.tbRightTeam, Me.tbLeftTeam})
+        Me.Controls.AddRange(New System.Windows.Forms.Control() {Me.btnHot10, Me.btnHot9, Me.btnHot8, Me.btnHot7, Me.btnHot6, Me.btnHot5, Me.btnHot4, Me.btnHot3, Me.btnHot2, Me.btnHot1, Me.btnBlackout, Me.TabControl1, Me.btnRightScoreColor, Me.btnLeftScoreColor, Me.btnPictureLeft, Me.picLeft, Me.btnScoreBoth, Me.Label4, Me.Label3, Me.tbRightScore, Me.tbLeftScore, Me.Label2, Me.Label1, Me.tbRightTeam, Me.tbLeftTeam})
         Me.ForeColor = System.Drawing.SystemColors.WindowText
         Me.Location = New System.Drawing.Point(20, 0)
         Me.Menu = Me.MainMenu1
@@ -2078,11 +1936,8 @@ Public Class fmMain
         Me.tbCurrentThing.Visible = False
         Me.tbSubstitutions.Visible = False
         Me.btnShowThingLeft.Visible = False
-        Me.btnShowThingRight.Visible = False
-        Me.btnShowThingBoth.Visible = False
 
         Me.LS = New fmScreen()
-        Me.RS = New fmScreen()
 
         '* Here's the wacky way you change font sizes in VB.NET. Piece of crap.
         Me.tbLeftText.Font = New Font(Me.tbLeftText.Font.Name, CSng(Val(Me.tbLeftFontSize.Text) / DisplayToEntryFontRatio), Me.tbLeftText.Font.Style)
@@ -2091,9 +1946,7 @@ Public Class fmMain
         Me.SetMonitorDisplayMode()
 
         DisplayTextScreen(Me.LS, Me.tbLeftText.Text, Me.tbLeftText.BackColor, CSng(Me.tbLeftFontSize.Text) * Me.DisplayFontRatio)
-        DisplayTextScreen(Me.RS, Me.tbRightText.Text, Me.tbRightText.BackColor, CSng(Me.tbRightFontSize.Text) * Me.DisplayFontRatio)
         Me.LS.Show()
-        Me.RS.Show()
 
         '* If the default support dirs aren't there, create them
         Dim MyDir As String = Dir(ROOT_SUPPORT_DIR, FileAttribute.Directory)
@@ -2110,20 +1963,12 @@ Public Class fmMain
         '* (what the hell was the guy thinking), but we can expand it down to the
         '* directory we want to see at the start. However, since we can't select it,
         '* the FileListBox's path will be empty.
-        Me.FTreeAutoExpand_C("Program Files\Multiple_Display")
+        Me.FTreeAutoExpand_C("Program Files\JANIS")
         Me.FileListBox1.Path = ""
     End Sub
 
-    Private Sub btnScoreLeft_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnScoreLeft.Click
-        Me.picLeft.Image = Nothing
-        DisplayScore(Me.LS, Me.tbLeftTeam.Text, Me.tbLeftScore.Text, tbLeftScore.BackColor)
-    End Sub
-    Private Sub btnScoreRight_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnScoreRight.Click
-        Me.picRight.Image = Nothing
-        DisplayScore(Me.RS, Me.tbRightTeam.Text, Me.tbRightScore.Text, Me.tbRightScore.BackColor)
-    End Sub
     Private Sub btnScoreBoth_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnScoreBoth.Click
-        DisplayBothScores()  ' Clears the local pic images itself.
+        DisplayScores()  ' Clears the local pic images itself.
     End Sub
     Private Sub btnLeftScoreColor_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnLeftScoreColor.Click
         tbLeftScore.BackColor = PickColor(sender.Left, sender.Top, tbLeftScore.BackColor)
@@ -2148,25 +1993,7 @@ Public Class fmMain
         DisplayTextScreen(Me.LS, Me.tbLeftText.Text, Me.tbLeftText.BackColor, CSng(Me.tbLeftFontSize.Text) * Me.DisplayFontRatio)
     End Sub
     Private Sub btnShowRightText_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnShowRightText.Click
-        DisplayTextScreen(Me.RS, Me.tbRightText.Text, Me.tbRightText.BackColor, CSng(Me.tbRightFontSize.Text) * Me.DisplayFontRatio)
-    End Sub
-    Private Sub btnLeftTextRight_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnLeftTextRight.Click
-        DisplayTextScreen(Me.RS, Me.tbLeftText.Text, Me.tbLeftText.BackColor, CSng(Me.tbLeftFontSize.Text) * Me.DisplayFontRatio)
-    End Sub
-    Private Sub btnRightTextLeft_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnRightTextLeft.Click
         DisplayTextScreen(Me.LS, Me.tbRightText.Text, Me.tbRightText.BackColor, CSng(Me.tbRightFontSize.Text) * Me.DisplayFontRatio)
-    End Sub
-    Private Sub btnLeftTextBoth_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnLeftTextBoth.Click
-        DisplayTextScreen(Me.LS, Me.tbLeftText.Text, Me.tbLeftText.BackColor, CSng(Me.tbLeftFontSize.Text) * Me.DisplayFontRatio)
-        DisplayTextScreen(Me.RS, Me.tbLeftText.Text, Me.tbLeftText.BackColor, CSng(Me.tbLeftFontSize.Text) * Me.DisplayFontRatio)
-    End Sub
-    Private Sub btnRightTextBoth_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnRightTextBoth.Click
-        DisplayTextScreen(Me.LS, Me.tbRightText.Text, Me.tbRightText.BackColor, CSng(Me.tbRightFontSize.Text) * Me.DisplayFontRatio)
-        DisplayTextScreen(Me.RS, Me.tbRightText.Text, Me.tbRightText.BackColor, CSng(Me.tbRightFontSize.Text) * Me.DisplayFontRatio)
-    End Sub
-    Private Sub btnBothTextScreens_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnBothTextScreens.Click
-        DisplayTextScreen(Me.LS, Me.tbLeftText.Text, Me.tbLeftText.BackColor, CSng(Me.tbLeftFontSize.Text) * Me.DisplayFontRatio)
-        DisplayTextScreen(Me.RS, Me.tbRightText.Text, Me.tbRightText.BackColor, CSng(Me.tbRightFontSize.Text) * Me.DisplayFontRatio)
     End Sub
 
     Private Sub btnDocLoad_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnDocLoadLeft.Click, btnDocLoadRight.Click, btnDocLoadBoth.Click
@@ -2225,17 +2052,13 @@ Public Class fmMain
 
         '* Shut them down, Artoo! Shut them all down!
         Me.LS.BackColor = System.Drawing.Color.Black
-        Me.RS.BackColor = System.Drawing.Color.Black
         Me.LS.picGraphic.Visible = False
-        Me.RS.picGraphic.Visible = False
         Me.picLeft.Image = Nothing
-        Me.picRight.Image = Nothing
         Me.LS.lblMsg.Visible = False
-        Me.RS.lblMsg.Visible = False
-        Me.LS.lblScore.Visible = False
-        Me.RS.lblScore.Visible = False
-        Me.LS.lblTeamName.Visible = False
-        Me.RS.lblTeamName.Visible = False
+        Me.LS.lblScoreLeft.Visible = False
+        Me.LS.lblScoreRight.Visible = False
+        Me.LS.lblTeamNameLeft.Visible = False
+        Me.LS.lblTeamNameRight.Visible = False
 
     End Sub
 
@@ -2274,21 +2097,31 @@ Public Class fmMain
     Private Sub SetMonitorDisplayMode()
         If SystemInformation.MonitorCount = 1 Then        '* We're in single monitor/test mode
             Me.TestMode = True
-            Me.DisplayToEntryFontRatio = Me.DisplayToEntryFontRatio / 25  '* = 5w x 5h
+            Me.DisplayToEntryFontRatio = Me.DisplayToEntryFontRatio / 25
             Me.LS.Left = Me.Left
             Me.LS.Top = Me.Height
             Me.LS.Height = Me.LS.Height / 5
             Me.LS.Width = Me.LS.Width / 5
-            Me.LS.lblScore.Left = Me.LS.lblScore.Left / 5
-            Me.LS.lblScore.Top = Me.LS.lblScore.Top / 5
-            Me.LS.lblScore.Height = Me.LS.lblScore.Height / 5
-            Me.LS.lblScore.Width = Me.LS.lblScore.Width / 5
-            Me.LS.lblScore.Font = New Font(Me.LS.lblScore.Font.Name, CSng(Val(Me.LS.lblScore.Font.Size) / 5), Me.LS.lblScore.Font.Style)
-            Me.LS.lblTeamName.Left = Me.LS.lblTeamName.Left / 5
-            Me.LS.lblTeamName.Top = Me.LS.lblTeamName.Top / 5
-            Me.LS.lblTeamName.Height = Me.LS.lblTeamName.Height / 5
-            Me.LS.lblTeamName.Width = Me.LS.lblTeamName.Width / 5
-            Me.LS.lblTeamName.Font = New Font(Me.LS.lblTeamName.Font.Name, CSng(Val(Me.LS.lblTeamName.Font.Size) / 5), Me.LS.lblTeamName.Font.Style)
+            Me.LS.lblScoreLeft.Left = Me.LS.lblScoreLeft.Left / 5
+            Me.LS.lblScoreLeft.Top = Me.LS.lblScoreLeft.Top / 5
+            Me.LS.lblScoreLeft.Height = Me.LS.lblScoreLeft.Height / 5
+            Me.LS.lblScoreLeft.Width = Me.LS.lblScoreLeft.Width / 5
+            Me.LS.lblScoreLeft.Font = New Font(Me.LS.lblScoreLeft.Font.Name, CSng(Val(Me.LS.lblScoreLeft.Font.Size) / 5), Me.LS.lblScoreLeft.Font.Style)
+            Me.LS.lblScoreRight.Left = Me.LS.lblScoreRight.Left / 5
+            Me.LS.lblScoreRight.Top = Me.LS.lblScoreRight.Top / 5
+            Me.LS.lblScoreRight.Height = Me.LS.lblScoreRight.Height / 5
+            Me.LS.lblScoreRight.Width = Me.LS.lblScoreRight.Width / 5
+            Me.LS.lblScoreRight.Font = New Font(Me.LS.lblScoreRight.Font.Name, CSng(Val(Me.LS.lblScoreRight.Font.Size) / 5), Me.LS.lblScoreRight.Font.Style)
+            Me.LS.lblTeamNameLeft.Left = Me.LS.lblTeamNameLeft.Left / 5
+            Me.LS.lblTeamNameLeft.Top = Me.LS.lblTeamNameLeft.Top / 5
+            Me.LS.lblTeamNameLeft.Height = Me.LS.lblTeamNameLeft.Height / 5
+            Me.LS.lblTeamNameLeft.Width = Me.LS.lblTeamNameLeft.Width / 5
+            Me.LS.lblTeamNameLeft.Font = New Font(Me.LS.lblTeamNameLeft.Font.Name, CSng(Val(Me.LS.lblTeamNameLeft.Font.Size) / 5), Me.LS.lblTeamNameLeft.Font.Style)
+            Me.LS.lblTeamNameRight.Left = Me.LS.lblTeamNameRight.Left / 5
+            Me.LS.lblTeamNameRight.Top = Me.LS.lblTeamNameRight.Top / 5
+            Me.LS.lblTeamNameRight.Height = Me.LS.lblTeamNameRight.Height / 5
+            Me.LS.lblTeamNameRight.Width = Me.LS.lblTeamNameRight.Width / 5
+            Me.LS.lblTeamNameRight.Font = New Font(Me.LS.lblTeamNameRight.Font.Name, CSng(Val(Me.LS.lblTeamNameRight.Font.Size) / 5), Me.LS.lblTeamNameRight.Font.Style)
             Me.LS.lblMsg.Left = Me.LS.lblMsg.Left / 5
             Me.LS.lblMsg.Top = Me.LS.lblMsg.Top / 5
             Me.LS.lblMsg.Height = Me.LS.lblMsg.Height / 5
@@ -2299,36 +2132,12 @@ Public Class fmMain
             Me.LS.picGraphic.Height = Me.LS.picGraphic.Height / 5
             Me.LS.picGraphic.Width = Me.LS.picGraphic.Width / 5
 
-            Me.RS.Left = Me.Left + Me.Width - 160
-            Me.RS.Top = Me.LS.Top
-            Me.RS.Height = Me.RS.Height / 5
-            Me.RS.Width = Me.RS.Width / 5
-            Me.RS.lblScore.Left = Me.RS.lblScore.Left / 5
-            Me.RS.lblScore.Top = Me.RS.lblScore.Top / 5
-            Me.RS.lblScore.Height = Me.RS.lblScore.Height / 5
-            Me.RS.lblScore.Width = Me.RS.lblScore.Width / 5
-            Me.RS.lblScore.Font = New Font(Me.RS.lblScore.Font.Name, CSng(Val(Me.RS.lblScore.Font.Size) / 5), Me.RS.lblScore.Font.Style)
-            Me.RS.lblTeamName.Left = Me.RS.lblTeamName.Left / 5
-            Me.RS.lblTeamName.Top = Me.RS.lblTeamName.Top / 5
-            Me.RS.lblTeamName.Height = Me.RS.lblTeamName.Height / 5
-            Me.RS.lblTeamName.Width = Me.RS.lblTeamName.Width / 5
-            Me.RS.lblTeamName.Font = New Font(Me.RS.lblTeamName.Font.Name, CSng(Val(Me.RS.lblTeamName.Font.Size) / 5), Me.RS.lblTeamName.Font.Style)
-            Me.RS.lblMsg.Left = Me.RS.lblMsg.Left / 5
-            Me.RS.lblMsg.Top = Me.RS.lblMsg.Top / 5
-            Me.RS.lblMsg.Height = Me.RS.lblMsg.Height / 5
-            Me.RS.lblMsg.Width = Me.RS.lblMsg.Width / 5
-            Me.RS.lblMsg.Font = New Font(Me.RS.lblMsg.Font.Name, CSng(Val(Me.RS.lblMsg.Font.Size) / 5), Me.RS.lblMsg.Font.Style)
-            Me.RS.picGraphic.Left = Me.RS.picGraphic.Left / 5
-            Me.RS.picGraphic.Top = Me.RS.picGraphic.Top / 5
-            Me.RS.picGraphic.Height = Me.RS.picGraphic.Height / 5
-            Me.RS.picGraphic.Width = Me.RS.picGraphic.Width / 5
             Me.tbRightText.Text = "TEST MODE"
             Me.Text = Me.Text + "   **** TEST MODE ****"
         Else
             Me.LS.Left = 800  'Don't really need to set this, but I'm doing it anyway
-            Me.RS.Left = 1600 'Because we copied another object that uses 800
-            Me.tbRightText.Text = "Arena Mode"
-            Me.Text = Me.Text + " - Arena Mode"
+            Me.tbRightText.Text = "Arena Mode (Single)"
+            Me.Text = Me.Text + " - Arena Mode (Single)"
         End If
         Me.tbRightText.Text = Me.tbRightText.Text + EOL + EOL + SystemInformation.MonitorCount.ToString + " monitors found"
 
@@ -2350,15 +2159,13 @@ Public Class fmMain
         StopSlideShow()
 
         '* Blank out the corresponding graphics preview
-        If Scr Is Me.LS Then
-            Me.picLeft.Image = Nothing
-        ElseIf Scr Is Me.RS Then
-            Me.picRight.Image = Nothing
-        End If
+        Me.picLeft.Image = Nothing
 
-        If TestMode Then fontsize = fontsize * 5
-        Scr.lblScore.Visible = False
-        Scr.lblTeamName.Visible = False
+        If Me.TestMode Then fontsize = fontsize * 5
+        Scr.lblScoreLeft.Visible = False
+        Scr.lblTeamNameLeft.Visible = False
+        Scr.lblScoreRight.Visible = False
+        Scr.lblTeamNameRight.Visible = False
         Scr.picGraphic.Visible = False
         Scr.lblMsg.Font = New Font(Scr.lblMsg.Font.Name, CSng(DisplayToEntryFontRatio * fontsize), Scr.lblMsg.Font.Style)
         Scr.lblMsg.Visible = True
@@ -2366,23 +2173,32 @@ Public Class fmMain
         Scr.BackColor = hue
     End Sub
 
-    Private Sub DisplayScore(ByVal Scr As fmScreen, ByVal Team As String, ByVal Score As String, ByVal BackColor As System.Drawing.Color)
+    Private Sub DisplayScore(ByVal Scr As fmScreen, ByVal TeamLeft As String, ByVal ScoreLeft As String, ByVal BackColorLeft As System.Drawing.Color, ByVal TeamRight As String, ByVal ScoreRight As String, ByVal BackColorRight As System.Drawing.Color)
         '* First, stop the slideshow if it's running.
         StopSlideShow()
 
-        Scr.BackColor = BackColor
+        Scr.lblTeamNameLeft.BackColor = BackColorLeft
+        Scr.lblScoreLeft.BackColor = BackColorLeft
+        Scr.lblTeamNameRight.BackColor = BackColorRight
+        Scr.lblScoreRight.BackColor = BackColorRight
         Scr.lblMsg.Visible = False
         Scr.picGraphic.Visible = False
-        Scr.lblScore.Text = Score
-        Scr.lblTeamName.Text = Team
-        Scr.lblScore.Visible = True
-        Scr.lblTeamName.Visible = True
+        Scr.lblScoreLeft.Text = ScoreLeft
+        Scr.lblScoreRight.Text = ScoreRight
+        Scr.lblTeamNameLeft.Text = TeamLeft
+        Scr.lblTeamNameRight.Text = TeamRight
+        Scr.lblScoreLeft.Visible = True
+        Scr.lblScoreRight.Visible = True
+        Scr.lblTeamNameLeft.Visible = True
+        Scr.lblTeamNameRight.Visible = True
     End Sub
 
     Private Sub DisplayImage(ByVal Scr As fmScreen, ByVal Img As Image)
         Scr.BackColor = System.Drawing.Color.Black
-        Scr.lblScore.Visible = False
-        Scr.lblTeamName.Visible = False
+        Scr.lblScoreLeft.Visible = False
+        Scr.lblTeamNameLeft.Visible = False
+        Scr.lblScoreRight.Visible = False
+        Scr.lblTeamNameRight.Visible = False
         Scr.lblMsg.Visible = False
         Scr.picGraphic.Image = Img
         Scr.picGraphic.Visible = True
@@ -2396,16 +2212,13 @@ Public Class fmMain
             img = Nothing
         End Try
         Me.picLeft.Image = img
-        Me.picRight.Image = img
         DisplayImage(Me.LS, img)
-        DisplayImage(Me.RS, img)
     End Sub
 
-    Private Sub DisplayBothScores()
+
+    Private Sub DisplayScores()
         Me.picLeft.Image = Nothing
-        DisplayScore(Me.LS, Me.tbLeftTeam.Text, Me.tbLeftScore.Text, Me.tbLeftScore.BackColor)
-        Me.picRight.Image = Nothing
-        DisplayScore(Me.RS, Me.tbRightTeam.Text, Me.tbRightScore.Text, Me.tbRightScore.BackColor)
+        DisplayScore(Me.LS, Me.tbLeftTeam.Text, Me.tbLeftScore.Text, Me.tbLeftScore.BackColor, Me.tbRightTeam.Text, Me.tbRightScore.Text, Me.tbRightScore.BackColor)
     End Sub
 
     Private Sub AddScore(ByVal Side As String, ByVal Points As Integer)
@@ -2417,10 +2230,10 @@ Public Class fmMain
             tbSource = tbRightScore
         End If
         score = Val(tbSource.Text) + Points
-        If score > 999 Then score = 999
+        If score > 99 Then score = 99
         If score < -99 Then score = -99
         tbSource.Text = score.ToString
-        DisplayBothScores()
+        DisplayScores()
     End Sub
 
     Private Sub menuChangeScore(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles menuAdd1Left.Click, menuSubtract1Left.Click, menuAdd5Left.Click, menuSubtract5Left.Click, menuAdd1Right.Click, menuSubtract1Right.Click, menuAdd5Right.Click, menuSubtract5Right.Click
@@ -2474,7 +2287,6 @@ Public Class fmMain
 
     Private Sub AllScreensToFront()
         Me.LS.Select()
-        Me.RS.Select()
         Me.Select()
     End Sub
 
@@ -2492,21 +2304,15 @@ Public Class fmMain
     End Function
 
 
-    Private Sub btnPicture_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnPictureBoth.Click, btnPictureLeft.Click, btnPictureRight.Click
+    Private Sub btnPicture_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnPictureLeft.Click
         '* First, stop the slideshow if it's running.
         StopSlideShow()
 
         Dim fn As String = SelectImageFilename()
         If fn <> "" Then
             Dim img As Image = Image.FromFile(fn)
-            If sender.Name <> "btnPictureRight" Then
-                Me.picLeft.Image = img
-                DisplayImage(Me.LS, img)
-            End If
-            If sender.Name <> "btnPictureLeft" Then
-                Me.picRight.Image = img
-                DisplayImage(Me.RS, img)
-            End If
+            Me.picLeft.Image = img
+            DisplayImage(Me.LS, img)
         End If
         AllScreensToFront()
     End Sub
@@ -2546,8 +2352,6 @@ Public Class fmMain
             Me.tbCurrentThing.Visible = False
             Me.tbSubstitutions.Visible = False
             Me.btnShowThingLeft.Visible = False
-            Me.btnShowThingRight.Visible = False
-            Me.btnShowThingBoth.Visible = False
         End If
         'Me.Select()
     End Sub
@@ -2574,8 +2378,6 @@ Public Class fmMain
             Me.tbCurrentThing.Visible = True
             Me.tbSubstitutions.Visible = True
             Me.btnShowThingLeft.Visible = True
-            Me.btnShowThingRight.Visible = True
-            Me.btnShowThingBoth.Visible = True
             Me.clbThings.Hide()
             Me.tbSubstitutions.Select(Me.tbSubstitutions.TextLength, 0)  '* deselect all text here
             Me.clbThings.Show()
@@ -2584,8 +2386,6 @@ Public Class fmMain
             Me.tbCurrentThing.Visible = False
             Me.tbSubstitutions.Visible = False
             Me.btnShowThingLeft.Visible = False
-            Me.btnShowThingRight.Visible = False
-            Me.btnShowThingBoth.Visible = False
             Me.tbNewThing.Focus()
         End If
     End Sub
@@ -2630,7 +2430,7 @@ Public Class fmMain
         End If
     End Sub
 
-    Private Sub btnList_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnListLeft.Click, btnListRight.Click, btnListBoth.Click
+    Private Sub btnList_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnListLeft.Click
         Dim ThingsFontSize As Single = 16
         Dim i As Integer
         Dim s As String
@@ -2651,14 +2451,12 @@ Public Class fmMain
         End If
         ' s = s + " " + s.Length.ToString
 
-        If sender.name <> "btnListRight" Then DisplayTextScreen(Me.LS, s, Me.clbThings.BackColor, ThingsFontSize)
-        If sender.name <> "btnListLeft" Then DisplayTextScreen(Me.RS, s, Me.clbThings.BackColor, ThingsFontSize)
+        DisplayTextScreen(Me.LS, s, Me.clbThings.BackColor, ThingsFontSize)
     End Sub
-    Private Sub btnShowThing_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnShowThingLeft.Click, btnShowThingRight.Click, btnShowThingBoth.Click
+    Private Sub btnShowThing_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnShowThingLeft.Click
         Dim s As String
         s = Me.tbCurrentThing.Text + EOL + EOL + Me.tbSubstitutions.Text
-        If sender.name <> "btnShowThingRight" Then DisplayTextScreen(Me.LS, s, clbThings.BackColor, 16)
-        If sender.name <> "btnShowThingLeft" Then DisplayTextScreen(Me.RS, s, clbThings.BackColor, 16)
+        DisplayTextScreen(Me.LS, s, clbThings.BackColor, 16)
     End Sub
     Private Sub radioThingColor_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles radioThingColorLeft.CheckedChanged, radioThingColorRight.CheckedChanged
         Me.clbThings.BackColor = sender.BackColor
