@@ -1,3 +1,5 @@
+Imports System.Resources
+
 Imports System.Reflection
 Imports System.Runtime.InteropServices
 
@@ -7,11 +9,11 @@ Imports System.Runtime.InteropServices
 
 ' Review the values of the assembly attributes
 
-<Assembly: AssemblyTitle("")> 
-<Assembly: AssemblyDescription("")> 
-<Assembly: AssemblyCompany("")> 
-<Assembly: AssemblyProduct("")> 
-<Assembly: AssemblyCopyright("")> 
+<Assembly: AssemblyTitle("JANIS")> 
+<Assembly: AssemblyDescription("The Improv Assistant")> 
+<Assembly: AssemblyCompany("Easy Being Productions")> 
+<Assembly: AssemblyProduct("DUAL DISPLAY")> 
+<Assembly: AssemblyCopyright("2004-2011")> 
 <Assembly: AssemblyTrademark("")> 
 <Assembly: CLSCompliant(True)> 
 
@@ -28,4 +30,7 @@ Imports System.Runtime.InteropServices
 ' You can specify all the values or you can default the Build and Revision Numbers 
 ' by using the '*' as shown below:
 
-<Assembly: AssemblyVersion("1.0.*")> 
+<Assembly: AssemblyVersion("2.5.*")> 
+
+<Assembly: AssemblyFileVersionAttribute("1.0")> 
+<Assembly: NeutralResourcesLanguageAttribute("en")> 

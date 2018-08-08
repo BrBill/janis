@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type='text/xsl' href='_UpgradeReport_Files/UpgradeReport.xslt'?><UpgradeLog>
+<Properties><Property Name="Solution" Value="JANIS">
+</Property><Property Name="Solution File" Value="C:\Users\bcernan\Documents\Visual Studio 2008\Projects\JANIS\2.4_Dual_Alpha_2\JANIS.sln">
+</Property><Property Name="Date" Value="Friday, October 01, 2010">
+</Property><Property Name="Time" Value="14:24 PM">
+</Property></Properties><Event ErrorLevel="0" Project="JANIS" Source="JANIS.vbproj" Description="Project converted successfully">
+</Event><Event ErrorLevel="3" Project="JANIS" Source="JANIS.vbproj" Description="Converted">
+</Event><Event ErrorLevel="0" Project="" Source="JANIS.sln" Description="Solution converted successfully">
+</Event><Event ErrorLevel="3" Project="" Source="JANIS.sln" Description="Converted">
+</Event><Event ErrorLevel="0" Project="JANIS" Source="JANIS.vbproj" Description="Scan complete: Upgrade not required for project files.">
+</Event><Event ErrorLevel="0" Project="JANIS_Setup.vdproj" Source="JANIS_Setup\JANIS_Setup.vdproj" Description="Project converted successfully">
+</Event><Event ErrorLevel="3" Project="JANIS_Setup.vdproj" Source="JANIS_Setup\JANIS_Setup.vdproj" Description="Converted">
+</Event></UpgradeLog>

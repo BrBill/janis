@@ -113,9 +113,19 @@ Public Class fmScreen
         System.Windows.Forms.Cursor.Position = New Point(Me.Left - 1, MousePosition.Y)
     End Sub
 
-    Public Function MyLeft()
+    Public Function MyLeft() As Integer
         '* Shareable function for public return of leftmost coordinate of this form.
         Return Me.Left
     End Function
+
+    Public Sub Blackout()
+        '* Black out the screen and turn off visible stuff
+
+        Me.BackColor = System.Drawing.Color.Black
+        Me.picGraphic.Visible = False
+        Me.lblMsg.Visible = False
+        Me.lblScore.Visible = False
+        Me.lblTeamName.Visible = False
+    End Sub
 
 End Class

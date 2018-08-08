@@ -1,3 +1,22 @@
+v2.5: 2010-10-25
+*  New feature: The WHAMMY! plays a slideshow at high speed, allowing us to have an
+   audience-controlled game randomizer (or ay other slideshow randomizer).
+*  Add Splash Screen, which displays while program is loading.
+*  Determines correct place to put JANIS files storage directory for Windows Vista and up.
+*  Allows drag-n-drop of images to Hotbuttons and audience screens.
+*  Allows pasting of images from clipboard directly to audience screens.
+*  Change image search text box to a dropdown that lists previous search terms.
+*  Tighten up redundant code that is the same for different controls. Make it shared.
+*  Move some code out of fmMain into fmScreen, where it belongs for object orientation.
+*  Always make Hotbutton titles lowercase to make longer titles fit on the buttons.
+*  Simplify code for initializing the image search file tree.
+*  Better error avoidance for bad image files in image search file tree.
+
+v2.2: 2007-09-11
+*  Added configurable audience-visible countdown timer and all supporting functionality
+   changes, per request of CSz-Chicago.
+*  SINGLE DISPLAY ONLY.
+
 v2.1: 2006-11-13
 *  Double-click on any slideshow filename and it displays *even if slideshow not running*.
 *  Preferences for preloading and running slideshows at startup now work.
