@@ -123,9 +123,94 @@ Public Class fmScreen
 
         Me.BackColor = System.Drawing.Color.Black
         Me.picGraphic.Visible = False
+        Me.picGraphic.ImageLocation = ""
         Me.lblMsg.Visible = False
         Me.lblScore.Visible = False
         Me.lblTeamName.Visible = False
     End Sub
+
+    Public Sub ShowText(ByVal txt As String, ByVal color As System.Drawing.Color, ByVal fontsize As Integer)
+        Me.lblScore.Visible = False
+        Me.lblTeamName.Visible = False
+        Me.picGraphic.Visible = False
+        Me.picGraphic.ImageLocation = ""
+        Me.lblMsg.Font = New Font(Me.lblMsg.Font.Name, fontsize, Me.lblMsg.Font.Style)
+        Me.lblMsg.Visible = True
+        Me.lblMsg.Text = txt
+        Me.BackColor = color
+    End Sub
+
+    Public Sub ShowScore(ByVal Score As String, ByVal Team As String, ByVal BackColor As System.Drawing.Color)
+        Me.lblTeamName.BackColor = BackColor
+        Me.lblScore.BackColor = BackColor
+        Me.lblMsg.Visible = False
+        Me.picGraphic.Visible = False
+        Me.picGraphic.ImageLocation = ""
+        Me.lblScore.Text = Score
+        Me.lblTeamName.Text = Team
+        Me.lblScore.Visible = True
+        Me.lblTeamName.Visible = True
+    End Sub
+
+    Public Sub ShowImage(ByRef Img As Image, ByVal Expand As Boolean)
+        If Img Is Nothing Then Exit Sub
+
+        Dim monitor_width_height_ratio As Single = CSng(Me.Width) / CSng(Me.Height)
+        Dim image_width_height_ratio As Single = CSng(Img.Width) / CSng(Img.Height)
+        Dim ratio_compare As Single = image_width_height_ratio / monitor_width_height_ratio
+        Dim new_height, new_width As Integer
+
+        Me.BackColor = System.Drawing.Color.Black
+        Me.lblScore.Visible = False
+        Me.lblTeamName.Visible = False
+        Me.lblMsg.Visible = False
+
+        If Expand Or (ratio_compare < 1.15 And ratio_compare > 0.85) Then
+            '* close enough to equal or in stretch mode
+            new_width = Me.Width
+            new_height = Me.Height
+        ElseIf ratio_compare > 1 Then   '* wider/shorter
+            new_width = Me.Width
+            new_height = CInt(new_width / image_width_height_ratio)
+        Else    '* narrower/taller
+            new_height = Me.Height
+            new_width = CInt(new_height * image_width_height_ratio)
+        End If
+
+        '* Float the picture in the middle if appropriate
+        If new_width <> Me.picGraphic.Width Then
+            Me.picGraphic.Left = (Me.Width - new_width) / 2
+            Me.picGraphic.Width = new_width
+        End If
+        If new_height <> Me.picGraphic.Height Then
+            Me.picGraphic.Top = (Me.Height - new_height) / 2
+            Me.picGraphic.Height = new_height
+        End If
+
+        Me.picGraphic.Image = Img
+        Me.picGraphic.Visible = True
+    End Sub
+
+    'Public Sub ShowURLImage(ByRef url As String)
+    '    If url = "" Then Exit Sub
+
+    '    Me.BackColor = System.Drawing.Color.Black
+    '    Me.lblScore.Visible = False
+    '    Me.lblTeamName.Visible = False
+    '    Me.lblMsg.Visible = False
+
+    '    '* when loading URL, we always show as expanded because we don't know pic info.
+    '    Me.picGraphic.Left = 0
+    '    Me.picGraphic.Width = Me.Width
+    '    Me.picGraphic.Top = 0
+    '    Me.picGraphic.Height = Me.Height
+
+    '    Try
+    '        Me.picGraphic.Load(url)
+    '        Me.picGraphic.Visible = True
+    '    Catch ex As Exception
+    '    End Try
+
+    'End Sub
 
 End Class

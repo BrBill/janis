@@ -1,6 +1,6 @@
 Public Class fmClickWait
     Inherits System.Windows.Forms.Form
-    Dim MyOwner As fmMain
+    Dim MyOwner As JANIS.fmMain
 
 #Region " Windows Form Designer generated code "
 

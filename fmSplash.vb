@@ -5,6 +5,7 @@ Public Class fmSplash
         Public Title As String = "JANIS"
         Public MajorVersion As Integer = 2
         Public MinorVersion As Integer = 5
+        Public Iteration As Integer = 1
         Public ProductName As String = "DUAL SCREEN"
         Public Copyright As String = "2004-2011"
     End Class
@@ -36,20 +37,21 @@ Public Class fmSplash
     'It can be modified using the Windows Form Designer.  
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
-        Dim resources As System.Resources.ResourceManager = New System.Resources.ResourceManager(GetType(fmSplash))
-        Me.PictureBox1 = New System.Windows.Forms.PictureBox()
-        Me.lblAuthor = New System.Windows.Forms.Label()
-        Me.lblStatus = New System.Windows.Forms.Label()
-        Me.lblCopyright = New System.Windows.Forms.Label()
-        Me.lblVersionInfo = New System.Windows.Forms.Label()
-        Me.lblAppDesc = New System.Windows.Forms.Label()
-        Me.lblAppTitle = New System.Windows.Forms.Label()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(fmSplash))
+        Me.PictureBox1 = New System.Windows.Forms.PictureBox
+        Me.lblAuthor = New System.Windows.Forms.Label
+        Me.lblStatus = New System.Windows.Forms.Label
+        Me.lblCopyright = New System.Windows.Forms.Label
+        Me.lblVersionInfo = New System.Windows.Forms.Label
+        Me.lblAppDesc = New System.Windows.Forms.Label
+        Me.lblAppTitle = New System.Windows.Forms.Label
+        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'PictureBox1
         '
         Me.PictureBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.PictureBox1.Image = CType(resources.GetObject("PictureBox1.Image"), System.Drawing.Bitmap)
+        Me.PictureBox1.Image = CType(resources.GetObject("PictureBox1.Image"), System.Drawing.Image)
         Me.PictureBox1.Location = New System.Drawing.Point(12, 20)
         Me.PictureBox1.Name = "PictureBox1"
         Me.PictureBox1.Size = New System.Drawing.Size(232, 232)
@@ -85,7 +87,7 @@ Public Class fmSplash
         Me.lblCopyright.Name = "lblCopyright"
         Me.lblCopyright.Size = New System.Drawing.Size(209, 16)
         Me.lblCopyright.TabIndex = 10
-        Me.lblCopyright.Text = "Copyright 2004-2010"
+        Me.lblCopyright.Text = "Copyright 2004-2011"
         Me.lblCopyright.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
         'lblVersionInfo
@@ -95,7 +97,7 @@ Public Class fmSplash
         Me.lblVersionInfo.Name = "lblVersionInfo"
         Me.lblVersionInfo.Size = New System.Drawing.Size(201, 25)
         Me.lblVersionInfo.TabIndex = 9
-        Me.lblVersionInfo.Text = "Version {0}.{1} {2}"
+        Me.lblVersionInfo.Text = "Version {0}.{1}.{2} {3}"
         Me.lblVersionInfo.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
         'lblAppDesc
@@ -104,7 +106,7 @@ Public Class fmSplash
         Me.lblAppDesc.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblAppDesc.Location = New System.Drawing.Point(343, 53)
         Me.lblAppDesc.Name = "lblAppDesc"
-        Me.lblAppDesc.Size = New System.Drawing.Size(130, 15)
+        Me.lblAppDesc.Size = New System.Drawing.Size(133, 16)
         Me.lblAppDesc.TabIndex = 8
         Me.lblAppDesc.Text = "The Improv Assistant"
         Me.lblAppDesc.TextAlign = System.Drawing.ContentAlignment.TopRight
@@ -115,7 +117,7 @@ Public Class fmSplash
         Me.lblAppTitle.Font = New System.Drawing.Font("Microsoft Sans Serif", 21.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblAppTitle.Location = New System.Drawing.Point(378, 20)
         Me.lblAppTitle.Name = "lblAppTitle"
-        Me.lblAppTitle.Size = New System.Drawing.Size(98, 33)
+        Me.lblAppTitle.Size = New System.Drawing.Size(102, 33)
         Me.lblAppTitle.TabIndex = 7
         Me.lblAppTitle.Text = "JANIS"
         Me.lblAppTitle.TextAlign = System.Drawing.ContentAlignment.TopRight
@@ -126,7 +128,13 @@ Public Class fmSplash
         Me.BackColor = System.Drawing.Color.Gainsboro
         Me.ClientSize = New System.Drawing.Size(492, 273)
         Me.ControlBox = False
-        Me.Controls.AddRange(New System.Windows.Forms.Control() {Me.lblAuthor, Me.lblStatus, Me.lblCopyright, Me.lblVersionInfo, Me.lblAppDesc, Me.lblAppTitle, Me.PictureBox1})
+        Me.Controls.Add(Me.lblAuthor)
+        Me.Controls.Add(Me.lblStatus)
+        Me.Controls.Add(Me.lblCopyright)
+        Me.Controls.Add(Me.lblVersionInfo)
+        Me.Controls.Add(Me.lblAppDesc)
+        Me.Controls.Add(Me.lblAppTitle)
+        Me.Controls.Add(Me.PictureBox1)
         Me.Cursor = System.Windows.Forms.Cursors.AppStarting
         Me.ForeColor = System.Drawing.Color.Black
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None
@@ -137,7 +145,9 @@ Public Class fmSplash
         Me.StartPosition = System.Windows.Forms.FormStartPosition.Manual
         Me.Text = "Starting JANIS..."
         Me.TopMost = True
+        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
+        Me.PerformLayout()
 
     End Sub
 
@@ -246,7 +256,7 @@ Public Class fmSplash
         '
         '    Version.Text = System.String.Format(Version.Text, My.Application.Info.Version.Major, My.Application.Info.Version.Minor, My.Application.Info.Version.Build, My.Application.Info.Version.Revision)
 
-        Me.lblVersionInfo.Text = System.String.Format(Me.lblVersionInfo.Text, Me.AppInfo.MajorVersion, Me.AppInfo.MinorVersion, Me.AppInfo.ProductName)
+        Me.lblVersionInfo.Text = System.String.Format(Me.lblVersionInfo.Text, Me.AppInfo.MajorVersion, Me.AppInfo.MinorVersion, Me.AppInfo.Iteration, Me.AppInfo.ProductName)
         'Copyright info
         Me.lblCopyright.Text = "Copyright " + Me.AppInfo.Copyright
         System.Windows.Forms.Application.DoEvents()
