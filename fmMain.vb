@@ -374,274 +374,274 @@ Namespace JANIS
 
 
         <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
-            Me.components = New System.ComponentModel.Container
+            Me.components = New System.ComponentModel.Container()
             Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(fmMain))
-            Me.btnBlackout = New System.Windows.Forms.Button
-            Me.tbLeftTeam = New System.Windows.Forms.TextBox
-            Me.tbRightTeam = New System.Windows.Forms.TextBox
-            Me.Label1 = New System.Windows.Forms.Label
-            Me.Label2 = New System.Windows.Forms.Label
-            Me.tbLeftScore = New System.Windows.Forms.TextBox
-            Me.tbRightScore = New System.Windows.Forms.TextBox
-            Me.Label3 = New System.Windows.Forms.Label
-            Me.Label4 = New System.Windows.Forms.Label
-            Me.btnScoreLeft = New System.Windows.Forms.Button
-            Me.btnScoreRight = New System.Windows.Forms.Button
-            Me.btnScoreBoth = New System.Windows.Forms.Button
+            Me.btnBlackout = New System.Windows.Forms.Button()
+            Me.tbLeftTeam = New System.Windows.Forms.TextBox()
+            Me.tbRightTeam = New System.Windows.Forms.TextBox()
+            Me.Label1 = New System.Windows.Forms.Label()
+            Me.Label2 = New System.Windows.Forms.Label()
+            Me.tbLeftScore = New System.Windows.Forms.TextBox()
+            Me.tbRightScore = New System.Windows.Forms.TextBox()
+            Me.Label3 = New System.Windows.Forms.Label()
+            Me.Label4 = New System.Windows.Forms.Label()
+            Me.btnScoreLeft = New System.Windows.Forms.Button()
+            Me.btnScoreRight = New System.Windows.Forms.Button()
+            Me.btnScoreBoth = New System.Windows.Forms.Button()
             Me.MainMenu1 = New System.Windows.Forms.MainMenu(Me.components)
-            Me.menuDummy = New System.Windows.Forms.MenuItem
-            Me.menuAdd1Left = New System.Windows.Forms.MenuItem
-            Me.menuSubtract1Left = New System.Windows.Forms.MenuItem
-            Me.menuAdd5Left = New System.Windows.Forms.MenuItem
-            Me.menuSubtract5Left = New System.Windows.Forms.MenuItem
-            Me.menuAdd1Right = New System.Windows.Forms.MenuItem
-            Me.menuSubtract1Right = New System.Windows.Forms.MenuItem
-            Me.menuAdd5Right = New System.Windows.Forms.MenuItem
-            Me.menuSubtract5Right = New System.Windows.Forms.MenuItem
-            Me.EasterEgg1 = New System.Windows.Forms.MenuItem
-            Me.picLeft = New System.Windows.Forms.PictureBox
-            Me.btnPictureLeft = New System.Windows.Forms.Button
-            Me.btnPictureRight = New System.Windows.Forms.Button
-            Me.btnPictureBoth = New System.Windows.Forms.Button
-            Me.btnLeftScoreColor = New System.Windows.Forms.Button
-            Me.btnRightScoreColor = New System.Windows.Forms.Button
-            Me.TabControl1 = New System.Windows.Forms.TabControl
-            Me.tpScreenText = New System.Windows.Forms.TabPage
-            Me.GroupBox1 = New System.Windows.Forms.GroupBox
-            Me.btnRightTextLeft = New System.Windows.Forms.Button
-            Me.btnRightTextBoth = New System.Windows.Forms.Button
-            Me.btnShowRightText = New System.Windows.Forms.Button
-            Me.grpShowLeftText = New System.Windows.Forms.GroupBox
-            Me.btnShowLeftText = New System.Windows.Forms.Button
-            Me.btnLeftTextBoth = New System.Windows.Forms.Button
-            Me.btnLeftTextRight = New System.Windows.Forms.Button
-            Me.grpLoadText = New System.Windows.Forms.GroupBox
-            Me.btnDocLoadLeft = New System.Windows.Forms.Button
-            Me.btnDocLoadBoth = New System.Windows.Forms.Button
-            Me.btnDocLoadRight = New System.Windows.Forms.Button
-            Me.grpClearText = New System.Windows.Forms.GroupBox
-            Me.btnClearTextLeft = New System.Windows.Forms.Button
-            Me.btnClearTextBoth = New System.Windows.Forms.Button
-            Me.btnClearTextRight = New System.Windows.Forms.Button
-            Me.btnBothTextScreens = New System.Windows.Forms.Button
-            Me.Label11 = New System.Windows.Forms.Label
-            Me.Label10 = New System.Windows.Forms.Label
-            Me.tbLeftText = New System.Windows.Forms.TextBox
-            Me.tbRightFontSize = New System.Windows.Forms.TextBox
-            Me.grpRightColors = New System.Windows.Forms.GroupBox
-            Me.btnChooseTextColorRight = New System.Windows.Forms.Button
-            Me.pnlTextColorRight6 = New System.Windows.Forms.Panel
-            Me.pnlTextColorRight5 = New System.Windows.Forms.Panel
-            Me.pnlTextColorRight4 = New System.Windows.Forms.Panel
-            Me.pnlTextColorRight3 = New System.Windows.Forms.Panel
-            Me.pnlTextColorRight2 = New System.Windows.Forms.Panel
-            Me.pnlTextColorRight1 = New System.Windows.Forms.Panel
-            Me.tbRightText = New System.Windows.Forms.TextBox
-            Me.tbLeftFontSize = New System.Windows.Forms.TextBox
-            Me.grpLeftColors = New System.Windows.Forms.GroupBox
-            Me.btnChooseTextColorLeft = New System.Windows.Forms.Button
-            Me.pnlTextColorLeft6 = New System.Windows.Forms.Panel
-            Me.pnlTextColorLeft5 = New System.Windows.Forms.Panel
-            Me.pnlTextColorLeft4 = New System.Windows.Forms.Panel
-            Me.pnlTextColorLeft3 = New System.Windows.Forms.Panel
-            Me.pnlTextColorLeft2 = New System.Windows.Forms.Panel
-            Me.pnlTextColorLeft1 = New System.Windows.Forms.Panel
-            Me.tpImgSearch = New System.Windows.Forms.TabPage
-            Me.Label32 = New System.Windows.Forms.Label
-            Me.Label21 = New System.Windows.Forms.Label
-            Me.lbImgResults = New System.Windows.Forms.ListBox
-            Me.comboImgSearchText = New System.Windows.Forms.ComboBox
-            Me.Label20 = New System.Windows.Forms.Label
-            Me.btnImgSearch = New System.Windows.Forms.Button
-            Me.btnSearchImgAddSlide = New System.Windows.Forms.Button
-            Me.btnSearchImgShowRight = New System.Windows.Forms.Button
-            Me.btnSearchImgShowBoth = New System.Windows.Forms.Button
-            Me.btnSearchImgShowLeft = New System.Windows.Forms.Button
-            Me.Label19 = New System.Windows.Forms.Label
-            Me.picImgSearchPreview = New System.Windows.Forms.PictureBox
-            Me.tp5Things = New System.Windows.Forms.TabPage
-            Me.tbCurrentThing = New System.Windows.Forms.TextBox
-            Me.Label12 = New System.Windows.Forms.Label
-            Me.clbThings = New System.Windows.Forms.CheckedListBox
-            Me.Label5 = New System.Windows.Forms.Label
-            Me.grpThingsColor = New System.Windows.Forms.GroupBox
-            Me.radioThingColorRight = New System.Windows.Forms.RadioButton
-            Me.radioThingColorLeft = New System.Windows.Forms.RadioButton
-            Me.btnClearThings = New System.Windows.Forms.Button
-            Me.btnRemoveThing = New System.Windows.Forms.Button
-            Me.btnListRight = New System.Windows.Forms.Button
-            Me.btnListBoth = New System.Windows.Forms.Button
-            Me.btnListLeft = New System.Windows.Forms.Button
-            Me.btnShowThingRight = New System.Windows.Forms.Button
-            Me.btnShowThingBoth = New System.Windows.Forms.Button
-            Me.btnShowThingLeft = New System.Windows.Forms.Button
-            Me.tbSubstitutions = New System.Windows.Forms.TextBox
-            Me.btnAddThing = New System.Windows.Forms.Button
-            Me.tbNewThing = New System.Windows.Forms.TextBox
-            Me.btnThingDown = New System.Windows.Forms.Button
-            Me.btnThingUp = New System.Windows.Forms.Button
-            Me.tpSlides = New System.Windows.Forms.TabPage
-            Me.ExpTree1 = New ExpTreeLib.ExpTree
-            Me.btnWhammy = New System.Windows.Forms.Button
-            Me.btnPauseSlides = New System.Windows.Forms.Button
-            Me.btnNextSlide = New System.Windows.Forms.Button
-            Me.btnPrevSlide = New System.Windows.Forms.Button
-            Me.btnClearSlideList = New System.Windows.Forms.Button
-            Me.Label9 = New System.Windows.Forms.Label
-            Me.nudDelay = New System.Windows.Forms.NumericUpDown
-            Me.Label8 = New System.Windows.Forms.Label
-            Me.Label7 = New System.Windows.Forms.Label
-            Me.btnSaveSlides = New System.Windows.Forms.Button
-            Me.btnLoadSlides = New System.Windows.Forms.Button
-            Me.FileListBox1 = New Microsoft.VisualBasic.Compatibility.VB6.FileListBox
-            Me.btnRemoveSlides = New System.Windows.Forms.Button
-            Me.btnAddSlide = New System.Windows.Forms.Button
-            Me.Label6 = New System.Windows.Forms.Label
-            Me.btnSlideDown = New System.Windows.Forms.Button
-            Me.btnSlideUp = New System.Windows.Forms.Button
-            Me.btnStopSlides = New System.Windows.Forms.Button
-            Me.btnLastSlide = New System.Windows.Forms.Button
-            Me.btnPlaySlides = New System.Windows.Forms.Button
-            Me.btnFirstSlide = New System.Windows.Forms.Button
-            Me.lbSlideList = New System.Windows.Forms.ListBox
-            Me.picSlidePreview = New System.Windows.Forms.PictureBox
-            Me.tpHotButtons = New System.Windows.Forms.TabPage
-            Me.btnClearHB = New System.Windows.Forms.Button
-            Me.lblHBinstructions = New System.Windows.Forms.Label
-            Me.btnSaveHB = New System.Windows.Forms.Button
-            Me.btnLoadHB = New System.Windows.Forms.Button
-            Me.gbHB = New System.Windows.Forms.GroupBox
-            Me.tbHBfile10 = New System.Windows.Forms.TextBox
-            Me.tbHBfile9 = New System.Windows.Forms.TextBox
-            Me.tbHBfile8 = New System.Windows.Forms.TextBox
-            Me.tbHBfile7 = New System.Windows.Forms.TextBox
-            Me.tbHBfile6 = New System.Windows.Forms.TextBox
-            Me.tbHBfile5 = New System.Windows.Forms.TextBox
-            Me.tbHBfile4 = New System.Windows.Forms.TextBox
-            Me.tbHBfile3 = New System.Windows.Forms.TextBox
-            Me.tbHBfile2 = New System.Windows.Forms.TextBox
-            Me.tbHBfile1 = New System.Windows.Forms.TextBox
-            Me.Label14 = New System.Windows.Forms.Label
-            Me.Label13 = New System.Windows.Forms.Label
-            Me.Label30 = New System.Windows.Forms.Label
-            Me.Label31 = New System.Windows.Forms.Label
-            Me.Label28 = New System.Windows.Forms.Label
-            Me.Label29 = New System.Windows.Forms.Label
-            Me.Label26 = New System.Windows.Forms.Label
-            Me.Label27 = New System.Windows.Forms.Label
-            Me.Label24 = New System.Windows.Forms.Label
-            Me.Label25 = New System.Windows.Forms.Label
-            Me.Label23 = New System.Windows.Forms.Label
-            Me.Label22 = New System.Windows.Forms.Label
-            Me.btnHBSelect10 = New System.Windows.Forms.Button
-            Me.btnHBSelect9 = New System.Windows.Forms.Button
-            Me.btnHBSelect8 = New System.Windows.Forms.Button
-            Me.btnHBSelect7 = New System.Windows.Forms.Button
-            Me.btnHBSelect6 = New System.Windows.Forms.Button
-            Me.btnHBSelect5 = New System.Windows.Forms.Button
-            Me.btnHBSelect4 = New System.Windows.Forms.Button
-            Me.btnHBSelect3 = New System.Windows.Forms.Button
-            Me.btnHBSelect2 = New System.Windows.Forms.Button
-            Me.btnHBSelect1 = New System.Windows.Forms.Button
-            Me.tbHBtext10 = New System.Windows.Forms.TextBox
-            Me.tbHBtext9 = New System.Windows.Forms.TextBox
-            Me.tbHBtext8 = New System.Windows.Forms.TextBox
-            Me.tbHBtext7 = New System.Windows.Forms.TextBox
-            Me.tbHBtext6 = New System.Windows.Forms.TextBox
-            Me.tbHBtext5 = New System.Windows.Forms.TextBox
-            Me.tbHBtext4 = New System.Windows.Forms.TextBox
-            Me.tbHBtext3 = New System.Windows.Forms.TextBox
-            Me.tbHBtext2 = New System.Windows.Forms.TextBox
-            Me.tbHBtext1 = New System.Windows.Forms.TextBox
-            Me.cbHBActive = New System.Windows.Forms.CheckBox
-            Me.tpPrefs = New System.Windows.Forms.TabPage
-            Me.Label43 = New System.Windows.Forms.Label
-            Me.Label38 = New System.Windows.Forms.Label
-            Me.Label39 = New System.Windows.Forms.Label
-            Me.Label40 = New System.Windows.Forms.Label
-            Me.nudDefaultCountdownSeconds = New System.Windows.Forms.NumericUpDown
-            Me.nudDefaultCountdownMinutes = New System.Windows.Forms.NumericUpDown
-            Me.nudDefaultCountdownHours = New System.Windows.Forms.NumericUpDown
-            Me.btnDefaultPrefs = New System.Windows.Forms.Button
-            Me.tbDefaultImageDir = New System.Windows.Forms.TextBox
-            Me.btnChooseDefaultImageDir = New System.Windows.Forms.Button
-            Me.Label18 = New System.Windows.Forms.Label
-            Me.tbDefaultFontSize = New System.Windows.Forms.TextBox
-            Me.Label17 = New System.Windows.Forms.Label
-            Me.GroupBox2 = New System.Windows.Forms.GroupBox
-            Me.lblDefaultColorRight = New System.Windows.Forms.Label
-            Me.lblDefaultColorLeft = New System.Windows.Forms.Label
-            Me.grpDefaultColorsRight = New System.Windows.Forms.GroupBox
-            Me.btnChooseDefaultTextColorRight = New System.Windows.Forms.Button
-            Me.pnlDefaultTextColorRight6 = New System.Windows.Forms.Panel
-            Me.pnlDefaultTextColorRight5 = New System.Windows.Forms.Panel
-            Me.pnlDefaultTextColorRight4 = New System.Windows.Forms.Panel
-            Me.pnlDefaultTextColorRight3 = New System.Windows.Forms.Panel
-            Me.pnlDefaultTextColorRight2 = New System.Windows.Forms.Panel
-            Me.pnlDefaultTextColorRight1 = New System.Windows.Forms.Panel
-            Me.grpDefaultColorsLeft = New System.Windows.Forms.GroupBox
-            Me.btnChooseDefaultTextColorLeft = New System.Windows.Forms.Button
-            Me.pnlDefaultTextColorLeft6 = New System.Windows.Forms.Panel
-            Me.pnlDefaultTextColorLeft5 = New System.Windows.Forms.Panel
-            Me.pnlDefaultTextColorLeft4 = New System.Windows.Forms.Panel
-            Me.pnlDefaultTextColorLeft3 = New System.Windows.Forms.Panel
-            Me.pnlDefaultTextColorLeft2 = New System.Windows.Forms.Panel
-            Me.pnlDefaultTextColorLeft1 = New System.Windows.Forms.Panel
-            Me.btnSavePrefs = New System.Windows.Forms.Button
-            Me.btnRevertPrefs = New System.Windows.Forms.Button
-            Me.cbPlaySlidesAtStart = New System.Windows.Forms.CheckBox
-            Me.Label16 = New System.Windows.Forms.Label
-            Me.nudDefaultSlideDelay = New System.Windows.Forms.NumericUpDown
-            Me.tbDefaultSlideShow = New System.Windows.Forms.TextBox
-            Me.btnChooseDefaultSlideShow = New System.Windows.Forms.Button
-            Me.tbDefaultHBFile = New System.Windows.Forms.TextBox
-            Me.btnChooseDefaultHB = New System.Windows.Forms.Button
-            Me.tbDefaultImageFile = New System.Windows.Forms.TextBox
-            Me.btnChooseDefaultImage = New System.Windows.Forms.Button
-            Me.cbDisplayDefaultImage = New System.Windows.Forms.CheckBox
-            Me.cbLoadDefaultSlides = New System.Windows.Forms.CheckBox
-            Me.cbLoadDefaultHB = New System.Windows.Forms.CheckBox
-            Me.tpAbout = New System.Windows.Forms.TabPage
-            Me.TextBox2 = New System.Windows.Forms.TextBox
-            Me.TextBox1 = New System.Windows.Forms.TextBox
+            Me.menuDummy = New System.Windows.Forms.MenuItem()
+            Me.menuAdd1Left = New System.Windows.Forms.MenuItem()
+            Me.menuSubtract1Left = New System.Windows.Forms.MenuItem()
+            Me.menuAdd5Left = New System.Windows.Forms.MenuItem()
+            Me.menuSubtract5Left = New System.Windows.Forms.MenuItem()
+            Me.menuAdd1Right = New System.Windows.Forms.MenuItem()
+            Me.menuSubtract1Right = New System.Windows.Forms.MenuItem()
+            Me.menuAdd5Right = New System.Windows.Forms.MenuItem()
+            Me.menuSubtract5Right = New System.Windows.Forms.MenuItem()
+            Me.EasterEgg1 = New System.Windows.Forms.MenuItem()
+            Me.picLeft = New System.Windows.Forms.PictureBox()
+            Me.btnPictureLeft = New System.Windows.Forms.Button()
+            Me.btnPictureRight = New System.Windows.Forms.Button()
+            Me.btnPictureBoth = New System.Windows.Forms.Button()
+            Me.btnLeftScoreColor = New System.Windows.Forms.Button()
+            Me.btnRightScoreColor = New System.Windows.Forms.Button()
+            Me.TabControl1 = New System.Windows.Forms.TabControl()
+            Me.tpScreenText = New System.Windows.Forms.TabPage()
+            Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+            Me.btnRightTextLeft = New System.Windows.Forms.Button()
+            Me.btnRightTextBoth = New System.Windows.Forms.Button()
+            Me.btnShowRightText = New System.Windows.Forms.Button()
+            Me.grpShowLeftText = New System.Windows.Forms.GroupBox()
+            Me.btnShowLeftText = New System.Windows.Forms.Button()
+            Me.btnLeftTextBoth = New System.Windows.Forms.Button()
+            Me.btnLeftTextRight = New System.Windows.Forms.Button()
+            Me.grpLoadText = New System.Windows.Forms.GroupBox()
+            Me.btnDocLoadLeft = New System.Windows.Forms.Button()
+            Me.btnDocLoadBoth = New System.Windows.Forms.Button()
+            Me.btnDocLoadRight = New System.Windows.Forms.Button()
+            Me.grpClearText = New System.Windows.Forms.GroupBox()
+            Me.btnClearTextLeft = New System.Windows.Forms.Button()
+            Me.btnClearTextBoth = New System.Windows.Forms.Button()
+            Me.btnClearTextRight = New System.Windows.Forms.Button()
+            Me.btnBothTextScreens = New System.Windows.Forms.Button()
+            Me.Label11 = New System.Windows.Forms.Label()
+            Me.Label10 = New System.Windows.Forms.Label()
+            Me.tbLeftText = New System.Windows.Forms.TextBox()
+            Me.tbRightFontSize = New System.Windows.Forms.TextBox()
+            Me.grpRightColors = New System.Windows.Forms.GroupBox()
+            Me.btnChooseTextColorRight = New System.Windows.Forms.Button()
+            Me.pnlTextColorRight6 = New System.Windows.Forms.Panel()
+            Me.pnlTextColorRight5 = New System.Windows.Forms.Panel()
+            Me.pnlTextColorRight4 = New System.Windows.Forms.Panel()
+            Me.pnlTextColorRight3 = New System.Windows.Forms.Panel()
+            Me.pnlTextColorRight2 = New System.Windows.Forms.Panel()
+            Me.pnlTextColorRight1 = New System.Windows.Forms.Panel()
+            Me.tbRightText = New System.Windows.Forms.TextBox()
+            Me.tbLeftFontSize = New System.Windows.Forms.TextBox()
+            Me.grpLeftColors = New System.Windows.Forms.GroupBox()
+            Me.btnChooseTextColorLeft = New System.Windows.Forms.Button()
+            Me.pnlTextColorLeft6 = New System.Windows.Forms.Panel()
+            Me.pnlTextColorLeft5 = New System.Windows.Forms.Panel()
+            Me.pnlTextColorLeft4 = New System.Windows.Forms.Panel()
+            Me.pnlTextColorLeft3 = New System.Windows.Forms.Panel()
+            Me.pnlTextColorLeft2 = New System.Windows.Forms.Panel()
+            Me.pnlTextColorLeft1 = New System.Windows.Forms.Panel()
+            Me.tpImgSearch = New System.Windows.Forms.TabPage()
+            Me.Label32 = New System.Windows.Forms.Label()
+            Me.Label21 = New System.Windows.Forms.Label()
+            Me.lbImgResults = New System.Windows.Forms.ListBox()
+            Me.comboImgSearchText = New System.Windows.Forms.ComboBox()
+            Me.Label20 = New System.Windows.Forms.Label()
+            Me.btnImgSearch = New System.Windows.Forms.Button()
+            Me.btnSearchImgAddSlide = New System.Windows.Forms.Button()
+            Me.btnSearchImgShowRight = New System.Windows.Forms.Button()
+            Me.btnSearchImgShowBoth = New System.Windows.Forms.Button()
+            Me.btnSearchImgShowLeft = New System.Windows.Forms.Button()
+            Me.Label19 = New System.Windows.Forms.Label()
+            Me.picImgSearchPreview = New System.Windows.Forms.PictureBox()
+            Me.tp5Things = New System.Windows.Forms.TabPage()
+            Me.tbCurrentThing = New System.Windows.Forms.TextBox()
+            Me.Label12 = New System.Windows.Forms.Label()
+            Me.clbThings = New System.Windows.Forms.CheckedListBox()
+            Me.Label5 = New System.Windows.Forms.Label()
+            Me.grpThingsColor = New System.Windows.Forms.GroupBox()
+            Me.radioThingColorRight = New System.Windows.Forms.RadioButton()
+            Me.radioThingColorLeft = New System.Windows.Forms.RadioButton()
+            Me.btnClearThings = New System.Windows.Forms.Button()
+            Me.btnRemoveThing = New System.Windows.Forms.Button()
+            Me.btnListRight = New System.Windows.Forms.Button()
+            Me.btnListBoth = New System.Windows.Forms.Button()
+            Me.btnListLeft = New System.Windows.Forms.Button()
+            Me.btnShowThingRight = New System.Windows.Forms.Button()
+            Me.btnShowThingBoth = New System.Windows.Forms.Button()
+            Me.btnShowThingLeft = New System.Windows.Forms.Button()
+            Me.tbSubstitutions = New System.Windows.Forms.TextBox()
+            Me.btnAddThing = New System.Windows.Forms.Button()
+            Me.tbNewThing = New System.Windows.Forms.TextBox()
+            Me.btnThingDown = New System.Windows.Forms.Button()
+            Me.btnThingUp = New System.Windows.Forms.Button()
+            Me.tpSlides = New System.Windows.Forms.TabPage()
+            Me.ExpTree1 = New ExpTreeLib.ExpTree()
+            Me.btnWhammy = New System.Windows.Forms.Button()
+            Me.btnPauseSlides = New System.Windows.Forms.Button()
+            Me.btnNextSlide = New System.Windows.Forms.Button()
+            Me.btnPrevSlide = New System.Windows.Forms.Button()
+            Me.btnClearSlideList = New System.Windows.Forms.Button()
+            Me.Label9 = New System.Windows.Forms.Label()
+            Me.nudDelay = New System.Windows.Forms.NumericUpDown()
+            Me.Label8 = New System.Windows.Forms.Label()
+            Me.Label7 = New System.Windows.Forms.Label()
+            Me.btnSaveSlides = New System.Windows.Forms.Button()
+            Me.btnLoadSlides = New System.Windows.Forms.Button()
+            Me.FileListBox1 = New Microsoft.VisualBasic.Compatibility.VB6.FileListBox()
+            Me.btnRemoveSlides = New System.Windows.Forms.Button()
+            Me.btnAddSlide = New System.Windows.Forms.Button()
+            Me.Label6 = New System.Windows.Forms.Label()
+            Me.btnSlideDown = New System.Windows.Forms.Button()
+            Me.btnSlideUp = New System.Windows.Forms.Button()
+            Me.btnStopSlides = New System.Windows.Forms.Button()
+            Me.btnLastSlide = New System.Windows.Forms.Button()
+            Me.btnPlaySlides = New System.Windows.Forms.Button()
+            Me.btnFirstSlide = New System.Windows.Forms.Button()
+            Me.lbSlideList = New System.Windows.Forms.ListBox()
+            Me.picSlidePreview = New System.Windows.Forms.PictureBox()
+            Me.tpHotButtons = New System.Windows.Forms.TabPage()
+            Me.btnClearHB = New System.Windows.Forms.Button()
+            Me.lblHBinstructions = New System.Windows.Forms.Label()
+            Me.btnSaveHB = New System.Windows.Forms.Button()
+            Me.btnLoadHB = New System.Windows.Forms.Button()
+            Me.gbHB = New System.Windows.Forms.GroupBox()
+            Me.tbHBfile10 = New System.Windows.Forms.TextBox()
+            Me.tbHBfile9 = New System.Windows.Forms.TextBox()
+            Me.tbHBfile8 = New System.Windows.Forms.TextBox()
+            Me.tbHBfile7 = New System.Windows.Forms.TextBox()
+            Me.tbHBfile6 = New System.Windows.Forms.TextBox()
+            Me.tbHBfile5 = New System.Windows.Forms.TextBox()
+            Me.tbHBfile4 = New System.Windows.Forms.TextBox()
+            Me.tbHBfile3 = New System.Windows.Forms.TextBox()
+            Me.tbHBfile2 = New System.Windows.Forms.TextBox()
+            Me.tbHBfile1 = New System.Windows.Forms.TextBox()
+            Me.Label14 = New System.Windows.Forms.Label()
+            Me.Label13 = New System.Windows.Forms.Label()
+            Me.Label30 = New System.Windows.Forms.Label()
+            Me.Label31 = New System.Windows.Forms.Label()
+            Me.Label28 = New System.Windows.Forms.Label()
+            Me.Label29 = New System.Windows.Forms.Label()
+            Me.Label26 = New System.Windows.Forms.Label()
+            Me.Label27 = New System.Windows.Forms.Label()
+            Me.Label24 = New System.Windows.Forms.Label()
+            Me.Label25 = New System.Windows.Forms.Label()
+            Me.Label23 = New System.Windows.Forms.Label()
+            Me.Label22 = New System.Windows.Forms.Label()
+            Me.btnHBSelect10 = New System.Windows.Forms.Button()
+            Me.btnHBSelect9 = New System.Windows.Forms.Button()
+            Me.btnHBSelect8 = New System.Windows.Forms.Button()
+            Me.btnHBSelect7 = New System.Windows.Forms.Button()
+            Me.btnHBSelect6 = New System.Windows.Forms.Button()
+            Me.btnHBSelect5 = New System.Windows.Forms.Button()
+            Me.btnHBSelect4 = New System.Windows.Forms.Button()
+            Me.btnHBSelect3 = New System.Windows.Forms.Button()
+            Me.btnHBSelect2 = New System.Windows.Forms.Button()
+            Me.btnHBSelect1 = New System.Windows.Forms.Button()
+            Me.tbHBtext10 = New System.Windows.Forms.TextBox()
+            Me.tbHBtext9 = New System.Windows.Forms.TextBox()
+            Me.tbHBtext8 = New System.Windows.Forms.TextBox()
+            Me.tbHBtext7 = New System.Windows.Forms.TextBox()
+            Me.tbHBtext6 = New System.Windows.Forms.TextBox()
+            Me.tbHBtext5 = New System.Windows.Forms.TextBox()
+            Me.tbHBtext4 = New System.Windows.Forms.TextBox()
+            Me.tbHBtext3 = New System.Windows.Forms.TextBox()
+            Me.tbHBtext2 = New System.Windows.Forms.TextBox()
+            Me.tbHBtext1 = New System.Windows.Forms.TextBox()
+            Me.cbHBActive = New System.Windows.Forms.CheckBox()
+            Me.tpPrefs = New System.Windows.Forms.TabPage()
+            Me.Label43 = New System.Windows.Forms.Label()
+            Me.Label38 = New System.Windows.Forms.Label()
+            Me.Label39 = New System.Windows.Forms.Label()
+            Me.Label40 = New System.Windows.Forms.Label()
+            Me.nudDefaultCountdownSeconds = New System.Windows.Forms.NumericUpDown()
+            Me.nudDefaultCountdownMinutes = New System.Windows.Forms.NumericUpDown()
+            Me.nudDefaultCountdownHours = New System.Windows.Forms.NumericUpDown()
+            Me.btnDefaultPrefs = New System.Windows.Forms.Button()
+            Me.tbDefaultImageDir = New System.Windows.Forms.TextBox()
+            Me.btnChooseDefaultImageDir = New System.Windows.Forms.Button()
+            Me.Label18 = New System.Windows.Forms.Label()
+            Me.tbDefaultFontSize = New System.Windows.Forms.TextBox()
+            Me.Label17 = New System.Windows.Forms.Label()
+            Me.GroupBox2 = New System.Windows.Forms.GroupBox()
+            Me.lblDefaultColorRight = New System.Windows.Forms.Label()
+            Me.lblDefaultColorLeft = New System.Windows.Forms.Label()
+            Me.grpDefaultColorsRight = New System.Windows.Forms.GroupBox()
+            Me.btnChooseDefaultTextColorRight = New System.Windows.Forms.Button()
+            Me.pnlDefaultTextColorRight6 = New System.Windows.Forms.Panel()
+            Me.pnlDefaultTextColorRight5 = New System.Windows.Forms.Panel()
+            Me.pnlDefaultTextColorRight4 = New System.Windows.Forms.Panel()
+            Me.pnlDefaultTextColorRight3 = New System.Windows.Forms.Panel()
+            Me.pnlDefaultTextColorRight2 = New System.Windows.Forms.Panel()
+            Me.pnlDefaultTextColorRight1 = New System.Windows.Forms.Panel()
+            Me.grpDefaultColorsLeft = New System.Windows.Forms.GroupBox()
+            Me.btnChooseDefaultTextColorLeft = New System.Windows.Forms.Button()
+            Me.pnlDefaultTextColorLeft6 = New System.Windows.Forms.Panel()
+            Me.pnlDefaultTextColorLeft5 = New System.Windows.Forms.Panel()
+            Me.pnlDefaultTextColorLeft4 = New System.Windows.Forms.Panel()
+            Me.pnlDefaultTextColorLeft3 = New System.Windows.Forms.Panel()
+            Me.pnlDefaultTextColorLeft2 = New System.Windows.Forms.Panel()
+            Me.pnlDefaultTextColorLeft1 = New System.Windows.Forms.Panel()
+            Me.btnSavePrefs = New System.Windows.Forms.Button()
+            Me.btnRevertPrefs = New System.Windows.Forms.Button()
+            Me.cbPlaySlidesAtStart = New System.Windows.Forms.CheckBox()
+            Me.Label16 = New System.Windows.Forms.Label()
+            Me.nudDefaultSlideDelay = New System.Windows.Forms.NumericUpDown()
+            Me.tbDefaultSlideShow = New System.Windows.Forms.TextBox()
+            Me.btnChooseDefaultSlideShow = New System.Windows.Forms.Button()
+            Me.tbDefaultHBFile = New System.Windows.Forms.TextBox()
+            Me.btnChooseDefaultHB = New System.Windows.Forms.Button()
+            Me.tbDefaultImageFile = New System.Windows.Forms.TextBox()
+            Me.btnChooseDefaultImage = New System.Windows.Forms.Button()
+            Me.cbDisplayDefaultImage = New System.Windows.Forms.CheckBox()
+            Me.cbLoadDefaultSlides = New System.Windows.Forms.CheckBox()
+            Me.cbLoadDefaultHB = New System.Windows.Forms.CheckBox()
+            Me.tpAbout = New System.Windows.Forms.TabPage()
+            Me.TextBox2 = New System.Windows.Forms.TextBox()
+            Me.TextBox1 = New System.Windows.Forms.TextBox()
             Me.SlideTimer = New System.Windows.Forms.Timer(Me.components)
-            Me.btnHot1 = New System.Windows.Forms.Button
-            Me.btnHot2 = New System.Windows.Forms.Button
-            Me.btnHot3 = New System.Windows.Forms.Button
-            Me.btnHot4 = New System.Windows.Forms.Button
-            Me.btnHot5 = New System.Windows.Forms.Button
-            Me.btnHot6 = New System.Windows.Forms.Button
-            Me.btnHot7 = New System.Windows.Forms.Button
-            Me.btnHot8 = New System.Windows.Forms.Button
-            Me.btnHot9 = New System.Windows.Forms.Button
-            Me.btnHot10 = New System.Windows.Forms.Button
-            Me.pnlPicBackLeft = New System.Windows.Forms.Panel
-            Me.pnlPicBackRight = New System.Windows.Forms.Panel
-            Me.picRight = New System.Windows.Forms.PictureBox
+            Me.btnHot1 = New System.Windows.Forms.Button()
+            Me.btnHot2 = New System.Windows.Forms.Button()
+            Me.btnHot3 = New System.Windows.Forms.Button()
+            Me.btnHot4 = New System.Windows.Forms.Button()
+            Me.btnHot5 = New System.Windows.Forms.Button()
+            Me.btnHot6 = New System.Windows.Forms.Button()
+            Me.btnHot7 = New System.Windows.Forms.Button()
+            Me.btnHot8 = New System.Windows.Forms.Button()
+            Me.btnHot9 = New System.Windows.Forms.Button()
+            Me.btnHot10 = New System.Windows.Forms.Button()
+            Me.pnlPicBackLeft = New System.Windows.Forms.Panel()
+            Me.pnlPicBackRight = New System.Windows.Forms.Panel()
+            Me.picRight = New System.Windows.Forms.PictureBox()
             Me.CountdownTimer = New System.Windows.Forms.Timer(Me.components)
-            Me.cbExpandPicLeft = New System.Windows.Forms.CheckBox
-            Me.cbExpandPicRight = New System.Windows.Forms.CheckBox
-            Me.lblLibraryCount = New System.Windows.Forms.Label
-            Me.btnPasteBoth = New System.Windows.Forms.Button
-            Me.btnPasteRight = New System.Windows.Forms.Button
-            Me.btnPasteLeft = New System.Windows.Forms.Button
-            Me.grpLoadImage = New System.Windows.Forms.GroupBox
-            Me.grpPasteImage = New System.Windows.Forms.GroupBox
-            Me.gbCountdownControls = New System.Windows.Forms.GroupBox
-            Me.Label37 = New System.Windows.Forms.Label
-            Me.Label36 = New System.Windows.Forms.Label
-            Me.Label35 = New System.Windows.Forms.Label
-            Me.Label34 = New System.Windows.Forms.Label
-            Me.nudCountdownWarnSeconds = New System.Windows.Forms.NumericUpDown
-            Me.nudCountdownWarnMinutes = New System.Windows.Forms.NumericUpDown
-            Me.nudCountdownWarnHours = New System.Windows.Forms.NumericUpDown
-            Me.Label33 = New System.Windows.Forms.Label
-            Me.cbCountdownVisible = New System.Windows.Forms.CheckBox
-            Me.nudCountdownSeconds = New System.Windows.Forms.NumericUpDown
-            Me.nudCountdownMinutes = New System.Windows.Forms.NumericUpDown
-            Me.nudCountdownHours = New System.Windows.Forms.NumericUpDown
-            Me.btnResetCountdown = New System.Windows.Forms.Button
-            Me.btnStartCountdown = New System.Windows.Forms.Button
+            Me.cbExpandPicLeft = New System.Windows.Forms.CheckBox()
+            Me.cbExpandPicRight = New System.Windows.Forms.CheckBox()
+            Me.lblLibraryCount = New System.Windows.Forms.Label()
+            Me.btnPasteBoth = New System.Windows.Forms.Button()
+            Me.btnPasteRight = New System.Windows.Forms.Button()
+            Me.btnPasteLeft = New System.Windows.Forms.Button()
+            Me.grpLoadImage = New System.Windows.Forms.GroupBox()
+            Me.grpPasteImage = New System.Windows.Forms.GroupBox()
+            Me.gbCountdownControls = New System.Windows.Forms.GroupBox()
+            Me.Label37 = New System.Windows.Forms.Label()
+            Me.Label36 = New System.Windows.Forms.Label()
+            Me.Label35 = New System.Windows.Forms.Label()
+            Me.Label34 = New System.Windows.Forms.Label()
+            Me.nudCountdownWarnSeconds = New System.Windows.Forms.NumericUpDown()
+            Me.nudCountdownWarnMinutes = New System.Windows.Forms.NumericUpDown()
+            Me.nudCountdownWarnHours = New System.Windows.Forms.NumericUpDown()
+            Me.Label33 = New System.Windows.Forms.Label()
+            Me.cbCountdownVisible = New System.Windows.Forms.CheckBox()
+            Me.nudCountdownSeconds = New System.Windows.Forms.NumericUpDown()
+            Me.nudCountdownMinutes = New System.Windows.Forms.NumericUpDown()
+            Me.nudCountdownHours = New System.Windows.Forms.NumericUpDown()
+            Me.btnResetCountdown = New System.Windows.Forms.Button()
+            Me.btnStartCountdown = New System.Windows.Forms.Button()
             Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
             CType(Me.picLeft, System.ComponentModel.ISupportInitialize).BeginInit()
             Me.TabControl1.SuspendLayout()
@@ -889,7 +889,7 @@ Namespace JANIS
             Me.picLeft.Location = New System.Drawing.Point(0, 0)
             Me.picLeft.Name = "picLeft"
             Me.picLeft.Size = New System.Drawing.Size(272, 153)
-            Me.picLeft.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
+            Me.picLeft.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
             Me.picLeft.TabIndex = 28
             Me.picLeft.TabStop = False
             '
@@ -1828,7 +1828,6 @@ Namespace JANIS
             Me.ExpTree1.Name = "ExpTree1"
             Me.ExpTree1.ShowRootLines = False
             Me.ExpTree1.Size = New System.Drawing.Size(251, 411)
-            Me.ExpTree1.StartUpDirectory = ExpTreeLib.ExpTree.StartDir.Desktop
             Me.ExpTree1.TabIndex = 91
             '
             'btnWhammy
@@ -2097,8 +2096,8 @@ Namespace JANIS
             Me.lblHBinstructions.Size = New System.Drawing.Size(168, 139)
             Me.lblHBinstructions.TabIndex = 42
             Me.lblHBinstructions.Text = "Hint: Hot Buttons are image shortcuts that you can define for quick access to sto" & _
-                "red images. Select a name && image for each button. Save lists of buttons for sp" & _
-                "ecific uses."
+        "red images. Select a name && image for each button. Save lists of buttons for sp" & _
+        "ecific uses."
             Me.lblHBinstructions.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
             '
             'btnSaveHB
@@ -3163,8 +3162,8 @@ Namespace JANIS
             Me.TextBox1.Size = New System.Drawing.Size(972, 118)
             Me.TextBox1.TabIndex = 90
             Me.TextBox1.TabStop = False
-            Me.TextBox1.Text = "JANIS Dual Display" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Version 3.1 Released Aug 11, 2012" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "by Bill Cernansky ( bill@e" & _
-                "asybeing.com )" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "© 2004-2012 Easy Being Productions"
+            Me.TextBox1.Text = "JANIS Dual Display" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Version 3.2.1 Released May 19, 2014" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "by Bill Cernansky ( bill" & _
+        "@easybeing.com )" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "© 2004-2014 Easy Being Productions"
             Me.TextBox1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
             '
             'SlideTimer
@@ -3339,7 +3338,7 @@ Namespace JANIS
             Me.picRight.Location = New System.Drawing.Point(0, 0)
             Me.picRight.Name = "picRight"
             Me.picRight.Size = New System.Drawing.Size(272, 153)
-            Me.picRight.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
+            Me.picRight.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
             Me.picRight.TabIndex = 30
             Me.picRight.TabStop = False
             '
@@ -3379,7 +3378,7 @@ Namespace JANIS
             Me.lblLibraryCount.Text = "Images in Search Library:"
             Me.lblLibraryCount.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
             Me.ToolTip1.SetToolTip(Me.lblLibraryCount, "Double-Click this message to re-index the image search library." & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Useful if you've" & _
-                    " added new images while JANIS is running.")
+            " added new images while JANIS is running.")
             Me.lblLibraryCount.UseMnemonic = False
             '
             'btnPasteBoth
@@ -3723,7 +3722,6 @@ Namespace JANIS
                 '* Here's the wacky way you change font sizes in VB.NET. Piece of crap.
                 Me.tbLeftText.Font = New Font(Me.tbLeftText.Font.Name, CSng(Val(Me.tbLeftFontSize.Text) / DisplayToEntryFontRatio), Me.tbLeftText.Font.Style)
                 Me.tbRightText.Font = New Font(Me.tbRightText.Font.Name, CSng(Val(Me.tbRightFontSize.Text) / DisplayToEntryFontRatio), Me.tbRightText.Font.Style)
-                Me.tbLeftText.VerticalContentAlignment = VerticalAlignment.Bottom
 
                 Me.SetMonitorDisplayMode()
 
@@ -4054,11 +4052,11 @@ Namespace JANIS
                     .lblMsg.Height = .lblMsg.Height / sRatio
                     .lblMsg.Width = .lblMsg.Width / sRatio
                     .lblMsg.Font = New Font(.lblMsg.Font.Name, CSng(Val(.lblMsg.Font.Size) / sRatio), .lblMsg.Font.Style)
-                    .lblCountdown.Left = .lblCountdown.Left / 5
-                    .lblCountdown.Top = .lblCountdown.Top / 5
-                    .lblCountdown.Height = .lblCountdown.Height / 5
-                    .lblCountdown.Width = .lblCountdown.Width / 5
-                    .lblCountdown.Font = New Font(.lblCountdown.Font.Name, CSng(Val(.lblCountdown.Font.Size) / 5), .lblCountdown.Font.Style)
+                    .lblCountdown.Left = .lblCountdown.Left / sRatio
+                    .lblCountdown.Top = .lblCountdown.Top / sRatio
+                    .lblCountdown.Height = .lblCountdown.Height / sRatio
+                    .lblCountdown.Width = .lblCountdown.Width / sRatio
+                    .lblCountdown.Font = New Font(.lblCountdown.Font.Name, CSng(Val(.lblCountdown.Font.Size) / sRatio), .lblCountdown.Font.Style)
                     .picGraphic.Left = .picGraphic.Left / sRatio
                     .picGraphic.Top = .picGraphic.Top / sRatio
                     .picGraphic.Height = .picGraphic.Height / sRatio
@@ -4085,11 +4083,11 @@ Namespace JANIS
                     .lblMsg.Height = .lblMsg.Height / sRatio
                     .lblMsg.Width = .lblMsg.Width / sRatio
                     .lblMsg.Font = New Font(.lblMsg.Font.Name, CSng(Val(.lblMsg.Font.Size) / sRatio), .lblMsg.Font.Style)
-                    .lblCountdown.Left = .lblCountdown.Left / 5
-                    .lblCountdown.Top = .lblCountdown.Top / 5
-                    .lblCountdown.Height = .lblCountdown.Height / 5
-                    .lblCountdown.Width = .lblCountdown.Width / 5
-                    .lblCountdown.Font = New Font(.lblCountdown.Font.Name, CSng(Val(.lblCountdown.Font.Size) / 5), .lblCountdown.Font.Style)
+                    .lblCountdown.Left = .lblCountdown.Left / sRatio
+                    .lblCountdown.Top = .lblCountdown.Top / sRatio
+                    .lblCountdown.Height = .lblCountdown.Height / sRatio
+                    .lblCountdown.Width = .lblCountdown.Width / sRatio
+                    .lblCountdown.Font = New Font(.lblCountdown.Font.Name, CSng(Val(.lblCountdown.Font.Size) / sRatio), .lblCountdown.Font.Style)
                     .picGraphic.Left = .picGraphic.Left / sRatio
                     .picGraphic.Top = .picGraphic.Top / sRatio
                     .picGraphic.Height = .picGraphic.Height / sRatio
@@ -4237,33 +4235,13 @@ Namespace JANIS
 
             Dim backpanel As Panel
             If picture.Name = "picLeft" Then backpanel = Me.pnlPicBackLeft Else backpanel = Me.pnlPicBackRight
-            Dim panel_width_height_ratio As Single = CSng(backpanel.Width) / CSng(backpanel.Height)
-            Dim image_width_height_ratio As Single = CSng(Img.Width) / CSng(Img.Height)
-            Dim ratio_compare As Single = image_width_height_ratio / panel_width_height_ratio
-            Dim new_height, new_width As Integer
 
             'picture.Visible = False
             backpanel.BackColor = System.Drawing.Color.Black
-            If Expand Or (ratio_compare < 1.15 And ratio_compare > 0.85) Then
-                '* close enough to equal or in stretch mode
-                new_width = backpanel.Width
-                new_height = backpanel.Height
-            ElseIf ratio_compare > 1 Then   '* wider/shorter
-                new_width = backpanel.Width
-                new_height = CInt(new_width / image_width_height_ratio)
-            Else    '* narrower/taller
-                new_height = backpanel.Height
-                new_width = CInt(new_height * image_width_height_ratio)
-            End If
-
-            '* Float the picture in the middle if appropriate
-            If new_width <> picture.Width Then
-                picture.Left = (backpanel.Width - new_width) / 2
-                picture.Width = new_width
-            End If
-            If new_height <> picture.Height Then
-                picture.Top = (backpanel.Height - new_height) / 2
-                picture.Height = new_height
+            If Expand Then
+                picture.SizeMode = PictureBoxSizeMode.StretchImage
+            Else
+                picture.SizeMode = PictureBoxSizeMode.Zoom
             End If
 
             picture.Image = Img
@@ -4277,12 +4255,9 @@ Namespace JANIS
 
         '    'picture.Visible = False
 
-        '    '* when loading URL, we always show as expanded because we don't know pic info.
+        '    '* when loading URL, we always maintain size ratio because we don't know pic info.
         '    backpanel.BackColor = System.Drawing.Color.Black
-        '    picture.Left = 0
-        '    picture.Width = backpanel.Width
-        '    picture.Top = 0
-        '    picture.Height = backpanel.Height
+        '    picture.SizeMode = PictureBoxSizeMode.Zoom
 
         '    Try
         '        picture.Load(url)
@@ -5082,7 +5057,7 @@ Namespace JANIS
                         Me.StopSlideShow()
                         Return
                     ElseIf Me.SlidesStatus = SLIDES_WHAMMY Then
-                        Me.DisplayBothRawImages(Me.BufferedSlide, True)   '* expand all images during whammy, for smoothness/speed
+                        Me.DisplayBothRawImages(Me.BufferedSlide, False)   '* maintain ratio for all images during whammy, for smoothness/speed
                         Me.SelectRandomSlide()                            '* Set Me.BufferedSlide to a random slide
                     Else
                         If .SelectedIndex < (.Items.Count - 1) Then
@@ -5671,7 +5646,7 @@ Namespace JANIS
             Dim bgColor As System.Drawing.Color = System.Drawing.Color.Black
 
             If Me.CountdownSeconds <= Me.CountdownWarnSeconds Then
-                bgColor = System.Drawing.Color.Maroon
+                bgColor = System.Drawing.Color.Red
             End If
 
             If Me.nudCountdownHours.Value > 0 Then TimeText = Me.nudCountdownHours.Value.ToString + ":"

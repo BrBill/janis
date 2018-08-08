@@ -1,3 +1,8 @@
+v3.2.1: 2014-05-19 (dual), 2018-06-27 (single)
+*  Changed text and score displays to use dropshadows and shading effects.
+*  Image fill-the-screen simplified greatly.
+*  All changes since v2.5 ported over to single screen version!
+
 v3.1.1: 2014-04-28
 *  Change color chooser text from "Choose..." to "Other..."
 *  DUAL DISPLAY ONLY. Probably never released.
