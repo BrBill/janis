@@ -83,69 +83,70 @@ Public Class fmColorDialog
     Friend WithEvents pnlSelected As System.Windows.Forms.Panel
     Friend WithEvents SaveFileDialog1 As System.Windows.Forms.SaveFileDialog
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
-        Me.grp1 = New System.Windows.Forms.GroupBox()
-        Me.pnlSelected = New System.Windows.Forms.Panel()
-        Me.Panel1 = New System.Windows.Forms.Panel()
-        Me.Panel2 = New System.Windows.Forms.Panel()
-        Me.Panel3 = New System.Windows.Forms.Panel()
-        Me.Panel4 = New System.Windows.Forms.Panel()
-        Me.Panel5 = New System.Windows.Forms.Panel()
-        Me.Panel6 = New System.Windows.Forms.Panel()
-        Me.Panel7 = New System.Windows.Forms.Panel()
-        Me.Panel8 = New System.Windows.Forms.Panel()
-        Me.Panel9 = New System.Windows.Forms.Panel()
-        Me.Panel10 = New System.Windows.Forms.Panel()
-        Me.Panel11 = New System.Windows.Forms.Panel()
-        Me.Panel12 = New System.Windows.Forms.Panel()
-        Me.Panel13 = New System.Windows.Forms.Panel()
-        Me.Panel14 = New System.Windows.Forms.Panel()
-        Me.Panel15 = New System.Windows.Forms.Panel()
-        Me.Panel16 = New System.Windows.Forms.Panel()
-        Me.Panel17 = New System.Windows.Forms.Panel()
-        Me.Panel18 = New System.Windows.Forms.Panel()
-        Me.Panel19 = New System.Windows.Forms.Panel()
-        Me.Panel20 = New System.Windows.Forms.Panel()
-        Me.Panel21 = New System.Windows.Forms.Panel()
-        Me.Panel22 = New System.Windows.Forms.Panel()
-        Me.Panel23 = New System.Windows.Forms.Panel()
-        Me.Panel24 = New System.Windows.Forms.Panel()
-        Me.Panel25 = New System.Windows.Forms.Panel()
-        Me.Panel26 = New System.Windows.Forms.Panel()
-        Me.Panel27 = New System.Windows.Forms.Panel()
-        Me.Panel28 = New System.Windows.Forms.Panel()
-        Me.Panel29 = New System.Windows.Forms.Panel()
-        Me.Panel30 = New System.Windows.Forms.Panel()
-        Me.Panel31 = New System.Windows.Forms.Panel()
-        Me.Panel32 = New System.Windows.Forms.Panel()
-        Me.Panel33 = New System.Windows.Forms.Panel()
-        Me.Panel34 = New System.Windows.Forms.Panel()
-        Me.Panel35 = New System.Windows.Forms.Panel()
-        Me.Panel36 = New System.Windows.Forms.Panel()
-        Me.Panel37 = New System.Windows.Forms.Panel()
-        Me.Panel38 = New System.Windows.Forms.Panel()
-        Me.Panel39 = New System.Windows.Forms.Panel()
-        Me.Panel40 = New System.Windows.Forms.Panel()
-        Me.Panel41 = New System.Windows.Forms.Panel()
-        Me.Panel42 = New System.Windows.Forms.Panel()
-        Me.Panel43 = New System.Windows.Forms.Panel()
-        Me.Panel44 = New System.Windows.Forms.Panel()
-        Me.Panel45 = New System.Windows.Forms.Panel()
-        Me.Panel46 = New System.Windows.Forms.Panel()
-        Me.Panel47 = New System.Windows.Forms.Panel()
-        Me.Panel48 = New System.Windows.Forms.Panel()
-        Me.btnCancel = New System.Windows.Forms.Button()
-        Me.btnOK = New System.Windows.Forms.Button()
-        Me.SaveFileDialog1 = New System.Windows.Forms.SaveFileDialog()
+        Me.grp1 = New System.Windows.Forms.GroupBox
+        Me.pnlSelected = New System.Windows.Forms.Panel
+        Me.Panel1 = New System.Windows.Forms.Panel
+        Me.Panel2 = New System.Windows.Forms.Panel
+        Me.Panel3 = New System.Windows.Forms.Panel
+        Me.Panel4 = New System.Windows.Forms.Panel
+        Me.Panel5 = New System.Windows.Forms.Panel
+        Me.Panel6 = New System.Windows.Forms.Panel
+        Me.Panel7 = New System.Windows.Forms.Panel
+        Me.Panel8 = New System.Windows.Forms.Panel
+        Me.Panel9 = New System.Windows.Forms.Panel
+        Me.Panel10 = New System.Windows.Forms.Panel
+        Me.Panel11 = New System.Windows.Forms.Panel
+        Me.Panel12 = New System.Windows.Forms.Panel
+        Me.Panel13 = New System.Windows.Forms.Panel
+        Me.Panel14 = New System.Windows.Forms.Panel
+        Me.Panel15 = New System.Windows.Forms.Panel
+        Me.Panel16 = New System.Windows.Forms.Panel
+        Me.Panel17 = New System.Windows.Forms.Panel
+        Me.Panel18 = New System.Windows.Forms.Panel
+        Me.Panel19 = New System.Windows.Forms.Panel
+        Me.Panel20 = New System.Windows.Forms.Panel
+        Me.Panel21 = New System.Windows.Forms.Panel
+        Me.Panel22 = New System.Windows.Forms.Panel
+        Me.Panel23 = New System.Windows.Forms.Panel
+        Me.Panel24 = New System.Windows.Forms.Panel
+        Me.Panel25 = New System.Windows.Forms.Panel
+        Me.Panel26 = New System.Windows.Forms.Panel
+        Me.Panel27 = New System.Windows.Forms.Panel
+        Me.Panel28 = New System.Windows.Forms.Panel
+        Me.Panel29 = New System.Windows.Forms.Panel
+        Me.Panel30 = New System.Windows.Forms.Panel
+        Me.Panel31 = New System.Windows.Forms.Panel
+        Me.Panel32 = New System.Windows.Forms.Panel
+        Me.Panel33 = New System.Windows.Forms.Panel
+        Me.Panel34 = New System.Windows.Forms.Panel
+        Me.Panel35 = New System.Windows.Forms.Panel
+        Me.Panel36 = New System.Windows.Forms.Panel
+        Me.Panel37 = New System.Windows.Forms.Panel
+        Me.Panel38 = New System.Windows.Forms.Panel
+        Me.Panel39 = New System.Windows.Forms.Panel
+        Me.Panel40 = New System.Windows.Forms.Panel
+        Me.Panel41 = New System.Windows.Forms.Panel
+        Me.Panel42 = New System.Windows.Forms.Panel
+        Me.Panel43 = New System.Windows.Forms.Panel
+        Me.Panel44 = New System.Windows.Forms.Panel
+        Me.Panel45 = New System.Windows.Forms.Panel
+        Me.Panel46 = New System.Windows.Forms.Panel
+        Me.Panel47 = New System.Windows.Forms.Panel
+        Me.Panel48 = New System.Windows.Forms.Panel
+        Me.btnCancel = New System.Windows.Forms.Button
+        Me.btnOK = New System.Windows.Forms.Button
+        Me.SaveFileDialog1 = New System.Windows.Forms.SaveFileDialog
         Me.grp1.SuspendLayout()
         Me.SuspendLayout()
         '
         'grp1
         '
         Me.grp1.BackColor = System.Drawing.Color.Transparent
-        Me.grp1.Controls.AddRange(New System.Windows.Forms.Control() {Me.pnlSelected})
-        Me.grp1.Location = New System.Drawing.Point(220, 8)
+        Me.grp1.Controls.Add(Me.pnlSelected)
+        Me.grp1.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.grp1.Location = New System.Drawing.Point(204, 8)
         Me.grp1.Name = "grp1"
-        Me.grp1.Size = New System.Drawing.Size(68, 140)
+        Me.grp1.Size = New System.Drawing.Size(84, 140)
         Me.grp1.TabIndex = 0
         Me.grp1.TabStop = False
         Me.grp1.Text = "Selection"
@@ -154,9 +155,9 @@ Public Class fmColorDialog
         '
         Me.pnlSelected.BackColor = System.Drawing.Color.Transparent
         Me.pnlSelected.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.pnlSelected.Location = New System.Drawing.Point(4, 16)
+        Me.pnlSelected.Location = New System.Drawing.Point(2, 20)
         Me.pnlSelected.Name = "pnlSelected"
-        Me.pnlSelected.Size = New System.Drawing.Size(60, 120)
+        Me.pnlSelected.Size = New System.Drawing.Size(80, 116)
         Me.pnlSelected.TabIndex = 0
         '
         'Panel1
@@ -170,7 +171,7 @@ Public Class fmColorDialog
         '
         'Panel2
         '
-        Me.Panel2.BackColor = System.Drawing.Color.FromArgb(CType(224, Byte), CType(224, Byte), CType(224, Byte))
+        Me.Panel2.BackColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
         Me.Panel2.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.Panel2.Location = New System.Drawing.Point(8, 32)
         Me.Panel2.Name = "Panel2"
@@ -197,7 +198,7 @@ Public Class fmColorDialog
         '
         'Panel5
         '
-        Me.Panel5.BackColor = System.Drawing.Color.FromArgb(CType(64, Byte), CType(64, Byte), CType(64, Byte))
+        Me.Panel5.BackColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
         Me.Panel5.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.Panel5.Location = New System.Drawing.Point(8, 104)
         Me.Panel5.Name = "Panel5"
@@ -215,7 +216,7 @@ Public Class fmColorDialog
         '
         'Panel7
         '
-        Me.Panel7.BackColor = System.Drawing.Color.FromArgb(CType(255, Byte), CType(192, Byte), CType(192, Byte))
+        Me.Panel7.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer), CType(CType(192, Byte), Integer))
         Me.Panel7.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.Panel7.Location = New System.Drawing.Point(32, 8)
         Me.Panel7.Name = "Panel7"
@@ -224,7 +225,7 @@ Public Class fmColorDialog
         '
         'Panel8
         '
-        Me.Panel8.BackColor = System.Drawing.Color.FromArgb(CType(255, Byte), CType(128, Byte), CType(128, Byte))
+        Me.Panel8.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer))
         Me.Panel8.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.Panel8.Location = New System.Drawing.Point(32, 32)
         Me.Panel8.Name = "Panel8"
@@ -242,7 +243,7 @@ Public Class fmColorDialog
         '
         'Panel10
         '
-        Me.Panel10.BackColor = System.Drawing.Color.FromArgb(CType(192, Byte), CType(0, Byte), CType(0, Byte))
+        Me.Panel10.BackColor = System.Drawing.Color.FromArgb(CType(CType(192, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(0, Byte), Integer))
         Me.Panel10.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.Panel10.Location = New System.Drawing.Point(32, 80)
         Me.Panel10.Name = "Panel10"
@@ -260,7 +261,7 @@ Public Class fmColorDialog
         '
         'Panel12
         '
-        Me.Panel12.BackColor = System.Drawing.Color.FromArgb(CType(64, Byte), CType(0, Byte), CType(0, Byte))
+        Me.Panel12.BackColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(0, Byte), Integer))
         Me.Panel12.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.Panel12.Location = New System.Drawing.Point(32, 128)
         Me.Panel12.Name = "Panel12"
@@ -269,7 +270,7 @@ Public Class fmColorDialog
         '
         'Panel13
         '
-        Me.Panel13.BackColor = System.Drawing.Color.FromArgb(CType(255, Byte), CType(224, Byte), CType(192, Byte))
+        Me.Panel13.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(192, Byte), Integer))
         Me.Panel13.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.Panel13.Location = New System.Drawing.Point(56, 8)
         Me.Panel13.Name = "Panel13"
@@ -278,7 +279,7 @@ Public Class fmColorDialog
         '
         'Panel14
         '
-        Me.Panel14.BackColor = System.Drawing.Color.FromArgb(CType(255, Byte), CType(192, Byte), CType(128, Byte))
+        Me.Panel14.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer), CType(CType(128, Byte), Integer))
         Me.Panel14.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.Panel14.Location = New System.Drawing.Point(56, 32)
         Me.Panel14.Name = "Panel14"
@@ -287,7 +288,7 @@ Public Class fmColorDialog
         '
         'Panel15
         '
-        Me.Panel15.BackColor = System.Drawing.Color.FromArgb(CType(255, Byte), CType(128, Byte), CType(0, Byte))
+        Me.Panel15.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(0, Byte), Integer))
         Me.Panel15.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.Panel15.Location = New System.Drawing.Point(56, 56)
         Me.Panel15.Name = "Panel15"
@@ -296,7 +297,7 @@ Public Class fmColorDialog
         '
         'Panel16
         '
-        Me.Panel16.BackColor = System.Drawing.Color.FromArgb(CType(192, Byte), CType(64, Byte), CType(0, Byte))
+        Me.Panel16.BackColor = System.Drawing.Color.FromArgb(CType(CType(192, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(0, Byte), Integer))
         Me.Panel16.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.Panel16.Location = New System.Drawing.Point(56, 80)
         Me.Panel16.Name = "Panel16"
@@ -305,7 +306,7 @@ Public Class fmColorDialog
         '
         'Panel17
         '
-        Me.Panel17.BackColor = System.Drawing.Color.FromArgb(CType(128, Byte), CType(64, Byte), CType(0, Byte))
+        Me.Panel17.BackColor = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(0, Byte), Integer))
         Me.Panel17.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.Panel17.Location = New System.Drawing.Point(56, 104)
         Me.Panel17.Name = "Panel17"
@@ -314,7 +315,7 @@ Public Class fmColorDialog
         '
         'Panel18
         '
-        Me.Panel18.BackColor = System.Drawing.Color.FromArgb(CType(128, Byte), CType(64, Byte), CType(64, Byte))
+        Me.Panel18.BackColor = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
         Me.Panel18.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.Panel18.Location = New System.Drawing.Point(56, 128)
         Me.Panel18.Name = "Panel18"
@@ -323,7 +324,7 @@ Public Class fmColorDialog
         '
         'Panel19
         '
-        Me.Panel19.BackColor = System.Drawing.Color.FromArgb(CType(255, Byte), CType(255, Byte), CType(192, Byte))
+        Me.Panel19.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
         Me.Panel19.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.Panel19.Location = New System.Drawing.Point(80, 8)
         Me.Panel19.Name = "Panel19"
@@ -332,7 +333,7 @@ Public Class fmColorDialog
         '
         'Panel20
         '
-        Me.Panel20.BackColor = System.Drawing.Color.FromArgb(CType(255, Byte), CType(255, Byte), CType(128, Byte))
+        Me.Panel20.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(128, Byte), Integer))
         Me.Panel20.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.Panel20.Location = New System.Drawing.Point(80, 32)
         Me.Panel20.Name = "Panel20"
@@ -350,7 +351,7 @@ Public Class fmColorDialog
         '
         'Panel22
         '
-        Me.Panel22.BackColor = System.Drawing.Color.FromArgb(CType(192, Byte), CType(192, Byte), CType(0, Byte))
+        Me.Panel22.BackColor = System.Drawing.Color.FromArgb(CType(CType(192, Byte), Integer), CType(CType(192, Byte), Integer), CType(CType(0, Byte), Integer))
         Me.Panel22.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.Panel22.Location = New System.Drawing.Point(80, 80)
         Me.Panel22.Name = "Panel22"
@@ -368,7 +369,7 @@ Public Class fmColorDialog
         '
         'Panel24
         '
-        Me.Panel24.BackColor = System.Drawing.Color.FromArgb(CType(64, Byte), CType(64, Byte), CType(0, Byte))
+        Me.Panel24.BackColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(0, Byte), Integer))
         Me.Panel24.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.Panel24.Location = New System.Drawing.Point(80, 128)
         Me.Panel24.Name = "Panel24"
@@ -377,7 +378,7 @@ Public Class fmColorDialog
         '
         'Panel25
         '
-        Me.Panel25.BackColor = System.Drawing.Color.FromArgb(CType(192, Byte), CType(255, Byte), CType(192, Byte))
+        Me.Panel25.BackColor = System.Drawing.Color.FromArgb(CType(CType(192, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
         Me.Panel25.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.Panel25.Location = New System.Drawing.Point(104, 8)
         Me.Panel25.Name = "Panel25"
@@ -386,7 +387,7 @@ Public Class fmColorDialog
         '
         'Panel26
         '
-        Me.Panel26.BackColor = System.Drawing.Color.FromArgb(CType(128, Byte), CType(255, Byte), CType(128, Byte))
+        Me.Panel26.BackColor = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(128, Byte), Integer))
         Me.Panel26.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.Panel26.Location = New System.Drawing.Point(104, 32)
         Me.Panel26.Name = "Panel26"
@@ -404,7 +405,7 @@ Public Class fmColorDialog
         '
         'Panel28
         '
-        Me.Panel28.BackColor = System.Drawing.Color.FromArgb(CType(0, Byte), CType(192, Byte), CType(0, Byte))
+        Me.Panel28.BackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(192, Byte), Integer), CType(CType(0, Byte), Integer))
         Me.Panel28.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.Panel28.Location = New System.Drawing.Point(104, 80)
         Me.Panel28.Name = "Panel28"
@@ -422,7 +423,7 @@ Public Class fmColorDialog
         '
         'Panel30
         '
-        Me.Panel30.BackColor = System.Drawing.Color.FromArgb(CType(0, Byte), CType(64, Byte), CType(0, Byte))
+        Me.Panel30.BackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(0, Byte), Integer))
         Me.Panel30.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.Panel30.Location = New System.Drawing.Point(104, 128)
         Me.Panel30.Name = "Panel30"
@@ -431,7 +432,7 @@ Public Class fmColorDialog
         '
         'Panel31
         '
-        Me.Panel31.BackColor = System.Drawing.Color.FromArgb(CType(192, Byte), CType(255, Byte), CType(255, Byte))
+        Me.Panel31.BackColor = System.Drawing.Color.FromArgb(CType(CType(192, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
         Me.Panel31.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.Panel31.Location = New System.Drawing.Point(128, 8)
         Me.Panel31.Name = "Panel31"
@@ -440,7 +441,7 @@ Public Class fmColorDialog
         '
         'Panel32
         '
-        Me.Panel32.BackColor = System.Drawing.Color.FromArgb(CType(128, Byte), CType(255, Byte), CType(255, Byte))
+        Me.Panel32.BackColor = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer))
         Me.Panel32.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.Panel32.Location = New System.Drawing.Point(128, 32)
         Me.Panel32.Name = "Panel32"
@@ -458,7 +459,7 @@ Public Class fmColorDialog
         '
         'Panel34
         '
-        Me.Panel34.BackColor = System.Drawing.Color.FromArgb(CType(0, Byte), CType(192, Byte), CType(192, Byte))
+        Me.Panel34.BackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(192, Byte), Integer), CType(CType(192, Byte), Integer))
         Me.Panel34.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.Panel34.Location = New System.Drawing.Point(128, 80)
         Me.Panel34.Name = "Panel34"
@@ -476,7 +477,7 @@ Public Class fmColorDialog
         '
         'Panel36
         '
-        Me.Panel36.BackColor = System.Drawing.Color.FromArgb(CType(0, Byte), CType(64, Byte), CType(64, Byte))
+        Me.Panel36.BackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
         Me.Panel36.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.Panel36.Location = New System.Drawing.Point(128, 128)
         Me.Panel36.Name = "Panel36"
@@ -485,7 +486,7 @@ Public Class fmColorDialog
         '
         'Panel37
         '
-        Me.Panel37.BackColor = System.Drawing.Color.FromArgb(CType(192, Byte), CType(192, Byte), CType(255, Byte))
+        Me.Panel37.BackColor = System.Drawing.Color.FromArgb(CType(CType(192, Byte), Integer), CType(CType(192, Byte), Integer), CType(CType(255, Byte), Integer))
         Me.Panel37.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.Panel37.Location = New System.Drawing.Point(152, 8)
         Me.Panel37.Name = "Panel37"
@@ -494,7 +495,7 @@ Public Class fmColorDialog
         '
         'Panel38
         '
-        Me.Panel38.BackColor = System.Drawing.Color.FromArgb(CType(128, Byte), CType(128, Byte), CType(255, Byte))
+        Me.Panel38.BackColor = System.Drawing.Color.FromArgb(CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(255, Byte), Integer))
         Me.Panel38.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.Panel38.Location = New System.Drawing.Point(152, 32)
         Me.Panel38.Name = "Panel38"
@@ -512,7 +513,7 @@ Public Class fmColorDialog
         '
         'Panel40
         '
-        Me.Panel40.BackColor = System.Drawing.Color.FromArgb(CType(0, Byte), CType(0, Byte), CType(176, Byte))
+        Me.Panel40.BackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(176, Byte), Integer))
         Me.Panel40.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.Panel40.Location = New System.Drawing.Point(152, 80)
         Me.Panel40.Name = "Panel40"
@@ -530,7 +531,7 @@ Public Class fmColorDialog
         '
         'Panel42
         '
-        Me.Panel42.BackColor = System.Drawing.Color.FromArgb(CType(0, Byte), CType(0, Byte), CType(64, Byte))
+        Me.Panel42.BackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(64, Byte), Integer))
         Me.Panel42.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.Panel42.Location = New System.Drawing.Point(152, 128)
         Me.Panel42.Name = "Panel42"
@@ -539,7 +540,7 @@ Public Class fmColorDialog
         '
         'Panel43
         '
-        Me.Panel43.BackColor = System.Drawing.Color.FromArgb(CType(255, Byte), CType(192, Byte), CType(255, Byte))
+        Me.Panel43.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer), CType(CType(255, Byte), Integer))
         Me.Panel43.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.Panel43.Location = New System.Drawing.Point(176, 8)
         Me.Panel43.Name = "Panel43"
@@ -548,7 +549,7 @@ Public Class fmColorDialog
         '
         'Panel44
         '
-        Me.Panel44.BackColor = System.Drawing.Color.FromArgb(CType(255, Byte), CType(128, Byte), CType(255, Byte))
+        Me.Panel44.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(255, Byte), Integer))
         Me.Panel44.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.Panel44.Location = New System.Drawing.Point(176, 32)
         Me.Panel44.Name = "Panel44"
@@ -566,7 +567,7 @@ Public Class fmColorDialog
         '
         'Panel46
         '
-        Me.Panel46.BackColor = System.Drawing.Color.FromArgb(CType(192, Byte), CType(0, Byte), CType(192, Byte))
+        Me.Panel46.BackColor = System.Drawing.Color.FromArgb(CType(CType(192, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(192, Byte), Integer))
         Me.Panel46.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.Panel46.Location = New System.Drawing.Point(176, 80)
         Me.Panel46.Name = "Panel46"
@@ -584,7 +585,7 @@ Public Class fmColorDialog
         '
         'Panel48
         '
-        Me.Panel48.BackColor = System.Drawing.Color.FromArgb(CType(64, Byte), CType(0, Byte), CType(64, Byte))
+        Me.Panel48.BackColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(64, Byte), Integer))
         Me.Panel48.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.Panel48.Location = New System.Drawing.Point(176, 128)
         Me.Panel48.Name = "Panel48"
@@ -594,6 +595,7 @@ Public Class fmColorDialog
         'btnCancel
         '
         Me.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel
+        Me.btnCancel.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btnCancel.Location = New System.Drawing.Point(8, 160)
         Me.btnCancel.Name = "btnCancel"
         Me.btnCancel.Size = New System.Drawing.Size(108, 32)
@@ -603,6 +605,7 @@ Public Class fmColorDialog
         'btnOK
         '
         Me.btnOK.DialogResult = System.Windows.Forms.DialogResult.OK
+        Me.btnOK.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btnOK.Location = New System.Drawing.Point(180, 160)
         Me.btnOK.Name = "btnOK"
         Me.btnOK.Size = New System.Drawing.Size(108, 32)
@@ -620,7 +623,57 @@ Public Class fmColorDialog
         Me.CancelButton = Me.btnCancel
         Me.ClientSize = New System.Drawing.Size(296, 205)
         Me.ControlBox = False
-        Me.Controls.AddRange(New System.Windows.Forms.Control() {Me.btnOK, Me.btnCancel, Me.Panel48, Me.Panel47, Me.Panel46, Me.Panel45, Me.Panel44, Me.Panel43, Me.Panel42, Me.Panel41, Me.Panel40, Me.Panel39, Me.Panel38, Me.Panel37, Me.Panel36, Me.Panel35, Me.Panel34, Me.Panel33, Me.Panel32, Me.Panel31, Me.Panel30, Me.Panel29, Me.Panel28, Me.Panel27, Me.Panel26, Me.Panel25, Me.Panel24, Me.Panel23, Me.Panel22, Me.Panel21, Me.Panel20, Me.Panel19, Me.Panel18, Me.Panel17, Me.Panel16, Me.Panel15, Me.Panel14, Me.Panel13, Me.Panel12, Me.Panel11, Me.Panel10, Me.Panel9, Me.Panel8, Me.Panel7, Me.Panel6, Me.Panel5, Me.Panel4, Me.Panel3, Me.Panel2, Me.Panel1, Me.grp1})
+        Me.Controls.Add(Me.btnOK)
+        Me.Controls.Add(Me.btnCancel)
+        Me.Controls.Add(Me.Panel48)
+        Me.Controls.Add(Me.Panel47)
+        Me.Controls.Add(Me.Panel46)
+        Me.Controls.Add(Me.Panel45)
+        Me.Controls.Add(Me.Panel44)
+        Me.Controls.Add(Me.Panel43)
+        Me.Controls.Add(Me.Panel42)
+        Me.Controls.Add(Me.Panel41)
+        Me.Controls.Add(Me.Panel40)
+        Me.Controls.Add(Me.Panel39)
+        Me.Controls.Add(Me.Panel38)
+        Me.Controls.Add(Me.Panel37)
+        Me.Controls.Add(Me.Panel36)
+        Me.Controls.Add(Me.Panel35)
+        Me.Controls.Add(Me.Panel34)
+        Me.Controls.Add(Me.Panel33)
+        Me.Controls.Add(Me.Panel32)
+        Me.Controls.Add(Me.Panel31)
+        Me.Controls.Add(Me.Panel30)
+        Me.Controls.Add(Me.Panel29)
+        Me.Controls.Add(Me.Panel28)
+        Me.Controls.Add(Me.Panel27)
+        Me.Controls.Add(Me.Panel26)
+        Me.Controls.Add(Me.Panel25)
+        Me.Controls.Add(Me.Panel24)
+        Me.Controls.Add(Me.Panel23)
+        Me.Controls.Add(Me.Panel22)
+        Me.Controls.Add(Me.Panel21)
+        Me.Controls.Add(Me.Panel20)
+        Me.Controls.Add(Me.Panel19)
+        Me.Controls.Add(Me.Panel18)
+        Me.Controls.Add(Me.Panel17)
+        Me.Controls.Add(Me.Panel16)
+        Me.Controls.Add(Me.Panel15)
+        Me.Controls.Add(Me.Panel14)
+        Me.Controls.Add(Me.Panel13)
+        Me.Controls.Add(Me.Panel12)
+        Me.Controls.Add(Me.Panel11)
+        Me.Controls.Add(Me.Panel10)
+        Me.Controls.Add(Me.Panel9)
+        Me.Controls.Add(Me.Panel8)
+        Me.Controls.Add(Me.Panel7)
+        Me.Controls.Add(Me.Panel6)
+        Me.Controls.Add(Me.Panel5)
+        Me.Controls.Add(Me.Panel4)
+        Me.Controls.Add(Me.Panel3)
+        Me.Controls.Add(Me.Panel2)
+        Me.Controls.Add(Me.Panel1)
+        Me.Controls.Add(Me.grp1)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
         Me.Location = New System.Drawing.Point(350, 250)
         Me.MaximizeBox = False

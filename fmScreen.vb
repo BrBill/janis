@@ -34,16 +34,18 @@ Public Class fmScreen
     Friend WithEvents lblScore As System.Windows.Forms.Label
     Friend WithEvents lblTeamName As System.Windows.Forms.Label
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
-        Me.picGraphic = New System.Windows.Forms.PictureBox()
-        Me.lblMsg = New System.Windows.Forms.Label()
-        Me.lblScore = New System.Windows.Forms.Label()
-        Me.lblTeamName = New System.Windows.Forms.Label()
+        Me.picGraphic = New System.Windows.Forms.PictureBox
+        Me.lblMsg = New System.Windows.Forms.Label
+        Me.lblScore = New System.Windows.Forms.Label
+        Me.lblTeamName = New System.Windows.Forms.Label
+        CType(Me.picGraphic, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'picGraphic
         '
+        Me.picGraphic.Location = New System.Drawing.Point(0, 0)
         Me.picGraphic.Name = "picGraphic"
-        Me.picGraphic.Size = New System.Drawing.Size(800, 600)
+        Me.picGraphic.Size = New System.Drawing.Size(1280, 720)
         Me.picGraphic.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
         Me.picGraphic.TabIndex = 0
         Me.picGraphic.TabStop = False
@@ -52,9 +54,10 @@ Public Class fmScreen
         '
         Me.lblMsg.BackColor = System.Drawing.Color.Transparent
         Me.lblMsg.Font = New System.Drawing.Font("Arial", 123.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblMsg.Location = New System.Drawing.Point(0, 0)
         Me.lblMsg.Name = "lblMsg"
         Me.lblMsg.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.lblMsg.Size = New System.Drawing.Size(800, 600)
+        Me.lblMsg.Size = New System.Drawing.Size(1280, 720)
         Me.lblMsg.TabIndex = 1
         Me.lblMsg.Text = "Welcome to JANIS"
         Me.lblMsg.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -62,11 +65,11 @@ Public Class fmScreen
         'lblScore
         '
         Me.lblScore.BackColor = System.Drawing.Color.Transparent
-        Me.lblScore.Font = New System.Drawing.Font("Arial", 280.0!, System.Drawing.FontStyle.Bold)
+        Me.lblScore.Font = New System.Drawing.Font("Arial", 360.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblScore.Location = New System.Drawing.Point(0, 150)
         Me.lblScore.Name = "lblScore"
         Me.lblScore.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.lblScore.Size = New System.Drawing.Size(800, 650)
+        Me.lblScore.Size = New System.Drawing.Size(1280, 570)
         Me.lblScore.TabIndex = 3
         Me.lblScore.TextAlign = System.Drawing.ContentAlignment.TopCenter
         Me.lblScore.Visible = False
@@ -75,9 +78,10 @@ Public Class fmScreen
         '
         Me.lblTeamName.BackColor = System.Drawing.Color.Transparent
         Me.lblTeamName.Font = New System.Drawing.Font("Arial", 54.0!, System.Drawing.FontStyle.Bold)
+        Me.lblTeamName.Location = New System.Drawing.Point(0, 0)
         Me.lblTeamName.Name = "lblTeamName"
         Me.lblTeamName.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.lblTeamName.Size = New System.Drawing.Size(800, 150)
+        Me.lblTeamName.Size = New System.Drawing.Size(1280, 150)
         Me.lblTeamName.TabIndex = 3
         Me.lblTeamName.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         Me.lblTeamName.Visible = False
@@ -85,19 +89,22 @@ Public Class fmScreen
         'fmScreen
         '
         Me.AutoScaleBaseSize = New System.Drawing.Size(5, 13)
-        Me.BackColor = System.Drawing.Color.FromArgb(CType(0, Byte), CType(0, Byte), CType(192, Byte))
-        Me.ClientSize = New System.Drawing.Size(800, 600)
-        Me.Controls.AddRange(New System.Windows.Forms.Control() {Me.lblTeamName, Me.lblMsg, Me.picGraphic, Me.lblScore})
+        Me.BackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.ClientSize = New System.Drawing.Size(1280, 720)
+        Me.Controls.Add(Me.lblTeamName)
+        Me.Controls.Add(Me.lblMsg)
+        Me.Controls.Add(Me.picGraphic)
+        Me.Controls.Add(Me.lblScore)
         Me.ForeColor = System.Drawing.Color.White
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None
-        Me.Location = New System.Drawing.Point(800, 0)
+        Me.Location = New System.Drawing.Point(1280, 0)
         Me.MaximizeBox = False
-        Me.MaximumSize = New System.Drawing.Size(800, 600)
         Me.MinimizeBox = False
         Me.Name = "fmScreen"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.Manual
         Me.TopMost = True
+        CType(Me.picGraphic, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub

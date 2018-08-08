@@ -3,11 +3,11 @@ Public Class fmSplash
 
     Class ApplicationInformation
         Public Title As String = "JANIS"
-        Public MajorVersion As Integer = 2
-        Public MinorVersion As Integer = 5
-        Public Iteration As Integer = 1
+        Public MajorVersion As Integer = 3
+        Public MinorVersion As Integer = 0
+        Public Iteration As Integer = 0
         Public ProductName As String = "DUAL SCREEN"
-        Public Copyright As String = "2004-2011"
+        Public Copyright As String = "2004-2012"
     End Class
 
 
@@ -61,8 +61,8 @@ Public Class fmSplash
         '
         'lblAuthor
         '
-        Me.lblAuthor.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblAuthor.Location = New System.Drawing.Point(267, 151)
+        Me.lblAuthor.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblAuthor.Location = New System.Drawing.Point(267, 170)
         Me.lblAuthor.Name = "lblAuthor"
         Me.lblAuthor.Size = New System.Drawing.Size(209, 16)
         Me.lblAuthor.TabIndex = 12
@@ -71,7 +71,7 @@ Public Class fmSplash
         '
         'lblStatus
         '
-        Me.lblStatus.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblStatus.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblStatus.ForeColor = System.Drawing.Color.Green
         Me.lblStatus.Location = New System.Drawing.Point(250, 224)
         Me.lblStatus.Name = "lblStatus"
@@ -82,8 +82,8 @@ Public Class fmSplash
         '
         'lblCopyright
         '
-        Me.lblCopyright.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblCopyright.Location = New System.Drawing.Point(267, 135)
+        Me.lblCopyright.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblCopyright.Location = New System.Drawing.Point(267, 145)
         Me.lblCopyright.Name = "lblCopyright"
         Me.lblCopyright.Size = New System.Drawing.Size(209, 16)
         Me.lblCopyright.TabIndex = 10
@@ -92,8 +92,8 @@ Public Class fmSplash
         '
         'lblVersionInfo
         '
-        Me.lblVersionInfo.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblVersionInfo.Location = New System.Drawing.Point(279, 91)
+        Me.lblVersionInfo.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblVersionInfo.Location = New System.Drawing.Point(279, 96)
         Me.lblVersionInfo.Name = "lblVersionInfo"
         Me.lblVersionInfo.Size = New System.Drawing.Size(201, 25)
         Me.lblVersionInfo.TabIndex = 9
@@ -104,7 +104,7 @@ Public Class fmSplash
         '
         Me.lblAppDesc.AutoSize = True
         Me.lblAppDesc.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblAppDesc.Location = New System.Drawing.Point(343, 53)
+        Me.lblAppDesc.Location = New System.Drawing.Point(343, 66)
         Me.lblAppDesc.Name = "lblAppDesc"
         Me.lblAppDesc.Size = New System.Drawing.Size(133, 16)
         Me.lblAppDesc.TabIndex = 8
@@ -114,10 +114,10 @@ Public Class fmSplash
         'lblAppTitle
         '
         Me.lblAppTitle.AutoSize = True
-        Me.lblAppTitle.Font = New System.Drawing.Font("Microsoft Sans Serif", 21.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblAppTitle.Location = New System.Drawing.Point(378, 20)
+        Me.lblAppTitle.Font = New System.Drawing.Font("Microsoft Sans Serif", 24.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblAppTitle.Location = New System.Drawing.Point(367, 20)
         Me.lblAppTitle.Name = "lblAppTitle"
-        Me.lblAppTitle.Size = New System.Drawing.Size(102, 33)
+        Me.lblAppTitle.Size = New System.Drawing.Size(113, 37)
         Me.lblAppTitle.TabIndex = 7
         Me.lblAppTitle.Text = "JANIS"
         Me.lblAppTitle.TextAlign = System.Drawing.ContentAlignment.TopRight
