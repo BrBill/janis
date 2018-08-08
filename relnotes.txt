@@ -1,3 +1,10 @@
+v3.1: 2012-08-11
+*  Sized up fonts on control monitor for aging readers :-)
+*  Users can now double-click on the image library count label to re-index the library.
+*  Add tooltips to a bunch of controls.
+*  Ported over countdown timer functionality from single-screen to dual-screen version.
+*  DUAL DISPLAY ONLY.
+
 v3.0: 2012-01-10
 *  Changed from 800x600 audience monitors (roughly NTSC) to 720p widescreen.
 *  Better autodetection of control monitor size and location.
@@ -16,7 +23,6 @@ v2.5.1: 2010-11-15
 v2.5: 2010-10-25
 *  New feature: The WHAMMY! plays a slideshow at high speed, allowing us to have an
    audience-controlled game randomizer (or ay other slideshow randomizer).
-*  Ported over countdown timer functionality from single-screen to dual-screen version.
 *  Add Splash Screen, which displays while program is loading.
 *  Determines correct place to put JANIS files storage directory for Windows Vista and up.
 *  Allows drag-n-drop of images to Hotbuttons and audience screens.

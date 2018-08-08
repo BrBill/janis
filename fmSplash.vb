@@ -4,7 +4,7 @@ Public Class fmSplash
     Class ApplicationInformation
         Public Title As String = "JANIS"
         Public MajorVersion As Integer = 3
-        Public MinorVersion As Integer = 0
+        Public MinorVersion As Integer = 1
         Public Iteration As Integer = 0
         Public ProductName As String = "DUAL SCREEN"
         Public Copyright As String = "2004-2012"
@@ -87,7 +87,7 @@ Public Class fmSplash
         Me.lblCopyright.Name = "lblCopyright"
         Me.lblCopyright.Size = New System.Drawing.Size(209, 16)
         Me.lblCopyright.TabIndex = 10
-        Me.lblCopyright.Text = "Copyright 2004-2011"
+        Me.lblCopyright.Text = "Copyright 2004-2013"
         Me.lblCopyright.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
         'lblVersionInfo

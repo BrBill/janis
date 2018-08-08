@@ -32,12 +32,14 @@ Public Class fmScreen
     Friend WithEvents picGraphic As System.Windows.Forms.PictureBox
     Friend WithEvents lblMsg As System.Windows.Forms.Label
     Friend WithEvents lblScore As System.Windows.Forms.Label
+    Friend WithEvents lblCountdown As System.Windows.Forms.Label
     Friend WithEvents lblTeamName As System.Windows.Forms.Label
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
         Me.picGraphic = New System.Windows.Forms.PictureBox
         Me.lblMsg = New System.Windows.Forms.Label
         Me.lblScore = New System.Windows.Forms.Label
         Me.lblTeamName = New System.Windows.Forms.Label
+        Me.lblCountdown = New System.Windows.Forms.Label
         CType(Me.picGraphic, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
@@ -86,11 +88,25 @@ Public Class fmScreen
         Me.lblTeamName.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         Me.lblTeamName.Visible = False
         '
+        'lblCountdown
+        '
+        Me.lblCountdown.BackColor = System.Drawing.Color.Black
+        Me.lblCountdown.Font = New System.Drawing.Font("Arial Black", 70.0!, System.Drawing.FontStyle.Bold)
+        Me.lblCountdown.Location = New System.Drawing.Point(0, 600)
+        Me.lblCountdown.Name = "lblCountdown"
+        Me.lblCountdown.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.lblCountdown.Size = New System.Drawing.Size(1280, 120)
+        Me.lblCountdown.TabIndex = 7
+        Me.lblCountdown.Text = "00:00:00"
+        Me.lblCountdown.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        Me.lblCountdown.Visible = False
+        '
         'fmScreen
         '
         Me.AutoScaleBaseSize = New System.Drawing.Size(5, 13)
         Me.BackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(192, Byte), Integer))
         Me.ClientSize = New System.Drawing.Size(1280, 720)
+        Me.Controls.Add(Me.lblCountdown)
         Me.Controls.Add(Me.lblTeamName)
         Me.Controls.Add(Me.lblMsg)
         Me.Controls.Add(Me.picGraphic)
@@ -219,5 +235,17 @@ Public Class fmScreen
     '    End Try
 
     'End Sub
+
+    Public Sub ShowCountdownText(ByVal CountdownText As String, ByVal BackColor As System.Drawing.Color, ByVal CountdownVisible As Boolean)
+        '* Change the size of the message window to accomodate the countdown timer
+        If CountdownVisible Then
+            Me.lblMsg.Height = Me.lblMsg.Tag - Me.lblCountdown.Height
+        Else
+            Me.lblMsg.Height = Me.lblMsg.Tag
+        End If
+
+        Me.lblCountdown.Visible = CountdownVisible
+        Me.lblCountdown.Text = CountdownText
+    End Sub
 
 End Class

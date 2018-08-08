@@ -54,13 +54,13 @@ Namespace JANIS
         Private BufferedSlide As Image = Nothing          '* For holding next whammy slide
         Private DragBounds As Rectangle
         Private DragMethod As String
-        Friend WithEvents grpLoadImage As System.Windows.Forms.GroupBox
-        Friend WithEvents grpPasteImage As System.Windows.Forms.GroupBox
-        Friend WithEvents grpClearText As System.Windows.Forms.GroupBox
-        Friend WithEvents grpLoadText As System.Windows.Forms.GroupBox
-        Friend WithEvents GroupBox1 As System.Windows.Forms.GroupBox
-        Friend WithEvents grpShowLeftText As System.Windows.Forms.GroupBox
-        Private CountdownSeconds As Integer
+        Private CountdownSeconds As Integer = 300
+        Private CountdownWarnSeconds As Integer
+        Friend WithEvents ToolTip1 As System.Windows.Forms.ToolTip
+        Private ComponentsDoneInitializing As Boolean = False
+
+
+
 
 
 #Region " Windows Form Designer generated code "
@@ -86,6 +86,7 @@ Namespace JANIS
             InitializeComponent()
 
             'Add any initialization after the InitializeComponent() call
+            Me.ComponentsDoneInitializing = True
         End Sub
 
         'Form overrides dispose to clean up the component list.
@@ -104,6 +105,34 @@ Namespace JANIS
         'NOTE: The following procedure is required by the Windows Form Designer
         'It can be modified using the Windows Form Designer.
         'Do not modify it using the code editor.
+        Friend WithEvents Label43 As System.Windows.Forms.Label
+        Friend WithEvents Label38 As System.Windows.Forms.Label
+        Friend WithEvents Label39 As System.Windows.Forms.Label
+        Friend WithEvents Label40 As System.Windows.Forms.Label
+        Friend WithEvents nudDefaultCountdownSeconds As System.Windows.Forms.NumericUpDown
+        Friend WithEvents nudDefaultCountdownMinutes As System.Windows.Forms.NumericUpDown
+        Friend WithEvents nudDefaultCountdownHours As System.Windows.Forms.NumericUpDown
+        Friend WithEvents grpLoadImage As System.Windows.Forms.GroupBox
+        Friend WithEvents grpPasteImage As System.Windows.Forms.GroupBox
+        Friend WithEvents grpClearText As System.Windows.Forms.GroupBox
+        Friend WithEvents grpLoadText As System.Windows.Forms.GroupBox
+        Friend WithEvents GroupBox1 As System.Windows.Forms.GroupBox
+        Friend WithEvents grpShowLeftText As System.Windows.Forms.GroupBox
+        Friend WithEvents gbCountdownControls As System.Windows.Forms.GroupBox
+        Friend WithEvents Label37 As System.Windows.Forms.Label
+        Friend WithEvents Label36 As System.Windows.Forms.Label
+        Friend WithEvents Label35 As System.Windows.Forms.Label
+        Friend WithEvents Label34 As System.Windows.Forms.Label
+        Friend WithEvents nudCountdownWarnSeconds As System.Windows.Forms.NumericUpDown
+        Friend WithEvents nudCountdownWarnMinutes As System.Windows.Forms.NumericUpDown
+        Friend WithEvents nudCountdownWarnHours As System.Windows.Forms.NumericUpDown
+        Friend WithEvents Label33 As System.Windows.Forms.Label
+        Friend WithEvents cbCountdownVisible As System.Windows.Forms.CheckBox
+        Friend WithEvents nudCountdownSeconds As System.Windows.Forms.NumericUpDown
+        Friend WithEvents nudCountdownMinutes As System.Windows.Forms.NumericUpDown
+        Friend WithEvents nudCountdownHours As System.Windows.Forms.NumericUpDown
+        Friend WithEvents btnResetCountdown As System.Windows.Forms.Button
+        Friend WithEvents btnStartCountdown As System.Windows.Forms.Button
         Friend WithEvents btnBlackout As System.Windows.Forms.Button
         Friend WithEvents tbLeftTeam As System.Windows.Forms.TextBox
         Friend WithEvents tbRightTeam As System.Windows.Forms.TextBox
@@ -322,8 +351,6 @@ Namespace JANIS
         Friend WithEvents tbDefaultImageDir As System.Windows.Forms.TextBox
         Friend WithEvents btnClearTextBoth As System.Windows.Forms.Button
         Friend WithEvents CountdownTimer As System.Windows.Forms.Timer
-        Friend WithEvents MenuCountdownToggle As System.Windows.Forms.MenuItem
-        Friend WithEvents btnStartCountdown As System.Windows.Forms.Button
         Friend WithEvents cbExpandPicLeft As System.Windows.Forms.CheckBox
         Friend WithEvents cbExpandPicRight As System.Windows.Forms.CheckBox
         Friend WithEvents tpImgSearch As System.Windows.Forms.TabPage
@@ -372,7 +399,6 @@ Namespace JANIS
             Me.menuAdd5Right = New System.Windows.Forms.MenuItem
             Me.menuSubtract5Right = New System.Windows.Forms.MenuItem
             Me.EasterEgg1 = New System.Windows.Forms.MenuItem
-            Me.MenuCountdownToggle = New System.Windows.Forms.MenuItem
             Me.picLeft = New System.Windows.Forms.PictureBox
             Me.btnPictureLeft = New System.Windows.Forms.Button
             Me.btnPictureRight = New System.Windows.Forms.Button
@@ -397,7 +423,6 @@ Namespace JANIS
             Me.btnClearTextLeft = New System.Windows.Forms.Button
             Me.btnClearTextBoth = New System.Windows.Forms.Button
             Me.btnClearTextRight = New System.Windows.Forms.Button
-            Me.btnStartCountdown = New System.Windows.Forms.Button
             Me.btnBothTextScreens = New System.Windows.Forms.Button
             Me.Label11 = New System.Windows.Forms.Label
             Me.Label10 = New System.Windows.Forms.Label
@@ -530,6 +555,13 @@ Namespace JANIS
             Me.tbHBtext1 = New System.Windows.Forms.TextBox
             Me.cbHBActive = New System.Windows.Forms.CheckBox
             Me.tpPrefs = New System.Windows.Forms.TabPage
+            Me.Label43 = New System.Windows.Forms.Label
+            Me.Label38 = New System.Windows.Forms.Label
+            Me.Label39 = New System.Windows.Forms.Label
+            Me.Label40 = New System.Windows.Forms.Label
+            Me.nudDefaultCountdownSeconds = New System.Windows.Forms.NumericUpDown
+            Me.nudDefaultCountdownMinutes = New System.Windows.Forms.NumericUpDown
+            Me.nudDefaultCountdownHours = New System.Windows.Forms.NumericUpDown
             Me.btnDefaultPrefs = New System.Windows.Forms.Button
             Me.tbDefaultImageDir = New System.Windows.Forms.TextBox
             Me.btnChooseDefaultImageDir = New System.Windows.Forms.Button
@@ -595,6 +627,22 @@ Namespace JANIS
             Me.btnPasteLeft = New System.Windows.Forms.Button
             Me.grpLoadImage = New System.Windows.Forms.GroupBox
             Me.grpPasteImage = New System.Windows.Forms.GroupBox
+            Me.gbCountdownControls = New System.Windows.Forms.GroupBox
+            Me.Label37 = New System.Windows.Forms.Label
+            Me.Label36 = New System.Windows.Forms.Label
+            Me.Label35 = New System.Windows.Forms.Label
+            Me.Label34 = New System.Windows.Forms.Label
+            Me.nudCountdownWarnSeconds = New System.Windows.Forms.NumericUpDown
+            Me.nudCountdownWarnMinutes = New System.Windows.Forms.NumericUpDown
+            Me.nudCountdownWarnHours = New System.Windows.Forms.NumericUpDown
+            Me.Label33 = New System.Windows.Forms.Label
+            Me.cbCountdownVisible = New System.Windows.Forms.CheckBox
+            Me.nudCountdownSeconds = New System.Windows.Forms.NumericUpDown
+            Me.nudCountdownMinutes = New System.Windows.Forms.NumericUpDown
+            Me.nudCountdownHours = New System.Windows.Forms.NumericUpDown
+            Me.btnResetCountdown = New System.Windows.Forms.Button
+            Me.btnStartCountdown = New System.Windows.Forms.Button
+            Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
             CType(Me.picLeft, System.ComponentModel.ISupportInitialize).BeginInit()
             Me.TabControl1.SuspendLayout()
             Me.tpScreenText.SuspendLayout()
@@ -614,6 +662,9 @@ Namespace JANIS
             Me.tpHotButtons.SuspendLayout()
             Me.gbHB.SuspendLayout()
             Me.tpPrefs.SuspendLayout()
+            CType(Me.nudDefaultCountdownSeconds, System.ComponentModel.ISupportInitialize).BeginInit()
+            CType(Me.nudDefaultCountdownMinutes, System.ComponentModel.ISupportInitialize).BeginInit()
+            CType(Me.nudDefaultCountdownHours, System.ComponentModel.ISupportInitialize).BeginInit()
             Me.GroupBox2.SuspendLayout()
             Me.grpDefaultColorsRight.SuspendLayout()
             Me.grpDefaultColorsLeft.SuspendLayout()
@@ -624,6 +675,13 @@ Namespace JANIS
             CType(Me.picRight, System.ComponentModel.ISupportInitialize).BeginInit()
             Me.grpLoadImage.SuspendLayout()
             Me.grpPasteImage.SuspendLayout()
+            Me.gbCountdownControls.SuspendLayout()
+            CType(Me.nudCountdownWarnSeconds, System.ComponentModel.ISupportInitialize).BeginInit()
+            CType(Me.nudCountdownWarnMinutes, System.ComponentModel.ISupportInitialize).BeginInit()
+            CType(Me.nudCountdownWarnHours, System.ComponentModel.ISupportInitialize).BeginInit()
+            CType(Me.nudCountdownSeconds, System.ComponentModel.ISupportInitialize).BeginInit()
+            CType(Me.nudCountdownMinutes, System.ComponentModel.ISupportInitialize).BeginInit()
+            CType(Me.nudCountdownHours, System.ComponentModel.ISupportInitialize).BeginInit()
             Me.SuspendLayout()
             '
             'btnBlackout
@@ -631,7 +689,7 @@ Namespace JANIS
             Me.btnBlackout.BackColor = System.Drawing.SystemColors.Control
             Me.btnBlackout.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
             Me.btnBlackout.ForeColor = System.Drawing.SystemColors.WindowText
-            Me.btnBlackout.Location = New System.Drawing.Point(442, 125)
+            Me.btnBlackout.Location = New System.Drawing.Point(442, 110)
             Me.btnBlackout.Name = "btnBlackout"
             Me.btnBlackout.Size = New System.Drawing.Size(112, 40)
             Me.btnBlackout.TabIndex = 13
@@ -735,7 +793,7 @@ Namespace JANIS
             'btnScoreLeft
             '
             Me.btnScoreLeft.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.btnScoreLeft.Location = New System.Drawing.Point(343, 4)
+            Me.btnScoreLeft.Location = New System.Drawing.Point(343, 2)
             Me.btnScoreLeft.Name = "btnScoreLeft"
             Me.btnScoreLeft.Size = New System.Drawing.Size(76, 40)
             Me.btnScoreLeft.TabIndex = 5
@@ -744,7 +802,7 @@ Namespace JANIS
             'btnScoreRight
             '
             Me.btnScoreRight.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.btnScoreRight.Location = New System.Drawing.Point(577, 4)
+            Me.btnScoreRight.Location = New System.Drawing.Point(577, 2)
             Me.btnScoreRight.Name = "btnScoreRight"
             Me.btnScoreRight.Size = New System.Drawing.Size(76, 40)
             Me.btnScoreRight.TabIndex = 7
@@ -753,7 +811,7 @@ Namespace JANIS
             'btnScoreBoth
             '
             Me.btnScoreBoth.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.btnScoreBoth.Location = New System.Drawing.Point(457, 4)
+            Me.btnScoreBoth.Location = New System.Drawing.Point(457, 2)
             Me.btnScoreBoth.Name = "btnScoreBoth"
             Me.btnScoreBoth.Size = New System.Drawing.Size(84, 40)
             Me.btnScoreBoth.TabIndex = 6
@@ -766,7 +824,7 @@ Namespace JANIS
             'menuDummy
             '
             Me.menuDummy.Index = 0
-            Me.menuDummy.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.menuAdd1Left, Me.menuSubtract1Left, Me.menuAdd5Left, Me.menuSubtract5Left, Me.menuAdd1Right, Me.menuSubtract1Right, Me.menuAdd5Right, Me.menuSubtract5Right, Me.EasterEgg1, Me.MenuCountdownToggle})
+            Me.menuDummy.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.menuAdd1Left, Me.menuSubtract1Left, Me.menuAdd5Left, Me.menuSubtract5Left, Me.menuAdd1Right, Me.menuSubtract1Right, Me.menuAdd5Right, Me.menuSubtract5Right, Me.EasterEgg1})
             Me.menuDummy.Text = "Dummy"
             Me.menuDummy.Visible = False
             '
@@ -823,12 +881,6 @@ Namespace JANIS
             Me.EasterEgg1.Index = 8
             Me.EasterEgg1.Shortcut = System.Windows.Forms.Shortcut.CtrlShiftB
             Me.EasterEgg1.Text = "Bill Loves Betse!"
-            '
-            'MenuCountdownToggle
-            '
-            Me.MenuCountdownToggle.Index = 9
-            Me.MenuCountdownToggle.Shortcut = System.Windows.Forms.Shortcut.CtrlShiftT
-            Me.MenuCountdownToggle.Text = "CountdownTimer"
             '
             'picLeft
             '
@@ -904,7 +956,7 @@ Namespace JANIS
             Me.TabControl1.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
             Me.TabControl1.HotTrack = True
             Me.TabControl1.ItemSize = New System.Drawing.Size(120, 24)
-            Me.TabControl1.Location = New System.Drawing.Point(0, 274)
+            Me.TabControl1.Location = New System.Drawing.Point(0, 309)
             Me.TabControl1.Name = "TabControl1"
             Me.TabControl1.SelectedIndex = 0
             Me.TabControl1.Size = New System.Drawing.Size(996, 454)
@@ -918,7 +970,6 @@ Namespace JANIS
             Me.tpScreenText.Controls.Add(Me.grpShowLeftText)
             Me.tpScreenText.Controls.Add(Me.grpLoadText)
             Me.tpScreenText.Controls.Add(Me.grpClearText)
-            Me.tpScreenText.Controls.Add(Me.btnStartCountdown)
             Me.tpScreenText.Controls.Add(Me.btnBothTextScreens)
             Me.tpScreenText.Controls.Add(Me.Label11)
             Me.tpScreenText.Controls.Add(Me.Label10)
@@ -1122,16 +1173,6 @@ Namespace JANIS
             Me.btnClearTextRight.Text = "ð"
             Me.btnClearTextRight.TextAlign = System.Drawing.ContentAlignment.TopCenter
             Me.btnClearTextRight.UseVisualStyleBackColor = False
-            '
-            'btnStartCountdown
-            '
-            Me.btnStartCountdown.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.btnStartCountdown.Location = New System.Drawing.Point(442, 17)
-            Me.btnStartCountdown.Name = "btnStartCountdown"
-            Me.btnStartCountdown.Size = New System.Drawing.Size(112, 42)
-            Me.btnStartCountdown.TabIndex = 57
-            Me.btnStartCountdown.Text = "START TIMER"
-            Me.btnStartCountdown.Visible = False
             '
             'btnBothTextScreens
             '
@@ -1800,6 +1841,7 @@ Namespace JANIS
             Me.btnWhammy.Size = New System.Drawing.Size(95, 28)
             Me.btnWhammy.TabIndex = 90
             Me.btnWhammy.Text = "WHAMMY!"
+            Me.ToolTip1.SetToolTip(Me.btnWhammy, "Launch slideshow as high-speed randomizer")
             Me.btnWhammy.UseVisualStyleBackColor = False
             '
             'btnPauseSlides
@@ -2555,6 +2597,13 @@ Namespace JANIS
             '
             'tpPrefs
             '
+            Me.tpPrefs.Controls.Add(Me.Label43)
+            Me.tpPrefs.Controls.Add(Me.Label38)
+            Me.tpPrefs.Controls.Add(Me.Label39)
+            Me.tpPrefs.Controls.Add(Me.Label40)
+            Me.tpPrefs.Controls.Add(Me.nudDefaultCountdownSeconds)
+            Me.tpPrefs.Controls.Add(Me.nudDefaultCountdownMinutes)
+            Me.tpPrefs.Controls.Add(Me.nudDefaultCountdownHours)
             Me.tpPrefs.Controls.Add(Me.btnDefaultPrefs)
             Me.tpPrefs.Controls.Add(Me.tbDefaultImageDir)
             Me.tpPrefs.Controls.Add(Me.btnChooseDefaultImageDir)
@@ -2583,33 +2632,105 @@ Namespace JANIS
             Me.tpPrefs.TabIndex = 5
             Me.tpPrefs.Text = "Preferences"
             '
+            'Label43
+            '
+            Me.Label43.BackColor = System.Drawing.Color.Transparent
+            Me.Label43.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+            Me.Label43.Location = New System.Drawing.Point(516, 279)
+            Me.Label43.Name = "Label43"
+            Me.Label43.Size = New System.Drawing.Size(277, 20)
+            Me.Label43.TabIndex = 113
+            Me.Label43.Text = "Default Countdown Timer Values:"
+            Me.Label43.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+            '
+            'Label38
+            '
+            Me.Label38.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+            Me.Label38.Location = New System.Drawing.Point(924, 255)
+            Me.Label38.Name = "Label38"
+            Me.Label38.Size = New System.Drawing.Size(40, 16)
+            Me.Label38.TabIndex = 112
+            Me.Label38.Text = "SS"
+            Me.Label38.TextAlign = System.Drawing.ContentAlignment.TopCenter
+            '
+            'Label39
+            '
+            Me.Label39.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+            Me.Label39.Location = New System.Drawing.Point(880, 255)
+            Me.Label39.Name = "Label39"
+            Me.Label39.Size = New System.Drawing.Size(40, 16)
+            Me.Label39.TabIndex = 111
+            Me.Label39.Text = "MM"
+            Me.Label39.TextAlign = System.Drawing.ContentAlignment.TopCenter
+            '
+            'Label40
+            '
+            Me.Label40.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+            Me.Label40.Location = New System.Drawing.Point(836, 255)
+            Me.Label40.Name = "Label40"
+            Me.Label40.Size = New System.Drawing.Size(40, 16)
+            Me.Label40.TabIndex = 110
+            Me.Label40.Text = "HH"
+            Me.Label40.TextAlign = System.Drawing.ContentAlignment.TopCenter
+            '
+            'nudDefaultCountdownSeconds
+            '
+            Me.nudDefaultCountdownSeconds.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+            Me.nudDefaultCountdownSeconds.Location = New System.Drawing.Point(924, 279)
+            Me.nudDefaultCountdownSeconds.Maximum = New Decimal(New Integer() {59, 0, 0, 0})
+            Me.nudDefaultCountdownSeconds.Name = "nudDefaultCountdownSeconds"
+            Me.nudDefaultCountdownSeconds.Size = New System.Drawing.Size(44, 23)
+            Me.nudDefaultCountdownSeconds.TabIndex = 116
+            Me.nudDefaultCountdownSeconds.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+            '
+            'nudDefaultCountdownMinutes
+            '
+            Me.nudDefaultCountdownMinutes.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+            Me.nudDefaultCountdownMinutes.Location = New System.Drawing.Point(880, 279)
+            Me.nudDefaultCountdownMinutes.Maximum = New Decimal(New Integer() {59, 0, 0, 0})
+            Me.nudDefaultCountdownMinutes.Name = "nudDefaultCountdownMinutes"
+            Me.nudDefaultCountdownMinutes.Size = New System.Drawing.Size(44, 23)
+            Me.nudDefaultCountdownMinutes.TabIndex = 115
+            Me.nudDefaultCountdownMinutes.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+            Me.nudDefaultCountdownMinutes.Value = New Decimal(New Integer() {5, 0, 0, 0})
+            '
+            'nudDefaultCountdownHours
+            '
+            Me.nudDefaultCountdownHours.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+            Me.nudDefaultCountdownHours.Location = New System.Drawing.Point(836, 279)
+            Me.nudDefaultCountdownHours.Maximum = New Decimal(New Integer() {99, 0, 0, 0})
+            Me.nudDefaultCountdownHours.Name = "nudDefaultCountdownHours"
+            Me.nudDefaultCountdownHours.Size = New System.Drawing.Size(44, 23)
+            Me.nudDefaultCountdownHours.TabIndex = 114
+            Me.nudDefaultCountdownHours.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+            '
             'btnDefaultPrefs
             '
             Me.btnDefaultPrefs.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
             Me.btnDefaultPrefs.Location = New System.Drawing.Point(11, 373)
             Me.btnDefaultPrefs.Name = "btnDefaultPrefs"
             Me.btnDefaultPrefs.Size = New System.Drawing.Size(190, 32)
-            Me.btnDefaultPrefs.TabIndex = 97
+            Me.btnDefaultPrefs.TabIndex = 117
             Me.btnDefaultPrefs.Text = "FACTORY DEFAULTS"
             '
             'tbDefaultImageDir
             '
             Me.tbDefaultImageDir.BackColor = System.Drawing.SystemColors.Control
             Me.tbDefaultImageDir.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.tbDefaultImageDir.Location = New System.Drawing.Point(254, 117)
+            Me.tbDefaultImageDir.Location = New System.Drawing.Point(27, 142)
             Me.tbDefaultImageDir.Name = "tbDefaultImageDir"
             Me.tbDefaultImageDir.ReadOnly = True
-            Me.tbDefaultImageDir.Size = New System.Drawing.Size(644, 23)
-            Me.tbDefaultImageDir.TabIndex = 96
+            Me.tbDefaultImageDir.Size = New System.Drawing.Size(366, 23)
+            Me.tbDefaultImageDir.TabIndex = 95
             Me.tbDefaultImageDir.Text = "C:\JANIS"
             '
             'btnChooseDefaultImageDir
             '
             Me.btnChooseDefaultImageDir.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.btnChooseDefaultImageDir.Location = New System.Drawing.Point(904, 114)
+            Me.btnChooseDefaultImageDir.Location = New System.Drawing.Point(399, 140)
             Me.btnChooseDefaultImageDir.Name = "btnChooseDefaultImageDir"
             Me.btnChooseDefaultImageDir.Size = New System.Drawing.Size(72, 26)
-            Me.btnChooseDefaultImageDir.TabIndex = 95
+            Me.btnChooseDefaultImageDir.TabIndex = 96
             Me.btnChooseDefaultImageDir.Tag = "0"
             Me.btnChooseDefaultImageDir.Text = "Select..."
             '
@@ -2627,7 +2748,7 @@ Namespace JANIS
             'tbDefaultFontSize
             '
             Me.tbDefaultFontSize.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.tbDefaultFontSize.Location = New System.Drawing.Point(254, 83)
+            Me.tbDefaultFontSize.Location = New System.Drawing.Point(278, 83)
             Me.tbDefaultFontSize.MaxLength = 3
             Me.tbDefaultFontSize.Name = "tbDefaultFontSize"
             Me.tbDefaultFontSize.Size = New System.Drawing.Size(52, 24)
@@ -2853,7 +2974,7 @@ Namespace JANIS
             Me.btnSavePrefs.Location = New System.Drawing.Point(380, 373)
             Me.btnSavePrefs.Name = "btnSavePrefs"
             Me.btnSavePrefs.Size = New System.Drawing.Size(190, 32)
-            Me.btnSavePrefs.TabIndex = 87
+            Me.btnSavePrefs.TabIndex = 118
             Me.btnSavePrefs.Text = "SAVE PREFS"
             '
             'btnRevertPrefs
@@ -2862,7 +2983,7 @@ Namespace JANIS
             Me.btnRevertPrefs.Location = New System.Drawing.Point(786, 373)
             Me.btnRevertPrefs.Name = "btnRevertPrefs"
             Me.btnRevertPrefs.Size = New System.Drawing.Size(190, 32)
-            Me.btnRevertPrefs.TabIndex = 86
+            Me.btnRevertPrefs.TabIndex = 119
             Me.btnRevertPrefs.Text = "UNDO CHANGES"
             '
             'cbPlaySlidesAtStart
@@ -2870,10 +2991,10 @@ Namespace JANIS
             Me.cbPlaySlidesAtStart.BackColor = System.Drawing.Color.Transparent
             Me.cbPlaySlidesAtStart.Enabled = False
             Me.cbPlaySlidesAtStart.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.cbPlaySlidesAtStart.Location = New System.Drawing.Point(40, 314)
+            Me.cbPlaySlidesAtStart.Location = New System.Drawing.Point(542, 174)
             Me.cbPlaySlidesAtStart.Name = "cbPlaySlidesAtStart"
             Me.cbPlaySlidesAtStart.Size = New System.Drawing.Size(299, 22)
-            Me.cbPlaySlidesAtStart.TabIndex = 85
+            Me.cbPlaySlidesAtStart.TabIndex = 108
             Me.cbPlaySlidesAtStart.Text = "Play this Slideshow when program starts"
             Me.cbPlaySlidesAtStart.UseVisualStyleBackColor = False
             '
@@ -2881,22 +3002,22 @@ Namespace JANIS
             '
             Me.Label16.BackColor = System.Drawing.Color.Transparent
             Me.Label16.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.Label16.Location = New System.Drawing.Point(8, 238)
+            Me.Label16.Location = New System.Drawing.Point(516, 82)
             Me.Label16.Name = "Label16"
             Me.Label16.Size = New System.Drawing.Size(242, 22)
-            Me.Label16.TabIndex = 83
+            Me.Label16.TabIndex = 103
             Me.Label16.Text = "Default seconds between slides:"
             Me.Label16.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
             '
             'nudDefaultSlideDelay
             '
             Me.nudDefaultSlideDelay.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.nudDefaultSlideDelay.Location = New System.Drawing.Point(254, 236)
+            Me.nudDefaultSlideDelay.Location = New System.Drawing.Point(785, 83)
             Me.nudDefaultSlideDelay.Maximum = New Decimal(New Integer() {60, 0, 0, 0})
             Me.nudDefaultSlideDelay.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
             Me.nudDefaultSlideDelay.Name = "nudDefaultSlideDelay"
             Me.nudDefaultSlideDelay.Size = New System.Drawing.Size(56, 24)
-            Me.nudDefaultSlideDelay.TabIndex = 84
+            Me.nudDefaultSlideDelay.TabIndex = 104
             Me.nudDefaultSlideDelay.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
             Me.nudDefaultSlideDelay.Value = New Decimal(New Integer() {15, 0, 0, 0})
             '
@@ -2905,20 +3026,21 @@ Namespace JANIS
             Me.tbDefaultSlideShow.BackColor = System.Drawing.SystemColors.ControlDark
             Me.tbDefaultSlideShow.Enabled = False
             Me.tbDefaultSlideShow.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.tbDefaultSlideShow.Location = New System.Drawing.Point(254, 286)
+            Me.tbDefaultSlideShow.Location = New System.Drawing.Point(531, 145)
             Me.tbDefaultSlideShow.Name = "tbDefaultSlideShow"
             Me.tbDefaultSlideShow.ReadOnly = True
-            Me.tbDefaultSlideShow.Size = New System.Drawing.Size(644, 23)
-            Me.tbDefaultSlideShow.TabIndex = 52
+            Me.tbDefaultSlideShow.Size = New System.Drawing.Size(365, 23)
+            Me.tbDefaultSlideShow.TabIndex = 6
+            Me.tbDefaultSlideShow.TabStop = False
             '
             'btnChooseDefaultSlideShow
             '
             Me.btnChooseDefaultSlideShow.Enabled = False
             Me.btnChooseDefaultSlideShow.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.btnChooseDefaultSlideShow.Location = New System.Drawing.Point(904, 283)
+            Me.btnChooseDefaultSlideShow.Location = New System.Drawing.Point(902, 143)
             Me.btnChooseDefaultSlideShow.Name = "btnChooseDefaultSlideShow"
             Me.btnChooseDefaultSlideShow.Size = New System.Drawing.Size(72, 26)
-            Me.btnChooseDefaultSlideShow.TabIndex = 51
+            Me.btnChooseDefaultSlideShow.TabIndex = 107
             Me.btnChooseDefaultSlideShow.Tag = "0"
             Me.btnChooseDefaultSlideShow.Text = "Select..."
             '
@@ -2927,20 +3049,21 @@ Namespace JANIS
             Me.tbDefaultHBFile.BackColor = System.Drawing.SystemColors.ControlDark
             Me.tbDefaultHBFile.Enabled = False
             Me.tbDefaultHBFile.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.tbDefaultHBFile.Location = New System.Drawing.Point(254, 192)
+            Me.tbDefaultHBFile.Location = New System.Drawing.Point(27, 305)
             Me.tbDefaultHBFile.Name = "tbDefaultHBFile"
             Me.tbDefaultHBFile.ReadOnly = True
-            Me.tbDefaultHBFile.Size = New System.Drawing.Size(644, 23)
-            Me.tbDefaultHBFile.TabIndex = 50
+            Me.tbDefaultHBFile.Size = New System.Drawing.Size(366, 23)
+            Me.tbDefaultHBFile.TabIndex = 101
+            Me.tbDefaultHBFile.TabStop = False
             '
             'btnChooseDefaultHB
             '
             Me.btnChooseDefaultHB.Enabled = False
             Me.btnChooseDefaultHB.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.btnChooseDefaultHB.Location = New System.Drawing.Point(904, 189)
+            Me.btnChooseDefaultHB.Location = New System.Drawing.Point(399, 303)
             Me.btnChooseDefaultHB.Name = "btnChooseDefaultHB"
             Me.btnChooseDefaultHB.Size = New System.Drawing.Size(72, 26)
-            Me.btnChooseDefaultHB.TabIndex = 49
+            Me.btnChooseDefaultHB.TabIndex = 102
             Me.btnChooseDefaultHB.Tag = "0"
             Me.btnChooseDefaultHB.Text = "Select..."
             '
@@ -2949,20 +3072,21 @@ Namespace JANIS
             Me.tbDefaultImageFile.BackColor = System.Drawing.SystemColors.ControlDark
             Me.tbDefaultImageFile.Enabled = False
             Me.tbDefaultImageFile.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.tbDefaultImageFile.Location = New System.Drawing.Point(254, 158)
+            Me.tbDefaultImageFile.Location = New System.Drawing.Point(27, 225)
             Me.tbDefaultImageFile.Name = "tbDefaultImageFile"
             Me.tbDefaultImageFile.ReadOnly = True
-            Me.tbDefaultImageFile.Size = New System.Drawing.Size(644, 23)
-            Me.tbDefaultImageFile.TabIndex = 48
+            Me.tbDefaultImageFile.Size = New System.Drawing.Size(366, 23)
+            Me.tbDefaultImageFile.TabIndex = 98
+            Me.tbDefaultImageFile.TabStop = False
             '
             'btnChooseDefaultImage
             '
             Me.btnChooseDefaultImage.Enabled = False
             Me.btnChooseDefaultImage.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.btnChooseDefaultImage.Location = New System.Drawing.Point(904, 155)
+            Me.btnChooseDefaultImage.Location = New System.Drawing.Point(399, 223)
             Me.btnChooseDefaultImage.Name = "btnChooseDefaultImage"
             Me.btnChooseDefaultImage.Size = New System.Drawing.Size(72, 26)
-            Me.btnChooseDefaultImage.TabIndex = 47
+            Me.btnChooseDefaultImage.TabIndex = 99
             Me.btnChooseDefaultImage.Tag = "0"
             Me.btnChooseDefaultImage.Text = "Select..."
             '
@@ -2970,10 +3094,10 @@ Namespace JANIS
             '
             Me.cbDisplayDefaultImage.BackColor = System.Drawing.Color.Transparent
             Me.cbDisplayDefaultImage.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.cbDisplayDefaultImage.Location = New System.Drawing.Point(8, 159)
+            Me.cbDisplayDefaultImage.Location = New System.Drawing.Point(8, 197)
             Me.cbDisplayDefaultImage.Name = "cbDisplayDefaultImage"
             Me.cbDisplayDefaultImage.Size = New System.Drawing.Size(240, 22)
-            Me.cbDisplayDefaultImage.TabIndex = 2
+            Me.cbDisplayDefaultImage.TabIndex = 97
             Me.cbDisplayDefaultImage.Text = "Display image at program start:"
             Me.cbDisplayDefaultImage.UseVisualStyleBackColor = False
             '
@@ -2981,10 +3105,10 @@ Namespace JANIS
             '
             Me.cbLoadDefaultSlides.BackColor = System.Drawing.Color.Transparent
             Me.cbLoadDefaultSlides.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.cbLoadDefaultSlides.Location = New System.Drawing.Point(8, 286)
+            Me.cbLoadDefaultSlides.Location = New System.Drawing.Point(519, 117)
             Me.cbLoadDefaultSlides.Name = "cbLoadDefaultSlides"
             Me.cbLoadDefaultSlides.Size = New System.Drawing.Size(242, 22)
-            Me.cbLoadDefaultSlides.TabIndex = 1
+            Me.cbLoadDefaultSlides.TabIndex = 105
             Me.cbLoadDefaultSlides.Text = "Load a SlideShow file as default:"
             Me.cbLoadDefaultSlides.UseVisualStyleBackColor = False
             '
@@ -2992,10 +3116,10 @@ Namespace JANIS
             '
             Me.cbLoadDefaultHB.BackColor = System.Drawing.Color.Transparent
             Me.cbLoadDefaultHB.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.cbLoadDefaultHB.Location = New System.Drawing.Point(6, 193)
+            Me.cbLoadDefaultHB.Location = New System.Drawing.Point(8, 277)
             Me.cbLoadDefaultHB.Name = "cbLoadDefaultHB"
             Me.cbLoadDefaultHB.Size = New System.Drawing.Size(242, 22)
-            Me.cbLoadDefaultHB.TabIndex = 0
+            Me.cbLoadDefaultHB.TabIndex = 100
             Me.cbLoadDefaultHB.Text = "Load a HotButtons file at start:"
             Me.cbLoadDefaultHB.UseVisualStyleBackColor = False
             '
@@ -3039,8 +3163,8 @@ Namespace JANIS
             Me.TextBox1.Size = New System.Drawing.Size(972, 118)
             Me.TextBox1.TabIndex = 90
             Me.TextBox1.TabStop = False
-            Me.TextBox1.Text = "JANIS Dual Display" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Version 3.0 Alpha  Released Jan 1, 2012" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "by Bill Cernansky ( " & _
-                "bill@easybeing.com )" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "© 2004-2012 Easy Being Productions"
+            Me.TextBox1.Text = "JANIS Dual Display" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Version 3.1 Released Aug 11, 2012" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "by Bill Cernansky ( bill@e" & _
+                "asybeing.com )" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "© 2004-2012 Easy Being Productions"
             Me.TextBox1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
             '
             'SlideTimer
@@ -3053,7 +3177,7 @@ Namespace JANIS
             Me.btnHot1.BackColor = System.Drawing.Color.Gray
             Me.btnHot1.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.5!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
             Me.btnHot1.ForeColor = System.Drawing.Color.White
-            Me.btnHot1.Location = New System.Drawing.Point(4, 235)
+            Me.btnHot1.Location = New System.Drawing.Point(4, 277)
             Me.btnHot1.Name = "btnHot1"
             Me.btnHot1.Size = New System.Drawing.Size(96, 28)
             Me.btnHot1.TabIndex = 31
@@ -3067,7 +3191,7 @@ Namespace JANIS
             Me.btnHot2.BackColor = System.Drawing.Color.Gray
             Me.btnHot2.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.5!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
             Me.btnHot2.ForeColor = System.Drawing.Color.White
-            Me.btnHot2.Location = New System.Drawing.Point(103, 235)
+            Me.btnHot2.Location = New System.Drawing.Point(103, 277)
             Me.btnHot2.Name = "btnHot2"
             Me.btnHot2.Size = New System.Drawing.Size(96, 28)
             Me.btnHot2.TabIndex = 32
@@ -3081,7 +3205,7 @@ Namespace JANIS
             Me.btnHot3.BackColor = System.Drawing.Color.Gray
             Me.btnHot3.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.5!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
             Me.btnHot3.ForeColor = System.Drawing.Color.White
-            Me.btnHot3.Location = New System.Drawing.Point(202, 235)
+            Me.btnHot3.Location = New System.Drawing.Point(202, 277)
             Me.btnHot3.Name = "btnHot3"
             Me.btnHot3.Size = New System.Drawing.Size(96, 28)
             Me.btnHot3.TabIndex = 33
@@ -3095,7 +3219,7 @@ Namespace JANIS
             Me.btnHot4.BackColor = System.Drawing.Color.Gray
             Me.btnHot4.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.5!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
             Me.btnHot4.ForeColor = System.Drawing.Color.White
-            Me.btnHot4.Location = New System.Drawing.Point(301, 235)
+            Me.btnHot4.Location = New System.Drawing.Point(301, 277)
             Me.btnHot4.Name = "btnHot4"
             Me.btnHot4.Size = New System.Drawing.Size(96, 28)
             Me.btnHot4.TabIndex = 34
@@ -3109,7 +3233,7 @@ Namespace JANIS
             Me.btnHot5.BackColor = System.Drawing.Color.Gray
             Me.btnHot5.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.5!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
             Me.btnHot5.ForeColor = System.Drawing.Color.White
-            Me.btnHot5.Location = New System.Drawing.Point(400, 235)
+            Me.btnHot5.Location = New System.Drawing.Point(400, 277)
             Me.btnHot5.Name = "btnHot5"
             Me.btnHot5.Size = New System.Drawing.Size(96, 28)
             Me.btnHot5.TabIndex = 35
@@ -3123,7 +3247,7 @@ Namespace JANIS
             Me.btnHot6.BackColor = System.Drawing.Color.Gray
             Me.btnHot6.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.5!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
             Me.btnHot6.ForeColor = System.Drawing.Color.White
-            Me.btnHot6.Location = New System.Drawing.Point(500, 235)
+            Me.btnHot6.Location = New System.Drawing.Point(500, 277)
             Me.btnHot6.Name = "btnHot6"
             Me.btnHot6.Size = New System.Drawing.Size(96, 28)
             Me.btnHot6.TabIndex = 36
@@ -3137,7 +3261,7 @@ Namespace JANIS
             Me.btnHot7.BackColor = System.Drawing.Color.Gray
             Me.btnHot7.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.5!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
             Me.btnHot7.ForeColor = System.Drawing.Color.White
-            Me.btnHot7.Location = New System.Drawing.Point(599, 235)
+            Me.btnHot7.Location = New System.Drawing.Point(599, 277)
             Me.btnHot7.Name = "btnHot7"
             Me.btnHot7.Size = New System.Drawing.Size(96, 28)
             Me.btnHot7.TabIndex = 37
@@ -3151,7 +3275,7 @@ Namespace JANIS
             Me.btnHot8.BackColor = System.Drawing.Color.Gray
             Me.btnHot8.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.5!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
             Me.btnHot8.ForeColor = System.Drawing.Color.White
-            Me.btnHot8.Location = New System.Drawing.Point(698, 235)
+            Me.btnHot8.Location = New System.Drawing.Point(698, 277)
             Me.btnHot8.Name = "btnHot8"
             Me.btnHot8.Size = New System.Drawing.Size(96, 28)
             Me.btnHot8.TabIndex = 38
@@ -3165,7 +3289,7 @@ Namespace JANIS
             Me.btnHot9.BackColor = System.Drawing.Color.Gray
             Me.btnHot9.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.5!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
             Me.btnHot9.ForeColor = System.Drawing.Color.White
-            Me.btnHot9.Location = New System.Drawing.Point(797, 235)
+            Me.btnHot9.Location = New System.Drawing.Point(797, 277)
             Me.btnHot9.Name = "btnHot9"
             Me.btnHot9.Size = New System.Drawing.Size(96, 28)
             Me.btnHot9.TabIndex = 39
@@ -3179,7 +3303,7 @@ Namespace JANIS
             Me.btnHot10.BackColor = System.Drawing.Color.Gray
             Me.btnHot10.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.5!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
             Me.btnHot10.ForeColor = System.Drawing.Color.White
-            Me.btnHot10.Location = New System.Drawing.Point(896, 235)
+            Me.btnHot10.Location = New System.Drawing.Point(896, 277)
             Me.btnHot10.Name = "btnHot10"
             Me.btnHot10.Size = New System.Drawing.Size(96, 28)
             Me.btnHot10.TabIndex = 40
@@ -3193,7 +3317,7 @@ Namespace JANIS
             Me.pnlPicBackLeft.BackColor = System.Drawing.Color.Black
             Me.pnlPicBackLeft.Controls.Add(Me.picLeft)
             Me.pnlPicBackLeft.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.pnlPicBackLeft.Location = New System.Drawing.Point(4, 71)
+            Me.pnlPicBackLeft.Location = New System.Drawing.Point(4, 63)
             Me.pnlPicBackLeft.Name = "pnlPicBackLeft"
             Me.pnlPicBackLeft.Size = New System.Drawing.Size(272, 153)
             Me.pnlPicBackLeft.TabIndex = 41
@@ -3203,7 +3327,7 @@ Namespace JANIS
             Me.pnlPicBackRight.BackColor = System.Drawing.Color.Black
             Me.pnlPicBackRight.Controls.Add(Me.picRight)
             Me.pnlPicBackRight.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.pnlPicBackRight.Location = New System.Drawing.Point(720, 71)
+            Me.pnlPicBackRight.Location = New System.Drawing.Point(720, 63)
             Me.pnlPicBackRight.Name = "pnlPicBackRight"
             Me.pnlPicBackRight.Size = New System.Drawing.Size(272, 153)
             Me.pnlPicBackRight.TabIndex = 42
@@ -3248,46 +3372,51 @@ Namespace JANIS
             Me.lblLibraryCount.BackColor = System.Drawing.Color.PaleTurquoise
             Me.lblLibraryCount.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
             Me.lblLibraryCount.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.lblLibraryCount.Location = New System.Drawing.Point(384, 62)
+            Me.lblLibraryCount.Location = New System.Drawing.Point(372, 47)
             Me.lblLibraryCount.Name = "lblLibraryCount"
-            Me.lblLibraryCount.Size = New System.Drawing.Size(228, 28)
+            Me.lblLibraryCount.Size = New System.Drawing.Size(260, 28)
             Me.lblLibraryCount.TabIndex = 45
             Me.lblLibraryCount.Text = "Images in Search Library:"
             Me.lblLibraryCount.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+            Me.ToolTip1.SetToolTip(Me.lblLibraryCount, "Double-Click this message to re-index the image search library." & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Useful if you've" & _
+                    " added new images while JANIS is running.")
             Me.lblLibraryCount.UseMnemonic = False
             '
             'btnPasteBoth
             '
             Me.btnPasteBoth.AllowDrop = True
             Me.btnPasteBoth.Font = New System.Drawing.Font("Wingdings", 14.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
-            Me.btnPasteBoth.Location = New System.Drawing.Point(50, 18)
+            Me.btnPasteBoth.Location = New System.Drawing.Point(59, 18)
             Me.btnPasteBoth.Name = "btnPasteBoth"
             Me.btnPasteBoth.Size = New System.Drawing.Size(47, 28)
             Me.btnPasteBoth.TabIndex = 47
             Me.btnPasteBoth.Text = "ó"
             Me.btnPasteBoth.TextAlign = System.Drawing.ContentAlignment.TopCenter
+            Me.ToolTip1.SetToolTip(Me.btnPasteBoth, "Copy image from browser, etc. and paste here to display.")
             '
             'btnPasteRight
             '
             Me.btnPasteRight.AllowDrop = True
             Me.btnPasteRight.Font = New System.Drawing.Font("Wingdings", 14.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
-            Me.btnPasteRight.Location = New System.Drawing.Point(98, 18)
+            Me.btnPasteRight.Location = New System.Drawing.Point(107, 18)
             Me.btnPasteRight.Name = "btnPasteRight"
             Me.btnPasteRight.Size = New System.Drawing.Size(47, 28)
             Me.btnPasteRight.TabIndex = 48
             Me.btnPasteRight.Text = "ð"
             Me.btnPasteRight.TextAlign = System.Drawing.ContentAlignment.TopCenter
+            Me.ToolTip1.SetToolTip(Me.btnPasteRight, "Copy image from browser, etc. and paste here to display.")
             '
             'btnPasteLeft
             '
             Me.btnPasteLeft.AllowDrop = True
             Me.btnPasteLeft.Font = New System.Drawing.Font("Wingdings", 14.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
-            Me.btnPasteLeft.Location = New System.Drawing.Point(2, 18)
+            Me.btnPasteLeft.Location = New System.Drawing.Point(11, 18)
             Me.btnPasteLeft.Name = "btnPasteLeft"
             Me.btnPasteLeft.Size = New System.Drawing.Size(47, 28)
             Me.btnPasteLeft.TabIndex = 46
             Me.btnPasteLeft.Text = "ï"
             Me.btnPasteLeft.TextAlign = System.Drawing.ContentAlignment.TopCenter
+            Me.ToolTip1.SetToolTip(Me.btnPasteLeft, "Copy image from browser, etc. and paste here to display.")
             '
             'grpLoadImage
             '
@@ -3295,12 +3424,12 @@ Namespace JANIS
             Me.grpLoadImage.Controls.Add(Me.btnPictureBoth)
             Me.grpLoadImage.Controls.Add(Me.btnPictureRight)
             Me.grpLoadImage.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.grpLoadImage.Location = New System.Drawing.Point(282, 176)
+            Me.grpLoadImage.Location = New System.Drawing.Point(69, 222)
             Me.grpLoadImage.Name = "grpLoadImage"
             Me.grpLoadImage.Size = New System.Drawing.Size(148, 52)
             Me.grpLoadImage.TabIndex = 49
             Me.grpLoadImage.TabStop = False
-            Me.grpLoadImage.Text = "Load Image"
+            Me.grpLoadImage.Text = "Load Image File"
             '
             'grpPasteImage
             '
@@ -3308,18 +3437,175 @@ Namespace JANIS
             Me.grpPasteImage.Controls.Add(Me.btnPasteBoth)
             Me.grpPasteImage.Controls.Add(Me.btnPasteRight)
             Me.grpPasteImage.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.grpPasteImage.Location = New System.Drawing.Point(566, 176)
+            Me.grpPasteImage.Location = New System.Drawing.Point(772, 222)
             Me.grpPasteImage.Name = "grpPasteImage"
             Me.grpPasteImage.RightToLeft = System.Windows.Forms.RightToLeft.Yes
-            Me.grpPasteImage.Size = New System.Drawing.Size(148, 52)
+            Me.grpPasteImage.Size = New System.Drawing.Size(166, 52)
             Me.grpPasteImage.TabIndex = 50
             Me.grpPasteImage.TabStop = False
-            Me.grpPasteImage.Text = "Paste Image"
+            Me.grpPasteImage.Text = "Paste Clipboard Image"
+            '
+            'gbCountdownControls
+            '
+            Me.gbCountdownControls.Controls.Add(Me.Label37)
+            Me.gbCountdownControls.Controls.Add(Me.Label36)
+            Me.gbCountdownControls.Controls.Add(Me.Label35)
+            Me.gbCountdownControls.Controls.Add(Me.Label34)
+            Me.gbCountdownControls.Controls.Add(Me.nudCountdownWarnSeconds)
+            Me.gbCountdownControls.Controls.Add(Me.nudCountdownWarnMinutes)
+            Me.gbCountdownControls.Controls.Add(Me.nudCountdownWarnHours)
+            Me.gbCountdownControls.Controls.Add(Me.Label33)
+            Me.gbCountdownControls.Controls.Add(Me.cbCountdownVisible)
+            Me.gbCountdownControls.Controls.Add(Me.nudCountdownSeconds)
+            Me.gbCountdownControls.Controls.Add(Me.nudCountdownMinutes)
+            Me.gbCountdownControls.Controls.Add(Me.nudCountdownHours)
+            Me.gbCountdownControls.Controls.Add(Me.btnResetCountdown)
+            Me.gbCountdownControls.Controls.Add(Me.btnStartCountdown)
+            Me.gbCountdownControls.Location = New System.Drawing.Point(301, 177)
+            Me.gbCountdownControls.Name = "gbCountdownControls"
+            Me.gbCountdownControls.Size = New System.Drawing.Size(394, 91)
+            Me.gbCountdownControls.TabIndex = 51
+            Me.gbCountdownControls.TabStop = False
+            Me.gbCountdownControls.Text = "Countdown Timer"
+            '
+            'Label37
+            '
+            Me.Label37.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+            Me.Label37.Location = New System.Drawing.Point(263, 11)
+            Me.Label37.Name = "Label37"
+            Me.Label37.Size = New System.Drawing.Size(40, 16)
+            Me.Label37.TabIndex = 70
+            Me.Label37.Text = "SS"
+            Me.Label37.TextAlign = System.Drawing.ContentAlignment.TopCenter
+            '
+            'Label36
+            '
+            Me.Label36.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+            Me.Label36.Location = New System.Drawing.Point(219, 11)
+            Me.Label36.Name = "Label36"
+            Me.Label36.Size = New System.Drawing.Size(40, 16)
+            Me.Label36.TabIndex = 69
+            Me.Label36.Text = "MM"
+            Me.Label36.TextAlign = System.Drawing.ContentAlignment.TopCenter
+            '
+            'Label35
+            '
+            Me.Label35.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+            Me.Label35.Location = New System.Drawing.Point(175, 11)
+            Me.Label35.Name = "Label35"
+            Me.Label35.Size = New System.Drawing.Size(40, 16)
+            Me.Label35.TabIndex = 68
+            Me.Label35.Text = "HH"
+            Me.Label35.TextAlign = System.Drawing.ContentAlignment.TopCenter
+            '
+            'Label34
+            '
+            Me.Label34.ForeColor = System.Drawing.Color.Red
+            Me.Label34.Location = New System.Drawing.Point(84, 59)
+            Me.Label34.Name = "Label34"
+            Me.Label34.Size = New System.Drawing.Size(85, 20)
+            Me.Label34.TabIndex = 67
+            Me.Label34.Text = "Turn Red:"
+            Me.Label34.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+            '
+            'nudCountdownWarnSeconds
+            '
+            Me.nudCountdownWarnSeconds.Location = New System.Drawing.Point(263, 59)
+            Me.nudCountdownWarnSeconds.Maximum = New Decimal(New Integer() {59, 0, 0, 0})
+            Me.nudCountdownWarnSeconds.Name = "nudCountdownWarnSeconds"
+            Me.nudCountdownWarnSeconds.Size = New System.Drawing.Size(44, 23)
+            Me.nudCountdownWarnSeconds.TabIndex = 63
+            Me.nudCountdownWarnSeconds.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+            '
+            'nudCountdownWarnMinutes
+            '
+            Me.nudCountdownWarnMinutes.Location = New System.Drawing.Point(219, 59)
+            Me.nudCountdownWarnMinutes.Maximum = New Decimal(New Integer() {59, 0, 0, 0})
+            Me.nudCountdownWarnMinutes.Name = "nudCountdownWarnMinutes"
+            Me.nudCountdownWarnMinutes.Size = New System.Drawing.Size(44, 23)
+            Me.nudCountdownWarnMinutes.TabIndex = 62
+            Me.nudCountdownWarnMinutes.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+            '
+            'nudCountdownWarnHours
+            '
+            Me.nudCountdownWarnHours.Location = New System.Drawing.Point(175, 59)
+            Me.nudCountdownWarnHours.Maximum = New Decimal(New Integer() {99, 0, 0, 0})
+            Me.nudCountdownWarnHours.Name = "nudCountdownWarnHours"
+            Me.nudCountdownWarnHours.Size = New System.Drawing.Size(44, 23)
+            Me.nudCountdownWarnHours.TabIndex = 61
+            Me.nudCountdownWarnHours.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+            '
+            'Label33
+            '
+            Me.Label33.Location = New System.Drawing.Point(84, 31)
+            Me.Label33.Name = "Label33"
+            Me.Label33.Size = New System.Drawing.Size(85, 20)
+            Me.Label33.TabIndex = 63
+            Me.Label33.Text = "Time Left:"
+            Me.Label33.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+            '
+            'cbCountdownVisible
+            '
+            Me.cbCountdownVisible.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+            Me.cbCountdownVisible.Location = New System.Drawing.Point(6, 46)
+            Me.cbCountdownVisible.Name = "cbCountdownVisible"
+            Me.cbCountdownVisible.Size = New System.Drawing.Size(67, 22)
+            Me.cbCountdownVisible.TabIndex = 57
+            Me.cbCountdownVisible.Text = "Visible"
+            '
+            'nudCountdownSeconds
+            '
+            Me.nudCountdownSeconds.Location = New System.Drawing.Point(263, 31)
+            Me.nudCountdownSeconds.Maximum = New Decimal(New Integer() {59, 0, 0, 0})
+            Me.nudCountdownSeconds.Name = "nudCountdownSeconds"
+            Me.nudCountdownSeconds.Size = New System.Drawing.Size(44, 23)
+            Me.nudCountdownSeconds.TabIndex = 60
+            Me.nudCountdownSeconds.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+            '
+            'nudCountdownMinutes
+            '
+            Me.nudCountdownMinutes.Location = New System.Drawing.Point(219, 31)
+            Me.nudCountdownMinutes.Maximum = New Decimal(New Integer() {59, 0, 0, 0})
+            Me.nudCountdownMinutes.Name = "nudCountdownMinutes"
+            Me.nudCountdownMinutes.Size = New System.Drawing.Size(44, 23)
+            Me.nudCountdownMinutes.TabIndex = 59
+            Me.nudCountdownMinutes.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+            Me.nudCountdownMinutes.Value = New Decimal(New Integer() {5, 0, 0, 0})
+            '
+            'nudCountdownHours
+            '
+            Me.nudCountdownHours.Location = New System.Drawing.Point(175, 31)
+            Me.nudCountdownHours.Maximum = New Decimal(New Integer() {99, 0, 0, 0})
+            Me.nudCountdownHours.Name = "nudCountdownHours"
+            Me.nudCountdownHours.Size = New System.Drawing.Size(44, 23)
+            Me.nudCountdownHours.TabIndex = 58
+            Me.nudCountdownHours.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+            '
+            'btnResetCountdown
+            '
+            Me.btnResetCountdown.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+            Me.btnResetCountdown.ForeColor = System.Drawing.SystemColors.ControlText
+            Me.btnResetCountdown.Location = New System.Drawing.Point(328, 15)
+            Me.btnResetCountdown.Name = "btnResetCountdown"
+            Me.btnResetCountdown.Size = New System.Drawing.Size(60, 24)
+            Me.btnResetCountdown.TabIndex = 64
+            Me.btnResetCountdown.Text = "RESET"
+            '
+            'btnStartCountdown
+            '
+            Me.btnStartCountdown.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+            Me.btnStartCountdown.ForeColor = System.Drawing.Color.Green
+            Me.btnStartCountdown.Location = New System.Drawing.Point(328, 59)
+            Me.btnStartCountdown.Name = "btnStartCountdown"
+            Me.btnStartCountdown.Size = New System.Drawing.Size(60, 24)
+            Me.btnStartCountdown.TabIndex = 65
+            Me.btnStartCountdown.Text = "START"
             '
             'fmMain
             '
             Me.AutoScaleBaseSize = New System.Drawing.Size(6, 16)
-            Me.ClientSize = New System.Drawing.Size(996, 723)
+            Me.ClientSize = New System.Drawing.Size(996, 763)
+            Me.Controls.Add(Me.gbCountdownControls)
             Me.Controls.Add(Me.grpPasteImage)
             Me.Controls.Add(Me.lblLibraryCount)
             Me.Controls.Add(Me.cbExpandPicRight)
@@ -3384,6 +3670,9 @@ Namespace JANIS
             Me.gbHB.PerformLayout()
             Me.tpPrefs.ResumeLayout(False)
             Me.tpPrefs.PerformLayout()
+            CType(Me.nudDefaultCountdownSeconds, System.ComponentModel.ISupportInitialize).EndInit()
+            CType(Me.nudDefaultCountdownMinutes, System.ComponentModel.ISupportInitialize).EndInit()
+            CType(Me.nudDefaultCountdownHours, System.ComponentModel.ISupportInitialize).EndInit()
             Me.GroupBox2.ResumeLayout(False)
             Me.grpDefaultColorsRight.ResumeLayout(False)
             Me.grpDefaultColorsLeft.ResumeLayout(False)
@@ -3395,6 +3684,13 @@ Namespace JANIS
             CType(Me.picRight, System.ComponentModel.ISupportInitialize).EndInit()
             Me.grpLoadImage.ResumeLayout(False)
             Me.grpPasteImage.ResumeLayout(False)
+            Me.gbCountdownControls.ResumeLayout(False)
+            CType(Me.nudCountdownWarnSeconds, System.ComponentModel.ISupportInitialize).EndInit()
+            CType(Me.nudCountdownWarnMinutes, System.ComponentModel.ISupportInitialize).EndInit()
+            CType(Me.nudCountdownWarnHours, System.ComponentModel.ISupportInitialize).EndInit()
+            CType(Me.nudCountdownSeconds, System.ComponentModel.ISupportInitialize).EndInit()
+            CType(Me.nudCountdownMinutes, System.ComponentModel.ISupportInitialize).EndInit()
+            CType(Me.nudCountdownHours, System.ComponentModel.ISupportInitialize).EndInit()
             Me.ResumeLayout(False)
             Me.PerformLayout()
 
@@ -3430,10 +3726,14 @@ Namespace JANIS
 
                 Me.SetMonitorDisplayMode()
 
-                If (Not Me.cbDisplayDefaultImage.Checked) Then
+                If Not (Me.cbDisplayDefaultImage.Checked Or Me.cbPlaySlidesAtStart.Checked) Then
                     Me.DisplayTextScreen(Me.LS, Me.tbLeftText.Text, Me.tbLeftText.BackColor, CSng(Me.tbLeftFontSize.Text) * Me.DisplayFontRatio)
                     Me.DisplayTextScreen(Me.RS, Me.tbRightText.Text, Me.tbRightText.BackColor, CSng(Me.tbRightFontSize.Text) * Me.DisplayFontRatio)
                 End If
+
+                '* Save the label message heights because the timer screws around with them and needs to restore them
+                Me.LS.lblMsg.Tag = Me.LS.lblMsg.Height
+                Me.RS.lblMsg.Tag = Me.RS.lblMsg.Height
 
                 '* Show the audience display monitors early, because it might take time to
                 '* load the image library and we don't need the audience to see our wallpaper.
@@ -3753,6 +4053,11 @@ Namespace JANIS
                     .lblMsg.Height = .lblMsg.Height / sRatio
                     .lblMsg.Width = .lblMsg.Width / sRatio
                     .lblMsg.Font = New Font(.lblMsg.Font.Name, CSng(Val(.lblMsg.Font.Size) / sRatio), .lblMsg.Font.Style)
+                    .lblCountdown.Left = .lblCountdown.Left / 5
+                    .lblCountdown.Top = .lblCountdown.Top / 5
+                    .lblCountdown.Height = .lblCountdown.Height / 5
+                    .lblCountdown.Width = .lblCountdown.Width / 5
+                    .lblCountdown.Font = New Font(.lblCountdown.Font.Name, CSng(Val(.lblCountdown.Font.Size) / 5), .lblCountdown.Font.Style)
                     .picGraphic.Left = .picGraphic.Left / sRatio
                     .picGraphic.Top = .picGraphic.Top / sRatio
                     .picGraphic.Height = .picGraphic.Height / sRatio
@@ -3779,6 +4084,11 @@ Namespace JANIS
                     .lblMsg.Height = .lblMsg.Height / sRatio
                     .lblMsg.Width = .lblMsg.Width / sRatio
                     .lblMsg.Font = New Font(.lblMsg.Font.Name, CSng(Val(.lblMsg.Font.Size) / sRatio), .lblMsg.Font.Style)
+                    .lblCountdown.Left = .lblCountdown.Left / 5
+                    .lblCountdown.Top = .lblCountdown.Top / 5
+                    .lblCountdown.Height = .lblCountdown.Height / 5
+                    .lblCountdown.Width = .lblCountdown.Width / 5
+                    .lblCountdown.Font = New Font(.lblCountdown.Font.Name, CSng(Val(.lblCountdown.Font.Size) / 5), .lblCountdown.Font.Style)
                     .picGraphic.Left = .picGraphic.Left / sRatio
                     .picGraphic.Top = .picGraphic.Top / sRatio
                     .picGraphic.Height = .picGraphic.Height / sRatio
@@ -4969,6 +5279,7 @@ Namespace JANIS
                 Next
                 Me.HotButtonsChanged = False
             End If
+            Me.AllScreensToFront()
         End Sub
 
         Private Sub btnHBSelect_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnHBSelect1.Click, btnHBSelect2.Click, btnHBSelect3.Click, btnHBSelect4.Click, btnHBSelect5.Click, btnHBSelect6.Click, btnHBSelect7.Click, btnHBSelect8.Click, btnHBSelect9.Click, btnHBSelect10.Click
@@ -5087,6 +5398,9 @@ Namespace JANIS
             Me.tbDefaultSlideShow.Text = Me.tbDefaultSlideShow.Tag
             Me.cbPlaySlidesAtStart.Checked = Me.cbPlaySlidesAtStart.Tag
             Me.cbLoadDefaultSlides.Checked = Me.cbLoadDefaultSlides.Tag
+            Me.nudDefaultCountdownHours.Value = CInt(Me.nudDefaultCountdownHours.Tag)
+            Me.nudDefaultCountdownMinutes.Value = CInt(Me.nudDefaultCountdownMinutes.Tag)
+            Me.nudDefaultCountdownSeconds.Value = CInt(Me.nudDefaultCountdownSeconds.Tag)
         End Sub
 
         Private Function PrefsChanged() As Boolean
@@ -5102,6 +5416,9 @@ Namespace JANIS
             If Me.tbDefaultSlideShow.Text <> Me.tbDefaultSlideShow.Tag Then Return True
             If Me.cbPlaySlidesAtStart.Checked <> Me.cbPlaySlidesAtStart.Tag Then Return True
             If Me.cbLoadDefaultSlides.Checked <> Me.cbLoadDefaultSlides.Tag Then Return True
+            If Me.nudDefaultCountdownHours.Value <> Me.nudDefaultCountdownHours.Tag Then Return True
+            If Me.nudDefaultCountdownMinutes.Value <> Me.nudDefaultCountdownMinutes.Tag Then Return True
+            If Me.nudDefaultCountdownSeconds.Value <> Me.nudDefaultCountdownSeconds.Tag Then Return True
             Return False
         End Function
 
@@ -5138,9 +5455,24 @@ Namespace JANIS
                     Input(fn, Me.tbDefaultSlideShow.Text)
                     Input(fn, s)
                     Me.cbPlaySlidesAtStart.Checked = (s = "True")
-                    FileClose(fn)
-                    Me.StorePrefs()
+                    Try
+                        Input(fn, s)
+                    Catch ex As Exception
+                        FileErr = True
+                        Me.nudDefaultCountdownHours.Value = 0
+                        Me.nudDefaultCountdownMinutes.Value = 5
+                        Me.nudDefaultCountdownSeconds.Value = 0
+                    End Try
+                    If Not FileErr Then
+                        Me.nudDefaultCountdownHours.Value = CInt(s)
+                        Input(fn, s)
+                        Me.nudDefaultCountdownMinutes.Value = CInt(s)
+                        Input(fn, s)
+                        Me.nudDefaultCountdownSeconds.Value = CInt(s)
+                    End If
                 End If
+                FileClose(fn)
+                Me.StorePrefs()
             Else
                 '* OK, the prefs file was not found. So load defaults and
                 '* write the prefs file with those defaults.
@@ -5168,6 +5500,9 @@ Namespace JANIS
             PrintLine(fn, Me.cbLoadDefaultSlides.Checked.ToString)
             PrintLine(fn, Me.tbDefaultSlideShow.Text)
             PrintLine(fn, Me.cbPlaySlidesAtStart.Checked.ToString)
+            PrintLine(fn, Me.nudDefaultCountdownHours.Value.ToString)
+            PrintLine(fn, Me.nudDefaultCountdownMinutes.Value.ToString)
+            PrintLine(fn, Me.nudDefaultCountdownSeconds.Value.ToString)
             FileClose(fn)
             Me.StorePrefs()
             Me.AllScreensToFront()
@@ -5190,6 +5525,9 @@ Namespace JANIS
             Me.tbDefaultSlideShow.Text = ""
             Me.cbPlaySlidesAtStart.Checked = False
             Me.cbLoadDefaultSlides.Checked = False
+            Me.nudDefaultCountdownHours.Value = 0
+            Me.nudDefaultCountdownMinutes.Value = 5
+            Me.nudDefaultCountdownSeconds.Value = 0
         End Sub
         Private Sub StorePrefs()
             '* Stores whatever the current set of preferences is in the TAG properties of the controls on the
@@ -5206,6 +5544,9 @@ Namespace JANIS
             Me.tbDefaultSlideShow.Tag = Me.tbDefaultSlideShow.Text
             Me.cbPlaySlidesAtStart.Tag = Me.cbPlaySlidesAtStart.Checked
             Me.cbLoadDefaultSlides.Tag = Me.cbLoadDefaultSlides.Checked
+            Me.nudDefaultCountdownHours.Tag = Me.nudDefaultCountdownHours.Value
+            Me.nudDefaultCountdownMinutes.Tag = Me.nudDefaultCountdownMinutes.Value
+            Me.nudDefaultCountdownSeconds.Tag = Me.nudDefaultCountdownSeconds.Value
         End Sub
         Private Sub ApplyPrefs()
             Me.SetTeamColor("Left", Me.lblDefaultColorLeft.BackColor)
@@ -5227,6 +5568,9 @@ Namespace JANIS
                     Me.StartSlideShow()
                 End If
             End If
+            Me.nudCountdownHours.Value = Me.nudDefaultCountdownHours.Value
+            Me.nudCountdownMinutes.Value = Me.nudDefaultCountdownMinutes.Value
+            Me.nudCountdownSeconds.Value = Me.nudDefaultCountdownSeconds.Value
             Me.StorePrefs()
         End Sub
         Private Function SelectDir(ByVal startdir As String) As String
@@ -5246,64 +5590,105 @@ Namespace JANIS
         '=================================================================================================
         '* BEGIN COUNTDOWN TIMER STUFF
 
-        Private Sub MenuCountdownToggle_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuCountdownToggle.Click
-            Me.btnStartCountdown.Visible = Not (Me.btnStartCountdown.Visible)
-        End Sub
         Private Sub btnStartCountdown_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnStartCountdown.Click
-            Me.CountdownSeconds = 1800 ' = 30 * 60
-            Me.CountdownTimer.Interval = 1000
-
-            Me.CountdownTimer.Enabled = True
-            MsgBox("Click OK to end the countdown and return to JANIS.", MsgBoxStyle.ApplicationModal Or MsgBoxStyle.OkOnly Or MsgBoxStyle.MsgBoxSetForeground, "COUNTDOWN MODE")
-            Me.CountdownTimer.Enabled = False
+            If Me.CountdownTimer.Enabled Then
+                Me.StopCountdown()
+            Else
+                Me.StartCountdown()
+            End If
+        End Sub
+        Private Sub btnResetCountdown_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnResetCountdown.Click
+            Me.ResetCountdown()
+        End Sub
+        Private Sub cbCountdownVisible_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbCountdownVisible.CheckedChanged
+             Me.UpdateCountdown()
         End Sub
         Private Sub CountdownTimer_Tick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CountdownTimer.Tick
-            Dim CountdownBackground As System.Drawing.Color
-            Dim CountdownSize As Integer
-            Dim minutes As Integer = CInt(Fix(Me.CountdownSeconds / 60))
-            Dim seconds As Integer = Me.CountdownSeconds Mod 60
+            Me.CountdownOneTick()
+        End Sub
 
-            If Me.CountdownSeconds > 120 Then
-                CountdownBackground = System.Drawing.Color.DarkGreen
-                CountdownSize = 200 - CInt(0.09524! * (Me.CountdownSeconds - 120))
-            ElseIf Me.CountdownSeconds <= 120 And Me.CountdownSeconds > 30 Then
-                CountdownBackground = System.Drawing.Color.Maroon
-                CountdownSize = 250 - CInt(5.0! / 9.0! * (Me.CountdownSeconds - 30))
-            ElseIf CountdownSeconds > 10 Then
-                CountdownBackground = System.Drawing.Color.Maroon
-                CountdownSize = 300 - CInt(5.0! / 2.0! * (Me.CountdownSeconds - 10))
-            ElseIf seconds >= 0 Then
-                CountdownBackground = System.Drawing.Color.Maroon
-                CountdownSize = 300
-            Else
-                If Me.CountdownTimer.Interval <> 250 Then Me.CountdownTimer.Interval = 250
-                minutes = 0
-                seconds = 0
-                CountdownSize = 300
-                If Fix(Me.CountdownSeconds / 2.0!) * 2 = Me.CountdownSeconds Then
-                    CountdownBackground = System.Drawing.Color.Black
-                Else
-                    CountdownBackground = System.Drawing.Color.Maroon
-                End If
+        Private Sub CountdownOneTick()
+            Me.nudCountdownHours.Value = CInt(Fix(Me.CountdownSeconds / 3600))
+            Me.nudCountdownMinutes.Value = CInt(Fix((Me.CountdownSeconds Mod 3600) / 60))
+            Me.nudCountdownSeconds.Value = Me.CountdownSeconds Mod 60
+
+            Me.UpdateCountdown()
+
+            If Me.CountdownSeconds < 1 Then
+                Me.StopCountdown()
+                Exit Sub
             End If
 
-            Dim TimeText As String = ""
-            If minutes > 0 Then TimeText = minutes.ToString
-            TimeText = TimeText + ":"
-            If seconds < 10 Then TimeText = TimeText + "0"
-            TimeText = TimeText + seconds.ToString
-
             Me.CountdownSeconds = Me.CountdownSeconds - 1
+        End Sub
 
-            Me.DisplayTextScreen(Me.LS, TimeText, CountdownBackground, CountdownSize * Me.DisplayFontRatio)
-            Me.DisplayTextScreen(Me.RS, TimeText, CountdownBackground, CountdownSize * Me.DisplayFontRatio)
+        Private Sub nudCountdown_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles nudCountdownHours.ValueChanged, nudCountdownMinutes.ValueChanged, nudCountdownSeconds.ValueChanged
+            If Not Me.CountdownTimer.Enabled Then Me.UpdateCountdown()
+        End Sub
 
+        Private Sub CountdownWarnTimeChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles nudCountdownWarnHours.ValueChanged, nudCountdownWarnMinutes.ValueChanged, nudCountdownWarnSeconds.ValueChanged, nudCountdownWarnHours.TextChanged, nudCountdownWarnMinutes.TextChanged, nudCountdownWarnSeconds.TextChanged
+            Me.CountdownWarnSeconds = Me.ComputeSeconds(Me.nudCountdownWarnHours.Value, Me.nudCountdownWarnMinutes.Value, Me.nudCountdownWarnSeconds.Value)
+        End Sub
+
+        Private Sub StartCountdown()
+            If Me.CountdownTimer.Enabled Then Exit Sub
+            Me.CountdownSeconds = Me.ComputeSeconds(Me.nudCountdownHours.Value, Me.nudCountdownMinutes.Value, Me.nudCountdownSeconds.Value)
+            Me.CountdownTimer.Interval = 1000
+            Me.nudCountdownHours.Enabled = False
+            Me.nudCountdownMinutes.Enabled = False
+            Me.nudCountdownSeconds.Enabled = False
+            Me.CountdownTimer.Enabled = True
+            Me.btnStartCountdown.Text = "STOP"
+            Me.btnStartCountdown.ForeColor = System.Drawing.Color.Red
+            Me.CountdownOneTick()    '* First tick makes timer appear right away instead of 1 second delay
+        End Sub
+        Private Sub StopCountdown()
+            If Not Me.CountdownTimer.Enabled Then Exit Sub
+            Me.CountdownTimer.Enabled = False
+            Me.nudCountdownHours.Enabled = True
+            Me.nudCountdownMinutes.Enabled = True
+            Me.nudCountdownSeconds.Enabled = True
+            Me.btnStartCountdown.Text = "START"
+            Me.btnStartCountdown.ForeColor = System.Drawing.Color.Green
+        End Sub
+        Private Sub ResetCountdown()
+            Me.StopCountdown()
+            Me.nudCountdownHours.Value = Me.nudDefaultCountdownHours.Value
+            Me.nudCountdownMinutes.Value = Me.nudDefaultCountdownMinutes.Value
+            Me.nudCountdownSeconds.Value = Me.nudDefaultCountdownSeconds.Value
+            Me.CountdownSeconds = Me.ComputeSeconds(Me.nudCountdownHours.Value, Me.nudCountdownMinutes.Value, Me.nudCountdownSeconds.Value)
+            Me.UpdateCountdown()
+        End Sub
+
+        Private Function ComputeSeconds(ByVal hours As Integer, ByVal minutes As Integer, ByVal seconds As Integer) As Integer
+            Return (hours * 3600) + (minutes * 60) + seconds
+        End Function
+
+        Private Sub UpdateCountdown()
+            If Not Me.ComponentsDoneInitializing Then Exit Sub '* OR ELSE unhandled exception at app launch
+            Dim TimeText As String = ""
+            Dim bgColor As System.Drawing.Color = System.Drawing.Color.Black
+
+            If Me.CountdownSeconds <= Me.CountdownWarnSeconds Then
+                bgColor = System.Drawing.Color.Maroon
+            End If
+
+            If Me.nudCountdownHours.Value > 0 Then TimeText = Me.nudCountdownHours.Value.ToString + ":"
+            TimeText = TimeText + Format(Me.nudCountdownMinutes.Value, "00") + ":" + Format(Me.nudCountdownSeconds.Value, "00")
+
+            Me.LS.ShowCountdownText(TimeText, bgColor, Me.cbCountdownVisible.Checked)
+            Me.RS.ShowCountdownText(TimeText, bgColor, Me.cbCountdownVisible.Checked)
         End Sub
 
         '=================================================================================================
 
         Private Sub EasterEgg1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles EasterEgg1.Click
             MessageBox.Show("Pass it on...", "BILL LOVES BETSE", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly)
+        End Sub
+
+        Private Sub lblLibraryCount_DoubleClick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles lblLibraryCount.DoubleClick
+            Me.ClearImageLibrary()
+            Me.BuildImageLibrary(Me.tbDefaultImageDir.Tag)  '* Use the SAVED value, in case prefs weren't saved.
         End Sub
     End Class
 End Namespace
