@@ -1254,7 +1254,7 @@ Namespace JANIS
             Me.btnChooseTextColorRight.RightToLeft = System.Windows.Forms.RightToLeft.No
             Me.btnChooseTextColorRight.Size = New System.Drawing.Size(78, 26)
             Me.btnChooseTextColorRight.TabIndex = 37
-            Me.btnChooseTextColorRight.Text = "Choose..."
+            Me.btnChooseTextColorRight.Text = "Other..."
             '
             'pnlTextColorRight6
             '
@@ -1358,7 +1358,7 @@ Namespace JANIS
             Me.btnChooseTextColorLeft.Name = "btnChooseTextColorLeft"
             Me.btnChooseTextColorLeft.Size = New System.Drawing.Size(78, 26)
             Me.btnChooseTextColorLeft.TabIndex = 27
-            Me.btnChooseTextColorLeft.Text = "Choose..."
+            Me.btnChooseTextColorLeft.Text = "Other..."
             '
             'pnlTextColorLeft6
             '
@@ -3723,6 +3723,7 @@ Namespace JANIS
                 '* Here's the wacky way you change font sizes in VB.NET. Piece of crap.
                 Me.tbLeftText.Font = New Font(Me.tbLeftText.Font.Name, CSng(Val(Me.tbLeftFontSize.Text) / DisplayToEntryFontRatio), Me.tbLeftText.Font.Style)
                 Me.tbRightText.Font = New Font(Me.tbRightText.Font.Name, CSng(Val(Me.tbRightFontSize.Text) / DisplayToEntryFontRatio), Me.tbRightText.Font.Style)
+                Me.tbLeftText.VerticalContentAlignment = VerticalAlignment.Bottom
 
                 Me.SetMonitorDisplayMode()
 
