@@ -1,3 +1,50 @@
+v3.2.1: 2014-05-19 (dual), 2018-06-27 (single)
+*  Changed text and score displays to use dropshadows and shading effects.
+*  Image fill-the-screen simplified greatly.
+*  All changes since v2.5 ported over to single screen version!
+
+v3.1.1: 2014-04-28
+*  Change color chooser text from "Choose..." to "Other..."
+*  DUAL DISPLAY ONLY. Probably never released.
+
+v3.1: 2012-08-11
+*  Sized up fonts on control monitor for aging readers :-)
+*  Users can now double-click on the image library count label to re-index the library.
+*  Add tooltips to a bunch of controls.
+*  Ported over countdown timer functionality from single-screen to dual-screen version.
+*  DUAL DISPLAY ONLY.
+
+v3.0: 2012-01-10
+*  Changed from 800x600 audience monitors (roughly NTSC) to 720p widescreen.
+*  Better autodetection of control monitor size and location.
+*  Tightened up and rearranged the background color chooser dialog.
+*  DUAL DISPLAY ONLY.
+
+v2.5.1: 2010-11-15
+*  Replace HyperCoder.FileSystemControls.dll with ExpTreeLib.dll for file tree. This
+   improves the product and also allows moving forward with newer compiler.
+*  Allow multiple selection in slide list and file tree controls and act accordingly.
+*  Form fmDirDialog no longer needed.
+*  Move the bitmap conversion code to its own file.
+*  Move display code to Screen objects where it belongs.
+*  DUAL DISPLAY ONLY.
+
+v2.5: 2010-10-25
+*  New feature: The WHAMMY! plays a slideshow at high speed, allowing us to have an
+   audience-controlled game randomizer (or ay other slideshow randomizer).
+*  Add Splash Screen, which displays while program is loading.
+*  Determines correct place to put JANIS files storage directory for Windows Vista and up.
+*  Allows drag-n-drop of images to Hotbuttons and audience screens.
+*  Allows pasting of images from clipboard directly to audience screens.
+*  Change image search text box to a dropdown that lists previous search terms.
+*  Tighten up redundant code that is the same for different controls. Make it shared.
+*  Move some code out of fmMain into fmScreen, where it belongs for object orientation.
+*  Always make Hotbutton titles lowercase to make longer titles fit on the buttons.
+*  Simplify code for initializing the image search file tree.
+*  Better error avoidance for bad image files in image search file tree.
+*  DUAL DISPLAY ONLY.
+
+>>>>>>> master
 v2.2: 2007-09-11
 *  Added configurable audience-visible countdown timer and all supporting functionality
    changes, per request of CSz-Chicago.
