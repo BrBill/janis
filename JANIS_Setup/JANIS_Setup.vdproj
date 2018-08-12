@@ -46,13 +46,13 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_7AC180B8073C1B777BD0B84CB1D181C8"
+        "OwnerKey" = "8:_968E031362B54FD4978A74CA592D0E9B"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_968E031362B54FD4978A74CA592D0E9B"
+        "OwnerKey" = "8:_7AC180B8073C1B777BD0B84CB1D181C8"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -167,11 +167,6 @@
             "AssemblyAsmDisplayName" = "8:ExpTreeLib, Version=2.11.2259.2510, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_7AC180B8073C1B777BD0B84CB1D181C8"
-                    {
-                    "Name" = "8:ExpTreeLib.dll"
-                    "Attributes" = "3:512"
-                    }
                 }
             "SourcePath" = "8:ExpTreeLib.dll"
             "TargetName" = "8:"
@@ -198,11 +193,6 @@
             "AssemblyAsmDisplayName" = "8:Interop.VBRUN, Version=6.0.0.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_B535F3BE521CB93EF2CC0DE7A1EAC858"
-                    {
-                    "Name" = "8:Interop.VBRUN.dll"
-                    "Attributes" = "3:512"
-                    }
                 }
             "SourcePath" = "8:Interop.VBRUN.dll"
             "TargetName" = "8:"
@@ -298,9 +288,9 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:JANIS"
-        "ProductCode" = "8:{E2854C98-EE5E-4CF2-A2CE-6C1B379A6131}"
+        "ProductCode" = "8:{CC684067-E5F1-4A1E-8F3A-D34189D9351C}"
         "PackageCode" = "8:{C9B49C61-81A0-466C-8724-277FB0E10FAA}"
-        "UpgradeCode" = "8:{DBD96AFB-39C4-4E40-B4A0-B4A628229B46}"
+        "UpgradeCode" = "8:{95E021C4-9260-4C75-ADA7-723527302781}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:FALSE"
@@ -848,7 +838,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_968E031362B54FD4978A74CA592D0E9B"
             {
-            "SourcePath" = "8:..\\obj\\Release\\JANIS_v3.1.1.exe"
+            "SourcePath" = "8:..\\obj\\x86\\Release\\JANIS_v3.3.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_97EC6D2D24C644F9963B1EBC0A45BD48"

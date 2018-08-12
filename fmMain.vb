@@ -39,7 +39,7 @@ Namespace JANIS
         Private TestMode As Boolean = False
         Dim DisplayModeAdjustment As Single = 1.0 ' Divide font setting by this for display. Differs for test/arena mode.
         Dim DisplayToEntryFontRatio As Single = 123 / 42  ' This is the size ratio of fonts in the display vs. in the textbox
-        Dim DisplayFontRatio As Single = 33 / 88 ' This is the "should be" size ratio of display to what I once thought it was.
+        Dim DisplayFontRatio As Single = 33 / 80 ' This is the "should be" size ratio of display to what I once thought it was.
 
         Private ImageFileExtensions() As String = {".BMP", ".GIF", ".JPG", ".PNG", ".WMF"}
         Private ImageLibrary As New Collection()
@@ -56,11 +56,7 @@ Namespace JANIS
         Private DragMethod As String
         Private CountdownSeconds As Integer = 300
         Private CountdownWarnSeconds As Integer
-        Friend WithEvents ToolTip1 As System.Windows.Forms.ToolTip
-        Private ComponentsDoneInitializing As Boolean = False
-
-
-
+        Public ComponentsDoneInitializing As Boolean = False
 
 
 #Region " Windows Form Designer generated code "
@@ -105,6 +101,9 @@ Namespace JANIS
         'NOTE: The following procedure is required by the Windows Form Designer
         'It can be modified using the Windows Form Designer.
         'Do not modify it using the code editor.
+        Friend WithEvents cbShadowsEnabled As System.Windows.Forms.CheckBox
+        Friend WithEvents btnReIndexImgLib As System.Windows.Forms.Button
+        Friend WithEvents ToolTip1 As System.Windows.Forms.ToolTip
         Friend WithEvents Label43 As System.Windows.Forms.Label
         Friend WithEvents Label38 As System.Windows.Forms.Label
         Friend WithEvents Label39 As System.Windows.Forms.Label
@@ -555,6 +554,7 @@ Namespace JANIS
             Me.tbHBtext1 = New System.Windows.Forms.TextBox()
             Me.cbHBActive = New System.Windows.Forms.CheckBox()
             Me.tpPrefs = New System.Windows.Forms.TabPage()
+            Me.cbShadowsEnabled = New System.Windows.Forms.CheckBox()
             Me.Label43 = New System.Windows.Forms.Label()
             Me.Label38 = New System.Windows.Forms.Label()
             Me.Label39 = New System.Windows.Forms.Label()
@@ -643,6 +643,7 @@ Namespace JANIS
             Me.btnResetCountdown = New System.Windows.Forms.Button()
             Me.btnStartCountdown = New System.Windows.Forms.Button()
             Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
+            Me.btnReIndexImgLib = New System.Windows.Forms.Button()
             CType(Me.picLeft, System.ComponentModel.ISupportInitialize).BeginInit()
             Me.TabControl1.SuspendLayout()
             Me.tpScreenText.SuspendLayout()
@@ -689,7 +690,7 @@ Namespace JANIS
             Me.btnBlackout.BackColor = System.Drawing.SystemColors.Control
             Me.btnBlackout.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
             Me.btnBlackout.ForeColor = System.Drawing.SystemColors.WindowText
-            Me.btnBlackout.Location = New System.Drawing.Point(442, 110)
+            Me.btnBlackout.Location = New System.Drawing.Point(442, 104)
             Me.btnBlackout.Name = "btnBlackout"
             Me.btnBlackout.Size = New System.Drawing.Size(112, 40)
             Me.btnBlackout.TabIndex = 13
@@ -747,7 +748,7 @@ Namespace JANIS
             Me.tbLeftScore.BackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(176, Byte), Integer))
             Me.tbLeftScore.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
             Me.tbLeftScore.ForeColor = System.Drawing.Color.White
-            Me.tbLeftScore.Location = New System.Drawing.Point(88, 33)
+            Me.tbLeftScore.Location = New System.Drawing.Point(88, 30)
             Me.tbLeftScore.MaxLength = 3
             Me.tbLeftScore.Name = "tbLeftScore"
             Me.tbLeftScore.Size = New System.Drawing.Size(60, 24)
@@ -760,7 +761,7 @@ Namespace JANIS
             Me.tbRightScore.BackColor = System.Drawing.Color.Maroon
             Me.tbRightScore.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
             Me.tbRightScore.ForeColor = System.Drawing.Color.White
-            Me.tbRightScore.Location = New System.Drawing.Point(848, 33)
+            Me.tbRightScore.Location = New System.Drawing.Point(848, 30)
             Me.tbRightScore.MaxLength = 3
             Me.tbRightScore.Name = "tbRightScore"
             Me.tbRightScore.Size = New System.Drawing.Size(60, 24)
@@ -772,7 +773,7 @@ Namespace JANIS
             '
             Me.Label3.BackColor = System.Drawing.Color.Transparent
             Me.Label3.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.Label3.Location = New System.Drawing.Point(28, 32)
+            Me.Label3.Location = New System.Drawing.Point(28, 29)
             Me.Label3.Name = "Label3"
             Me.Label3.Size = New System.Drawing.Size(56, 24)
             Me.Label3.TabIndex = 2
@@ -783,7 +784,7 @@ Namespace JANIS
             '
             Me.Label4.BackColor = System.Drawing.Color.Transparent
             Me.Label4.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.Label4.Location = New System.Drawing.Point(916, 32)
+            Me.Label4.Location = New System.Drawing.Point(916, 29)
             Me.Label4.Name = "Label4"
             Me.Label4.Size = New System.Drawing.Size(56, 24)
             Me.Label4.TabIndex = 12
@@ -901,7 +902,7 @@ Namespace JANIS
             Me.btnPictureLeft.Name = "btnPictureLeft"
             Me.btnPictureLeft.Size = New System.Drawing.Size(47, 28)
             Me.btnPictureLeft.TabIndex = 14
-            Me.btnPictureLeft.Text = "ï"
+            Me.btnPictureLeft.Text = "Ã¯"
             Me.btnPictureLeft.TextAlign = System.Drawing.ContentAlignment.TopCenter
             '
             'btnPictureRight
@@ -912,7 +913,7 @@ Namespace JANIS
             Me.btnPictureRight.Name = "btnPictureRight"
             Me.btnPictureRight.Size = New System.Drawing.Size(47, 28)
             Me.btnPictureRight.TabIndex = 16
-            Me.btnPictureRight.Text = "ð"
+            Me.btnPictureRight.Text = "Ã°"
             Me.btnPictureRight.TextAlign = System.Drawing.ContentAlignment.TopCenter
             '
             'btnPictureBoth
@@ -923,13 +924,13 @@ Namespace JANIS
             Me.btnPictureBoth.Name = "btnPictureBoth"
             Me.btnPictureBoth.Size = New System.Drawing.Size(47, 28)
             Me.btnPictureBoth.TabIndex = 15
-            Me.btnPictureBoth.Text = "ó"
+            Me.btnPictureBoth.Text = "Ã³"
             Me.btnPictureBoth.TextAlign = System.Drawing.ContentAlignment.TopCenter
             '
             'btnLeftScoreColor
             '
             Me.btnLeftScoreColor.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.btnLeftScoreColor.Location = New System.Drawing.Point(176, 32)
+            Me.btnLeftScoreColor.Location = New System.Drawing.Point(176, 29)
             Me.btnLeftScoreColor.Name = "btnLeftScoreColor"
             Me.btnLeftScoreColor.Size = New System.Drawing.Size(100, 24)
             Me.btnLeftScoreColor.TabIndex = 4
@@ -938,7 +939,7 @@ Namespace JANIS
             'btnRightScoreColor
             '
             Me.btnRightScoreColor.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.btnRightScoreColor.Location = New System.Drawing.Point(720, 32)
+            Me.btnRightScoreColor.Location = New System.Drawing.Point(720, 29)
             Me.btnRightScoreColor.Name = "btnRightScoreColor"
             Me.btnRightScoreColor.Size = New System.Drawing.Size(100, 24)
             Me.btnRightScoreColor.TabIndex = 10
@@ -956,10 +957,10 @@ Namespace JANIS
             Me.TabControl1.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
             Me.TabControl1.HotTrack = True
             Me.TabControl1.ItemSize = New System.Drawing.Size(120, 24)
-            Me.TabControl1.Location = New System.Drawing.Point(0, 309)
+            Me.TabControl1.Location = New System.Drawing.Point(0, 298)
             Me.TabControl1.Name = "TabControl1"
             Me.TabControl1.SelectedIndex = 0
-            Me.TabControl1.Size = New System.Drawing.Size(996, 454)
+            Me.TabControl1.Size = New System.Drawing.Size(996, 404)
             Me.TabControl1.SizeMode = System.Windows.Forms.TabSizeMode.Fixed
             Me.TabControl1.TabIndex = 17
             '
@@ -982,7 +983,7 @@ Namespace JANIS
             Me.tpScreenText.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
             Me.tpScreenText.Location = New System.Drawing.Point(4, 28)
             Me.tpScreenText.Name = "tpScreenText"
-            Me.tpScreenText.Size = New System.Drawing.Size(988, 422)
+            Me.tpScreenText.Size = New System.Drawing.Size(988, 372)
             Me.tpScreenText.TabIndex = 0
             Me.tpScreenText.Text = "Text Display"
             '
@@ -992,7 +993,7 @@ Namespace JANIS
             Me.GroupBox1.Controls.Add(Me.btnRightTextBoth)
             Me.GroupBox1.Controls.Add(Me.btnShowRightText)
             Me.GroupBox1.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.GroupBox1.Location = New System.Drawing.Point(822, 359)
+            Me.GroupBox1.Location = New System.Drawing.Point(822, 300)
             Me.GroupBox1.Name = "GroupBox1"
             Me.GroupBox1.RightToLeft = System.Windows.Forms.RightToLeft.Yes
             Me.GroupBox1.Size = New System.Drawing.Size(148, 52)
@@ -1007,7 +1008,7 @@ Namespace JANIS
             Me.btnRightTextLeft.Name = "btnRightTextLeft"
             Me.btnRightTextLeft.Size = New System.Drawing.Size(47, 28)
             Me.btnRightTextLeft.TabIndex = 48
-            Me.btnRightTextLeft.Text = "ï"
+            Me.btnRightTextLeft.Text = "Ã¯"
             Me.btnRightTextLeft.TextAlign = System.Drawing.ContentAlignment.TopCenter
             '
             'btnRightTextBoth
@@ -1017,7 +1018,7 @@ Namespace JANIS
             Me.btnRightTextBoth.Name = "btnRightTextBoth"
             Me.btnRightTextBoth.Size = New System.Drawing.Size(47, 28)
             Me.btnRightTextBoth.TabIndex = 46
-            Me.btnRightTextBoth.Text = "ó"
+            Me.btnRightTextBoth.Text = "Ã³"
             Me.btnRightTextBoth.TextAlign = System.Drawing.ContentAlignment.TopCenter
             '
             'btnShowRightText
@@ -1027,7 +1028,7 @@ Namespace JANIS
             Me.btnShowRightText.Name = "btnShowRightText"
             Me.btnShowRightText.Size = New System.Drawing.Size(47, 28)
             Me.btnShowRightText.TabIndex = 45
-            Me.btnShowRightText.Text = "ð"
+            Me.btnShowRightText.Text = "Ã°"
             Me.btnShowRightText.TextAlign = System.Drawing.ContentAlignment.TopCenter
             '
             'grpShowLeftText
@@ -1036,7 +1037,7 @@ Namespace JANIS
             Me.grpShowLeftText.Controls.Add(Me.btnLeftTextBoth)
             Me.grpShowLeftText.Controls.Add(Me.btnLeftTextRight)
             Me.grpShowLeftText.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.grpShowLeftText.Location = New System.Drawing.Point(27, 359)
+            Me.grpShowLeftText.Location = New System.Drawing.Point(27, 300)
             Me.grpShowLeftText.Name = "grpShowLeftText"
             Me.grpShowLeftText.RightToLeft = System.Windows.Forms.RightToLeft.No
             Me.grpShowLeftText.Size = New System.Drawing.Size(148, 52)
@@ -1051,7 +1052,7 @@ Namespace JANIS
             Me.btnShowLeftText.Name = "btnShowLeftText"
             Me.btnShowLeftText.Size = New System.Drawing.Size(47, 28)
             Me.btnShowLeftText.TabIndex = 41
-            Me.btnShowLeftText.Text = "ï"
+            Me.btnShowLeftText.Text = "Ã¯"
             Me.btnShowLeftText.TextAlign = System.Drawing.ContentAlignment.TopCenter
             '
             'btnLeftTextBoth
@@ -1061,7 +1062,7 @@ Namespace JANIS
             Me.btnLeftTextBoth.Name = "btnLeftTextBoth"
             Me.btnLeftTextBoth.Size = New System.Drawing.Size(47, 28)
             Me.btnLeftTextBoth.TabIndex = 42
-            Me.btnLeftTextBoth.Text = "ó"
+            Me.btnLeftTextBoth.Text = "Ã³"
             Me.btnLeftTextBoth.TextAlign = System.Drawing.ContentAlignment.TopCenter
             '
             'btnLeftTextRight
@@ -1071,7 +1072,7 @@ Namespace JANIS
             Me.btnLeftTextRight.Name = "btnLeftTextRight"
             Me.btnLeftTextRight.Size = New System.Drawing.Size(47, 28)
             Me.btnLeftTextRight.TabIndex = 49
-            Me.btnLeftTextRight.Text = "ð"
+            Me.btnLeftTextRight.Text = "Ã°"
             Me.btnLeftTextRight.TextAlign = System.Drawing.ContentAlignment.TopCenter
             '
             'grpLoadText
@@ -1080,7 +1081,7 @@ Namespace JANIS
             Me.grpLoadText.Controls.Add(Me.btnDocLoadBoth)
             Me.grpLoadText.Controls.Add(Me.btnDocLoadRight)
             Me.grpLoadText.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.grpLoadText.Location = New System.Drawing.Point(424, 217)
+            Me.grpLoadText.Location = New System.Drawing.Point(424, 197)
             Me.grpLoadText.Name = "grpLoadText"
             Me.grpLoadText.RightToLeft = System.Windows.Forms.RightToLeft.Yes
             Me.grpLoadText.Size = New System.Drawing.Size(148, 52)
@@ -1096,7 +1097,7 @@ Namespace JANIS
             Me.btnDocLoadLeft.Size = New System.Drawing.Size(47, 28)
             Me.btnDocLoadLeft.TabIndex = 43
             Me.btnDocLoadLeft.Tag = "Left"
-            Me.btnDocLoadLeft.Text = "ï"
+            Me.btnDocLoadLeft.Text = "Ã¯"
             Me.btnDocLoadLeft.TextAlign = System.Drawing.ContentAlignment.TopCenter
             '
             'btnDocLoadBoth
@@ -1107,7 +1108,7 @@ Namespace JANIS
             Me.btnDocLoadBoth.Size = New System.Drawing.Size(47, 28)
             Me.btnDocLoadBoth.TabIndex = 44
             Me.btnDocLoadBoth.Tag = "Both"
-            Me.btnDocLoadBoth.Text = "ó"
+            Me.btnDocLoadBoth.Text = "Ã³"
             Me.btnDocLoadBoth.TextAlign = System.Drawing.ContentAlignment.TopCenter
             '
             'btnDocLoadRight
@@ -1118,7 +1119,7 @@ Namespace JANIS
             Me.btnDocLoadRight.Size = New System.Drawing.Size(47, 28)
             Me.btnDocLoadRight.TabIndex = 47
             Me.btnDocLoadRight.Tag = "Right"
-            Me.btnDocLoadRight.Text = "ð"
+            Me.btnDocLoadRight.Text = "Ã°"
             Me.btnDocLoadRight.TextAlign = System.Drawing.ContentAlignment.TopCenter
             '
             'grpClearText
@@ -1127,7 +1128,7 @@ Namespace JANIS
             Me.grpClearText.Controls.Add(Me.btnClearTextBoth)
             Me.grpClearText.Controls.Add(Me.btnClearTextRight)
             Me.grpClearText.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.grpClearText.Location = New System.Drawing.Point(424, 119)
+            Me.grpClearText.Location = New System.Drawing.Point(424, 98)
             Me.grpClearText.Name = "grpClearText"
             Me.grpClearText.RightToLeft = System.Windows.Forms.RightToLeft.No
             Me.grpClearText.Size = New System.Drawing.Size(148, 52)
@@ -1144,7 +1145,7 @@ Namespace JANIS
             Me.btnClearTextLeft.Name = "btnClearTextLeft"
             Me.btnClearTextLeft.Size = New System.Drawing.Size(47, 28)
             Me.btnClearTextLeft.TabIndex = 53
-            Me.btnClearTextLeft.Text = "ï"
+            Me.btnClearTextLeft.Text = "Ã¯"
             Me.btnClearTextLeft.TextAlign = System.Drawing.ContentAlignment.TopCenter
             Me.btnClearTextLeft.UseVisualStyleBackColor = False
             '
@@ -1157,7 +1158,7 @@ Namespace JANIS
             Me.btnClearTextBoth.Name = "btnClearTextBoth"
             Me.btnClearTextBoth.Size = New System.Drawing.Size(47, 28)
             Me.btnClearTextBoth.TabIndex = 56
-            Me.btnClearTextBoth.Text = "ó"
+            Me.btnClearTextBoth.Text = "Ã³"
             Me.btnClearTextBoth.TextAlign = System.Drawing.ContentAlignment.TopCenter
             Me.btnClearTextBoth.UseVisualStyleBackColor = False
             '
@@ -1170,14 +1171,14 @@ Namespace JANIS
             Me.btnClearTextRight.Name = "btnClearTextRight"
             Me.btnClearTextRight.Size = New System.Drawing.Size(47, 28)
             Me.btnClearTextRight.TabIndex = 54
-            Me.btnClearTextRight.Text = "ð"
+            Me.btnClearTextRight.Text = "Ã°"
             Me.btnClearTextRight.TextAlign = System.Drawing.ContentAlignment.TopCenter
             Me.btnClearTextRight.UseVisualStyleBackColor = False
             '
             'btnBothTextScreens
             '
             Me.btnBothTextScreens.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.btnBothTextScreens.Location = New System.Drawing.Point(453, 359)
+            Me.btnBothTextScreens.Location = New System.Drawing.Point(444, 300)
             Me.btnBothTextScreens.Name = "btnBothTextScreens"
             Me.btnBothTextScreens.Size = New System.Drawing.Size(108, 44)
             Me.btnBothTextScreens.TabIndex = 39
@@ -1187,7 +1188,7 @@ Namespace JANIS
             'Label11
             '
             Me.Label11.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.Label11.Location = New System.Drawing.Point(907, 12)
+            Me.Label11.Location = New System.Drawing.Point(902, 2)
             Me.Label11.Name = "Label11"
             Me.Label11.Size = New System.Drawing.Size(65, 20)
             Me.Label11.TabIndex = 28
@@ -1197,7 +1198,7 @@ Namespace JANIS
             'Label10
             '
             Me.Label10.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.Label10.Location = New System.Drawing.Point(30, 9)
+            Me.Label10.Location = New System.Drawing.Point(25, 2)
             Me.Label10.Name = "Label10"
             Me.Label10.Size = New System.Drawing.Size(64, 23)
             Me.Label10.TabIndex = 18
@@ -1209,7 +1210,7 @@ Namespace JANIS
             Me.tbLeftText.BackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(176, Byte), Integer))
             Me.tbLeftText.Font = New System.Drawing.Font("Arial", 20.0!, System.Drawing.FontStyle.Bold)
             Me.tbLeftText.ForeColor = System.Drawing.Color.White
-            Me.tbLeftText.Location = New System.Drawing.Point(3, 80)
+            Me.tbLeftText.Location = New System.Drawing.Point(2, 60)
             Me.tbLeftText.Multiline = True
             Me.tbLeftText.Name = "tbLeftText"
             Me.tbLeftText.Size = New System.Drawing.Size(400, 225)
@@ -1219,7 +1220,7 @@ Namespace JANIS
             'tbRightFontSize
             '
             Me.tbRightFontSize.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.tbRightFontSize.Location = New System.Drawing.Point(910, 35)
+            Me.tbRightFontSize.Location = New System.Drawing.Point(905, 27)
             Me.tbRightFontSize.MaxLength = 3
             Me.tbRightFontSize.Name = "tbRightFontSize"
             Me.tbRightFontSize.Size = New System.Drawing.Size(56, 24)
@@ -1238,7 +1239,7 @@ Namespace JANIS
             Me.grpRightColors.Controls.Add(Me.pnlTextColorRight2)
             Me.grpRightColors.Controls.Add(Me.pnlTextColorRight1)
             Me.grpRightColors.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.grpRightColors.Location = New System.Drawing.Point(613, 17)
+            Me.grpRightColors.Location = New System.Drawing.Point(608, 10)
             Me.grpRightColors.Name = "grpRightColors"
             Me.grpRightColors.RightToLeft = System.Windows.Forms.RightToLeft.Yes
             Me.grpRightColors.Size = New System.Drawing.Size(244, 44)
@@ -1315,7 +1316,7 @@ Namespace JANIS
             Me.tbRightText.BackColor = System.Drawing.Color.Maroon
             Me.tbRightText.Font = New System.Drawing.Font("Arial", 20.0!, System.Drawing.FontStyle.Bold)
             Me.tbRightText.ForeColor = System.Drawing.Color.White
-            Me.tbRightText.Location = New System.Drawing.Point(592, 80)
+            Me.tbRightText.Location = New System.Drawing.Point(591, 60)
             Me.tbRightText.Multiline = True
             Me.tbRightText.Name = "tbRightText"
             Me.tbRightText.Size = New System.Drawing.Size(400, 225)
@@ -1325,7 +1326,7 @@ Namespace JANIS
             'tbLeftFontSize
             '
             Me.tbLeftFontSize.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.tbLeftFontSize.Location = New System.Drawing.Point(33, 32)
+            Me.tbLeftFontSize.Location = New System.Drawing.Point(28, 27)
             Me.tbLeftFontSize.MaxLength = 3
             Me.tbLeftFontSize.Name = "tbLeftFontSize"
             Me.tbLeftFontSize.Size = New System.Drawing.Size(56, 24)
@@ -1344,7 +1345,7 @@ Namespace JANIS
             Me.grpLeftColors.Controls.Add(Me.pnlTextColorLeft2)
             Me.grpLeftColors.Controls.Add(Me.pnlTextColorLeft1)
             Me.grpLeftColors.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.grpLeftColors.Location = New System.Drawing.Point(140, 17)
+            Me.grpLeftColors.Location = New System.Drawing.Point(135, 10)
             Me.grpLeftColors.Name = "grpLeftColors"
             Me.grpLeftColors.Size = New System.Drawing.Size(244, 44)
             Me.grpLeftColors.TabIndex = 20
@@ -1430,7 +1431,7 @@ Namespace JANIS
             Me.tpImgSearch.Controls.Add(Me.picImgSearchPreview)
             Me.tpImgSearch.Location = New System.Drawing.Point(4, 28)
             Me.tpImgSearch.Name = "tpImgSearch"
-            Me.tpImgSearch.Size = New System.Drawing.Size(988, 422)
+            Me.tpImgSearch.Size = New System.Drawing.Size(988, 372)
             Me.tpImgSearch.TabIndex = 6
             Me.tpImgSearch.Text = "Image Search"
             '
@@ -1465,7 +1466,7 @@ Namespace JANIS
             Me.lbImgResults.ItemHeight = 18
             Me.lbImgResults.Location = New System.Drawing.Point(12, 162)
             Me.lbImgResults.Name = "lbImgResults"
-            Me.lbImgResults.Size = New System.Drawing.Size(962, 256)
+            Me.lbImgResults.Size = New System.Drawing.Size(962, 202)
             Me.lbImgResults.Sorted = True
             Me.lbImgResults.TabIndex = 95
             '
@@ -1577,7 +1578,7 @@ Namespace JANIS
             Me.tp5Things.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
             Me.tp5Things.Location = New System.Drawing.Point(4, 28)
             Me.tp5Things.Name = "tp5Things"
-            Me.tp5Things.Size = New System.Drawing.Size(988, 422)
+            Me.tp5Things.Size = New System.Drawing.Size(988, 372)
             Me.tp5Things.TabIndex = 1
             Me.tp5Things.Text = "5/6 Things"
             '
@@ -1586,7 +1587,7 @@ Namespace JANIS
             Me.tbCurrentThing.BackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(176, Byte), Integer))
             Me.tbCurrentThing.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
             Me.tbCurrentThing.ForeColor = System.Drawing.Color.White
-            Me.tbCurrentThing.Location = New System.Drawing.Point(595, 111)
+            Me.tbCurrentThing.Location = New System.Drawing.Point(595, 90)
             Me.tbCurrentThing.Name = "tbCurrentThing"
             Me.tbCurrentThing.Size = New System.Drawing.Size(324, 26)
             Me.tbCurrentThing.TabIndex = 63
@@ -1596,7 +1597,7 @@ Namespace JANIS
             'Label12
             '
             Me.Label12.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.Label12.Location = New System.Drawing.Point(68, 29)
+            Me.Label12.Location = New System.Drawing.Point(68, 8)
             Me.Label12.Name = "Label12"
             Me.Label12.Size = New System.Drawing.Size(212, 24)
             Me.Label12.TabIndex = 48
@@ -1608,7 +1609,7 @@ Namespace JANIS
             Me.clbThings.BackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(176, Byte), Integer))
             Me.clbThings.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
             Me.clbThings.ForeColor = System.Drawing.Color.White
-            Me.clbThings.Location = New System.Drawing.Point(71, 96)
+            Me.clbThings.Location = New System.Drawing.Point(71, 75)
             Me.clbThings.Name = "clbThings"
             Me.clbThings.Size = New System.Drawing.Size(324, 213)
             Me.clbThings.TabIndex = 51
@@ -1618,7 +1619,7 @@ Namespace JANIS
             '
             Me.Label5.BackColor = System.Drawing.Color.Transparent
             Me.Label5.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.Label5.Location = New System.Drawing.Point(14, 191)
+            Me.Label5.Location = New System.Drawing.Point(14, 170)
             Me.Label5.Name = "Label5"
             Me.Label5.Size = New System.Drawing.Size(56, 20)
             Me.Label5.TabIndex = 53
@@ -1631,7 +1632,7 @@ Namespace JANIS
             Me.grpThingsColor.Controls.Add(Me.radioThingColorRight)
             Me.grpThingsColor.Controls.Add(Me.radioThingColorLeft)
             Me.grpThingsColor.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.grpThingsColor.Location = New System.Drawing.Point(592, 37)
+            Me.grpThingsColor.Location = New System.Drawing.Point(592, 16)
             Me.grpThingsColor.Name = "grpThingsColor"
             Me.grpThingsColor.Size = New System.Drawing.Size(332, 54)
             Me.grpThingsColor.TabIndex = 60
@@ -1670,7 +1671,7 @@ Namespace JANIS
             'btnClearThings
             '
             Me.btnClearThings.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.btnClearThings.Location = New System.Drawing.Point(410, 245)
+            Me.btnClearThings.Location = New System.Drawing.Point(410, 224)
             Me.btnClearThings.Name = "btnClearThings"
             Me.btnClearThings.Size = New System.Drawing.Size(96, 32)
             Me.btnClearThings.TabIndex = 56
@@ -1679,7 +1680,7 @@ Namespace JANIS
             'btnRemoveThing
             '
             Me.btnRemoveThing.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.btnRemoveThing.Location = New System.Drawing.Point(410, 158)
+            Me.btnRemoveThing.Location = New System.Drawing.Point(410, 137)
             Me.btnRemoveThing.Name = "btnRemoveThing"
             Me.btnRemoveThing.Size = New System.Drawing.Size(96, 44)
             Me.btnRemoveThing.TabIndex = 55
@@ -1688,7 +1689,7 @@ Namespace JANIS
             'btnListRight
             '
             Me.btnListRight.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.btnListRight.Location = New System.Drawing.Point(297, 333)
+            Me.btnListRight.Location = New System.Drawing.Point(299, 300)
             Me.btnListRight.Name = "btnListRight"
             Me.btnListRight.Size = New System.Drawing.Size(96, 44)
             Me.btnListRight.TabIndex = 59
@@ -1697,7 +1698,7 @@ Namespace JANIS
             'btnListBoth
             '
             Me.btnListBoth.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.btnListBoth.Location = New System.Drawing.Point(185, 333)
+            Me.btnListBoth.Location = New System.Drawing.Point(185, 300)
             Me.btnListBoth.Name = "btnListBoth"
             Me.btnListBoth.Size = New System.Drawing.Size(96, 44)
             Me.btnListBoth.TabIndex = 58
@@ -1706,7 +1707,7 @@ Namespace JANIS
             'btnListLeft
             '
             Me.btnListLeft.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.btnListLeft.Location = New System.Drawing.Point(73, 333)
+            Me.btnListLeft.Location = New System.Drawing.Point(71, 300)
             Me.btnListLeft.Name = "btnListLeft"
             Me.btnListLeft.Size = New System.Drawing.Size(96, 44)
             Me.btnListLeft.TabIndex = 57
@@ -1715,7 +1716,7 @@ Namespace JANIS
             'btnShowThingRight
             '
             Me.btnShowThingRight.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.btnShowThingRight.Location = New System.Drawing.Point(824, 333)
+            Me.btnShowThingRight.Location = New System.Drawing.Point(823, 300)
             Me.btnShowThingRight.Name = "btnShowThingRight"
             Me.btnShowThingRight.Size = New System.Drawing.Size(96, 44)
             Me.btnShowThingRight.TabIndex = 67
@@ -1724,7 +1725,7 @@ Namespace JANIS
             'btnShowThingBoth
             '
             Me.btnShowThingBoth.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.btnShowThingBoth.Location = New System.Drawing.Point(711, 333)
+            Me.btnShowThingBoth.Location = New System.Drawing.Point(710, 300)
             Me.btnShowThingBoth.Name = "btnShowThingBoth"
             Me.btnShowThingBoth.Size = New System.Drawing.Size(96, 44)
             Me.btnShowThingBoth.TabIndex = 66
@@ -1733,7 +1734,7 @@ Namespace JANIS
             'btnShowThingLeft
             '
             Me.btnShowThingLeft.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.btnShowThingLeft.Location = New System.Drawing.Point(596, 333)
+            Me.btnShowThingLeft.Location = New System.Drawing.Point(595, 300)
             Me.btnShowThingLeft.Name = "btnShowThingLeft"
             Me.btnShowThingLeft.Size = New System.Drawing.Size(96, 44)
             Me.btnShowThingLeft.TabIndex = 65
@@ -1744,7 +1745,7 @@ Namespace JANIS
             Me.tbSubstitutions.BackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(176, Byte), Integer))
             Me.tbSubstitutions.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
             Me.tbSubstitutions.ForeColor = System.Drawing.Color.White
-            Me.tbSubstitutions.Location = New System.Drawing.Point(595, 140)
+            Me.tbSubstitutions.Location = New System.Drawing.Point(595, 119)
             Me.tbSubstitutions.Multiline = True
             Me.tbSubstitutions.Name = "tbSubstitutions"
             Me.tbSubstitutions.Size = New System.Drawing.Size(324, 169)
@@ -1754,7 +1755,7 @@ Namespace JANIS
             'btnAddThing
             '
             Me.btnAddThing.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.btnAddThing.Location = New System.Drawing.Point(410, 52)
+            Me.btnAddThing.Location = New System.Drawing.Point(410, 31)
             Me.btnAddThing.Name = "btnAddThing"
             Me.btnAddThing.Size = New System.Drawing.Size(96, 32)
             Me.btnAddThing.TabIndex = 50
@@ -1763,7 +1764,7 @@ Namespace JANIS
             'tbNewThing
             '
             Me.tbNewThing.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.tbNewThing.Location = New System.Drawing.Point(68, 56)
+            Me.tbNewThing.Location = New System.Drawing.Point(68, 35)
             Me.tbNewThing.Name = "tbNewThing"
             Me.tbNewThing.Size = New System.Drawing.Size(327, 23)
             Me.tbNewThing.TabIndex = 49
@@ -1771,7 +1772,7 @@ Namespace JANIS
             'btnThingDown
             '
             Me.btnThingDown.Font = New System.Drawing.Font("Webdings", 20.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
-            Me.btnThingDown.Location = New System.Drawing.Point(22, 214)
+            Me.btnThingDown.Location = New System.Drawing.Point(22, 193)
             Me.btnThingDown.Name = "btnThingDown"
             Me.btnThingDown.Size = New System.Drawing.Size(40, 41)
             Me.btnThingDown.TabIndex = 54
@@ -1780,7 +1781,7 @@ Namespace JANIS
             'btnThingUp
             '
             Me.btnThingUp.Font = New System.Drawing.Font("Webdings", 20.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
-            Me.btnThingUp.Location = New System.Drawing.Point(22, 147)
+            Me.btnThingUp.Location = New System.Drawing.Point(22, 126)
             Me.btnThingUp.Name = "btnThingUp"
             Me.btnThingUp.Size = New System.Drawing.Size(40, 41)
             Me.btnThingUp.TabIndex = 52
@@ -1815,7 +1816,7 @@ Namespace JANIS
             Me.tpSlides.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
             Me.tpSlides.Location = New System.Drawing.Point(4, 28)
             Me.tpSlides.Name = "tpSlides"
-            Me.tpSlides.Size = New System.Drawing.Size(988, 422)
+            Me.tpSlides.Size = New System.Drawing.Size(988, 372)
             Me.tpSlides.TabIndex = 2
             Me.tpSlides.Text = "Slide Show"
             '
@@ -1827,7 +1828,7 @@ Namespace JANIS
             Me.ExpTree1.Location = New System.Drawing.Point(3, 3)
             Me.ExpTree1.Name = "ExpTree1"
             Me.ExpTree1.ShowRootLines = False
-            Me.ExpTree1.Size = New System.Drawing.Size(251, 411)
+            Me.ExpTree1.Size = New System.Drawing.Size(251, 329)
             Me.ExpTree1.TabIndex = 91
             '
             'btnWhammy
@@ -1835,7 +1836,7 @@ Namespace JANIS
             Me.btnWhammy.BackColor = System.Drawing.Color.Yellow
             Me.btnWhammy.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
             Me.btnWhammy.ForeColor = System.Drawing.Color.Blue
-            Me.btnWhammy.Location = New System.Drawing.Point(548, 238)
+            Me.btnWhammy.Location = New System.Drawing.Point(547, 202)
             Me.btnWhammy.Name = "btnWhammy"
             Me.btnWhammy.Size = New System.Drawing.Size(95, 28)
             Me.btnWhammy.TabIndex = 90
@@ -1847,7 +1848,7 @@ Namespace JANIS
             '
             Me.btnPauseSlides.Font = New System.Drawing.Font("Webdings", 15.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
             Me.btnPauseSlides.ForeColor = System.Drawing.Color.Blue
-            Me.btnPauseSlides.Location = New System.Drawing.Point(823, 382)
+            Me.btnPauseSlides.Location = New System.Drawing.Point(822, 334)
             Me.btnPauseSlides.Name = "btnPauseSlides"
             Me.btnPauseSlides.Size = New System.Drawing.Size(36, 32)
             Me.btnPauseSlides.TabIndex = 86
@@ -1856,7 +1857,7 @@ Namespace JANIS
             'btnNextSlide
             '
             Me.btnNextSlide.Font = New System.Drawing.Font("Webdings", 14.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
-            Me.btnNextSlide.Location = New System.Drawing.Point(907, 382)
+            Me.btnNextSlide.Location = New System.Drawing.Point(906, 334)
             Me.btnNextSlide.Name = "btnNextSlide"
             Me.btnNextSlide.Size = New System.Drawing.Size(36, 32)
             Me.btnNextSlide.TabIndex = 88
@@ -1865,7 +1866,7 @@ Namespace JANIS
             'btnPrevSlide
             '
             Me.btnPrevSlide.Font = New System.Drawing.Font("Webdings", 14.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
-            Me.btnPrevSlide.Location = New System.Drawing.Point(739, 382)
+            Me.btnPrevSlide.Location = New System.Drawing.Point(738, 334)
             Me.btnPrevSlide.Name = "btnPrevSlide"
             Me.btnPrevSlide.Size = New System.Drawing.Size(36, 32)
             Me.btnPrevSlide.TabIndex = 84
@@ -1874,7 +1875,7 @@ Namespace JANIS
             'btnClearSlideList
             '
             Me.btnClearSlideList.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.btnClearSlideList.Location = New System.Drawing.Point(559, 196)
+            Me.btnClearSlideList.Location = New System.Drawing.Point(558, 165)
             Me.btnClearSlideList.Name = "btnClearSlideList"
             Me.btnClearSlideList.Size = New System.Drawing.Size(72, 28)
             Me.btnClearSlideList.TabIndex = 78
@@ -1884,7 +1885,7 @@ Namespace JANIS
             '
             Me.Label9.BackColor = System.Drawing.Color.Transparent
             Me.Label9.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.Label9.Location = New System.Drawing.Point(536, 382)
+            Me.Label9.Location = New System.Drawing.Point(535, 334)
             Me.Label9.Name = "Label9"
             Me.Label9.Size = New System.Drawing.Size(92, 24)
             Me.Label9.TabIndex = 81
@@ -1894,7 +1895,7 @@ Namespace JANIS
             'nudDelay
             '
             Me.nudDelay.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.nudDelay.Location = New System.Drawing.Point(632, 382)
+            Me.nudDelay.Location = New System.Drawing.Point(631, 334)
             Me.nudDelay.Maximum = New Decimal(New Integer() {60, 0, 0, 0})
             Me.nudDelay.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
             Me.nudDelay.Name = "nudDelay"
@@ -1918,7 +1919,7 @@ Namespace JANIS
             '
             Me.Label7.BackColor = System.Drawing.Color.Transparent
             Me.Label7.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.Label7.Location = New System.Drawing.Point(268, 4)
+            Me.Label7.Location = New System.Drawing.Point(268, 2)
             Me.Label7.Name = "Label7"
             Me.Label7.Size = New System.Drawing.Size(120, 16)
             Me.Label7.TabIndex = 68
@@ -1928,7 +1929,7 @@ Namespace JANIS
             'btnSaveSlides
             '
             Me.btnSaveSlides.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.btnSaveSlides.Location = New System.Drawing.Point(547, 324)
+            Me.btnSaveSlides.Location = New System.Drawing.Point(547, 284)
             Me.btnSaveSlides.Name = "btnSaveSlides"
             Me.btnSaveSlides.Size = New System.Drawing.Size(96, 40)
             Me.btnSaveSlides.TabIndex = 80
@@ -1937,7 +1938,7 @@ Namespace JANIS
             'btnLoadSlides
             '
             Me.btnLoadSlides.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.btnLoadSlides.Location = New System.Drawing.Point(548, 278)
+            Me.btnLoadSlides.Location = New System.Drawing.Point(547, 240)
             Me.btnLoadSlides.Name = "btnLoadSlides"
             Me.btnLoadSlides.Size = New System.Drawing.Size(96, 40)
             Me.btnLoadSlides.TabIndex = 79
@@ -1947,19 +1948,19 @@ Namespace JANIS
             '
             Me.FileListBox1.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
             Me.FileListBox1.FormattingEnabled = True
-            Me.FileListBox1.Location = New System.Drawing.Point(268, 154)
+            Me.FileListBox1.Location = New System.Drawing.Point(268, 152)
             Me.FileListBox1.Name = "FileListBox1"
             Me.FileListBox1.Pattern = "*.jpg;*.gif;*.bmp;*.wmf;*.png"
             Me.FileListBox1.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended
-            Me.FileListBox1.Size = New System.Drawing.Size(250, 260)
+            Me.FileListBox1.Size = New System.Drawing.Size(250, 180)
             Me.FileListBox1.TabIndex = 70
             '
             'btnRemoveSlides
             '
             Me.btnRemoveSlides.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.btnRemoveSlides.Location = New System.Drawing.Point(559, 158)
+            Me.btnRemoveSlides.Location = New System.Drawing.Point(558, 131)
             Me.btnRemoveSlides.Name = "btnRemoveSlides"
-            Me.btnRemoveSlides.Size = New System.Drawing.Size(72, 32)
+            Me.btnRemoveSlides.Size = New System.Drawing.Size(72, 28)
             Me.btnRemoveSlides.TabIndex = 77
             Me.btnRemoveSlides.Text = "Remove"
             '
@@ -1968,7 +1969,7 @@ Namespace JANIS
             Me.btnAddSlide.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
             Me.btnAddSlide.Location = New System.Drawing.Point(458, 50)
             Me.btnAddSlide.Name = "btnAddSlide"
-            Me.btnAddSlide.Size = New System.Drawing.Size(60, 48)
+            Me.btnAddSlide.Size = New System.Drawing.Size(60, 52)
             Me.btnAddSlide.TabIndex = 71
             Me.btnAddSlide.Text = "Add To List"
             '
@@ -1976,7 +1977,7 @@ Namespace JANIS
             '
             Me.Label6.BackColor = System.Drawing.Color.Transparent
             Me.Label6.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.Label6.Location = New System.Drawing.Point(563, 75)
+            Me.Label6.Location = New System.Drawing.Point(562, 54)
             Me.Label6.Name = "Label6"
             Me.Label6.Size = New System.Drawing.Size(71, 27)
             Me.Label6.TabIndex = 75
@@ -1986,7 +1987,7 @@ Namespace JANIS
             'btnSlideDown
             '
             Me.btnSlideDown.Font = New System.Drawing.Font("Webdings", 20.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
-            Me.btnSlideDown.Location = New System.Drawing.Point(578, 101)
+            Me.btnSlideDown.Location = New System.Drawing.Point(577, 80)
             Me.btnSlideDown.Name = "btnSlideDown"
             Me.btnSlideDown.Size = New System.Drawing.Size(40, 36)
             Me.btnSlideDown.TabIndex = 76
@@ -1995,7 +1996,7 @@ Namespace JANIS
             'btnSlideUp
             '
             Me.btnSlideUp.Font = New System.Drawing.Font("Webdings", 20.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
-            Me.btnSlideUp.Location = New System.Drawing.Point(578, 36)
+            Me.btnSlideUp.Location = New System.Drawing.Point(577, 19)
             Me.btnSlideUp.Name = "btnSlideUp"
             Me.btnSlideUp.Size = New System.Drawing.Size(40, 36)
             Me.btnSlideUp.TabIndex = 74
@@ -2005,7 +2006,7 @@ Namespace JANIS
             '
             Me.btnStopSlides.Font = New System.Drawing.Font("Webdings", 14.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
             Me.btnStopSlides.ForeColor = System.Drawing.Color.Red
-            Me.btnStopSlides.Location = New System.Drawing.Point(865, 382)
+            Me.btnStopSlides.Location = New System.Drawing.Point(864, 334)
             Me.btnStopSlides.Name = "btnStopSlides"
             Me.btnStopSlides.Size = New System.Drawing.Size(36, 32)
             Me.btnStopSlides.TabIndex = 87
@@ -2014,7 +2015,7 @@ Namespace JANIS
             'btnLastSlide
             '
             Me.btnLastSlide.Font = New System.Drawing.Font("Webdings", 14.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
-            Me.btnLastSlide.Location = New System.Drawing.Point(949, 382)
+            Me.btnLastSlide.Location = New System.Drawing.Point(948, 334)
             Me.btnLastSlide.Name = "btnLastSlide"
             Me.btnLastSlide.Size = New System.Drawing.Size(36, 32)
             Me.btnLastSlide.TabIndex = 89
@@ -2024,7 +2025,7 @@ Namespace JANIS
             '
             Me.btnPlaySlides.Font = New System.Drawing.Font("Webdings", 14.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
             Me.btnPlaySlides.ForeColor = System.Drawing.Color.Green
-            Me.btnPlaySlides.Location = New System.Drawing.Point(781, 382)
+            Me.btnPlaySlides.Location = New System.Drawing.Point(780, 334)
             Me.btnPlaySlides.Name = "btnPlaySlides"
             Me.btnPlaySlides.RightToLeft = System.Windows.Forms.RightToLeft.No
             Me.btnPlaySlides.Size = New System.Drawing.Size(36, 32)
@@ -2034,7 +2035,7 @@ Namespace JANIS
             'btnFirstSlide
             '
             Me.btnFirstSlide.Font = New System.Drawing.Font("Webdings", 14.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
-            Me.btnFirstSlide.Location = New System.Drawing.Point(694, 382)
+            Me.btnFirstSlide.Location = New System.Drawing.Point(693, 334)
             Me.btnFirstSlide.Name = "btnFirstSlide"
             Me.btnFirstSlide.Size = New System.Drawing.Size(36, 32)
             Me.btnFirstSlide.TabIndex = 83
@@ -2048,7 +2049,7 @@ Namespace JANIS
             Me.lbSlideList.Location = New System.Drawing.Point(656, 20)
             Me.lbSlideList.Name = "lbSlideList"
             Me.lbSlideList.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended
-            Me.lbSlideList.Size = New System.Drawing.Size(329, 356)
+            Me.lbSlideList.Size = New System.Drawing.Size(329, 308)
             Me.lbSlideList.TabIndex = 73
             '
             'picSlidePreview
@@ -2072,14 +2073,14 @@ Namespace JANIS
             Me.tpHotButtons.Controls.Add(Me.cbHBActive)
             Me.tpHotButtons.Location = New System.Drawing.Point(4, 28)
             Me.tpHotButtons.Name = "tpHotButtons"
-            Me.tpHotButtons.Size = New System.Drawing.Size(988, 422)
+            Me.tpHotButtons.Size = New System.Drawing.Size(988, 372)
             Me.tpHotButtons.TabIndex = 4
             Me.tpHotButtons.Text = "Hot Buttons"
             '
             'btnClearHB
             '
             Me.btnClearHB.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.btnClearHB.Location = New System.Drawing.Point(27, 250)
+            Me.btnClearHB.Location = New System.Drawing.Point(27, 226)
             Me.btnClearHB.Name = "btnClearHB"
             Me.btnClearHB.Size = New System.Drawing.Size(124, 36)
             Me.btnClearHB.TabIndex = 43
@@ -2091,7 +2092,7 @@ Namespace JANIS
             Me.lblHBinstructions.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
             Me.lblHBinstructions.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
             Me.lblHBinstructions.ForeColor = System.Drawing.Color.Black
-            Me.lblHBinstructions.Location = New System.Drawing.Point(6, 82)
+            Me.lblHBinstructions.Location = New System.Drawing.Point(6, 68)
             Me.lblHBinstructions.Name = "lblHBinstructions"
             Me.lblHBinstructions.Size = New System.Drawing.Size(168, 139)
             Me.lblHBinstructions.TabIndex = 42
@@ -2103,7 +2104,7 @@ Namespace JANIS
             'btnSaveHB
             '
             Me.btnSaveHB.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.btnSaveHB.Location = New System.Drawing.Point(27, 369)
+            Me.btnSaveHB.Location = New System.Drawing.Point(27, 318)
             Me.btnSaveHB.Name = "btnSaveHB"
             Me.btnSaveHB.Size = New System.Drawing.Size(124, 36)
             Me.btnSaveHB.TabIndex = 6
@@ -2112,7 +2113,7 @@ Namespace JANIS
             'btnLoadHB
             '
             Me.btnLoadHB.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.btnLoadHB.Location = New System.Drawing.Point(27, 310)
+            Me.btnLoadHB.Location = New System.Drawing.Point(27, 272)
             Me.btnLoadHB.Name = "btnLoadHB"
             Me.btnLoadHB.Size = New System.Drawing.Size(124, 36)
             Me.btnLoadHB.TabIndex = 5
@@ -2163,16 +2164,16 @@ Namespace JANIS
             Me.gbHB.Controls.Add(Me.tbHBtext2)
             Me.gbHB.Controls.Add(Me.tbHBtext1)
             Me.gbHB.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.gbHB.Location = New System.Drawing.Point(182, 3)
+            Me.gbHB.Location = New System.Drawing.Point(182, 0)
             Me.gbHB.Name = "gbHB"
-            Me.gbHB.Size = New System.Drawing.Size(798, 416)
+            Me.gbHB.Size = New System.Drawing.Size(798, 364)
             Me.gbHB.TabIndex = 4
             Me.gbHB.TabStop = False
             '
             'tbHBfile10
             '
             Me.tbHBfile10.BackColor = System.Drawing.SystemColors.Control
-            Me.tbHBfile10.Location = New System.Drawing.Point(177, 384)
+            Me.tbHBfile10.Location = New System.Drawing.Point(177, 332)
             Me.tbHBfile10.Name = "tbHBfile10"
             Me.tbHBfile10.ReadOnly = True
             Me.tbHBfile10.Size = New System.Drawing.Size(535, 22)
@@ -2181,7 +2182,7 @@ Namespace JANIS
             'tbHBfile9
             '
             Me.tbHBfile9.BackColor = System.Drawing.SystemColors.Control
-            Me.tbHBfile9.Location = New System.Drawing.Point(177, 348)
+            Me.tbHBfile9.Location = New System.Drawing.Point(177, 299)
             Me.tbHBfile9.Name = "tbHBfile9"
             Me.tbHBfile9.ReadOnly = True
             Me.tbHBfile9.Size = New System.Drawing.Size(535, 22)
@@ -2190,7 +2191,7 @@ Namespace JANIS
             'tbHBfile8
             '
             Me.tbHBfile8.BackColor = System.Drawing.SystemColors.Control
-            Me.tbHBfile8.Location = New System.Drawing.Point(177, 310)
+            Me.tbHBfile8.Location = New System.Drawing.Point(177, 266)
             Me.tbHBfile8.Name = "tbHBfile8"
             Me.tbHBfile8.ReadOnly = True
             Me.tbHBfile8.Size = New System.Drawing.Size(535, 22)
@@ -2199,7 +2200,7 @@ Namespace JANIS
             'tbHBfile7
             '
             Me.tbHBfile7.BackColor = System.Drawing.SystemColors.Control
-            Me.tbHBfile7.Location = New System.Drawing.Point(177, 272)
+            Me.tbHBfile7.Location = New System.Drawing.Point(177, 233)
             Me.tbHBfile7.Name = "tbHBfile7"
             Me.tbHBfile7.ReadOnly = True
             Me.tbHBfile7.Size = New System.Drawing.Size(535, 22)
@@ -2208,7 +2209,7 @@ Namespace JANIS
             'tbHBfile6
             '
             Me.tbHBfile6.BackColor = System.Drawing.SystemColors.Control
-            Me.tbHBfile6.Location = New System.Drawing.Point(177, 234)
+            Me.tbHBfile6.Location = New System.Drawing.Point(177, 200)
             Me.tbHBfile6.Name = "tbHBfile6"
             Me.tbHBfile6.ReadOnly = True
             Me.tbHBfile6.Size = New System.Drawing.Size(535, 22)
@@ -2217,7 +2218,7 @@ Namespace JANIS
             'tbHBfile5
             '
             Me.tbHBfile5.BackColor = System.Drawing.SystemColors.Control
-            Me.tbHBfile5.Location = New System.Drawing.Point(177, 196)
+            Me.tbHBfile5.Location = New System.Drawing.Point(177, 167)
             Me.tbHBfile5.Name = "tbHBfile5"
             Me.tbHBfile5.ReadOnly = True
             Me.tbHBfile5.Size = New System.Drawing.Size(535, 22)
@@ -2226,7 +2227,7 @@ Namespace JANIS
             'tbHBfile4
             '
             Me.tbHBfile4.BackColor = System.Drawing.SystemColors.Control
-            Me.tbHBfile4.Location = New System.Drawing.Point(177, 158)
+            Me.tbHBfile4.Location = New System.Drawing.Point(177, 134)
             Me.tbHBfile4.Name = "tbHBfile4"
             Me.tbHBfile4.ReadOnly = True
             Me.tbHBfile4.Size = New System.Drawing.Size(535, 22)
@@ -2235,7 +2236,7 @@ Namespace JANIS
             'tbHBfile3
             '
             Me.tbHBfile3.BackColor = System.Drawing.SystemColors.Control
-            Me.tbHBfile3.Location = New System.Drawing.Point(177, 120)
+            Me.tbHBfile3.Location = New System.Drawing.Point(177, 101)
             Me.tbHBfile3.Name = "tbHBfile3"
             Me.tbHBfile3.ReadOnly = True
             Me.tbHBfile3.Size = New System.Drawing.Size(535, 22)
@@ -2244,7 +2245,7 @@ Namespace JANIS
             'tbHBfile2
             '
             Me.tbHBfile2.BackColor = System.Drawing.SystemColors.Control
-            Me.tbHBfile2.Location = New System.Drawing.Point(177, 82)
+            Me.tbHBfile2.Location = New System.Drawing.Point(177, 68)
             Me.tbHBfile2.Name = "tbHBfile2"
             Me.tbHBfile2.ReadOnly = True
             Me.tbHBfile2.Size = New System.Drawing.Size(535, 22)
@@ -2253,7 +2254,7 @@ Namespace JANIS
             'tbHBfile1
             '
             Me.tbHBfile1.BackColor = System.Drawing.SystemColors.Control
-            Me.tbHBfile1.Location = New System.Drawing.Point(177, 44)
+            Me.tbHBfile1.Location = New System.Drawing.Point(177, 35)
             Me.tbHBfile1.Name = "tbHBfile1"
             Me.tbHBfile1.ReadOnly = True
             Me.tbHBfile1.Size = New System.Drawing.Size(535, 22)
@@ -2263,7 +2264,7 @@ Namespace JANIS
             '
             Me.Label14.BackColor = System.Drawing.Color.Transparent
             Me.Label14.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, CType((System.Drawing.FontStyle.Bold Or System.Drawing.FontStyle.Underline), System.Drawing.FontStyle), System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.Label14.Location = New System.Drawing.Point(180, 16)
+            Me.Label14.Location = New System.Drawing.Point(180, 8)
             Me.Label14.Name = "Label14"
             Me.Label14.Size = New System.Drawing.Size(328, 20)
             Me.Label14.TabIndex = 45
@@ -2274,7 +2275,7 @@ Namespace JANIS
             '
             Me.Label13.BackColor = System.Drawing.Color.Transparent
             Me.Label13.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, CType((System.Drawing.FontStyle.Bold Or System.Drawing.FontStyle.Underline), System.Drawing.FontStyle), System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.Label13.Location = New System.Drawing.Point(68, 16)
+            Me.Label13.Location = New System.Drawing.Point(68, 8)
             Me.Label13.Name = "Label13"
             Me.Label13.Size = New System.Drawing.Size(96, 20)
             Me.Label13.TabIndex = 44
@@ -2284,7 +2285,7 @@ Namespace JANIS
             'Label30
             '
             Me.Label30.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.Label30.Location = New System.Drawing.Point(4, 387)
+            Me.Label30.Location = New System.Drawing.Point(4, 335)
             Me.Label30.Name = "Label30"
             Me.Label30.Size = New System.Drawing.Size(64, 20)
             Me.Label30.TabIndex = 43
@@ -2293,7 +2294,7 @@ Namespace JANIS
             'Label31
             '
             Me.Label31.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.Label31.Location = New System.Drawing.Point(4, 351)
+            Me.Label31.Location = New System.Drawing.Point(4, 302)
             Me.Label31.Name = "Label31"
             Me.Label31.Size = New System.Drawing.Size(64, 20)
             Me.Label31.TabIndex = 42
@@ -2302,7 +2303,7 @@ Namespace JANIS
             'Label28
             '
             Me.Label28.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.Label28.Location = New System.Drawing.Point(4, 313)
+            Me.Label28.Location = New System.Drawing.Point(4, 269)
             Me.Label28.Name = "Label28"
             Me.Label28.Size = New System.Drawing.Size(64, 20)
             Me.Label28.TabIndex = 41
@@ -2311,7 +2312,7 @@ Namespace JANIS
             'Label29
             '
             Me.Label29.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.Label29.Location = New System.Drawing.Point(4, 275)
+            Me.Label29.Location = New System.Drawing.Point(4, 236)
             Me.Label29.Name = "Label29"
             Me.Label29.Size = New System.Drawing.Size(64, 20)
             Me.Label29.TabIndex = 40
@@ -2320,7 +2321,7 @@ Namespace JANIS
             'Label26
             '
             Me.Label26.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.Label26.Location = New System.Drawing.Point(4, 237)
+            Me.Label26.Location = New System.Drawing.Point(4, 203)
             Me.Label26.Name = "Label26"
             Me.Label26.Size = New System.Drawing.Size(64, 20)
             Me.Label26.TabIndex = 39
@@ -2329,7 +2330,7 @@ Namespace JANIS
             'Label27
             '
             Me.Label27.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.Label27.Location = New System.Drawing.Point(4, 199)
+            Me.Label27.Location = New System.Drawing.Point(4, 170)
             Me.Label27.Name = "Label27"
             Me.Label27.Size = New System.Drawing.Size(64, 20)
             Me.Label27.TabIndex = 38
@@ -2338,7 +2339,7 @@ Namespace JANIS
             'Label24
             '
             Me.Label24.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.Label24.Location = New System.Drawing.Point(4, 161)
+            Me.Label24.Location = New System.Drawing.Point(4, 137)
             Me.Label24.Name = "Label24"
             Me.Label24.Size = New System.Drawing.Size(64, 20)
             Me.Label24.TabIndex = 37
@@ -2347,7 +2348,7 @@ Namespace JANIS
             'Label25
             '
             Me.Label25.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.Label25.Location = New System.Drawing.Point(4, 123)
+            Me.Label25.Location = New System.Drawing.Point(4, 104)
             Me.Label25.Name = "Label25"
             Me.Label25.Size = New System.Drawing.Size(64, 20)
             Me.Label25.TabIndex = 36
@@ -2356,7 +2357,7 @@ Namespace JANIS
             'Label23
             '
             Me.Label23.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.Label23.Location = New System.Drawing.Point(4, 85)
+            Me.Label23.Location = New System.Drawing.Point(4, 71)
             Me.Label23.Name = "Label23"
             Me.Label23.Size = New System.Drawing.Size(64, 20)
             Me.Label23.TabIndex = 35
@@ -2365,7 +2366,7 @@ Namespace JANIS
             'Label22
             '
             Me.Label22.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.Label22.Location = New System.Drawing.Point(4, 47)
+            Me.Label22.Location = New System.Drawing.Point(4, 38)
             Me.Label22.Name = "Label22"
             Me.Label22.Size = New System.Drawing.Size(64, 20)
             Me.Label22.TabIndex = 34
@@ -2374,7 +2375,7 @@ Namespace JANIS
             'btnHBSelect10
             '
             Me.btnHBSelect10.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.btnHBSelect10.Location = New System.Drawing.Point(718, 382)
+            Me.btnHBSelect10.Location = New System.Drawing.Point(718, 329)
             Me.btnHBSelect10.Name = "btnHBSelect10"
             Me.btnHBSelect10.Size = New System.Drawing.Size(74, 26)
             Me.btnHBSelect10.TabIndex = 33
@@ -2384,7 +2385,7 @@ Namespace JANIS
             'btnHBSelect9
             '
             Me.btnHBSelect9.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.btnHBSelect9.Location = New System.Drawing.Point(718, 345)
+            Me.btnHBSelect9.Location = New System.Drawing.Point(718, 296)
             Me.btnHBSelect9.Name = "btnHBSelect9"
             Me.btnHBSelect9.Size = New System.Drawing.Size(74, 26)
             Me.btnHBSelect9.TabIndex = 32
@@ -2394,7 +2395,7 @@ Namespace JANIS
             'btnHBSelect8
             '
             Me.btnHBSelect8.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.btnHBSelect8.Location = New System.Drawing.Point(718, 307)
+            Me.btnHBSelect8.Location = New System.Drawing.Point(718, 263)
             Me.btnHBSelect8.Name = "btnHBSelect8"
             Me.btnHBSelect8.Size = New System.Drawing.Size(74, 26)
             Me.btnHBSelect8.TabIndex = 31
@@ -2404,7 +2405,7 @@ Namespace JANIS
             'btnHBSelect7
             '
             Me.btnHBSelect7.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.btnHBSelect7.Location = New System.Drawing.Point(718, 269)
+            Me.btnHBSelect7.Location = New System.Drawing.Point(718, 230)
             Me.btnHBSelect7.Name = "btnHBSelect7"
             Me.btnHBSelect7.Size = New System.Drawing.Size(74, 26)
             Me.btnHBSelect7.TabIndex = 30
@@ -2414,7 +2415,7 @@ Namespace JANIS
             'btnHBSelect6
             '
             Me.btnHBSelect6.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.btnHBSelect6.Location = New System.Drawing.Point(718, 231)
+            Me.btnHBSelect6.Location = New System.Drawing.Point(718, 197)
             Me.btnHBSelect6.Name = "btnHBSelect6"
             Me.btnHBSelect6.Size = New System.Drawing.Size(74, 26)
             Me.btnHBSelect6.TabIndex = 29
@@ -2424,7 +2425,7 @@ Namespace JANIS
             'btnHBSelect5
             '
             Me.btnHBSelect5.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.btnHBSelect5.Location = New System.Drawing.Point(718, 193)
+            Me.btnHBSelect5.Location = New System.Drawing.Point(718, 164)
             Me.btnHBSelect5.Name = "btnHBSelect5"
             Me.btnHBSelect5.Size = New System.Drawing.Size(74, 26)
             Me.btnHBSelect5.TabIndex = 28
@@ -2434,7 +2435,7 @@ Namespace JANIS
             'btnHBSelect4
             '
             Me.btnHBSelect4.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.btnHBSelect4.Location = New System.Drawing.Point(718, 155)
+            Me.btnHBSelect4.Location = New System.Drawing.Point(718, 131)
             Me.btnHBSelect4.Name = "btnHBSelect4"
             Me.btnHBSelect4.Size = New System.Drawing.Size(74, 26)
             Me.btnHBSelect4.TabIndex = 27
@@ -2444,7 +2445,7 @@ Namespace JANIS
             'btnHBSelect3
             '
             Me.btnHBSelect3.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.btnHBSelect3.Location = New System.Drawing.Point(718, 117)
+            Me.btnHBSelect3.Location = New System.Drawing.Point(718, 98)
             Me.btnHBSelect3.Name = "btnHBSelect3"
             Me.btnHBSelect3.Size = New System.Drawing.Size(74, 26)
             Me.btnHBSelect3.TabIndex = 26
@@ -2454,7 +2455,7 @@ Namespace JANIS
             'btnHBSelect2
             '
             Me.btnHBSelect2.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.btnHBSelect2.Location = New System.Drawing.Point(718, 79)
+            Me.btnHBSelect2.Location = New System.Drawing.Point(718, 65)
             Me.btnHBSelect2.Name = "btnHBSelect2"
             Me.btnHBSelect2.Size = New System.Drawing.Size(74, 26)
             Me.btnHBSelect2.TabIndex = 25
@@ -2464,7 +2465,7 @@ Namespace JANIS
             'btnHBSelect1
             '
             Me.btnHBSelect1.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.btnHBSelect1.Location = New System.Drawing.Point(718, 41)
+            Me.btnHBSelect1.Location = New System.Drawing.Point(718, 32)
             Me.btnHBSelect1.Name = "btnHBSelect1"
             Me.btnHBSelect1.Size = New System.Drawing.Size(74, 26)
             Me.btnHBSelect1.TabIndex = 24
@@ -2473,7 +2474,7 @@ Namespace JANIS
             '
             'tbHBtext10
             '
-            Me.tbHBtext10.Location = New System.Drawing.Point(76, 384)
+            Me.tbHBtext10.Location = New System.Drawing.Point(76, 332)
             Me.tbHBtext10.MaxLength = 11
             Me.tbHBtext10.Name = "tbHBtext10"
             Me.tbHBtext10.Size = New System.Drawing.Size(95, 22)
@@ -2484,7 +2485,7 @@ Namespace JANIS
             '
             'tbHBtext9
             '
-            Me.tbHBtext9.Location = New System.Drawing.Point(76, 348)
+            Me.tbHBtext9.Location = New System.Drawing.Point(76, 299)
             Me.tbHBtext9.MaxLength = 11
             Me.tbHBtext9.Name = "tbHBtext9"
             Me.tbHBtext9.Size = New System.Drawing.Size(95, 22)
@@ -2495,7 +2496,7 @@ Namespace JANIS
             '
             'tbHBtext8
             '
-            Me.tbHBtext8.Location = New System.Drawing.Point(76, 310)
+            Me.tbHBtext8.Location = New System.Drawing.Point(76, 266)
             Me.tbHBtext8.MaxLength = 11
             Me.tbHBtext8.Name = "tbHBtext8"
             Me.tbHBtext8.Size = New System.Drawing.Size(95, 22)
@@ -2506,7 +2507,7 @@ Namespace JANIS
             '
             'tbHBtext7
             '
-            Me.tbHBtext7.Location = New System.Drawing.Point(76, 272)
+            Me.tbHBtext7.Location = New System.Drawing.Point(76, 233)
             Me.tbHBtext7.MaxLength = 11
             Me.tbHBtext7.Name = "tbHBtext7"
             Me.tbHBtext7.Size = New System.Drawing.Size(95, 22)
@@ -2517,7 +2518,7 @@ Namespace JANIS
             '
             'tbHBtext6
             '
-            Me.tbHBtext6.Location = New System.Drawing.Point(76, 234)
+            Me.tbHBtext6.Location = New System.Drawing.Point(76, 200)
             Me.tbHBtext6.MaxLength = 11
             Me.tbHBtext6.Name = "tbHBtext6"
             Me.tbHBtext6.Size = New System.Drawing.Size(95, 22)
@@ -2528,7 +2529,7 @@ Namespace JANIS
             '
             'tbHBtext5
             '
-            Me.tbHBtext5.Location = New System.Drawing.Point(76, 196)
+            Me.tbHBtext5.Location = New System.Drawing.Point(76, 167)
             Me.tbHBtext5.MaxLength = 11
             Me.tbHBtext5.Name = "tbHBtext5"
             Me.tbHBtext5.Size = New System.Drawing.Size(95, 22)
@@ -2539,7 +2540,7 @@ Namespace JANIS
             '
             'tbHBtext4
             '
-            Me.tbHBtext4.Location = New System.Drawing.Point(76, 158)
+            Me.tbHBtext4.Location = New System.Drawing.Point(76, 134)
             Me.tbHBtext4.MaxLength = 11
             Me.tbHBtext4.Name = "tbHBtext4"
             Me.tbHBtext4.Size = New System.Drawing.Size(95, 22)
@@ -2550,7 +2551,7 @@ Namespace JANIS
             '
             'tbHBtext3
             '
-            Me.tbHBtext3.Location = New System.Drawing.Point(76, 120)
+            Me.tbHBtext3.Location = New System.Drawing.Point(76, 101)
             Me.tbHBtext3.MaxLength = 11
             Me.tbHBtext3.Name = "tbHBtext3"
             Me.tbHBtext3.Size = New System.Drawing.Size(95, 22)
@@ -2561,7 +2562,7 @@ Namespace JANIS
             '
             'tbHBtext2
             '
-            Me.tbHBtext2.Location = New System.Drawing.Point(76, 82)
+            Me.tbHBtext2.Location = New System.Drawing.Point(76, 68)
             Me.tbHBtext2.MaxLength = 11
             Me.tbHBtext2.Name = "tbHBtext2"
             Me.tbHBtext2.Size = New System.Drawing.Size(95, 22)
@@ -2572,7 +2573,7 @@ Namespace JANIS
             '
             'tbHBtext1
             '
-            Me.tbHBtext1.Location = New System.Drawing.Point(76, 44)
+            Me.tbHBtext1.Location = New System.Drawing.Point(76, 35)
             Me.tbHBtext1.MaxLength = 11
             Me.tbHBtext1.Name = "tbHBtext1"
             Me.tbHBtext1.Size = New System.Drawing.Size(95, 22)
@@ -2587,15 +2588,16 @@ Namespace JANIS
             Me.cbHBActive.Checked = True
             Me.cbHBActive.CheckState = System.Windows.Forms.CheckState.Indeterminate
             Me.cbHBActive.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.cbHBActive.Location = New System.Drawing.Point(4, 12)
+            Me.cbHBActive.Location = New System.Drawing.Point(4, 4)
             Me.cbHBActive.Name = "cbHBActive"
             Me.cbHBActive.Size = New System.Drawing.Size(172, 39)
             Me.cbHBActive.TabIndex = 0
-            Me.cbHBActive.Text = "Show Hot Buttons"
+            Me.cbHBActive.Text = "Toggle Hot Buttons"
             Me.cbHBActive.TextAlign = System.Drawing.ContentAlignment.TopCenter
             '
             'tpPrefs
             '
+            Me.tpPrefs.Controls.Add(Me.cbShadowsEnabled)
             Me.tpPrefs.Controls.Add(Me.Label43)
             Me.tpPrefs.Controls.Add(Me.Label38)
             Me.tpPrefs.Controls.Add(Me.Label39)
@@ -2627,15 +2629,28 @@ Namespace JANIS
             Me.tpPrefs.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
             Me.tpPrefs.Location = New System.Drawing.Point(4, 28)
             Me.tpPrefs.Name = "tpPrefs"
-            Me.tpPrefs.Size = New System.Drawing.Size(988, 422)
+            Me.tpPrefs.Size = New System.Drawing.Size(988, 372)
             Me.tpPrefs.TabIndex = 5
             Me.tpPrefs.Text = "Preferences"
+            '
+            'cbShadowsEnabled
+            '
+            Me.cbShadowsEnabled.BackColor = System.Drawing.Color.Transparent
+            Me.cbShadowsEnabled.Checked = True
+            Me.cbShadowsEnabled.CheckState = System.Windows.Forms.CheckState.Checked
+            Me.cbShadowsEnabled.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+            Me.cbShadowsEnabled.Location = New System.Drawing.Point(11, 108)
+            Me.cbShadowsEnabled.Name = "cbShadowsEnabled"
+            Me.cbShadowsEnabled.Size = New System.Drawing.Size(242, 22)
+            Me.cbShadowsEnabled.TabIndex = 120
+            Me.cbShadowsEnabled.Text = "Display text shadows"
+            Me.cbShadowsEnabled.UseVisualStyleBackColor = False
             '
             'Label43
             '
             Me.Label43.BackColor = System.Drawing.Color.Transparent
             Me.Label43.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.Label43.Location = New System.Drawing.Point(516, 279)
+            Me.Label43.Location = New System.Drawing.Point(516, 260)
             Me.Label43.Name = "Label43"
             Me.Label43.Size = New System.Drawing.Size(277, 20)
             Me.Label43.TabIndex = 113
@@ -2645,7 +2660,7 @@ Namespace JANIS
             'Label38
             '
             Me.Label38.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.Label38.Location = New System.Drawing.Point(924, 255)
+            Me.Label38.Location = New System.Drawing.Point(924, 236)
             Me.Label38.Name = "Label38"
             Me.Label38.Size = New System.Drawing.Size(40, 16)
             Me.Label38.TabIndex = 112
@@ -2655,7 +2670,7 @@ Namespace JANIS
             'Label39
             '
             Me.Label39.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.Label39.Location = New System.Drawing.Point(880, 255)
+            Me.Label39.Location = New System.Drawing.Point(880, 236)
             Me.Label39.Name = "Label39"
             Me.Label39.Size = New System.Drawing.Size(40, 16)
             Me.Label39.TabIndex = 111
@@ -2665,7 +2680,7 @@ Namespace JANIS
             'Label40
             '
             Me.Label40.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.Label40.Location = New System.Drawing.Point(836, 255)
+            Me.Label40.Location = New System.Drawing.Point(836, 236)
             Me.Label40.Name = "Label40"
             Me.Label40.Size = New System.Drawing.Size(40, 16)
             Me.Label40.TabIndex = 110
@@ -2675,7 +2690,7 @@ Namespace JANIS
             'nudDefaultCountdownSeconds
             '
             Me.nudDefaultCountdownSeconds.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.nudDefaultCountdownSeconds.Location = New System.Drawing.Point(924, 279)
+            Me.nudDefaultCountdownSeconds.Location = New System.Drawing.Point(924, 260)
             Me.nudDefaultCountdownSeconds.Maximum = New Decimal(New Integer() {59, 0, 0, 0})
             Me.nudDefaultCountdownSeconds.Name = "nudDefaultCountdownSeconds"
             Me.nudDefaultCountdownSeconds.Size = New System.Drawing.Size(44, 23)
@@ -2685,7 +2700,7 @@ Namespace JANIS
             'nudDefaultCountdownMinutes
             '
             Me.nudDefaultCountdownMinutes.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.nudDefaultCountdownMinutes.Location = New System.Drawing.Point(880, 279)
+            Me.nudDefaultCountdownMinutes.Location = New System.Drawing.Point(880, 260)
             Me.nudDefaultCountdownMinutes.Maximum = New Decimal(New Integer() {59, 0, 0, 0})
             Me.nudDefaultCountdownMinutes.Name = "nudDefaultCountdownMinutes"
             Me.nudDefaultCountdownMinutes.Size = New System.Drawing.Size(44, 23)
@@ -2696,7 +2711,7 @@ Namespace JANIS
             'nudDefaultCountdownHours
             '
             Me.nudDefaultCountdownHours.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.nudDefaultCountdownHours.Location = New System.Drawing.Point(836, 279)
+            Me.nudDefaultCountdownHours.Location = New System.Drawing.Point(836, 260)
             Me.nudDefaultCountdownHours.Maximum = New Decimal(New Integer() {99, 0, 0, 0})
             Me.nudDefaultCountdownHours.Name = "nudDefaultCountdownHours"
             Me.nudDefaultCountdownHours.Size = New System.Drawing.Size(44, 23)
@@ -2706,7 +2721,7 @@ Namespace JANIS
             'btnDefaultPrefs
             '
             Me.btnDefaultPrefs.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.btnDefaultPrefs.Location = New System.Drawing.Point(11, 373)
+            Me.btnDefaultPrefs.Location = New System.Drawing.Point(11, 330)
             Me.btnDefaultPrefs.Name = "btnDefaultPrefs"
             Me.btnDefaultPrefs.Size = New System.Drawing.Size(190, 32)
             Me.btnDefaultPrefs.TabIndex = 117
@@ -2716,7 +2731,7 @@ Namespace JANIS
             '
             Me.tbDefaultImageDir.BackColor = System.Drawing.SystemColors.Control
             Me.tbDefaultImageDir.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.tbDefaultImageDir.Location = New System.Drawing.Point(27, 142)
+            Me.tbDefaultImageDir.Location = New System.Drawing.Point(27, 170)
             Me.tbDefaultImageDir.Name = "tbDefaultImageDir"
             Me.tbDefaultImageDir.ReadOnly = True
             Me.tbDefaultImageDir.Size = New System.Drawing.Size(366, 23)
@@ -2726,7 +2741,7 @@ Namespace JANIS
             'btnChooseDefaultImageDir
             '
             Me.btnChooseDefaultImageDir.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.btnChooseDefaultImageDir.Location = New System.Drawing.Point(399, 140)
+            Me.btnChooseDefaultImageDir.Location = New System.Drawing.Point(399, 168)
             Me.btnChooseDefaultImageDir.Name = "btnChooseDefaultImageDir"
             Me.btnChooseDefaultImageDir.Size = New System.Drawing.Size(72, 26)
             Me.btnChooseDefaultImageDir.TabIndex = 96
@@ -2737,7 +2752,7 @@ Namespace JANIS
             '
             Me.Label18.BackColor = System.Drawing.Color.Transparent
             Me.Label18.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.Label18.Location = New System.Drawing.Point(8, 117)
+            Me.Label18.Location = New System.Drawing.Point(8, 145)
             Me.Label18.Name = "Label18"
             Me.Label18.Size = New System.Drawing.Size(240, 22)
             Me.Label18.TabIndex = 94
@@ -2747,7 +2762,7 @@ Namespace JANIS
             'tbDefaultFontSize
             '
             Me.tbDefaultFontSize.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.tbDefaultFontSize.Location = New System.Drawing.Point(278, 83)
+            Me.tbDefaultFontSize.Location = New System.Drawing.Point(278, 76)
             Me.tbDefaultFontSize.MaxLength = 3
             Me.tbDefaultFontSize.Name = "tbDefaultFontSize"
             Me.tbDefaultFontSize.Size = New System.Drawing.Size(52, 24)
@@ -2760,7 +2775,7 @@ Namespace JANIS
             '
             Me.Label17.BackColor = System.Drawing.Color.Transparent
             Me.Label17.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.Label17.Location = New System.Drawing.Point(8, 83)
+            Me.Label17.Location = New System.Drawing.Point(8, 76)
             Me.Label17.Name = "Label17"
             Me.Label17.Size = New System.Drawing.Size(242, 22)
             Me.Label17.TabIndex = 92
@@ -2776,7 +2791,7 @@ Namespace JANIS
             Me.GroupBox2.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
             Me.GroupBox2.Location = New System.Drawing.Point(8, 4)
             Me.GroupBox2.Name = "GroupBox2"
-            Me.GroupBox2.Size = New System.Drawing.Size(968, 67)
+            Me.GroupBox2.Size = New System.Drawing.Size(968, 62)
             Me.GroupBox2.TabIndex = 91
             Me.GroupBox2.TabStop = False
             Me.GroupBox2.Text = "Default team colors at startup:"
@@ -2787,7 +2802,7 @@ Namespace JANIS
             Me.lblDefaultColorRight.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
             Me.lblDefaultColorRight.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
             Me.lblDefaultColorRight.ForeColor = System.Drawing.Color.White
-            Me.lblDefaultColorRight.Location = New System.Drawing.Point(582, 27)
+            Me.lblDefaultColorRight.Location = New System.Drawing.Point(582, 24)
             Me.lblDefaultColorRight.Name = "lblDefaultColorRight"
             Me.lblDefaultColorRight.Size = New System.Drawing.Size(112, 32)
             Me.lblDefaultColorRight.TabIndex = 94
@@ -2800,7 +2815,7 @@ Namespace JANIS
             Me.lblDefaultColorLeft.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
             Me.lblDefaultColorLeft.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
             Me.lblDefaultColorLeft.ForeColor = System.Drawing.Color.White
-            Me.lblDefaultColorLeft.Location = New System.Drawing.Point(273, 27)
+            Me.lblDefaultColorLeft.Location = New System.Drawing.Point(273, 24)
             Me.lblDefaultColorLeft.Name = "lblDefaultColorLeft"
             Me.lblDefaultColorLeft.Size = New System.Drawing.Size(112, 32)
             Me.lblDefaultColorLeft.TabIndex = 93
@@ -2818,7 +2833,7 @@ Namespace JANIS
             Me.grpDefaultColorsRight.Controls.Add(Me.pnlDefaultTextColorRight2)
             Me.grpDefaultColorsRight.Controls.Add(Me.pnlDefaultTextColorRight1)
             Me.grpDefaultColorsRight.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.grpDefaultColorsRight.Location = New System.Drawing.Point(712, 18)
+            Me.grpDefaultColorsRight.Location = New System.Drawing.Point(712, 15)
             Me.grpDefaultColorsRight.Name = "grpDefaultColorsRight"
             Me.grpDefaultColorsRight.Size = New System.Drawing.Size(244, 44)
             Me.grpDefaultColorsRight.TabIndex = 92
@@ -2898,7 +2913,7 @@ Namespace JANIS
             Me.grpDefaultColorsLeft.Controls.Add(Me.pnlDefaultTextColorLeft2)
             Me.grpDefaultColorsLeft.Controls.Add(Me.pnlDefaultTextColorLeft1)
             Me.grpDefaultColorsLeft.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.grpDefaultColorsLeft.Location = New System.Drawing.Point(11, 18)
+            Me.grpDefaultColorsLeft.Location = New System.Drawing.Point(11, 15)
             Me.grpDefaultColorsLeft.Name = "grpDefaultColorsLeft"
             Me.grpDefaultColorsLeft.Size = New System.Drawing.Size(244, 44)
             Me.grpDefaultColorsLeft.TabIndex = 91
@@ -2970,7 +2985,7 @@ Namespace JANIS
             'btnSavePrefs
             '
             Me.btnSavePrefs.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.btnSavePrefs.Location = New System.Drawing.Point(380, 373)
+            Me.btnSavePrefs.Location = New System.Drawing.Point(380, 330)
             Me.btnSavePrefs.Name = "btnSavePrefs"
             Me.btnSavePrefs.Size = New System.Drawing.Size(190, 32)
             Me.btnSavePrefs.TabIndex = 118
@@ -2979,7 +2994,7 @@ Namespace JANIS
             'btnRevertPrefs
             '
             Me.btnRevertPrefs.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.btnRevertPrefs.Location = New System.Drawing.Point(786, 373)
+            Me.btnRevertPrefs.Location = New System.Drawing.Point(786, 330)
             Me.btnRevertPrefs.Name = "btnRevertPrefs"
             Me.btnRevertPrefs.Size = New System.Drawing.Size(190, 32)
             Me.btnRevertPrefs.TabIndex = 119
@@ -3001,7 +3016,7 @@ Namespace JANIS
             '
             Me.Label16.BackColor = System.Drawing.Color.Transparent
             Me.Label16.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.Label16.Location = New System.Drawing.Point(516, 82)
+            Me.Label16.Location = New System.Drawing.Point(516, 76)
             Me.Label16.Name = "Label16"
             Me.Label16.Size = New System.Drawing.Size(242, 22)
             Me.Label16.TabIndex = 103
@@ -3011,7 +3026,7 @@ Namespace JANIS
             'nudDefaultSlideDelay
             '
             Me.nudDefaultSlideDelay.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.nudDefaultSlideDelay.Location = New System.Drawing.Point(785, 83)
+            Me.nudDefaultSlideDelay.Location = New System.Drawing.Point(785, 76)
             Me.nudDefaultSlideDelay.Maximum = New Decimal(New Integer() {60, 0, 0, 0})
             Me.nudDefaultSlideDelay.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
             Me.nudDefaultSlideDelay.Name = "nudDefaultSlideDelay"
@@ -3048,7 +3063,7 @@ Namespace JANIS
             Me.tbDefaultHBFile.BackColor = System.Drawing.SystemColors.ControlDark
             Me.tbDefaultHBFile.Enabled = False
             Me.tbDefaultHBFile.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.tbDefaultHBFile.Location = New System.Drawing.Point(27, 305)
+            Me.tbDefaultHBFile.Location = New System.Drawing.Point(25, 284)
             Me.tbDefaultHBFile.Name = "tbDefaultHBFile"
             Me.tbDefaultHBFile.ReadOnly = True
             Me.tbDefaultHBFile.Size = New System.Drawing.Size(366, 23)
@@ -3059,7 +3074,7 @@ Namespace JANIS
             '
             Me.btnChooseDefaultHB.Enabled = False
             Me.btnChooseDefaultHB.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.btnChooseDefaultHB.Location = New System.Drawing.Point(399, 303)
+            Me.btnChooseDefaultHB.Location = New System.Drawing.Point(397, 282)
             Me.btnChooseDefaultHB.Name = "btnChooseDefaultHB"
             Me.btnChooseDefaultHB.Size = New System.Drawing.Size(72, 26)
             Me.btnChooseDefaultHB.TabIndex = 102
@@ -3071,7 +3086,7 @@ Namespace JANIS
             Me.tbDefaultImageFile.BackColor = System.Drawing.SystemColors.ControlDark
             Me.tbDefaultImageFile.Enabled = False
             Me.tbDefaultImageFile.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.tbDefaultImageFile.Location = New System.Drawing.Point(27, 225)
+            Me.tbDefaultImageFile.Location = New System.Drawing.Point(27, 227)
             Me.tbDefaultImageFile.Name = "tbDefaultImageFile"
             Me.tbDefaultImageFile.ReadOnly = True
             Me.tbDefaultImageFile.Size = New System.Drawing.Size(366, 23)
@@ -3082,7 +3097,7 @@ Namespace JANIS
             '
             Me.btnChooseDefaultImage.Enabled = False
             Me.btnChooseDefaultImage.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.btnChooseDefaultImage.Location = New System.Drawing.Point(399, 223)
+            Me.btnChooseDefaultImage.Location = New System.Drawing.Point(399, 225)
             Me.btnChooseDefaultImage.Name = "btnChooseDefaultImage"
             Me.btnChooseDefaultImage.Size = New System.Drawing.Size(72, 26)
             Me.btnChooseDefaultImage.TabIndex = 99
@@ -3093,7 +3108,7 @@ Namespace JANIS
             '
             Me.cbDisplayDefaultImage.BackColor = System.Drawing.Color.Transparent
             Me.cbDisplayDefaultImage.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.cbDisplayDefaultImage.Location = New System.Drawing.Point(8, 197)
+            Me.cbDisplayDefaultImage.Location = New System.Drawing.Point(8, 199)
             Me.cbDisplayDefaultImage.Name = "cbDisplayDefaultImage"
             Me.cbDisplayDefaultImage.Size = New System.Drawing.Size(240, 22)
             Me.cbDisplayDefaultImage.TabIndex = 97
@@ -3115,7 +3130,7 @@ Namespace JANIS
             '
             Me.cbLoadDefaultHB.BackColor = System.Drawing.Color.Transparent
             Me.cbLoadDefaultHB.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.cbLoadDefaultHB.Location = New System.Drawing.Point(8, 277)
+            Me.cbLoadDefaultHB.Location = New System.Drawing.Point(6, 256)
             Me.cbLoadDefaultHB.Name = "cbLoadDefaultHB"
             Me.cbLoadDefaultHB.Size = New System.Drawing.Size(242, 22)
             Me.cbLoadDefaultHB.TabIndex = 100
@@ -3129,7 +3144,7 @@ Namespace JANIS
             Me.tpAbout.Controls.Add(Me.TextBox1)
             Me.tpAbout.Location = New System.Drawing.Point(4, 28)
             Me.tpAbout.Name = "tpAbout"
-            Me.tpAbout.Size = New System.Drawing.Size(988, 422)
+            Me.tpAbout.Size = New System.Drawing.Size(988, 372)
             Me.tpAbout.TabIndex = 3
             Me.tpAbout.Text = "About JANIS"
             '
@@ -3137,13 +3152,13 @@ Namespace JANIS
             '
             Me.TextBox2.BackColor = System.Drawing.SystemColors.Window
             Me.TextBox2.BorderStyle = System.Windows.Forms.BorderStyle.None
-            Me.TextBox2.Font = New System.Drawing.Font("Lucida Fax", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+            Me.TextBox2.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
             Me.TextBox2.ForeColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(64, Byte), Integer))
-            Me.TextBox2.Location = New System.Drawing.Point(8, 160)
+            Me.TextBox2.Location = New System.Drawing.Point(8, 144)
             Me.TextBox2.Multiline = True
             Me.TextBox2.Name = "TextBox2"
             Me.TextBox2.ReadOnly = True
-            Me.TextBox2.Size = New System.Drawing.Size(972, 242)
+            Me.TextBox2.Size = New System.Drawing.Size(972, 232)
             Me.TextBox2.TabIndex = 91
             Me.TextBox2.TabStop = False
             Me.TextBox2.Text = resources.GetString("TextBox2.Text")
@@ -3162,8 +3177,8 @@ Namespace JANIS
             Me.TextBox1.Size = New System.Drawing.Size(972, 118)
             Me.TextBox1.TabIndex = 90
             Me.TextBox1.TabStop = False
-            Me.TextBox1.Text = "JANIS Dual Display" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Version 3.2.1 Released May 19, 2014" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "by Bill Cernansky ( bill" & _
-        "@easybeing.com )" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "© 2004-2014 Easy Being Productions"
+            Me.TextBox1.Text = "JANIS Dual Display" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Version 3.3 Released August 19, 2018" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "by Bill Cernansky ( bil" & _
+        "l@easybeing.com )" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Â© 2003-2018 Easy Being Productions"
             Me.TextBox1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
             '
             'SlideTimer
@@ -3176,7 +3191,7 @@ Namespace JANIS
             Me.btnHot1.BackColor = System.Drawing.Color.Gray
             Me.btnHot1.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.5!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
             Me.btnHot1.ForeColor = System.Drawing.Color.White
-            Me.btnHot1.Location = New System.Drawing.Point(4, 277)
+            Me.btnHot1.Location = New System.Drawing.Point(4, 266)
             Me.btnHot1.Name = "btnHot1"
             Me.btnHot1.Size = New System.Drawing.Size(96, 28)
             Me.btnHot1.TabIndex = 31
@@ -3190,7 +3205,7 @@ Namespace JANIS
             Me.btnHot2.BackColor = System.Drawing.Color.Gray
             Me.btnHot2.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.5!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
             Me.btnHot2.ForeColor = System.Drawing.Color.White
-            Me.btnHot2.Location = New System.Drawing.Point(103, 277)
+            Me.btnHot2.Location = New System.Drawing.Point(103, 266)
             Me.btnHot2.Name = "btnHot2"
             Me.btnHot2.Size = New System.Drawing.Size(96, 28)
             Me.btnHot2.TabIndex = 32
@@ -3204,7 +3219,7 @@ Namespace JANIS
             Me.btnHot3.BackColor = System.Drawing.Color.Gray
             Me.btnHot3.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.5!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
             Me.btnHot3.ForeColor = System.Drawing.Color.White
-            Me.btnHot3.Location = New System.Drawing.Point(202, 277)
+            Me.btnHot3.Location = New System.Drawing.Point(202, 266)
             Me.btnHot3.Name = "btnHot3"
             Me.btnHot3.Size = New System.Drawing.Size(96, 28)
             Me.btnHot3.TabIndex = 33
@@ -3218,7 +3233,7 @@ Namespace JANIS
             Me.btnHot4.BackColor = System.Drawing.Color.Gray
             Me.btnHot4.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.5!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
             Me.btnHot4.ForeColor = System.Drawing.Color.White
-            Me.btnHot4.Location = New System.Drawing.Point(301, 277)
+            Me.btnHot4.Location = New System.Drawing.Point(300, 266)
             Me.btnHot4.Name = "btnHot4"
             Me.btnHot4.Size = New System.Drawing.Size(96, 28)
             Me.btnHot4.TabIndex = 34
@@ -3232,7 +3247,7 @@ Namespace JANIS
             Me.btnHot5.BackColor = System.Drawing.Color.Gray
             Me.btnHot5.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.5!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
             Me.btnHot5.ForeColor = System.Drawing.Color.White
-            Me.btnHot5.Location = New System.Drawing.Point(400, 277)
+            Me.btnHot5.Location = New System.Drawing.Point(399, 266)
             Me.btnHot5.Name = "btnHot5"
             Me.btnHot5.Size = New System.Drawing.Size(96, 28)
             Me.btnHot5.TabIndex = 35
@@ -3246,7 +3261,7 @@ Namespace JANIS
             Me.btnHot6.BackColor = System.Drawing.Color.Gray
             Me.btnHot6.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.5!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
             Me.btnHot6.ForeColor = System.Drawing.Color.White
-            Me.btnHot6.Location = New System.Drawing.Point(500, 277)
+            Me.btnHot6.Location = New System.Drawing.Point(499, 266)
             Me.btnHot6.Name = "btnHot6"
             Me.btnHot6.Size = New System.Drawing.Size(96, 28)
             Me.btnHot6.TabIndex = 36
@@ -3260,7 +3275,7 @@ Namespace JANIS
             Me.btnHot7.BackColor = System.Drawing.Color.Gray
             Me.btnHot7.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.5!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
             Me.btnHot7.ForeColor = System.Drawing.Color.White
-            Me.btnHot7.Location = New System.Drawing.Point(599, 277)
+            Me.btnHot7.Location = New System.Drawing.Point(598, 266)
             Me.btnHot7.Name = "btnHot7"
             Me.btnHot7.Size = New System.Drawing.Size(96, 28)
             Me.btnHot7.TabIndex = 37
@@ -3274,7 +3289,7 @@ Namespace JANIS
             Me.btnHot8.BackColor = System.Drawing.Color.Gray
             Me.btnHot8.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.5!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
             Me.btnHot8.ForeColor = System.Drawing.Color.White
-            Me.btnHot8.Location = New System.Drawing.Point(698, 277)
+            Me.btnHot8.Location = New System.Drawing.Point(697, 266)
             Me.btnHot8.Name = "btnHot8"
             Me.btnHot8.Size = New System.Drawing.Size(96, 28)
             Me.btnHot8.TabIndex = 38
@@ -3288,7 +3303,7 @@ Namespace JANIS
             Me.btnHot9.BackColor = System.Drawing.Color.Gray
             Me.btnHot9.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.5!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
             Me.btnHot9.ForeColor = System.Drawing.Color.White
-            Me.btnHot9.Location = New System.Drawing.Point(797, 277)
+            Me.btnHot9.Location = New System.Drawing.Point(796, 266)
             Me.btnHot9.Name = "btnHot9"
             Me.btnHot9.Size = New System.Drawing.Size(96, 28)
             Me.btnHot9.TabIndex = 39
@@ -3302,7 +3317,7 @@ Namespace JANIS
             Me.btnHot10.BackColor = System.Drawing.Color.Gray
             Me.btnHot10.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.5!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
             Me.btnHot10.ForeColor = System.Drawing.Color.White
-            Me.btnHot10.Location = New System.Drawing.Point(896, 277)
+            Me.btnHot10.Location = New System.Drawing.Point(895, 266)
             Me.btnHot10.Name = "btnHot10"
             Me.btnHot10.Size = New System.Drawing.Size(96, 28)
             Me.btnHot10.TabIndex = 40
@@ -3316,7 +3331,7 @@ Namespace JANIS
             Me.pnlPicBackLeft.BackColor = System.Drawing.Color.Black
             Me.pnlPicBackLeft.Controls.Add(Me.picLeft)
             Me.pnlPicBackLeft.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.pnlPicBackLeft.Location = New System.Drawing.Point(4, 63)
+            Me.pnlPicBackLeft.Location = New System.Drawing.Point(4, 57)
             Me.pnlPicBackLeft.Name = "pnlPicBackLeft"
             Me.pnlPicBackLeft.Size = New System.Drawing.Size(272, 153)
             Me.pnlPicBackLeft.TabIndex = 41
@@ -3326,7 +3341,7 @@ Namespace JANIS
             Me.pnlPicBackRight.BackColor = System.Drawing.Color.Black
             Me.pnlPicBackRight.Controls.Add(Me.picRight)
             Me.pnlPicBackRight.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.pnlPicBackRight.Location = New System.Drawing.Point(720, 63)
+            Me.pnlPicBackRight.Location = New System.Drawing.Point(720, 57)
             Me.pnlPicBackRight.Name = "pnlPicBackRight"
             Me.pnlPicBackRight.Size = New System.Drawing.Size(272, 153)
             Me.pnlPicBackRight.TabIndex = 42
@@ -3371,12 +3386,12 @@ Namespace JANIS
             Me.lblLibraryCount.BackColor = System.Drawing.Color.PaleTurquoise
             Me.lblLibraryCount.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
             Me.lblLibraryCount.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.lblLibraryCount.Location = New System.Drawing.Point(372, 47)
+            Me.lblLibraryCount.Location = New System.Drawing.Point(372, 56)
             Me.lblLibraryCount.Name = "lblLibraryCount"
-            Me.lblLibraryCount.Size = New System.Drawing.Size(260, 28)
+            Me.lblLibraryCount.Size = New System.Drawing.Size(260, 24)
             Me.lblLibraryCount.TabIndex = 45
             Me.lblLibraryCount.Text = "Images in Search Library:"
-            Me.lblLibraryCount.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+            Me.lblLibraryCount.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
             Me.ToolTip1.SetToolTip(Me.lblLibraryCount, "Double-Click this message to re-index the image search library." & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Useful if you've" & _
             " added new images while JANIS is running.")
             Me.lblLibraryCount.UseMnemonic = False
@@ -3389,7 +3404,7 @@ Namespace JANIS
             Me.btnPasteBoth.Name = "btnPasteBoth"
             Me.btnPasteBoth.Size = New System.Drawing.Size(47, 28)
             Me.btnPasteBoth.TabIndex = 47
-            Me.btnPasteBoth.Text = "ó"
+            Me.btnPasteBoth.Text = "Ã³"
             Me.btnPasteBoth.TextAlign = System.Drawing.ContentAlignment.TopCenter
             Me.ToolTip1.SetToolTip(Me.btnPasteBoth, "Copy image from browser, etc. and paste here to display.")
             '
@@ -3401,7 +3416,7 @@ Namespace JANIS
             Me.btnPasteRight.Name = "btnPasteRight"
             Me.btnPasteRight.Size = New System.Drawing.Size(47, 28)
             Me.btnPasteRight.TabIndex = 48
-            Me.btnPasteRight.Text = "ð"
+            Me.btnPasteRight.Text = "Ã°"
             Me.btnPasteRight.TextAlign = System.Drawing.ContentAlignment.TopCenter
             Me.ToolTip1.SetToolTip(Me.btnPasteRight, "Copy image from browser, etc. and paste here to display.")
             '
@@ -3413,7 +3428,7 @@ Namespace JANIS
             Me.btnPasteLeft.Name = "btnPasteLeft"
             Me.btnPasteLeft.Size = New System.Drawing.Size(47, 28)
             Me.btnPasteLeft.TabIndex = 46
-            Me.btnPasteLeft.Text = "ï"
+            Me.btnPasteLeft.Text = "Ã¯"
             Me.btnPasteLeft.TextAlign = System.Drawing.ContentAlignment.TopCenter
             Me.ToolTip1.SetToolTip(Me.btnPasteLeft, "Copy image from browser, etc. and paste here to display.")
             '
@@ -3423,7 +3438,7 @@ Namespace JANIS
             Me.grpLoadImage.Controls.Add(Me.btnPictureBoth)
             Me.grpLoadImage.Controls.Add(Me.btnPictureRight)
             Me.grpLoadImage.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.grpLoadImage.Location = New System.Drawing.Point(69, 222)
+            Me.grpLoadImage.Location = New System.Drawing.Point(69, 212)
             Me.grpLoadImage.Name = "grpLoadImage"
             Me.grpLoadImage.Size = New System.Drawing.Size(148, 52)
             Me.grpLoadImage.TabIndex = 49
@@ -3436,7 +3451,7 @@ Namespace JANIS
             Me.grpPasteImage.Controls.Add(Me.btnPasteBoth)
             Me.grpPasteImage.Controls.Add(Me.btnPasteRight)
             Me.grpPasteImage.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.grpPasteImage.Location = New System.Drawing.Point(772, 222)
+            Me.grpPasteImage.Location = New System.Drawing.Point(772, 212)
             Me.grpPasteImage.Name = "grpPasteImage"
             Me.grpPasteImage.RightToLeft = System.Windows.Forms.RightToLeft.Yes
             Me.grpPasteImage.Size = New System.Drawing.Size(166, 52)
@@ -3460,7 +3475,7 @@ Namespace JANIS
             Me.gbCountdownControls.Controls.Add(Me.nudCountdownHours)
             Me.gbCountdownControls.Controls.Add(Me.btnResetCountdown)
             Me.gbCountdownControls.Controls.Add(Me.btnStartCountdown)
-            Me.gbCountdownControls.Location = New System.Drawing.Point(301, 177)
+            Me.gbCountdownControls.Location = New System.Drawing.Point(301, 166)
             Me.gbCountdownControls.Name = "gbCountdownControls"
             Me.gbCountdownControls.Size = New System.Drawing.Size(394, 91)
             Me.gbCountdownControls.TabIndex = 51
@@ -3600,10 +3615,27 @@ Namespace JANIS
             Me.btnStartCountdown.TabIndex = 65
             Me.btnStartCountdown.Text = "START"
             '
+            'btnReIndexImgLib
+            '
+            Me.btnReIndexImgLib.BackColor = System.Drawing.Color.DarkTurquoise
+            Me.btnReIndexImgLib.FlatAppearance.BorderSize = 0
+            Me.btnReIndexImgLib.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+            Me.btnReIndexImgLib.Font = New System.Drawing.Font("Wingdings 3", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
+            Me.btnReIndexImgLib.Location = New System.Drawing.Point(607, 57)
+            Me.btnReIndexImgLib.Name = "btnReIndexImgLib"
+            Me.btnReIndexImgLib.Size = New System.Drawing.Size(24, 22)
+            Me.btnReIndexImgLib.TabIndex = 54
+            Me.btnReIndexImgLib.Text = "Q"
+            Me.btnReIndexImgLib.TextAlign = System.Drawing.ContentAlignment.TopCenter
+            Me.ToolTip1.SetToolTip(Me.btnReIndexImgLib, "Click here to re-index the image library" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "if you've added or deleted image files." & _
+            "")
+            Me.btnReIndexImgLib.UseVisualStyleBackColor = False
+            '
             'fmMain
             '
             Me.AutoScaleBaseSize = New System.Drawing.Size(6, 16)
-            Me.ClientSize = New System.Drawing.Size(996, 763)
+            Me.ClientSize = New System.Drawing.Size(996, 703)
+            Me.Controls.Add(Me.btnReIndexImgLib)
             Me.Controls.Add(Me.gbCountdownControls)
             Me.Controls.Add(Me.grpPasteImage)
             Me.Controls.Add(Me.lblLibraryCount)
@@ -3642,6 +3674,7 @@ Namespace JANIS
             Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
             Me.Location = New System.Drawing.Point(220, 30)
             Me.MaximizeBox = False
+            Me.MaximumSize = New System.Drawing.Size(1012, 762)
             Me.Menu = Me.MainMenu1
             Me.Name = "fmMain"
             Me.StartPosition = System.Windows.Forms.FormStartPosition.Manual
@@ -3735,7 +3768,7 @@ Namespace JANIS
                 Me.RS.lblMsg.Tag = Me.RS.lblMsg.Height
 
                 '* Show the audience display monitors early, because it might take time to
-                '* load the image library and we don't need the audience to see our wallpaper.
+                '* load the image library and we don't need the audience to see the O/S desktop.
                 Me.LS.Show()
                 Me.RS.Show()
 
@@ -4129,6 +4162,7 @@ Namespace JANIS
             End If
 
             If TestMode Then fontsize = fontsize * 4.006
+            Scr.SetTextShadows(cbShadowsEnabled.Checked)
             Scr.ShowText(translation, hue, CSng(Me.DisplayToEntryFontRatio * fontsize / Me.DisplayModeAdjustment))
         End Sub
 
@@ -4221,10 +4255,18 @@ Namespace JANIS
         End Sub
 
         Public Function AskIfSure(ByVal prompt As String) As Boolean
+            '* WHEN THIS FUNCTION EXITS, THE APP GIVES UP FOCUS TO BACKGROUND APPS. BUG.
+            Dim App As Process = Process.GetCurrentProcess
+            Dim response As Boolean = False
+
             If MessageBox.Show(prompt, "Are You Sure?", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2, MessageBoxOptions.DefaultDesktopOnly) = DialogResult.Yes Then
-                Return True
+                response = True
             End If
-            Return False
+
+            '* attempt to grab focus back from Windows, because the bug in .NET causes a different app to suddenly gain focus.
+            AppActivate(App.Id)
+
+            Return response
         End Function
 
         '=================================================================================================
@@ -4580,6 +4622,12 @@ Namespace JANIS
             System.Windows.Forms.Application.DoEvents()
         End Sub
 
+        Private Sub btnReIndexImgLib_Click(sender As System.Object, e As System.EventArgs) Handles btnReIndexImgLib.Click
+            Me.ClearImageLibrary()
+            Me.BuildImageLibrary(Me.tbDefaultImageDir.Tag)  '* Use the SAVED value, in case prefs weren't saved.
+        End Sub
+
+
         Private Sub ProcessImageDir(ByVal DirName As String)
             '* A recursive function to add all graphics file names into the ImageLibrary list.
             '* The list is for searching later.
@@ -4749,7 +4797,7 @@ Namespace JANIS
         End Sub
 
         Private Sub btnList_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnListLeft.Click, btnListRight.Click, btnListBoth.Click
-            Dim ThingsFontSize As Single = 16
+            Dim ThingsFontSize As Single = 20
             Dim i As Integer
             Dim s As String = ""
             For i = 0 To (Me.clbThings.Items.Count - 1)
@@ -4760,11 +4808,11 @@ Namespace JANIS
 
             If (Me.clbThings.Items.Count > 4) Then
                 If (s.Length > 200) Then
-                    ThingsFontSize = 11
-                ElseIf (s.Length > 160) Or (Me.clbThings.Items.Count > 8) Then
-                    ThingsFontSize = 12
-                ElseIf (s.Length > 130) Or (Me.clbThings.Items.Count > 6) Then
                     ThingsFontSize = 14
+                ElseIf (s.Length > 160) Or (Me.clbThings.Items.Count > 8) Then
+                    ThingsFontSize = 15
+                ElseIf (s.Length > 130) Or (Me.clbThings.Items.Count > 6) Then
+                    ThingsFontSize = 18
                 End If
             End If
             ' s = s + " " + s.Length.ToString
@@ -4775,8 +4823,8 @@ Namespace JANIS
         Private Sub btnShowThing_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnShowThingLeft.Click, btnShowThingRight.Click, btnShowThingBoth.Click
             Dim s As String
             s = Me.tbCurrentThing.Text + EOL + EOL + Me.tbSubstitutions.Text
-            If sender.name <> "btnShowThingRight" Then DisplayTextScreen(Me.LS, s, Me.clbThings.BackColor, 16)
-            If sender.name <> "btnShowThingLeft" Then DisplayTextScreen(Me.RS, s, Me.clbThings.BackColor, 16)
+            If sender.name <> "btnShowThingRight" Then DisplayTextScreen(Me.LS, s, Me.clbThings.BackColor, 19)
+            If sender.name <> "btnShowThingLeft" Then DisplayTextScreen(Me.RS, s, Me.clbThings.BackColor, 19)
         End Sub
         Private Sub radioThingColor_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles radioThingColorLeft.CheckedChanged, radioThingColorRight.CheckedChanged
             Me.clbThings.BackColor = sender.BackColor
@@ -5193,7 +5241,7 @@ Namespace JANIS
                 While Not EOF(fn)
                     Dim s As String = ""
                     Input(fn, s)
-                    Dim info() As String = Split(s, "¶")
+                    Dim info() As String = Split(s, "Â¶")
                     Me.HotButton(i).Text = info(0)
                     Me.HotText(i).Text = info(0)
                     Me.HotButton(i).Tag = info(1)
@@ -5219,7 +5267,7 @@ Namespace JANIS
                     FileOpen(fn, .FileName, OpenMode.Output)
                     Dim i As Integer
                     For i = 0 To 9
-                        PrintLine(fn, Me.HotButton(i).Text + "¶" + Me.HotButton(i).Tag)
+                        PrintLine(fn, Me.HotButton(i).Text + "Â¶" + Me.HotButton(i).Tag)
                     Next
                     FileClose(fn)
                     Me.HotButtonsChanged = False
@@ -5365,6 +5413,7 @@ Namespace JANIS
             Me.lblDefaultColorLeft.BackColor = Color.FromArgb(Me.lblDefaultColorLeft.Tag)
             Me.lblDefaultColorRight.BackColor = Color.FromArgb(Me.lblDefaultColorRight.Tag)
             Me.tbDefaultFontSize.Text = Me.tbDefaultFontSize.Tag
+            Me.cbShadowsEnabled.Checked = Me.cbShadowsEnabled.Tag
             Me.tbDefaultImageDir.Text = Me.tbDefaultImageDir.Tag
             Me.tbDefaultImageFile.Text = Me.tbDefaultImageFile.Tag
             Me.cbDisplayDefaultImage.Checked = Me.cbDisplayDefaultImage.Tag
@@ -5383,6 +5432,7 @@ Namespace JANIS
             If Me.lblDefaultColorLeft.BackColor.ToArgb <> Me.lblDefaultColorLeft.Tag Then Return True
             If Me.lblDefaultColorRight.BackColor.ToArgb <> Me.lblDefaultColorRight.Tag Then Return True
             If Me.tbDefaultFontSize.Text <> Me.tbDefaultFontSize.Tag Then Return True
+            If Me.cbShadowsEnabled.Checked <> Me.cbShadowsEnabled.Tag Then Return True
             If Me.tbDefaultImageDir.Text <> Me.tbDefaultImageDir.Tag Then Return True
             If Me.tbDefaultImageFile.Text <> Me.tbDefaultImageFile.Tag Then Return True
             If Me.cbDisplayDefaultImage.Checked <> Me.cbDisplayDefaultImage.Tag Then Return True
@@ -5445,6 +5495,15 @@ Namespace JANIS
                         Me.nudDefaultCountdownMinutes.Value = CInt(s)
                         Input(fn, s)
                         Me.nudDefaultCountdownSeconds.Value = CInt(s)
+                        Try
+                            Input(fn, s)
+                        Catch ex As Exception
+                            FileErr = True
+                            Me.cbShadowsEnabled.Checked = True
+                        End Try
+                        If Not FileErr Then
+                            Me.cbShadowsEnabled.Checked = (s = "True")
+                        End If
                     End If
                 End If
                 FileClose(fn)
@@ -5479,6 +5538,7 @@ Namespace JANIS
             PrintLine(fn, Me.nudDefaultCountdownHours.Value.ToString)
             PrintLine(fn, Me.nudDefaultCountdownMinutes.Value.ToString)
             PrintLine(fn, Me.nudDefaultCountdownSeconds.Value.ToString)
+            PrintLine(fn, Me.cbShadowsEnabled.Checked.ToString)
             FileClose(fn)
             Me.StorePrefs()
             Me.AllScreensToFront()
@@ -5492,6 +5552,7 @@ Namespace JANIS
             Me.lblDefaultColorLeft.BackColor = Me.pnlDefaultTextColorLeft1.BackColor
             Me.lblDefaultColorRight.BackColor = Me.pnlDefaultTextColorLeft2.BackColor
             Me.tbDefaultFontSize.Text = "60"
+            Me.cbShadowsEnabled.Checked = True
             Me.tbDefaultImageDir.Text = ROOT_SUPPORT_DIR
             Me.tbDefaultImageFile.Text = ""
             Me.cbDisplayDefaultImage.Checked = False
@@ -5511,6 +5572,7 @@ Namespace JANIS
             Me.lblDefaultColorLeft.Tag = Me.lblDefaultColorLeft.BackColor.ToArgb
             Me.lblDefaultColorRight.Tag = Me.lblDefaultColorRight.BackColor.ToArgb
             Me.tbDefaultFontSize.Tag = Me.tbDefaultFontSize.Text
+            Me.cbShadowsEnabled.Tag = Me.cbShadowsEnabled.Checked
             Me.tbDefaultImageDir.Tag = Me.tbDefaultImageDir.Text
             Me.tbDefaultImageFile.Tag = Me.tbDefaultImageFile.Text
             Me.cbDisplayDefaultImage.Tag = Me.cbDisplayDefaultImage.Checked
@@ -5531,6 +5593,8 @@ Namespace JANIS
             Me.tbRightText.BackColor = Me.lblDefaultColorRight.BackColor
             Me.tbLeftFontSize.Text = Me.tbDefaultFontSize.Text
             Me.tbRightFontSize.Text = Me.tbDefaultFontSize.Text
+            Me.LS.SetTextShadows(Me.cbShadowsEnabled.Checked)
+            Me.RS.SetTextShadows(Me.cbShadowsEnabled.Checked)
             If Me.cbDisplayDefaultImage.Checked Then Me.DisplayBothImages(Me.tbDefaultImageFile.Text)
             If Me.cbLoadDefaultHB.Checked Then
                 If Me.tbDefaultHBFile.Text <> "" Then Me.LoadHotButtons(Me.tbDefaultHBFile.Text)
@@ -5577,7 +5641,7 @@ Namespace JANIS
             Me.ResetCountdown()
         End Sub
         Private Sub cbCountdownVisible_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbCountdownVisible.CheckedChanged
-             Me.UpdateCountdown()
+            Me.UpdateCountdown()
         End Sub
         Private Sub CountdownTimer_Tick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CountdownTimer.Tick
             Me.CountdownOneTick()
@@ -5660,11 +5724,6 @@ Namespace JANIS
 
         Private Sub EasterEgg1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles EasterEgg1.Click
             MessageBox.Show("Pass it on...", "BILL LOVES BETSE", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly)
-        End Sub
-
-        Private Sub lblLibraryCount_DoubleClick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles lblLibraryCount.DoubleClick
-            Me.ClearImageLibrary()
-            Me.BuildImageLibrary(Me.tbDefaultImageDir.Tag)  '* Use the SAVED value, in case prefs weren't saved.
         End Sub
     End Class
 End Namespace

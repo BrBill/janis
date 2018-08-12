@@ -150,7 +150,7 @@ Public Class fmScreen
 
     Public Sub fmScreen_MouseEnter(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.MouseEnter, lblScore.MouseEnter, picGraphic.MouseEnter, lblTeamName.MouseEnter, lblMsg.MouseEnter
         '* Prevent the cursor from moving into the fmScreen. If it does, move it to the
-        '* immediate left of this form (keep Y coord). This works unbelievably well.
+        '* immediate left of this form (keep Y coord). This used to work in XP and VB 2005. I don't think it works now.
         System.Windows.Forms.Cursor.Position = New Point(Me.Left - 1, MousePosition.Y)
     End Sub
 
@@ -168,6 +168,10 @@ Public Class fmScreen
         Me.lblMsg.Visible = False
         Me.lblScore.Visible = False
         Me.lblTeamName.Visible = False
+    End Sub
+
+    Public Sub SetTextShadows(ByVal UseShadows As Boolean)
+        Me.lblMsg.ShadowState = UseShadows
     End Sub
 
     Public Sub ShowText(ByVal txt As String, ByVal BackColor As System.Drawing.Color, ByVal fontsize As Integer)
