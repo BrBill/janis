@@ -266,6 +266,7 @@
       <LastGenOutput>Resources.Designer.vb</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <Content Include="gLabel.dll" />
     <Content Include="JANIS.ICO" />
   </ItemGroup>
   <ItemGroup>
