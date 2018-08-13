@@ -146,6 +146,7 @@ Public Class fmScreen
 #End Region
 
     Public Sub fmScreen_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+        Me.lblCountdown.BringToFront()
     End Sub
 
     Public Sub fmScreen_MouseEnter(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.MouseEnter, lblScore.MouseEnter, picGraphic.MouseEnter, lblTeamName.MouseEnter, lblMsg.MouseEnter
@@ -274,6 +275,7 @@ Public Class fmScreen
 
     Public Sub ShowCountdownText(ByVal CountdownText As String, ByVal BackColor As System.Drawing.Color, ByVal CountdownVisible As Boolean)
         '* Change the size of the message window to accomodate the countdown timer
+        Me.lblCountdown.BringToFront()
         If CountdownVisible Then
             Me.lblMsg.Height = Me.lblMsg.Tag - Me.lblCountdown.Height
         Else
