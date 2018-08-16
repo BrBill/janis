@@ -1828,7 +1828,8 @@ Namespace JANIS
             Me.ExpTree1.Location = New System.Drawing.Point(3, 3)
             Me.ExpTree1.Name = "ExpTree1"
             Me.ExpTree1.ShowRootLines = False
-            Me.ExpTree1.Size = New System.Drawing.Size(251, 329)
+            Me.ExpTree1.Size = New System.Drawing.Size(251, 361)
+            Me.ExpTree1.StartUpDirectory = ExpTreeLib.ExpTree.StartDir.Controls
             Me.ExpTree1.TabIndex = 91
             '
             'btnWhammy
@@ -1885,7 +1886,7 @@ Namespace JANIS
             '
             Me.Label9.BackColor = System.Drawing.Color.Transparent
             Me.Label9.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.Label9.Location = New System.Drawing.Point(535, 334)
+            Me.Label9.Location = New System.Drawing.Point(535, 336)
             Me.Label9.Name = "Label9"
             Me.Label9.Size = New System.Drawing.Size(92, 24)
             Me.Label9.TabIndex = 81
@@ -1894,12 +1895,12 @@ Namespace JANIS
             '
             'nudDelay
             '
-            Me.nudDelay.Font = New System.Drawing.Font("Microsoft Sans Serif", 14.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+            Me.nudDelay.Font = New System.Drawing.Font("Microsoft Sans Serif", 15.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
             Me.nudDelay.Location = New System.Drawing.Point(631, 334)
             Me.nudDelay.Maximum = New Decimal(New Integer() {60, 0, 0, 0})
             Me.nudDelay.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
             Me.nudDelay.Name = "nudDelay"
-            Me.nudDelay.Size = New System.Drawing.Size(56, 29)
+            Me.nudDelay.Size = New System.Drawing.Size(56, 31)
             Me.nudDelay.TabIndex = 82
             Me.nudDelay.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
             Me.nudDelay.Value = New Decimal(New Integer() {15, 0, 0, 0})
@@ -1952,7 +1953,7 @@ Namespace JANIS
             Me.FileListBox1.Name = "FileListBox1"
             Me.FileListBox1.Pattern = "*.jpg;*.gif;*.bmp;*.wmf;*.png"
             Me.FileListBox1.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended
-            Me.FileListBox1.Size = New System.Drawing.Size(250, 180)
+            Me.FileListBox1.Size = New System.Drawing.Size(250, 212)
             Me.FileListBox1.TabIndex = 70
             '
             'btnRemoveSlides
