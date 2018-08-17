@@ -18,6 +18,7 @@ Namespace JANIS
         Const SLIDES_PAUSED As Integer = 1
         Const SLIDES_PLAYING As Integer = 2
         Const SLIDES_WHAMMY As Integer = 3
+        Const HOTSIDE_PIXELS As Integer = 15
 
 
         Private Class FileID   ' Used by the image indexing system
@@ -3190,12 +3191,15 @@ Namespace JANIS
             '
             Me.btnHot1.AllowDrop = True
             Me.btnHot1.BackColor = System.Drawing.Color.Gray
+            Me.btnHot1.BackgroundImage = Global.JANIS.My.Resources.Resources.HotButton_Divided
+            Me.btnHot1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center
             Me.btnHot1.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.5!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
             Me.btnHot1.ForeColor = System.Drawing.Color.White
             Me.btnHot1.Location = New System.Drawing.Point(4, 266)
             Me.btnHot1.Name = "btnHot1"
             Me.btnHot1.Size = New System.Drawing.Size(96, 28)
             Me.btnHot1.TabIndex = 31
+            Me.btnHot1.TabStop = False
             Me.btnHot1.Tag = "1"
             Me.btnHot1.Text = "Hot 1"
             Me.btnHot1.UseVisualStyleBackColor = False
@@ -3204,6 +3208,8 @@ Namespace JANIS
             '
             Me.btnHot2.AllowDrop = True
             Me.btnHot2.BackColor = System.Drawing.Color.Gray
+            Me.btnHot2.BackgroundImage = CType(resources.GetObject("btnHot2.BackgroundImage"), System.Drawing.Image)
+            Me.btnHot2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center
             Me.btnHot2.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.5!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
             Me.btnHot2.ForeColor = System.Drawing.Color.White
             Me.btnHot2.Location = New System.Drawing.Point(103, 266)
@@ -3218,6 +3224,8 @@ Namespace JANIS
             '
             Me.btnHot3.AllowDrop = True
             Me.btnHot3.BackColor = System.Drawing.Color.Gray
+            Me.btnHot3.BackgroundImage = CType(resources.GetObject("btnHot3.BackgroundImage"), System.Drawing.Image)
+            Me.btnHot3.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center
             Me.btnHot3.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.5!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
             Me.btnHot3.ForeColor = System.Drawing.Color.White
             Me.btnHot3.Location = New System.Drawing.Point(202, 266)
@@ -3232,6 +3240,8 @@ Namespace JANIS
             '
             Me.btnHot4.AllowDrop = True
             Me.btnHot4.BackColor = System.Drawing.Color.Gray
+            Me.btnHot4.BackgroundImage = CType(resources.GetObject("btnHot4.BackgroundImage"), System.Drawing.Image)
+            Me.btnHot4.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center
             Me.btnHot4.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.5!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
             Me.btnHot4.ForeColor = System.Drawing.Color.White
             Me.btnHot4.Location = New System.Drawing.Point(300, 266)
@@ -3246,6 +3256,8 @@ Namespace JANIS
             '
             Me.btnHot5.AllowDrop = True
             Me.btnHot5.BackColor = System.Drawing.Color.Gray
+            Me.btnHot5.BackgroundImage = CType(resources.GetObject("btnHot5.BackgroundImage"), System.Drawing.Image)
+            Me.btnHot5.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center
             Me.btnHot5.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.5!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
             Me.btnHot5.ForeColor = System.Drawing.Color.White
             Me.btnHot5.Location = New System.Drawing.Point(399, 266)
@@ -3260,6 +3272,8 @@ Namespace JANIS
             '
             Me.btnHot6.AllowDrop = True
             Me.btnHot6.BackColor = System.Drawing.Color.Gray
+            Me.btnHot6.BackgroundImage = CType(resources.GetObject("btnHot6.BackgroundImage"), System.Drawing.Image)
+            Me.btnHot6.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center
             Me.btnHot6.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.5!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
             Me.btnHot6.ForeColor = System.Drawing.Color.White
             Me.btnHot6.Location = New System.Drawing.Point(499, 266)
@@ -3274,6 +3288,8 @@ Namespace JANIS
             '
             Me.btnHot7.AllowDrop = True
             Me.btnHot7.BackColor = System.Drawing.Color.Gray
+            Me.btnHot7.BackgroundImage = CType(resources.GetObject("btnHot7.BackgroundImage"), System.Drawing.Image)
+            Me.btnHot7.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center
             Me.btnHot7.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.5!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
             Me.btnHot7.ForeColor = System.Drawing.Color.White
             Me.btnHot7.Location = New System.Drawing.Point(598, 266)
@@ -3288,6 +3304,8 @@ Namespace JANIS
             '
             Me.btnHot8.AllowDrop = True
             Me.btnHot8.BackColor = System.Drawing.Color.Gray
+            Me.btnHot8.BackgroundImage = CType(resources.GetObject("btnHot8.BackgroundImage"), System.Drawing.Image)
+            Me.btnHot8.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center
             Me.btnHot8.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.5!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
             Me.btnHot8.ForeColor = System.Drawing.Color.White
             Me.btnHot8.Location = New System.Drawing.Point(697, 266)
@@ -3302,6 +3320,8 @@ Namespace JANIS
             '
             Me.btnHot9.AllowDrop = True
             Me.btnHot9.BackColor = System.Drawing.Color.Gray
+            Me.btnHot9.BackgroundImage = CType(resources.GetObject("btnHot9.BackgroundImage"), System.Drawing.Image)
+            Me.btnHot9.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center
             Me.btnHot9.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.5!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
             Me.btnHot9.ForeColor = System.Drawing.Color.White
             Me.btnHot9.Location = New System.Drawing.Point(796, 266)
@@ -3316,6 +3336,8 @@ Namespace JANIS
             '
             Me.btnHot10.AllowDrop = True
             Me.btnHot10.BackColor = System.Drawing.Color.Gray
+            Me.btnHot10.BackgroundImage = CType(resources.GetObject("btnHot10.BackgroundImage"), System.Drawing.Image)
+            Me.btnHot10.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center
             Me.btnHot10.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.5!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
             Me.btnHot10.ForeColor = System.Drawing.Color.White
             Me.btnHot10.Location = New System.Drawing.Point(895, 266)
@@ -3924,8 +3946,8 @@ Namespace JANIS
                 Me.tbSubstitutions.BackColor = newcolor
                 Me.tbCurrentThing.BackColor = newcolor
             End If
+            Me.UpdateHotButtonColor(side, newcolor)
         End Sub
-
         Private Sub btnClearTextLeft_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnClearTextLeft.Click
             Me.tbLeftText.Text = ""
             Me.tbLeftText.Focus()
@@ -4334,13 +4356,13 @@ Namespace JANIS
             End If
         End Sub
 
-        Private Sub DisplayBothRawImages(ByRef img As Image, ByVal expand As Boolean)
+        Private Sub DisplayRawImageBoth(ByRef img As Image, ByVal expand As Boolean)
             If img Is Nothing Then Exit Sub
             Me.LS.ShowImage(img, expand)
             Me.RS.ShowImage(img, expand)
         End Sub
 
-        Private Sub DisplayBothImages(ByVal fnam As String)
+        Private Sub DisplayImageFile(ByVal Side As String, ByVal fnam As String)
             ''* If this is a web image, call with filename.
             'If fnam Like "http:*" Then
             '    Me.LS.ShowURLImage(fnam)
@@ -4355,12 +4377,7 @@ Namespace JANIS
                 img = Nothing
                 'Exit Sub
             End Try
-            If img IsNot Nothing Then
-                Me.LS.ShowImage(img, Me.cbExpandPicLeft.Checked)
-                Me.RS.ShowImage(img, Me.cbExpandPicRight.Checked)
-                Me.PreviewImage(Me.picLeft, img, Me.cbExpandPicLeft.Checked)
-                Me.PreviewImage(Me.picRight, img, Me.cbExpandPicRight.Checked)
-            End If
+            Me.Present_Image(Side, img)
             'End If
         End Sub
 
@@ -5051,7 +5068,7 @@ Namespace JANIS
             ElseIf SlidesStatus <> SLIDES_PAUSED Then
                 Me.lbSlideList.SelectedIndex = 0
             End If
-            Me.DisplayBothImages(Me.lbSlideList.SelectedItem)
+            Me.DisplayImageFile("Both", Me.lbSlideList.SelectedItem)
             Me.SetPauseButtonColor(False)
             Me.SetPlayButtonColor(True)
             If Me.SlidesStatus <> SLIDES_WHAMMY Then Me.SlidesStatus = SLIDES_PLAYING
@@ -5061,7 +5078,7 @@ Namespace JANIS
             Dim WhammyWasActive As Boolean = (Me.SlidesStatus = SLIDES_WHAMMY)
             Me.SlideTimer.Stop()
             Me.SlidesStatus = SLIDES_STOPPED
-            If WhammyWasActive Then Me.DisplayBothImages(Me.lbSlideList.SelectedItem)
+            If WhammyWasActive Then Me.DisplayImageFile("Both", Me.lbSlideList.SelectedItem)
             Me.SetPauseButtonColor(False)
             Me.SetPlayButtonColor(False)
             Me.lbSlideList.SelectionMode = SelectionMode.MultiExtended
@@ -5106,7 +5123,7 @@ Namespace JANIS
                         Me.StopSlideShow()
                         Return
                     ElseIf Me.SlidesStatus = SLIDES_WHAMMY Then
-                        Me.DisplayBothRawImages(Me.BufferedSlide, False)   '* maintain ratio for all images during whammy, for smoothness/speed
+                        Me.DisplayRawImageBoth(Me.BufferedSlide, False)   '* maintain ratio for all images during whammy, for smoothness/speed
                         Me.SelectRandomSlide()                            '* Set Me.BufferedSlide to a random slide
                     Else
                         If .SelectedIndex < (.Items.Count - 1) Then
@@ -5114,7 +5131,7 @@ Namespace JANIS
                         Else
                             .SelectedIndex = 0
                         End If
-                        Me.DisplayBothImages(.SelectedItem)
+                        Me.DisplayImageFile("Both", .SelectedItem)
                     End If
                 End With
             End If
@@ -5166,7 +5183,7 @@ Namespace JANIS
                     Case "btnLastSlide"
                         .SelectedIndex = .Items.Count - 1
                 End Select
-                Me.DisplayBothImages(.SelectedItem)
+                Me.DisplayImageFile("Both", .SelectedItem)
             End With
             If Me.SlidesStatus = SLIDES_PLAYING Then Me.StartSlideTimer()
         End Sub
@@ -5176,7 +5193,7 @@ Namespace JANIS
             '************************************************************************************
             If Me.SlidesStatus = SLIDES_WHAMMY Then Return
             If Me.SlidesStatus = SLIDES_PLAYING Then Me.SlideTimer.Stop() '* temporary stoppage
-            Me.DisplayBothImages(Me.lbSlideList.SelectedItem)
+            Me.DisplayImageFile("Both", Me.lbSlideList.SelectedItem)
             If Me.SlidesStatus = SLIDES_PLAYING Then StartSlideTimer()
         End Sub
         Private Sub btnWhammy_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnWhammy.Click
@@ -5208,7 +5225,49 @@ Namespace JANIS
             Dim textboxes() As TextBox = {Me.tbHBtext1, Me.tbHBtext2, Me.tbHBtext3, Me.tbHBtext4, Me.tbHBtext5, Me.tbHBtext6, Me.tbHBtext7, Me.tbHBtext8, Me.tbHBtext9, Me.tbHBtext10}
             Return textboxes(i)
         End Function
+        Private Sub UpdateHotButtonColor(ByVal side As String, ByVal newcolor As Color)
+            '* Used to update the side button colors on the HotButtons so they match the 
+            '* corresponding side team colors.
+            Dim x As Integer, y As Integer
+            Dim oldRGBcolor As Integer
+            Dim newRGBcolor As Integer = newcolor.ToArgb
+            Dim leftbound As Integer, rightbound As Integer
 
+            Dim img As Bitmap = New Bitmap(Me.btnHot1.BackgroundImage)
+
+            If side Like "Left" Then
+                leftbound = 0
+                rightbound = HOTSIDE_PIXELS - 1
+            Else
+                leftbound = img.Width - HOTSIDE_PIXELS
+                rightbound = img.Width - 1
+            End If
+            oldRGBcolor = img.GetPixel(leftbound, 0).ToArgb
+            If newRGBcolor = oldRGBcolor Then
+                Exit Sub
+            End If
+
+            For x = leftbound To rightbound
+                For y = 0 To img.Height - 1
+                    If img.GetPixel(x, y).ToArgb = oldRGBcolor Then
+                        img.SetPixel(x, y, newcolor)
+                    End If
+                Next
+            Next
+            Me.btnHot1.BackgroundImage = img
+        End Sub
+        Private Sub btnHot1_BackgroundImageChanged(sender As Object, e As System.EventArgs) Handles btnHot1.BackgroundImageChanged
+            '* If the background to button 1 changes, all 10 of them change.
+            Me.btnHot2.BackgroundImage = Me.btnHot1.BackgroundImage
+            Me.btnHot3.BackgroundImage = Me.btnHot1.BackgroundImage
+            Me.btnHot4.BackgroundImage = Me.btnHot1.BackgroundImage
+            Me.btnHot5.BackgroundImage = Me.btnHot1.BackgroundImage
+            Me.btnHot6.BackgroundImage = Me.btnHot1.BackgroundImage
+            Me.btnHot7.BackgroundImage = Me.btnHot1.BackgroundImage
+            Me.btnHot8.BackgroundImage = Me.btnHot1.BackgroundImage
+            Me.btnHot9.BackgroundImage = Me.btnHot1.BackgroundImage
+            Me.btnHot10.BackgroundImage = Me.btnHot1.BackgroundImage
+        End Sub
         Private Sub cbHBActive_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbHBActive.CheckedChanged
             Dim i As Integer
             For i = 0 To 9
@@ -5328,12 +5387,24 @@ Namespace JANIS
             sender.SelectionStart = sender.TextLength
         End Sub
 
-        Private Sub btnHot_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnHot1.Click, btnHot2.Click, btnHot3.Click, btnHot4.Click, btnHot5.Click, btnHot6.Click, btnHot7.Click, btnHot8.Click, btnHot9.Click, btnHot10.Click
+        Private Sub btnHot_MouseClick(ByVal sender As System.Object, ByVal e As MouseEventArgs) Handles btnHot1.MouseClick, btnHot2.MouseClick, btnHot3.MouseClick, btnHot4.MouseClick, btnHot5.MouseClick, btnHot6.MouseClick, btnHot7.MouseClick, btnHot8.MouseClick, btnHot9.MouseClick, btnHot10.MouseClick
+            Dim side_width_pixels As Integer = 24      '* Border = 4, subbutton = 20
             Dim img_name As String = sender.Tag
+
+            Me.tbLeftText.Text = e.X.ToString + ", " + e.Y.ToString
             If img_name <> "" Then
                 '* First, stop the slideshow if it's running.
                 Me.StopSlideShow()
-                Me.DisplayBothImages(img_name)
+                Dim location As String
+                '* The left and right sub-buttons are for showing the image only left or right
+                If e.X <= side_width_pixels Then
+                    location = "Left"
+                ElseIf e.X >= (sender.Width - side_width_pixels) Then
+                    location = "Right"
+                Else
+                    location = "Both"
+                End If
+                Me.DisplayImageFile(location, img_name)
             End If
         End Sub
 
@@ -5596,7 +5667,7 @@ Namespace JANIS
             Me.tbRightFontSize.Text = Me.tbDefaultFontSize.Text
             Me.LS.SetTextShadows(Me.cbShadowsEnabled.Checked)
             Me.RS.SetTextShadows(Me.cbShadowsEnabled.Checked)
-            If Me.cbDisplayDefaultImage.Checked Then Me.DisplayBothImages(Me.tbDefaultImageFile.Text)
+            If Me.cbDisplayDefaultImage.Checked Then Me.DisplayImageFile("Both", Me.tbDefaultImageFile.Text)
             If Me.cbLoadDefaultHB.Checked Then
                 If Me.tbDefaultHBFile.Text <> "" Then Me.LoadHotButtons(Me.tbDefaultHBFile.Text)
             End If

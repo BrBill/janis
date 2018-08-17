@@ -240,6 +240,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <None Include="Resources\HotButton_Divided.bmp" />
     <EmbeddedResource Include="fmClickWait.resx">
       <DependentUpon>fmClickWait.vb</DependentUpon>
       <SubType>Designer</SubType>
