@@ -4163,17 +4163,6 @@ Namespace JANIS
         End Sub
 
         Private Sub DisplayTextScreen(ByVal Scr As fmScreen, ByVal s As String, ByVal hue As Color, ByVal fontsize As Single)
-            '* Translate ampersands into double ampersands to make them appear.
-            Dim i As Integer
-            Dim translation As String = ""
-            For i = 1 To Len(s)
-                Dim onechar As String
-                onechar = Mid(s, i, 1)
-                '* double it up if it's an ampersand (&)
-                translation = translation + onechar
-                If onechar = "&" Then translation = translation + onechar
-            Next
-
             '* Stop the slideshow if it's running.
             Me.StopSlideShow()
 
@@ -4186,7 +4175,7 @@ Namespace JANIS
 
             If TestMode Then fontsize = fontsize * 4.006
             Scr.SetTextShadows(cbShadowsEnabled.Checked)
-            Scr.ShowText(translation, hue, CSng(Me.DisplayToEntryFontRatio * fontsize / Me.DisplayModeAdjustment))
+            Scr.ShowText(s, hue, CSng(Me.DisplayToEntryFontRatio * fontsize / Me.DisplayModeAdjustment))
         End Sub
 
         Private Sub DisplayScore(ByVal Scr As fmScreen, ByVal Team As String, ByVal Score As String, ByVal BackColor As System.Drawing.Color)
