@@ -4320,12 +4320,12 @@ Namespace JANIS
         '    End Try
         'End Sub
 
-        Private Sub Present_Image(ByVal controlName As String, ByRef img As Image)
+        Private Sub Present_Image(ByVal controlName As String, ByRef img As Image, Optional ByVal KillSlideShow As Boolean = True)
             '* Display this image to the proper displays and previews, whether controlName
             '* contains "Both", "Right", or "Left".
 
             If img IsNot Nothing Then
-                Me.StopSlideShow()
+                If KillSlideShow Then Me.StopSlideShow()
 
                 '* Show displays first for speed. Handles right, left or both.
                 If Not controlName Like "*Right*" Then
@@ -4351,7 +4351,7 @@ Namespace JANIS
             Me.RS.ShowImage(img, expand)
         End Sub
 
-        Private Sub DisplayImageFile(ByVal Side As String, ByVal fnam As String)
+        Private Sub DisplayImageFile(ByVal Side As String, ByVal fnam As String, Optional ByVal KillSlideShow As Boolean = True)
             ''* If this is a web image, call with filename.
             'If fnam Like "http:*" Then
             '    Me.LS.ShowURLImage(fnam)
@@ -4366,7 +4366,7 @@ Namespace JANIS
                 img = Nothing
                 'Exit Sub
             End Try
-            Me.Present_Image(Side, img)
+            Me.Present_Image(Side, img, KillSlideShow)
             'End If
         End Sub
 
@@ -5057,7 +5057,7 @@ Namespace JANIS
             ElseIf SlidesStatus <> SLIDES_PAUSED Then
                 Me.lbSlideList.SelectedIndex = 0
             End If
-            Me.DisplayImageFile("Both", Me.lbSlideList.SelectedItem)
+            Me.DisplayImageFile("Both", Me.lbSlideList.SelectedItem, False)
             Me.SetPauseButtonColor(False)
             Me.SetPlayButtonColor(True)
             If Me.SlidesStatus <> SLIDES_WHAMMY Then Me.SlidesStatus = SLIDES_PLAYING
@@ -5067,7 +5067,7 @@ Namespace JANIS
             Dim WhammyWasActive As Boolean = (Me.SlidesStatus = SLIDES_WHAMMY)
             Me.SlideTimer.Stop()
             Me.SlidesStatus = SLIDES_STOPPED
-            If WhammyWasActive Then Me.DisplayImageFile("Both", Me.lbSlideList.SelectedItem)
+            If WhammyWasActive Then Me.DisplayImageFile("Both", Me.lbSlideList.SelectedItem, False)
             Me.SetPauseButtonColor(False)
             Me.SetPlayButtonColor(False)
             Me.lbSlideList.SelectionMode = SelectionMode.MultiExtended
@@ -5120,7 +5120,7 @@ Namespace JANIS
                         Else
                             .SelectedIndex = 0
                         End If
-                        Me.DisplayImageFile("Both", .SelectedItem)
+                        Me.DisplayImageFile("Both", .SelectedItem, False)
                     End If
                 End With
             End If
@@ -5172,7 +5172,7 @@ Namespace JANIS
                     Case "btnLastSlide"
                         .SelectedIndex = .Items.Count - 1
                 End Select
-                Me.DisplayImageFile("Both", .SelectedItem)
+                Me.DisplayImageFile("Both", .SelectedItem, False)
             End With
             If Me.SlidesStatus = SLIDES_PLAYING Then Me.StartSlideTimer()
         End Sub
@@ -5182,7 +5182,7 @@ Namespace JANIS
             '************************************************************************************
             If Me.SlidesStatus = SLIDES_WHAMMY Then Return
             If Me.SlidesStatus = SLIDES_PLAYING Then Me.SlideTimer.Stop() '* temporary stoppage
-            Me.DisplayImageFile("Both", Me.lbSlideList.SelectedItem)
+            Me.DisplayImageFile("Both", Me.lbSlideList.SelectedItem, False)
             If Me.SlidesStatus = SLIDES_PLAYING Then StartSlideTimer()
         End Sub
         Private Sub btnWhammy_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnWhammy.Click
