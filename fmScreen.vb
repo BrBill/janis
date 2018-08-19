@@ -1,6 +1,7 @@
 Public Class fmScreen
     Inherits System.Windows.Forms.Form
 
+
 #Region " Windows Form Designer generated code "
 
     Public Sub New()
@@ -36,23 +37,14 @@ Public Class fmScreen
     Friend WithEvents GLabel1 As gLabel.gLabel
     Friend WithEvents lblTeamName As gLabel.gLabel
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
-        Dim CBlendItems1 As gLabel.cBlendItems = New gLabel.cBlendItems()
-        Me.picGraphic = New System.Windows.Forms.PictureBox()
+        Dim CBlendItems2 As gLabel.cBlendItems = New gLabel.cBlendItems()
         Me.lblMsg = New gLabel.gLabel()
         Me.lblTeamName = New gLabel.gLabel()
         Me.lblCountdown = New System.Windows.Forms.Label()
         Me.lblScore = New gLabel.gLabel()
+        Me.picGraphic = New System.Windows.Forms.PictureBox()
         CType(Me.picGraphic, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
-        '
-        'picGraphic
-        '
-        Me.picGraphic.Location = New System.Drawing.Point(0, 0)
-        Me.picGraphic.Name = "picGraphic"
-        Me.picGraphic.Size = New System.Drawing.Size(1280, 720)
-        Me.picGraphic.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
-        Me.picGraphic.TabIndex = 0
-        Me.picGraphic.TabStop = False
         '
         'lblMsg
         '
@@ -81,6 +73,8 @@ Public Class fmScreen
         Me.lblTeamName.ShadowState = True
         Me.lblTeamName.Size = New System.Drawing.Size(1280, 150)
         Me.lblTeamName.TabIndex = 3
+        Me.lblTeamName.Text = "The Team Name"
+        Me.lblTeamName.UseCompatibleTextRendering = True
         Me.lblTeamName.Visible = False
         '
         'lblCountdown
@@ -103,9 +97,9 @@ Public Class fmScreen
         Me.lblScore.FillType = gLabel.gLabel.eFillType.GradientLinear
         Me.lblScore.Font = New System.Drawing.Font("Arial", 360.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblScore.ForeColor = System.Drawing.Color.White
-        CBlendItems1.iColor = New System.Drawing.Color() {System.Drawing.Color.FromArgb(CType(CType(161, Byte), Integer), CType(CType(161, Byte), Integer), CType(CType(255, Byte), Integer)), System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer)), System.Drawing.Color.FromArgb(CType(CType(161, Byte), Integer), CType(CType(161, Byte), Integer), CType(CType(255, Byte), Integer))}
-        CBlendItems1.iPoint = New Single() {0.0!, 0.5!, 1.0!}
-        Me.lblScore.ForeColorBlend = CBlendItems1
+        CBlendItems2.iColor = New System.Drawing.Color() {System.Drawing.Color.FromArgb(CType(CType(161, Byte), Integer), CType(CType(161, Byte), Integer), CType(CType(255, Byte), Integer)), System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer)), System.Drawing.Color.FromArgb(CType(CType(161, Byte), Integer), CType(CType(161, Byte), Integer), CType(CType(255, Byte), Integer))}
+        CBlendItems2.iPoint = New Single() {0.0!, 0.5!, 1.0!}
+        Me.lblScore.ForeColorBlend = CBlendItems2
         Me.lblScore.GlowState = False
         Me.lblScore.Location = New System.Drawing.Point(0, 150)
         Me.lblScore.Name = "lblScore"
@@ -118,6 +112,15 @@ Public Class fmScreen
         Me.lblScore.TextAlign = System.Drawing.ContentAlignment.TopCenter
         Me.lblScore.TextWordWrap = False
         Me.lblScore.Visible = False
+        '
+        'picGraphic
+        '
+        Me.picGraphic.Location = New System.Drawing.Point(0, 0)
+        Me.picGraphic.Name = "picGraphic"
+        Me.picGraphic.Size = New System.Drawing.Size(1280, 720)
+        Me.picGraphic.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
+        Me.picGraphic.TabIndex = 0
+        Me.picGraphic.TabStop = False
         '
         'fmScreen
         '
@@ -146,6 +149,8 @@ Public Class fmScreen
 #End Region
 
     Public Sub fmScreen_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+        lblScore.Font = CustomFont.GetInstance(lblScore.Font.Size, FontStyle.Bold)
+        lblTeamName.Font = CustomFont.GetInstance(lblTeamName.Font.Size, FontStyle.Bold)
         Me.lblCountdown.BringToFront()
     End Sub
 

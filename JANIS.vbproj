@@ -235,11 +235,15 @@
     <Compile Include="fmSplash.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="CustomFont.vb" />
     <Compile Include="My Project\Resources.Designer.vb">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="Resources\RobotoSlab-Bold.ttf" />
+    <None Include="Resources\ScoreTemplate.bmp" />
+    <None Include="ScoreTemplate.bmp" />
     <None Include="Resources\HotButton_Divided.bmp" />
     <EmbeddedResource Include="fmClickWait.resx">
       <DependentUpon>fmClickWait.vb</DependentUpon>
@@ -267,6 +271,7 @@
       <LastGenOutput>Resources.Designer.vb</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <None Include="csz shield logo.png" />
     <Content Include="gLabel.dll" />
     <Content Include="JANIS.ICO" />
   </ItemGroup>
