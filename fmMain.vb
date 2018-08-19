@@ -1830,7 +1830,6 @@ Namespace JANIS
             Me.ExpTree1.Name = "ExpTree1"
             Me.ExpTree1.ShowRootLines = False
             Me.ExpTree1.Size = New System.Drawing.Size(251, 361)
-            Me.ExpTree1.StartUpDirectory = ExpTreeLib.ExpTree.StartDir.Controls
             Me.ExpTree1.TabIndex = 91
             '
             'btnWhammy
@@ -3856,6 +3855,9 @@ Namespace JANIS
             End If
             PREFS_FILE = ROOT_SUPPORT_DIR + "\JANIS.ini"
 
+            '* This is already set, but one time I broke it without knowing, so force it.
+            Me.ExpTree1.StartUpDirectory = ExpTreeLib.ExpTree.StartDir.Desktop
+
             '* Get the working dimensions of the primary monitor
             Dim workingArea As System.Drawing.Rectangle
             workingArea = Screen.GetWorkingArea(New System.Drawing.Point(200, 200))
@@ -5380,7 +5382,6 @@ Namespace JANIS
             Dim side_width_pixels As Integer = 24      '* Border = 4, subbutton = 20
             Dim img_name As String = sender.Tag
 
-            Me.tbLeftText.Text = e.X.ToString + ", " + e.Y.ToString
             If img_name <> "" Then
                 '* First, stop the slideshow if it's running.
                 Me.StopSlideShow()
