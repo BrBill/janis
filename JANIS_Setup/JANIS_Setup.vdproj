@@ -15,7 +15,19 @@
     {
         "Entry"
         {
-        "MsmKey" = "8:_7AC180B8073C1B777BD0B84CB1D181C8"
+        "MsmKey" = "8:_358ED153D9FE9900101A9215EB21ECCA"
+        "OwnerKey" = "8:_968E031362B54FD4978A74CA592D0E9B"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_43613C76ED52FF4CB250935F679AF3AE"
+        "OwnerKey" = "8:_968E031362B54FD4978A74CA592D0E9B"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_66EF1AB5CA82E0B8164843E3C98F3647"
         "OwnerKey" = "8:_968E031362B54FD4978A74CA592D0E9B"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -27,12 +39,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_B535F3BE521CB93EF2CC0DE7A1EAC858"
-        "OwnerKey" = "8:_968E031362B54FD4978A74CA592D0E9B"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_C9912A59EB59411EA3534EC8EC2091C4"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -40,19 +46,25 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_B535F3BE521CB93EF2CC0DE7A1EAC858"
+        "OwnerKey" = "8:_43613C76ED52FF4CB250935F679AF3AE"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_358ED153D9FE9900101A9215EB21ECCA"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_66EF1AB5CA82E0B8164843E3C98F3647"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_968E031362B54FD4978A74CA592D0E9B"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_7AC180B8073C1B777BD0B84CB1D181C8"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -160,15 +172,20 @@
         }
         "File"
         {
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_7AC180B8073C1B777BD0B84CB1D181C8"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_358ED153D9FE9900101A9215EB21ECCA"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:ExpTreeLib, Version=2.11.2259.2510, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:gLabel, Version=1.0.8.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
+                    "_358ED153D9FE9900101A9215EB21ECCA"
+                    {
+                    "Name" = "8:gLabel.dll"
+                    "Attributes" = "3:512"
+                    }
                 }
-            "SourcePath" = "8:ExpTreeLib.dll"
+            "SourcePath" = "8:gLabel.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_97EC6D2D24C644F9963B1EBC0A45BD48"
@@ -186,15 +203,51 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_B535F3BE521CB93EF2CC0DE7A1EAC858"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_43613C76ED52FF4CB250935F679AF3AE"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Interop.VBRUN, Version=6.0.0.0, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:Interop.VBRUN, Version=6.0.0.0, Culture=neutral, processorArchitecture=x86"
                 "ScatterAssemblies"
                 {
+                    "_43613C76ED52FF4CB250935F679AF3AE"
+                    {
+                    "Name" = "8:Interop.VBRUN.dll"
+                    "Attributes" = "3:512"
+                    }
                 }
             "SourcePath" = "8:Interop.VBRUN.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_97EC6D2D24C644F9963B1EBC0A45BD48"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_66EF1AB5CA82E0B8164843E3C98F3647"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:ExpTreeLib, Version=2.11.2259.2510, Culture=neutral, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_66EF1AB5CA82E0B8164843E3C98F3647"
+                    {
+                    "Name" = "8:ExpTreeLib.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:ExpTreeLib.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_97EC6D2D24C644F9963B1EBC0A45BD48"
@@ -288,7 +341,7 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:JANIS"
-        "ProductCode" = "8:{CC684067-E5F1-4A1E-8F3A-D34189D9351C}"
+        "ProductCode" = "8:{823CB187-2F60-4401-93AD-138F2DCBD866}"
         "PackageCode" = "8:{C9B49C61-81A0-466C-8724-277FB0E10FAA}"
         "UpgradeCode" = "8:{95E021C4-9260-4C75-ADA7-723527302781}"
         "AspNetVersion" = "8:4.0.30319.0"
@@ -838,7 +891,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_968E031362B54FD4978A74CA592D0E9B"
             {
-            "SourcePath" = "8:..\\obj\\x86\\Release\\JANIS_v3.3.exe"
+            "SourcePath" = "8:..\\obj\\x86\\Release\\JANIS_v3.3_beta_3.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_97EC6D2D24C644F9963B1EBC0A45BD48"

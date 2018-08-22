@@ -1,6 +1,14 @@
 Public Class fmScreen
     Inherits System.Windows.Forms.Form
 
+    Dim LEFT_TEAM_COLOR As System.Drawing.Color = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(176, Byte), Integer))
+    Dim RIGHT_TEAM_COLOR As System.Drawing.Color = System.Drawing.Color.Maroon
+    Dim DEFAULT_SCORE_COLOR As System.Drawing.Color = System.Drawing.Color.White
+    Dim LEFT_FADE_INCREMENTS() As Integer = {0, 16, 16, 5}     '* If any of these had to decrease to reach the goal color,
+    Dim RIGHT_FADE_INCREMENTS() As Integer = {0, 8, 16, 16}    '* The numbers would be negative, but that would break AddColor()
+    Const MAX_SCORE As Integer = 999
+    Friend WithEvents FadeTimer As System.Windows.Forms.Timer
+    Const MIN_SCORE As Integer = -99
 
 #Region " Windows Form Designer generated code "
 
@@ -33,16 +41,25 @@ Public Class fmScreen
     Friend WithEvents picGraphic As System.Windows.Forms.PictureBox
     Friend WithEvents lblMsg As gLabel.gLabel
     Friend WithEvents lblCountdown As System.Windows.Forms.Label
-    Friend WithEvents lblScore As gLabel.gLabel
     Friend WithEvents GLabel1 As gLabel.gLabel
-    Friend WithEvents lblTeamName As gLabel.gLabel
+    Friend WithEvents lblTeamLocLeft As System.Windows.Forms.Label
+    Friend WithEvents lblTeamNameLeft As System.Windows.Forms.Label
+    Friend WithEvents lblScoreLeft As System.Windows.Forms.Label
+    Friend WithEvents lblScoreRight As System.Windows.Forms.Label
+    Friend WithEvents lblTeamLocRight As System.Windows.Forms.Label
+    Friend WithEvents lblTeamNameRight As System.Windows.Forms.Label
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
-        Dim CBlendItems2 As gLabel.cBlendItems = New gLabel.cBlendItems()
+        Me.components = New System.ComponentModel.Container()
         Me.lblMsg = New gLabel.gLabel()
-        Me.lblTeamName = New gLabel.gLabel()
         Me.lblCountdown = New System.Windows.Forms.Label()
-        Me.lblScore = New gLabel.gLabel()
         Me.picGraphic = New System.Windows.Forms.PictureBox()
+        Me.lblTeamLocLeft = New System.Windows.Forms.Label()
+        Me.lblTeamNameLeft = New System.Windows.Forms.Label()
+        Me.lblScoreLeft = New System.Windows.Forms.Label()
+        Me.lblScoreRight = New System.Windows.Forms.Label()
+        Me.lblTeamLocRight = New System.Windows.Forms.Label()
+        Me.lblTeamNameRight = New System.Windows.Forms.Label()
+        Me.FadeTimer = New System.Windows.Forms.Timer(Me.components)
         CType(Me.picGraphic, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
@@ -60,26 +77,9 @@ Public Class fmScreen
         Me.lblMsg.TabIndex = 1
         Me.lblMsg.Text = "Welcome to JANIS"
         '
-        'lblTeamName
-        '
-        Me.lblTeamName.BackColor = System.Drawing.Color.Transparent
-        Me.lblTeamName.Font = New System.Drawing.Font("Arial", 54.0!, System.Drawing.FontStyle.Bold)
-        Me.lblTeamName.ForeColor = System.Drawing.Color.White
-        Me.lblTeamName.GlowState = False
-        Me.lblTeamName.Location = New System.Drawing.Point(0, 0)
-        Me.lblTeamName.Name = "lblTeamName"
-        Me.lblTeamName.ShadowColor = System.Drawing.Color.Black
-        Me.lblTeamName.ShadowOffset = New System.Drawing.Point(4, 4)
-        Me.lblTeamName.ShadowState = True
-        Me.lblTeamName.Size = New System.Drawing.Size(1280, 150)
-        Me.lblTeamName.TabIndex = 3
-        Me.lblTeamName.Text = "The Team Name"
-        Me.lblTeamName.UseCompatibleTextRendering = True
-        Me.lblTeamName.Visible = False
-        '
         'lblCountdown
         '
-        Me.lblCountdown.BackColor = System.Drawing.Color.Black
+        Me.lblCountdown.BackColor = System.Drawing.Color.FromArgb(CType(CType(48, Byte), Integer), CType(CType(48, Byte), Integer), CType(CType(48, Byte), Integer))
         Me.lblCountdown.Font = New System.Drawing.Font("Arial Black", 70.0!, System.Drawing.FontStyle.Bold)
         Me.lblCountdown.Location = New System.Drawing.Point(0, 600)
         Me.lblCountdown.Name = "lblCountdown"
@@ -89,32 +89,10 @@ Public Class fmScreen
         Me.lblCountdown.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         Me.lblCountdown.Visible = False
         '
-        'lblScore
-        '
-        Me.lblScore.BackColor = System.Drawing.Color.Transparent
-        Me.lblScore.Feather = 95
-        Me.lblScore.FeatherState = False
-        Me.lblScore.FillType = gLabel.gLabel.eFillType.GradientLinear
-        Me.lblScore.Font = New System.Drawing.Font("Arial", 360.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblScore.ForeColor = System.Drawing.Color.White
-        CBlendItems2.iColor = New System.Drawing.Color() {System.Drawing.Color.FromArgb(CType(CType(161, Byte), Integer), CType(CType(161, Byte), Integer), CType(CType(255, Byte), Integer)), System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(255, Byte), Integer)), System.Drawing.Color.FromArgb(CType(CType(161, Byte), Integer), CType(CType(161, Byte), Integer), CType(CType(255, Byte), Integer))}
-        CBlendItems2.iPoint = New Single() {0.0!, 0.5!, 1.0!}
-        Me.lblScore.ForeColorBlend = CBlendItems2
-        Me.lblScore.GlowState = False
-        Me.lblScore.Location = New System.Drawing.Point(0, 150)
-        Me.lblScore.Name = "lblScore"
-        Me.lblScore.ShadowColor = System.Drawing.Color.Black
-        Me.lblScore.ShadowOffset = New System.Drawing.Point(10, 10)
-        Me.lblScore.ShadowState = True
-        Me.lblScore.Size = New System.Drawing.Size(1280, 570)
-        Me.lblScore.TabIndex = 2
-        Me.lblScore.Text = "-68"
-        Me.lblScore.TextAlign = System.Drawing.ContentAlignment.TopCenter
-        Me.lblScore.TextWordWrap = False
-        Me.lblScore.Visible = False
-        '
         'picGraphic
         '
+        Me.picGraphic.Image = Global.JANIS.My.Resources.Resources.ScoreTemplate
+        Me.picGraphic.InitialImage = Nothing
         Me.picGraphic.Location = New System.Drawing.Point(0, 0)
         Me.picGraphic.Name = "picGraphic"
         Me.picGraphic.Size = New System.Drawing.Size(1280, 720)
@@ -122,14 +100,103 @@ Public Class fmScreen
         Me.picGraphic.TabIndex = 0
         Me.picGraphic.TabStop = False
         '
+        'lblTeamLocLeft
+        '
+        Me.lblTeamLocLeft.Anchor = System.Windows.Forms.AnchorStyles.Left
+        Me.lblTeamLocLeft.BackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(176, Byte), Integer))
+        Me.lblTeamLocLeft.Font = New System.Drawing.Font("Roboto Slab", 36.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblTeamLocLeft.ForeColor = System.Drawing.Color.White
+        Me.lblTeamLocLeft.Location = New System.Drawing.Point(25, 53)
+        Me.lblTeamLocLeft.Name = "lblTeamLocLeft"
+        Me.lblTeamLocLeft.Size = New System.Drawing.Size(440, 65)
+        Me.lblTeamLocLeft.TabIndex = 8
+        Me.lblTeamLocLeft.Text = "Left Team City" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10)
+        Me.lblTeamLocLeft.TextAlign = System.Drawing.ContentAlignment.BottomLeft
+        Me.lblTeamLocLeft.UseCompatibleTextRendering = True
+        '
+        'lblTeamNameLeft
+        '
+        Me.lblTeamNameLeft.Anchor = System.Windows.Forms.AnchorStyles.Left
+        Me.lblTeamNameLeft.BackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(176, Byte), Integer))
+        Me.lblTeamNameLeft.Font = New System.Drawing.Font("Roboto Slab", 36.0!, System.Drawing.FontStyle.Bold)
+        Me.lblTeamNameLeft.ForeColor = System.Drawing.Color.White
+        Me.lblTeamNameLeft.Location = New System.Drawing.Point(25, 118)
+        Me.lblTeamNameLeft.Name = "lblTeamNameLeft"
+        Me.lblTeamNameLeft.Size = New System.Drawing.Size(440, 65)
+        Me.lblTeamNameLeft.TabIndex = 9
+        Me.lblTeamNameLeft.Text = "Left Team Name"
+        Me.lblTeamNameLeft.UseCompatibleTextRendering = True
+        '
+        'lblScoreLeft
+        '
+        Me.lblScoreLeft.BackColor = System.Drawing.Color.Black
+        Me.lblScoreLeft.Font = New System.Drawing.Font("Roboto Slab", 220.0!, System.Drawing.FontStyle.Bold)
+        Me.lblScoreLeft.ForeColor = System.Drawing.Color.White
+        Me.lblScoreLeft.Location = New System.Drawing.Point(-30, 284)
+        Me.lblScoreLeft.Name = "lblScoreLeft"
+        Me.lblScoreLeft.Size = New System.Drawing.Size(620, 416)
+        Me.lblScoreLeft.TabIndex = 10
+        Me.lblScoreLeft.Text = "000"
+        Me.lblScoreLeft.TextAlign = System.Drawing.ContentAlignment.TopCenter
+        Me.lblScoreLeft.UseCompatibleTextRendering = True
+        '
+        'lblScoreRight
+        '
+        Me.lblScoreRight.BackColor = System.Drawing.Color.Black
+        Me.lblScoreRight.Font = New System.Drawing.Font("Roboto Slab", 220.0!, System.Drawing.FontStyle.Bold)
+        Me.lblScoreRight.ForeColor = System.Drawing.Color.White
+        Me.lblScoreRight.Location = New System.Drawing.Point(690, 284)
+        Me.lblScoreRight.Name = "lblScoreRight"
+        Me.lblScoreRight.Size = New System.Drawing.Size(620, 416)
+        Me.lblScoreRight.TabIndex = 11
+        Me.lblScoreRight.Text = "768"
+        Me.lblScoreRight.TextAlign = System.Drawing.ContentAlignment.TopCenter
+        Me.lblScoreRight.UseCompatibleTextRendering = True
+        '
+        'lblTeamLocRight
+        '
+        Me.lblTeamLocRight.Anchor = System.Windows.Forms.AnchorStyles.Right
+        Me.lblTeamLocRight.BackColor = System.Drawing.Color.Maroon
+        Me.lblTeamLocRight.Font = New System.Drawing.Font("Roboto Slab", 36.0!, System.Drawing.FontStyle.Bold)
+        Me.lblTeamLocRight.ForeColor = System.Drawing.Color.White
+        Me.lblTeamLocRight.Location = New System.Drawing.Point(815, 53)
+        Me.lblTeamLocRight.Name = "lblTeamLocRight"
+        Me.lblTeamLocRight.Size = New System.Drawing.Size(440, 65)
+        Me.lblTeamLocRight.TabIndex = 12
+        Me.lblTeamLocRight.Text = "Right Team City" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10)
+        Me.lblTeamLocRight.TextAlign = System.Drawing.ContentAlignment.BottomRight
+        Me.lblTeamLocRight.UseCompatibleTextRendering = True
+        '
+        'lblTeamNameRight
+        '
+        Me.lblTeamNameRight.Anchor = System.Windows.Forms.AnchorStyles.Left
+        Me.lblTeamNameRight.BackColor = System.Drawing.Color.Maroon
+        Me.lblTeamNameRight.Font = New System.Drawing.Font("Roboto Slab", 36.0!, System.Drawing.FontStyle.Bold)
+        Me.lblTeamNameRight.ForeColor = System.Drawing.Color.White
+        Me.lblTeamNameRight.Location = New System.Drawing.Point(815, 118)
+        Me.lblTeamNameRight.Name = "lblTeamNameRight"
+        Me.lblTeamNameRight.Size = New System.Drawing.Size(440, 65)
+        Me.lblTeamNameRight.TabIndex = 13
+        Me.lblTeamNameRight.Text = "Right Team Name"
+        Me.lblTeamNameRight.TextAlign = System.Drawing.ContentAlignment.TopRight
+        Me.lblTeamNameRight.UseCompatibleTextRendering = True
+        '
+        'FadeTimer
+        '
+        Me.FadeTimer.Interval = 60
+        '
         'fmScreen
         '
         Me.AutoScaleBaseSize = New System.Drawing.Size(5, 13)
-        Me.BackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.BackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(176, Byte), Integer))
         Me.ClientSize = New System.Drawing.Size(1280, 720)
-        Me.Controls.Add(Me.lblScore)
+        Me.Controls.Add(Me.lblTeamNameRight)
+        Me.Controls.Add(Me.lblTeamLocRight)
+        Me.Controls.Add(Me.lblScoreRight)
+        Me.Controls.Add(Me.lblScoreLeft)
+        Me.Controls.Add(Me.lblTeamNameLeft)
+        Me.Controls.Add(Me.lblTeamLocLeft)
         Me.Controls.Add(Me.lblCountdown)
-        Me.Controls.Add(Me.lblTeamName)
         Me.Controls.Add(Me.lblMsg)
         Me.Controls.Add(Me.picGraphic)
         Me.ForeColor = System.Drawing.Color.White
@@ -149,12 +216,25 @@ Public Class fmScreen
 #End Region
 
     Public Sub fmScreen_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
-        lblScore.Font = CustomFont.GetInstance(lblScore.Font.Size, FontStyle.Bold)
-        lblTeamName.Font = CustomFont.GetInstance(lblTeamName.Font.Size, FontStyle.Bold)
+        Me.lblScoreLeft.Font = CustomFont.GetInstance(Me.lblScoreLeft.Font.Size, FontStyle.Bold)
+        Me.lblScoreRight.Font = Me.lblScoreLeft.Font
+        Me.lblTeamNameLeft.Font = CustomFont.GetInstance(Me.lblTeamNameLeft.Font.Size, FontStyle.Bold)
+        Me.lblTeamNameRight.Font = Me.lblTeamNameLeft.Font
+        Me.lblTeamLocLeft.Font = Me.lblTeamNameLeft.Font
+        Me.lblTeamLocRight.Font = Me.lblTeamNameLeft.Font
+        '* Let's get all the elements stacked in the right order.
+        ' Me.picGraphic.BringToFront()  No need to do this, because we want it in back.
+        Me.lblMsg.BringToFront()
+        Me.lblTeamLocLeft.BringToFront()
+        Me.lblTeamLocRight.BringToFront()
+        Me.lblTeamNameLeft.BringToFront()
+        Me.lblTeamNameRight.BringToFront()
+        Me.lblScoreLeft.BringToFront()
+        Me.lblScoreRight.BringToFront()
         Me.lblCountdown.BringToFront()
     End Sub
 
-    Public Sub fmScreen_MouseEnter(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.MouseEnter, lblScore.MouseEnter, picGraphic.MouseEnter, lblTeamName.MouseEnter, lblMsg.MouseEnter
+    Public Sub fmScreen_MouseEnter(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.MouseEnter, picGraphic.MouseEnter, lblMsg.MouseEnter
         '* Prevent the cursor from moving into the fmScreen. If it does, move it to the
         '* immediate left of this form (keep Y coord). This used to work in XP and VB 2005. I don't think it works now.
         System.Windows.Forms.Cursor.Position = New Point(Me.Left - 1, MousePosition.Y)
@@ -165,6 +245,62 @@ Public Class fmScreen
         Return Me.Left
     End Function
 
+    Public Sub AdjustSize(ByVal sRatio As Integer)
+        '* Hack: resizing the height and width does WEIRD things to the team name field locations, so save them and use them later.
+
+        With Me
+            Dim NameTop As Integer = .lblTeamNameLeft.Top
+            Dim LocTop As Integer = .lblTeamLocLeft.Top
+            Dim RightLocLeft As Integer = .lblTeamLocRight.Left
+            .Height = .Height / sRatio
+            .Width = .Width / sRatio
+            .lblScoreLeft.Left = .lblScoreLeft.Left / sRatio
+            .lblScoreLeft.Top = .lblScoreLeft.Top / sRatio
+            .lblScoreLeft.Height = .lblScoreLeft.Height / sRatio
+            .lblScoreLeft.Width = .lblScoreLeft.Width / sRatio
+            .lblScoreLeft.Font = New Font(.lblScoreLeft.Font.FontFamily, CSng(Val(.lblScoreLeft.Font.Size) / sRatio), .lblScoreLeft.Font.Style)
+            .lblScoreRight.Left = .lblScoreRight.Left / sRatio
+            .lblScoreRight.Top = .lblScoreRight.Top / sRatio
+            .lblScoreRight.Height = .lblScoreRight.Height / sRatio
+            .lblScoreRight.Width = .lblScoreRight.Width / sRatio
+            .lblScoreRight.Font = .lblScoreLeft.Font
+            .lblTeamNameLeft.Left = .lblTeamNameLeft.Left / sRatio
+            .lblTeamNameLeft.Top = NameTop / sRatio
+            .lblTeamNameLeft.Height = .lblTeamNameLeft.Height / sRatio
+            .lblTeamNameLeft.Width = .lblTeamNameLeft.Width / sRatio
+            .lblTeamNameLeft.Font = New Font(.lblTeamNameLeft.Font.FontFamily, CSng(Val(.lblTeamNameLeft.Font.Size) / sRatio), .lblTeamNameLeft.Font.Style)
+            .lblTeamNameRight.Left = .lblTeamNameRight.Left / sRatio
+            .lblTeamNameRight.Top = .lblTeamNameLeft.Top
+            .lblTeamNameRight.Height = .lblTeamNameRight.Height / sRatio
+            .lblTeamNameRight.Width = .lblTeamNameRight.Width / sRatio
+            .lblTeamNameRight.Font = .lblTeamNameLeft.Font
+            .lblTeamLocLeft.Left = .lblTeamLocLeft.Left / sRatio
+            .lblTeamLocLeft.Top = LocTop / sRatio
+            .lblTeamLocLeft.Height = .lblTeamLocLeft.Height / sRatio
+            .lblTeamLocLeft.Width = .lblTeamLocLeft.Width / sRatio
+            .lblTeamLocLeft.Font = .lblTeamNameLeft.Font
+            .lblTeamLocRight.Left = RightLocLeft / sRatio
+            .lblTeamLocRight.Top = .lblTeamLocLeft.Top
+            .lblTeamLocRight.Height = .lblTeamLocRight.Height / sRatio
+            .lblTeamLocRight.Width = .lblTeamLocRight.Width / sRatio
+            .lblTeamLocRight.Font = .lblTeamNameLeft.Font
+            .lblMsg.Left = .lblMsg.Left / sRatio
+            .lblMsg.Top = .lblMsg.Top / sRatio
+            .lblMsg.Height = .lblMsg.Height / sRatio
+            .lblMsg.Width = .lblMsg.Width / sRatio
+            .lblMsg.Font = New Font(.lblMsg.Font.Name, CSng(Val(.lblMsg.Font.Size) / sRatio), .lblMsg.Font.Style)
+            .lblCountdown.Left = .lblCountdown.Left / sRatio
+            .lblCountdown.Top = .lblCountdown.Top / sRatio
+            .lblCountdown.Height = .lblCountdown.Height / sRatio
+            .lblCountdown.Width = .lblCountdown.Width / sRatio
+            .lblCountdown.Font = New Font(.lblCountdown.Font.Name, CSng(Val(.lblCountdown.Font.Size) / sRatio), .lblCountdown.Font.Style)
+            .picGraphic.Left = .picGraphic.Left / sRatio
+            .picGraphic.Top = .picGraphic.Top / sRatio
+            .picGraphic.Height = .picGraphic.Height / sRatio
+            .picGraphic.Width = .picGraphic.Width / sRatio
+        End With
+    End Sub
+
     Public Sub Blackout()
         '* Black out the screen and turn off visible stuff
 
@@ -172,8 +308,12 @@ Public Class fmScreen
         Me.picGraphic.Visible = False
         Me.picGraphic.ImageLocation = ""
         Me.lblMsg.Visible = False
-        Me.lblScore.Visible = False
-        Me.lblTeamName.Visible = False
+        Me.lblTeamLocLeft.Visible = False
+        Me.lblTeamLocRight.Visible = False
+        Me.lblTeamNameLeft.Visible = False
+        Me.lblTeamNameRight.Visible = False
+        Me.lblScoreLeft.Visible = False
+        Me.lblScoreRight.Visible = False
     End Sub
 
     Public Sub SetTextShadows(ByVal UseShadows As Boolean)
@@ -181,72 +321,58 @@ Public Class fmScreen
     End Sub
 
     Public Sub ShowText(ByVal txt As String, ByVal BackColor As System.Drawing.Color, ByVal fontsize As Integer)
-        Me.lblScore.Visible = False
-        Me.lblTeamName.Visible = False
+        Me.lblTeamLocLeft.Visible = False
+        Me.lblTeamLocRight.Visible = False
+        Me.lblTeamNameLeft.Visible = False
+        Me.lblTeamNameRight.Visible = False
+        Me.lblScoreLeft.Visible = False
+        Me.lblScoreRight.Visible = False
         Me.picGraphic.Visible = False
         Me.picGraphic.ImageLocation = ""
         Me.lblMsg.Font = New Font(Me.lblMsg.Font.Name, fontsize, Me.lblMsg.Font.Style)
-        Me.lblScore.ShadowColor = Me.ColorMixer(BackColor, System.Drawing.Color.Black)
         Me.lblMsg.BackColor = BackColor
         Me.lblMsg.Text = txt
         Me.lblMsg.Visible = True
     End Sub
 
-    Public Sub ShowScore(ByVal Score As String, ByVal Team As String, ByVal BackColor As System.Drawing.Color)
-        Dim scoreCBlendItems As gLabel.cBlendItems = New gLabel.cBlendItems()
-        '* Mix the background, foreground colors together with a gray to make a good blending shade for the score
-        Dim edgeBlendColor As System.Drawing.Color = Me.ColorMixer(BackColor, System.Drawing.Color.White, System.Drawing.Color.FromArgb(&HFF777777))
+    Public Sub ShowScore(ByVal scrLeft As String, ByVal locLeft As String, ByVal nameLeft As String, ByVal scrRight As String, ByVal locRight As String, ByVal nameRight As String)
 
-        Me.lblTeamName.BackColor = BackColor
-        Me.lblScore.BackColor = BackColor
+        Me.lblTeamLocLeft.Text = locLeft
+        Me.lblTeamNameLeft.Text = nameLeft
+        Me.lblTeamLocRight.Text = locRight
+        Me.lblTeamNameRight.Text = nameRight
+
         Me.lblMsg.Visible = False
-        Me.picGraphic.Visible = False
-        Me.picGraphic.ImageLocation = ""
-        Me.lblScore.Text = Score
-        Me.lblTeamName.Text = Team
-        '
-        ' Set the text gradient for the score
-        scoreCBlendItems.iColor = New System.Drawing.Color() {edgeBlendColor, System.Drawing.Color.White, edgeBlendColor}
-        scoreCBlendItems.iPoint = New Single() {0.0!, 0.5!, 1.0!}
-        Me.lblScore.ForeColorBlend = scoreCBlendItems
-        'Me.lblScore.ShadowColor = System.Drawing.Color.FromArgb(System.Drawing.Color.Black.ToArgb And &H77FFFFFF) 'Transparent
-        Me.lblScore.ShadowColor = Me.ColorMixer(BackColor, System.Drawing.Color.Black)
-        Me.lblTeamName.ShadowColor = Me.lblScore.ShadowColor
-        Me.lblScore.Visible = True
-        Me.lblTeamName.Visible = True
+        Me.picGraphic.Image = Global.JANIS.My.Resources.ScoreTemplate
+        Me.picGraphic.Visible = True
+
+        Me.lblTeamLocLeft.Visible = True
+        Me.lblTeamNameLeft.Visible = True
+        Me.lblTeamLocRight.Visible = True
+        Me.lblTeamNameRight.Visible = True
+
+        If Me.lblScoreLeft.Text <> scrLeft Then
+            Me.lblScoreLeft.Text = Me.Limited_Score(scrLeft)
+            FadeBuff(Me.lblScoreLeft, LEFT_TEAM_COLOR)
+        End If
+        If Me.lblScoreRight.Text <> scrRight Then
+            Me.lblScoreRight.Text = Me.Limited_Score(scrRight)
+            FadeBuff(Me.lblScoreRight, RIGHT_TEAM_COLOR)
+        End If
+        Me.lblScoreLeft.Visible = True
+        Me.lblScoreRight.Visible = True
     End Sub
-
-    Private Function ColorMixer(ByVal ParamArray colours() As System.Drawing.Color) As System.Drawing.Color
-        ' Find the correct edge blend color in Argb between the two passed-in colors and mix in a little gray for extra contrast, to be used for Scores.
-        Dim resultColor As Integer = &HFF000000        '* It's opaque, that much we know.
-        Dim R As Integer = 0, G As Integer = 0, B As Integer = 0
-        Dim myArgb As Integer
-
-        If colours.Length = 0 Then Return System.Drawing.Color.Black '* If this ever happens, it's CALLER error.
-
-        ' These are averages. Split into R G B and average them, then put them back into Argb.
-        For i As Integer = 0 To UBound(colours, 1)
-            myArgb = colours(i).ToArgb
-            R += (myArgb And &HFF0000)
-            G += (myArgb And &HFF00)
-            B += (myArgb And &HFF)
-        Next
-
-        ' The following rigamarole throws away remainders. This is a good thing, because otherwise we get unexpected tints.
-        ' This way we keep the color components isolated from each other.
-        R = (R / colours.Length) And &HFF0000
-        G = (G / colours.Length) And &HFF00
-        B = (B / colours.Length) And &HFF
-        resultColor += R + G + B
-        Return System.Drawing.Color.FromArgb(resultColor)
-    End Function
 
     Public Sub ShowImage(ByRef Img As Image, ByVal Expand As Boolean)
         If Img Is Nothing Then Exit Sub
 
         Me.BackColor = System.Drawing.Color.Black
-        Me.lblScore.Visible = False
-        Me.lblTeamName.Visible = False
+        Me.lblTeamLocLeft.Visible = False
+        Me.lblTeamLocRight.Visible = False
+        Me.lblTeamNameLeft.Visible = False
+        Me.lblTeamNameRight.Visible = False
+        Me.lblScoreLeft.Visible = False
+        Me.lblScoreRight.Visible = False
         Me.lblMsg.Visible = False
 
         If Expand Then
@@ -292,4 +418,39 @@ Public Class fmScreen
         Me.lblCountdown.Text = CountdownText
     End Sub
 
+
+#Region "Private Functions and Subs"
+    Private Function Limited_Score(ByVal score As String) As Integer
+        '* If the score is too big or too small, it will be too wide to display
+        Return Math.Min(Math.Max(Convert.ToInt32(score), MIN_SCORE), MAX_SCORE).ToString
+    End Function
+
+    Private Function AddColor(ByVal color As System.Drawing.Color, ByVal increments() As Integer) As System.Drawing.Color
+        Dim a As Integer = Math.Min(increments(0) + color.A, DEFAULT_SCORE_COLOR.A)
+        Dim r As Integer = Math.Min(increments(1) + color.R, DEFAULT_SCORE_COLOR.R)
+        Dim g As Integer = Math.Min(increments(2) + color.G, DEFAULT_SCORE_COLOR.G)
+        Dim b As Integer = Math.Min(increments(3) + color.B, DEFAULT_SCORE_COLOR.B)
+
+        Return System.Drawing.Color.FromArgb(a, r, g, b)
+    End Function
+
+    Private Sub FadeBuff(ByRef lbl As System.Windows.Forms.Label, buffcolor As System.Drawing.Color)
+        lbl.ForeColor = buffcolor
+        If Not Me.FadeTimer.Enabled Then Me.FadeTimer.Start()
+    End Sub
+
+    Private Sub FadeTimer_Tick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles FadeTimer.Tick
+        Dim changed As Boolean = False
+        If Not Me.lblScoreLeft.ForeColor.Equals(DEFAULT_SCORE_COLOR) Then
+            Me.lblScoreLeft.ForeColor = Me.AddColor(Me.lblScoreLeft.ForeColor, LEFT_FADE_INCREMENTS)
+            changed = True
+        End If
+        If Not Me.lblScoreRight.ForeColor.Equals(DEFAULT_SCORE_COLOR) Then
+            Me.lblScoreRight.ForeColor = Me.AddColor(Me.lblScoreRight.ForeColor, RIGHT_FADE_INCREMENTS)
+            changed = True
+        End If
+        If Not changed Then Me.FadeTimer.Stop()
+    End Sub
+
+#End Region
 End Class
