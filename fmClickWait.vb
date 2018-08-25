@@ -31,22 +31,11 @@ Public Class fmClickWait
     'NOTE: The following procedure is required by the Windows Form Designer
     'It can be modified using the Windows Form Designer.  
     'Do not modify it using the code editor.
-    Friend WithEvents pnlContainMouse As System.Windows.Forms.Panel
     Friend WithEvents Label1 As System.Windows.Forms.Label
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
-        Dim resources As System.Resources.ResourceManager = New System.Resources.ResourceManager(GetType(fmClickWait))
-        Me.pnlContainMouse = New System.Windows.Forms.Panel()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(fmClickWait))
         Me.Label1 = New System.Windows.Forms.Label()
         Me.SuspendLayout()
-        '
-        'pnlContainMouse
-        '
-        Me.pnlContainMouse.BackColor = System.Drawing.Color.Yellow
-        Me.pnlContainMouse.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.pnlContainMouse.Location = New System.Drawing.Point(302, 225)
-        Me.pnlContainMouse.Name = "pnlContainMouse"
-        Me.pnlContainMouse.Size = New System.Drawing.Size(187, 108)
-        Me.pnlContainMouse.TabIndex = 1
         '
         'Label1
         '
@@ -55,17 +44,18 @@ Public Class fmClickWait
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(591, 125)
         Me.Label1.TabIndex = 0
-        Me.Label1.Text = "To stop the Whammy! random selector, click the mouse" & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "or hit any key." & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10) & "Your mou" & _
-        "se will not be able to leave the yellow box until a choice has been made. Theore" & _
-        "tically."
+        Me.Label1.Text = "To stop the Whammy! random selector, click the mouse" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & " in this window, or hit any" & _
+    " key." & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "If you click somewhere else, I can't be held responsible for what happe" & _
+    "ns."
         Me.Label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'fmClickWait
         '
         Me.AutoScaleBaseSize = New System.Drawing.Size(10, 24)
+        Me.BackColor = System.Drawing.Color.Yellow
         Me.ClientSize = New System.Drawing.Size(764, 538)
         Me.ControlBox = False
-        Me.Controls.AddRange(New System.Windows.Forms.Control() {Me.Label1, Me.pnlContainMouse})
+        Me.Controls.Add(Me.Label1)
         Me.Cursor = System.Windows.Forms.Cursors.AppStarting
         Me.Font = New System.Drawing.Font("Microsoft Sans Serif", 15.75!)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
@@ -83,41 +73,38 @@ Public Class fmClickWait
 #End Region
 
     Private Sub fmClickWait_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
-        Me.CenterFormOnParent()
+        Me.Location = New Point(MyOwner.Left + ((MyOwner.Width - Me.Width) / 2), MyOwner.Top + ((MyOwner.Height - Me.Height)))
         Me.CenterMouseOnForm()
-        Me.pnlContainMouse.Focus()
+        Me.Focus()
+        Me.BringToFront()
     End Sub
     Private Sub fmClickWait_Closing(ByVal sender As System.Object, ByVal e As System.ComponentModel.CancelEventArgs) Handles MyBase.Closing
         MyOwner.StopSlideShow()
     End Sub
 
-    Private Sub fmClickWait_KeyDown(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles MyBase.KeyDown, pnlContainMouse.KeyDown
+    Private Sub fmClickWait_KeyDown(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles Me.KeyDown
         e.Handled = True
         Me.Close()
     End Sub
-    Private Sub fmClickWait_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles MyBase.MouseDown, pnlContainMouse.MouseDown
+    Private Sub fmClickWait_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles Me.MouseDown, Label1.MouseDown
         Me.Close()
     End Sub
 
-    Private Sub fmClickWait_MouseLeave(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.MouseLeave, pnlContainMouse.MouseLeave
+    Private Sub fmClickWait_MouseLeave(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.MouseLeave
         '* Prevent the mouse from leaving this form.
-        Me.pnlContainMouse.Focus()
+        Me.Focus()
         Me.CenterMouseOnForm()
     End Sub
 
     Private Sub CenterMouseOnForm()
-        With Me.pnlContainMouse
-            System.Windows.Forms.Cursor.Position = New Point(Me.Left + .Left + (.Width / 2), Me.Top + .Top + (.Height / 2))
-        End With
-    End Sub
-    Private Sub CenterFormOnParent()
-        Me.Left = MyOwner.Left + ((MyOwner.Width - Me.Width) / 2)
-        Me.Top = MyOwner.Top + (MyOwner.Height - Me.Height) - 2
+        '* This probably doesn't work in Windows newer than XP.
+        System.Windows.Forms.Cursor.Position = New Point(Me.Left + (Me.Width / 2), Me.Top + (Me.Height / 2))
     End Sub
 
-    Private Sub fmClickWait_LostFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.LostFocus
-        Me.pnlContainMouse.Focus()
+    Private Sub fmClickWait_LostFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.LostFocus
+        Me.Focus()
         Me.CenterMouseOnForm()
         Me.BringToFront()
     End Sub
+
 End Class

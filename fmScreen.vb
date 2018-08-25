@@ -102,29 +102,28 @@ Public Class fmScreen
         '
         'lblTeamLocLeft
         '
-        Me.lblTeamLocLeft.Anchor = System.Windows.Forms.AnchorStyles.Left
+        Me.lblTeamLocLeft.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.lblTeamLocLeft.BackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(176, Byte), Integer))
-        Me.lblTeamLocLeft.Font = New System.Drawing.Font("Roboto Slab", 36.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblTeamLocLeft.Font = New System.Drawing.Font("Roboto Slab", 46.0!, System.Drawing.FontStyle.Bold)
         Me.lblTeamLocLeft.ForeColor = System.Drawing.Color.White
-        Me.lblTeamLocLeft.Location = New System.Drawing.Point(25, 53)
+        Me.lblTeamLocLeft.Location = New System.Drawing.Point(25, 41)
         Me.lblTeamLocLeft.Name = "lblTeamLocLeft"
-        Me.lblTeamLocLeft.Size = New System.Drawing.Size(440, 65)
+        Me.lblTeamLocLeft.Size = New System.Drawing.Size(440, 77)
         Me.lblTeamLocLeft.TabIndex = 8
-        Me.lblTeamLocLeft.Text = "Left Team City" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10)
+        Me.lblTeamLocLeft.Text = "Team City" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10)
         Me.lblTeamLocLeft.TextAlign = System.Drawing.ContentAlignment.BottomLeft
         Me.lblTeamLocLeft.UseCompatibleTextRendering = True
         '
         'lblTeamNameLeft
         '
-        Me.lblTeamNameLeft.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.lblTeamNameLeft.BackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(176, Byte), Integer))
-        Me.lblTeamNameLeft.Font = New System.Drawing.Font("Roboto Slab", 36.0!, System.Drawing.FontStyle.Bold)
+        Me.lblTeamNameLeft.Font = New System.Drawing.Font("Roboto Slab", 46.0!, System.Drawing.FontStyle.Bold)
         Me.lblTeamNameLeft.ForeColor = System.Drawing.Color.White
-        Me.lblTeamNameLeft.Location = New System.Drawing.Point(25, 118)
+        Me.lblTeamNameLeft.Location = New System.Drawing.Point(25, 109)
         Me.lblTeamNameLeft.Name = "lblTeamNameLeft"
-        Me.lblTeamNameLeft.Size = New System.Drawing.Size(440, 65)
+        Me.lblTeamNameLeft.Size = New System.Drawing.Size(440, 77)
         Me.lblTeamNameLeft.TabIndex = 9
-        Me.lblTeamNameLeft.Text = "Left Team Name"
+        Me.lblTeamNameLeft.Text = "Team Name"
         Me.lblTeamNameLeft.UseCompatibleTextRendering = True
         '
         'lblScoreLeft
@@ -155,35 +154,35 @@ Public Class fmScreen
         '
         'lblTeamLocRight
         '
-        Me.lblTeamLocRight.Anchor = System.Windows.Forms.AnchorStyles.Right
+        Me.lblTeamLocRight.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.lblTeamLocRight.BackColor = System.Drawing.Color.Maroon
-        Me.lblTeamLocRight.Font = New System.Drawing.Font("Roboto Slab", 36.0!, System.Drawing.FontStyle.Bold)
+        Me.lblTeamLocRight.Font = New System.Drawing.Font("Roboto Slab", 46.0!, System.Drawing.FontStyle.Bold)
         Me.lblTeamLocRight.ForeColor = System.Drawing.Color.White
-        Me.lblTeamLocRight.Location = New System.Drawing.Point(815, 53)
+        Me.lblTeamLocRight.Location = New System.Drawing.Point(815, 41)
         Me.lblTeamLocRight.Name = "lblTeamLocRight"
-        Me.lblTeamLocRight.Size = New System.Drawing.Size(440, 65)
+        Me.lblTeamLocRight.Size = New System.Drawing.Size(440, 77)
         Me.lblTeamLocRight.TabIndex = 12
-        Me.lblTeamLocRight.Text = "Right Team City" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10)
+        Me.lblTeamLocRight.Text = "Team City" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10)
         Me.lblTeamLocRight.TextAlign = System.Drawing.ContentAlignment.BottomRight
         Me.lblTeamLocRight.UseCompatibleTextRendering = True
         '
         'lblTeamNameRight
         '
-        Me.lblTeamNameRight.Anchor = System.Windows.Forms.AnchorStyles.Left
+        Me.lblTeamNameRight.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.lblTeamNameRight.BackColor = System.Drawing.Color.Maroon
-        Me.lblTeamNameRight.Font = New System.Drawing.Font("Roboto Slab", 36.0!, System.Drawing.FontStyle.Bold)
+        Me.lblTeamNameRight.Font = New System.Drawing.Font("Roboto Slab", 46.0!, System.Drawing.FontStyle.Bold)
         Me.lblTeamNameRight.ForeColor = System.Drawing.Color.White
-        Me.lblTeamNameRight.Location = New System.Drawing.Point(815, 118)
+        Me.lblTeamNameRight.Location = New System.Drawing.Point(815, 109)
         Me.lblTeamNameRight.Name = "lblTeamNameRight"
-        Me.lblTeamNameRight.Size = New System.Drawing.Size(440, 65)
+        Me.lblTeamNameRight.Size = New System.Drawing.Size(440, 77)
         Me.lblTeamNameRight.TabIndex = 13
-        Me.lblTeamNameRight.Text = "Right Team Name"
+        Me.lblTeamNameRight.Text = "Team Name"
         Me.lblTeamNameRight.TextAlign = System.Drawing.ContentAlignment.TopRight
         Me.lblTeamNameRight.UseCompatibleTextRendering = True
         '
         'FadeTimer
         '
-        Me.FadeTimer.Interval = 60
+        Me.FadeTimer.Interval = 70
         '
         'fmScreen
         '
@@ -252,6 +251,7 @@ Public Class fmScreen
             Dim NameTop As Integer = .lblTeamNameLeft.Top
             Dim LocTop As Integer = .lblTeamLocLeft.Top
             Dim RightLocLeft As Integer = .lblTeamLocRight.Left
+            Dim RightTeamLeft As Integer = .lblTeamNameRight.Left
             .Height = .Height / sRatio
             .Width = .Width / sRatio
             .lblScoreLeft.Left = .lblScoreLeft.Left / sRatio
@@ -269,7 +269,7 @@ Public Class fmScreen
             .lblTeamNameLeft.Height = .lblTeamNameLeft.Height / sRatio
             .lblTeamNameLeft.Width = .lblTeamNameLeft.Width / sRatio
             .lblTeamNameLeft.Font = New Font(.lblTeamNameLeft.Font.FontFamily, CSng(Val(.lblTeamNameLeft.Font.Size) / sRatio), .lblTeamNameLeft.Font.Style)
-            .lblTeamNameRight.Left = .lblTeamNameRight.Left / sRatio
+            .lblTeamNameRight.Left = RightTeamLeft / sRatio
             .lblTeamNameRight.Top = .lblTeamNameLeft.Top
             .lblTeamNameRight.Height = .lblTeamNameRight.Height / sRatio
             .lblTeamNameRight.Width = .lblTeamNameRight.Width / sRatio

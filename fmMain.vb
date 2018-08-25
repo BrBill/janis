@@ -41,6 +41,7 @@ Namespace JANIS
         Dim DisplayModeAdjustment As Single = 1.0 ' Divide font setting by this for display. Differs for test/arena mode.
         Dim DisplayToEntryFontRatio As Single = 123 / 42  ' This is the size ratio of fonts in the display vs. in the textbox
         Dim DisplayFontRatio As Single = 33 / 80 ' This is the "should be" size ratio of display to what I once thought it was.
+        Dim DEFAULT_COUNTDOWN_COLOR As System.Drawing.Color = System.Drawing.Color.FromArgb(CType(CType(48, Byte), Integer), CType(CType(48, Byte), Integer), CType(CType(48, Byte), Integer))
 
         Private ImageFileExtensions() As String = {".BMP", ".GIF", ".JPG", ".PNG", ".WMF"}
         Private ImageLibrary As New Collection()
@@ -57,11 +58,6 @@ Namespace JANIS
         Private DragMethod As String
         Private CountdownSeconds As Integer = 300
         Private CountdownWarnSeconds As Integer
-        Friend WithEvents Label15 As System.Windows.Forms.Label
-        Friend WithEvents tbLeftLoc As System.Windows.Forms.TextBox
-        Friend WithEvents Label41 As System.Windows.Forms.Label
-        Friend WithEvents grpPasteImage As System.Windows.Forms.GroupBox
-        Friend WithEvents tbRightLoc As System.Windows.Forms.TextBox
         Public ComponentsDoneInitializing As Boolean = False
 
 
@@ -107,6 +103,11 @@ Namespace JANIS
         'NOTE: The following procedure is required by the Windows Form Designer
         'It can be modified using the Windows Form Designer.
         'Do not modify it using the code editor.
+        Friend WithEvents Label15 As System.Windows.Forms.Label
+        Friend WithEvents tbLeftLoc As System.Windows.Forms.TextBox
+        Friend WithEvents Label41 As System.Windows.Forms.Label
+        Friend WithEvents grpPasteImage As System.Windows.Forms.GroupBox
+        Friend WithEvents tbRightLoc As System.Windows.Forms.TextBox
         Friend WithEvents cbShadowsEnabled As System.Windows.Forms.CheckBox
         Friend WithEvents btnReIndexImgLib As System.Windows.Forms.Button
         Friend WithEvents ToolTip1 As System.Windows.Forms.ToolTip
@@ -4153,10 +4154,13 @@ Namespace JANIS
                 Me.LS.Left = Me.Left
                 Me.LS.Top = Me.Height + Me.Top
                 Me.LS.AdjustSize(sRatio)
+                '* Following is only for Bill to use at home in home testing, when the 3 lines above are commented out
+                'Me.LS.Left = 0
 
                 Me.RS.Left = Me.Left + Me.Width - (Me.RS.Width / sRatio)
-                Me.RS.Top = Me.LS.Top
+                Me.RS.Top = Me.Height + Me.Top
                 Me.RS.AdjustSize(sRatio)
+
                 Me.tbRightText.Text = "TEST MODE"
                 Me.Text = Me.Text + "   **** TEST MODE ****"
             Else  ' Full blown 3-monitor mode
@@ -5775,7 +5779,7 @@ Namespace JANIS
         Private Sub UpdateCountdown()
             If Not Me.ComponentsDoneInitializing Then Exit Sub '* OR ELSE unhandled exception at app launch
             Dim TimeText As String = ""
-            Dim bgColor As System.Drawing.Color = System.Drawing.Color.Black
+            Dim bgColor As System.Drawing.Color = DEFAULT_COUNTDOWN_COLOR
 
             If Me.CountdownSeconds <= Me.CountdownWarnSeconds Then
                 bgColor = System.Drawing.Color.Red
