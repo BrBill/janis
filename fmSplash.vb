@@ -3,11 +3,11 @@ Public Class fmSplash
 
     Class ApplicationInformation
         Public Title As String = "JANIS"
-        Public MajorVersion As Integer = 3
-        Public MinorVersion As Integer = 3
+        Public MajorVersion As Integer = 4
+        Public MinorVersion As Integer = 0
         Public Iteration As Integer = 0
         Public ProductName As String = "DUAL SCREEN"
-        Public Copyright As String = "2003-2018"
+        Public Copyright As String = "2004-2024"
     End Class
 
 
@@ -87,7 +87,7 @@ Public Class fmSplash
         Me.lblCopyright.Name = "lblCopyright"
         Me.lblCopyright.Size = New System.Drawing.Size(209, 16)
         Me.lblCopyright.TabIndex = 10
-        Me.lblCopyright.Text = "Copyright 2003-2018"
+        Me.lblCopyright.Text = "Copyright 2004-2024"
         Me.lblCopyright.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
         'lblVersionInfo
@@ -258,12 +258,12 @@ Public Class fmSplash
 
         Me.lblVersionInfo.Text = System.String.Format(Me.lblVersionInfo.Text, Me.AppInfo.MajorVersion, Me.AppInfo.MinorVersion, Me.AppInfo.Iteration, Me.AppInfo.ProductName)
         'Copyright info
-        Me.lblCopyright.Text = "Copyright " + Me.AppInfo.Copyright
+        Me.lblCopyright.Text = "Copyright " & Me.AppInfo.Copyright
         System.Windows.Forms.Application.DoEvents()
     End Sub
 
     Public Sub SetStatus(ByVal MyText As String)
-        Me.lblStatus.Text = "Status: " + MyText
+        Me.lblStatus.Text = "Status: " & MyText
         System.Windows.Forms.Application.DoEvents()
     End Sub
 End Class

@@ -34,7 +34,7 @@ Namespace JANIS
         '***************
         '* Globals
         '***************
-        Private ROOT_SUPPORT_DIR As String
+        Private ROOT_SUPPORT_DIR As String = "C:\JANIS"
         Private PREFS_FILE As String
         Private splash As fmSplash
         Private TestMode As Boolean = False
@@ -43,7 +43,7 @@ Namespace JANIS
         Dim DisplayFontRatio As Single = 33 / 80 ' This is the "should be" size ratio of display to what I once thought it was.
         Dim DEFAULT_COUNTDOWN_COLOR As System.Drawing.Color = System.Drawing.Color.FromArgb(CType(CType(48, Byte), Integer), CType(CType(48, Byte), Integer), CType(CType(48, Byte), Integer))
 
-        Private ImageFileExtensions() As String = {".BMP", ".GIF", ".JPG", ".PNG", ".WMF"}
+        Private ImageFileExtensions() As String = {".BMP", ".GIF", ".JPG", ".PNG", ".WMF", ".EXIF", ".TIFF"}
         Private ImageLibrary As New Collection()
 
         Private LS As fmScreen      '* The left team screen
@@ -73,7 +73,7 @@ Namespace JANIS
             ' The code to show itself is integrated in the constructor of the splashscreen.
             ' This line is the only line that needs to be added when using fmSplash. The rest
             ' is generated automatically when adding a new form.
-            'splash as New fmSplashScreen(Me)
+            '*splash as New fmSplashScreen(Me)
             ' This example splashscreen also has the ability to show itself for a minimum
             ' number of seconds. For example, if you want to show the splash for at least 6
             ' seconds, change the code above to:
@@ -206,6 +206,8 @@ Namespace JANIS
         Friend WithEvents btnAddThing As System.Windows.Forms.Button
         Friend WithEvents btnRemoveThing As System.Windows.Forms.Button
         Friend WithEvents clbThings As System.Windows.Forms.CheckedListBox
+        Friend WithEvents tvSlideFolders As System.Windows.Forms.TreeView
+        Friend WithEvents lbGfxFiles As System.Windows.Forms.ListBox
         Friend WithEvents lbSlideList As System.Windows.Forms.ListBox
         Friend WithEvents Label6 As System.Windows.Forms.Label
         Friend WithEvents btnThingDown As System.Windows.Forms.Button
@@ -213,7 +215,6 @@ Namespace JANIS
         Friend WithEvents btnClearThings As System.Windows.Forms.Button
         Friend WithEvents btnRemoveSlides As System.Windows.Forms.Button
         Friend WithEvents btnAddSlide As System.Windows.Forms.Button
-        Friend WithEvents FileListBox1 As Microsoft.VisualBasic.Compatibility.VB6.FileListBox
         Friend WithEvents btnSaveSlides As System.Windows.Forms.Button
         Friend WithEvents btnLoadSlides As System.Windows.Forms.Button
         Friend WithEvents btnSlideDown As System.Windows.Forms.Button
@@ -374,7 +375,6 @@ Namespace JANIS
         Friend WithEvents btnPasteBoth As System.Windows.Forms.Button
         Friend WithEvents btnPasteRight As System.Windows.Forms.Button
         Friend WithEvents btnPasteLeft As System.Windows.Forms.Button
-        Friend WithEvents ExpTree1 As ExpTreeLib.ExpTree
 
 
         <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
@@ -484,7 +484,8 @@ Namespace JANIS
             Me.btnThingDown = New System.Windows.Forms.Button()
             Me.btnThingUp = New System.Windows.Forms.Button()
             Me.tpSlides = New System.Windows.Forms.TabPage()
-            Me.ExpTree1 = New ExpTreeLib.ExpTree()
+            Me.lbGfxFiles = New System.Windows.Forms.ListBox()
+            Me.tvSlideFolders = New System.Windows.Forms.TreeView()
             Me.btnWhammy = New System.Windows.Forms.Button()
             Me.btnPauseSlides = New System.Windows.Forms.Button()
             Me.btnNextSlide = New System.Windows.Forms.Button()
@@ -496,7 +497,6 @@ Namespace JANIS
             Me.Label7 = New System.Windows.Forms.Label()
             Me.btnSaveSlides = New System.Windows.Forms.Button()
             Me.btnLoadSlides = New System.Windows.Forms.Button()
-            Me.FileListBox1 = New Microsoft.VisualBasic.Compatibility.VB6.FileListBox()
             Me.btnRemoveSlides = New System.Windows.Forms.Button()
             Me.btnAddSlide = New System.Windows.Forms.Button()
             Me.Label6 = New System.Windows.Forms.Label()
@@ -1790,7 +1790,8 @@ Namespace JANIS
             '
             'tpSlides
             '
-            Me.tpSlides.Controls.Add(Me.ExpTree1)
+            Me.tpSlides.Controls.Add(Me.lbGfxFiles)
+            Me.tpSlides.Controls.Add(Me.tvSlideFolders)
             Me.tpSlides.Controls.Add(Me.btnWhammy)
             Me.tpSlides.Controls.Add(Me.btnPauseSlides)
             Me.tpSlides.Controls.Add(Me.btnNextSlide)
@@ -1802,7 +1803,6 @@ Namespace JANIS
             Me.tpSlides.Controls.Add(Me.Label7)
             Me.tpSlides.Controls.Add(Me.btnSaveSlides)
             Me.tpSlides.Controls.Add(Me.btnLoadSlides)
-            Me.tpSlides.Controls.Add(Me.FileListBox1)
             Me.tpSlides.Controls.Add(Me.btnRemoveSlides)
             Me.tpSlides.Controls.Add(Me.btnAddSlide)
             Me.tpSlides.Controls.Add(Me.Label6)
@@ -1821,16 +1821,26 @@ Namespace JANIS
             Me.tpSlides.TabIndex = 2
             Me.tpSlides.Text = "Slide Show"
             '
-            'ExpTree1
+            'lbGfxFiles
             '
-            Me.ExpTree1.AllowDrop = True
-            Me.ExpTree1.Cursor = System.Windows.Forms.Cursors.Default
-            Me.ExpTree1.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.ExpTree1.Location = New System.Drawing.Point(3, 3)
-            Me.ExpTree1.Name = "ExpTree1"
-            Me.ExpTree1.ShowRootLines = False
-            Me.ExpTree1.Size = New System.Drawing.Size(251, 361)
-            Me.ExpTree1.TabIndex = 119
+            Me.lbGfxFiles.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!)
+            Me.lbGfxFiles.FormattingEnabled = True
+            Me.lbGfxFiles.ItemHeight = 16
+            Me.lbGfxFiles.Location = New System.Drawing.Point(268, 152)
+            Me.lbGfxFiles.Name = "lbGfxFiles"
+            Me.lbGfxFiles.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended
+            Me.lbGfxFiles.Size = New System.Drawing.Size(250, 212)
+            Me.lbGfxFiles.Sorted = True
+            Me.lbGfxFiles.TabIndex = 93
+            '
+            'tvSlideFolders
+            '
+            Me.tvSlideFolders.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!)
+            Me.tvSlideFolders.HideSelection = False
+            Me.tvSlideFolders.Location = New System.Drawing.Point(3, 3)
+            Me.tvSlideFolders.Name = "tvSlideFolders"
+            Me.tvSlideFolders.Size = New System.Drawing.Size(251, 361)
+            Me.tvSlideFolders.TabIndex = 92
             '
             'btnWhammy
             '
@@ -1944,17 +1954,6 @@ Namespace JANIS
             Me.btnLoadSlides.Size = New System.Drawing.Size(96, 40)
             Me.btnLoadSlides.TabIndex = 129
             Me.btnLoadSlides.Text = "Load Slideshow"
-            '
-            'FileListBox1
-            '
-            Me.FileListBox1.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.FileListBox1.FormattingEnabled = True
-            Me.FileListBox1.Location = New System.Drawing.Point(268, 152)
-            Me.FileListBox1.Name = "FileListBox1"
-            Me.FileListBox1.Pattern = "*.jpg;*.gif;*.bmp;*.wmf;*.png"
-            Me.FileListBox1.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended
-            Me.FileListBox1.Size = New System.Drawing.Size(250, 212)
-            Me.FileListBox1.TabIndex = 120
             '
             'btnRemoveSlides
             '
@@ -2097,9 +2096,9 @@ Namespace JANIS
             Me.lblHBinstructions.Name = "lblHBinstructions"
             Me.lblHBinstructions.Size = New System.Drawing.Size(168, 139)
             Me.lblHBinstructions.TabIndex = 142
-            Me.lblHBinstructions.Text = "Hint: Hot Buttons are image shortcuts that you can define for quick access to sto" & _
-        "red images. Select a name && image for each button. Save lists of buttons for sp" & _
-        "ecific uses."
+            Me.lblHBinstructions.Text = "Hint: Hot Buttons are image shortcuts that you can define for quick access to sto" &
+    "red images. Select a name && image for each button. Save lists of buttons for sp" &
+    "ecific uses."
             Me.lblHBinstructions.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
             '
             'btnSaveHB
@@ -3155,7 +3154,7 @@ Namespace JANIS
             Me.TextBox2.BorderStyle = System.Windows.Forms.BorderStyle.None
             Me.TextBox2.Font = New System.Drawing.Font("Times New Roman", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
             Me.TextBox2.ForeColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(64, Byte), Integer))
-            Me.TextBox2.Location = New System.Drawing.Point(8, 144)
+            Me.TextBox2.Location = New System.Drawing.Point(8, 132)
             Me.TextBox2.Multiline = True
             Me.TextBox2.Name = "TextBox2"
             Me.TextBox2.ReadOnly = True
@@ -3175,11 +3174,11 @@ Namespace JANIS
             Me.TextBox1.Multiline = True
             Me.TextBox1.Name = "TextBox1"
             Me.TextBox1.ReadOnly = True
-            Me.TextBox1.Size = New System.Drawing.Size(972, 118)
+            Me.TextBox1.Size = New System.Drawing.Size(972, 105)
             Me.TextBox1.TabIndex = 240
             Me.TextBox1.TabStop = False
-            Me.TextBox1.Text = "JANIS Dual Display" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Version 3.3 beta 3 Released August 21, 2018" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "by Bill Cernansk" & _
-        "y ( bill@easybeing.com, @boctorbill )" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "© 2003-2018 Easy Being Productions"
+            Me.TextBox1.Text = "JANIS" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Version 4.0 Alpha Released March 31, 2024" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "by Bill Cernansky (bill@easybei" &
+    "ng.com)" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "© 2003-2024 Easy Being Productions"
             Me.TextBox1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
             '
             'SlideTimer
@@ -3263,8 +3262,8 @@ Namespace JANIS
             Me.lblLibraryCount.TabIndex = 15
             Me.lblLibraryCount.Text = "Images in Search Library:"
             Me.lblLibraryCount.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-            Me.ToolTip1.SetToolTip(Me.lblLibraryCount, "Double-Click this message to re-index the image search library." & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Useful if you've" & _
-            " added new images while JANIS is running.")
+            Me.ToolTip1.SetToolTip(Me.lblLibraryCount, "Double-Click this message to re-index the image search library." & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Useful if you've" &
+        " added new images while JANIS is running.")
             Me.lblLibraryCount.UseMnemonic = False
             '
             'btnPasteBoth
@@ -3498,8 +3497,8 @@ Namespace JANIS
             Me.btnReIndexImgLib.TabIndex = 54
             Me.btnReIndexImgLib.Text = "Q"
             Me.btnReIndexImgLib.TextAlign = System.Drawing.ContentAlignment.TopCenter
-            Me.ToolTip1.SetToolTip(Me.btnReIndexImgLib, "Click here to re-index the image library" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "if you've added or deleted image files." & _
-            "")
+            Me.ToolTip1.SetToolTip(Me.btnReIndexImgLib, "Click here to re-index the image library" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "if you've added or deleted image files." &
+        "")
             Me.btnReIndexImgLib.UseVisualStyleBackColor = False
             '
             'btnHot10
@@ -3713,7 +3712,7 @@ Namespace JANIS
             'fmMain
             '
             Me.AutoScaleBaseSize = New System.Drawing.Size(6, 16)
-            Me.ClientSize = New System.Drawing.Size(996, 703)
+            Me.ClientSize = New System.Drawing.Size(996, 702)
             Me.Controls.Add(Me.tbRightLoc)
             Me.Controls.Add(Me.Label41)
             Me.Controls.Add(Me.tbLeftLoc)
@@ -3855,11 +3854,12 @@ Namespace JANIS
                 Me.LS.Show()
                 Me.RS.Show()
 
-                Me.FTreeAutoExpand(Me.ExpTree1, Me.tbDefaultImageDir.Text)
+                Me.tvSlideFolders_Init(Me.tbDefaultImageDir.Text)
 
-                Me.splash.SetStatus("Building Image Library...")
-                Me.BuildImageLibrary(Me.tbDefaultImageDir.Text)
+                'Me.splash.SetStatus("Building Image Library...")
+                Me.BuildImageLibrary()
                 Me.Opacity = 100          '* Make visible again
+
             End If
         End Sub
 
@@ -3895,8 +3895,7 @@ Namespace JANIS
             Me.Height = 1
             Me.Left = 0
             Me.Top = 0
-            MessageBox.Show("A previous instance of JANIS is already open!", "Already Running", _
-                            MessageBoxButtons.OK, MessageBoxIcon.Information)
+            MessageBox.Show("A previous instance of JANIS is already open!", "Already Running", MessageBoxButtons.OK, MessageBoxIcon.Information)
 
             ' This instance will self-destruct in 5 seconds.
             Me.SlideTimer.Interval = 5000
@@ -3906,18 +3905,7 @@ Namespace JANIS
         End Sub
 
         Private Sub InitializeSettings()
-            '* If this is Windows Vista or newer, different default home paths.
-            If OSVersion.Version.Major >= 6 Then
-                '* Vista or newer
-                ROOT_SUPPORT_DIR = "C:\JANIS"
-            Else
-                '* XP or older
-                ROOT_SUPPORT_DIR = "C:\Program Files\JANIS"
-            End If
             PREFS_FILE = ROOT_SUPPORT_DIR + "\JANIS.ini"
-
-            '* This is already set, but one time I broke it without knowing, so force it.
-            Me.ExpTree1.StartUpDirectory = ExpTreeLib.ExpTree.StartDir.Desktop
 
             '* Get the working dimensions of the primary monitor
             Dim workingArea As System.Drawing.Rectangle
@@ -3946,7 +3934,7 @@ Namespace JANIS
             If MyDir = "" Then MkDir(ROOT_SUPPORT_DIR + DEFAULT_HOTBUTTON_DIR)
         End Sub
 
-        Private Sub ListBox_KeyPress(ByVal sender As System.Object, ByVal e As KeyPressEventArgs) Handles FileListBox1.KeyPress, lbSlideList.KeyPress
+        Private Sub ListBox_KeyPress(ByVal sender As System.Object, ByVal e As KeyPressEventArgs) Handles lbGfxFiles.KeyPress, lbSlideList.KeyPress
             ' Ctrl-A will select all.
             If e.KeyChar = Chr(1) Then
                 If sender.SelectionMode.ToString Like "*Multi*" Then
@@ -4110,6 +4098,9 @@ Namespace JANIS
             Me.picLeft.Image = Nothing
             Me.picLeft.ImageLocation = ""
             Me.picRight.Image = Nothing
+
+            '* DELETE THIS AFTER TESTING
+            tvSlideFolders_SetFolder(Me.tbDefaultImageDir.Text)
         End Sub
 
         Private Sub tbFontSize_KeyUp(ByVal sender As System.Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles tbLeftFontSize.KeyUp, tbRightFontSize.KeyUp, tbDefaultFontSize.KeyUp
@@ -4163,6 +4154,10 @@ Namespace JANIS
 
                 Me.tbRightText.Text = "TEST MODE"
                 Me.Text = Me.Text + "   **** TEST MODE ****"
+
+                '* ONLY FOR TESTING MONITOR DISCONNECTION
+                'Me.LS.Left = SystemInformation.PrimaryMonitorSize.Width  'Force the window onto screen 2
+                'Me.LS.Top = 0
             Else  ' Full blown 3-monitor mode
                 '* Dim Scrs As Screen() = System.Windows.Forms.Screen.AllScreens
                 Me.LS.Left = SystemInformation.PrimaryMonitorSize.Width  'Don't really need to set this, but I'm doing it anyway
@@ -4422,9 +4417,8 @@ Namespace JANIS
         End Sub
 
         Private Sub picDisplay_DragDrop(ByVal sender As Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles picLeft.DragDrop, picRight.DragDrop, btnPictureBoth.DragDrop, btnPictureLeft.DragDrop, btnPictureRight.DragDrop, btnPasteBoth.DragDrop, btnPasteLeft.DragDrop, btnPasteRight.DragDrop
-            '* Hopefully, we can drop an image on one of these picture boxes and have it
-            '* display there. This works really well with Firefox. IE, of course, doesn't do
-            '* things nice. If you wanna use IE, gotta use copy/paste instead of drag/drop.
+            '* Hopefully, we can drag-drop an image from an external source onto one of these picture boxes and have it
+            '* display there. This works really well with Firefox.
             Dim img As Image
 
             '* We've limited this to only 2 kinds of data in picDisplay_DragEnter.
@@ -4552,9 +4546,9 @@ Namespace JANIS
 
                 ' ----- Don't start the drag yet. Wait until we move a
                 '       certain amount.
-                Me.DragBounds = New Rectangle(New Point(e.X - _
-                   (SystemInformation.DragSize.Width / 2), _
-                   e.Y - (SystemInformation.DragSize.Height / 2)), _
+                Me.DragBounds = New Rectangle(New Point(e.X -
+                   (SystemInformation.DragSize.Width / 2),
+                   e.Y - (SystemInformation.DragSize.Height / 2)),
                    SystemInformation.DragSize)
                 Me.DragMethod = "from_lbImgResults"
             End If
@@ -4612,28 +4606,22 @@ Namespace JANIS
         End Sub
 
         Private Sub ClearImageLibrary()
-            Dim i As Integer
-            For i = 1 To Me.ImageLibrary.Count
-                ' Since collections are reindexed automatically, remove
-                ' the first member on each iteration
-                Me.ImageLibrary.Remove(1)
-            Next
+            Me.ImageLibrary.Clear()
             Me.ShowLibraryCount()
         End Sub
 
-        Private Sub BuildImageLibrary(ByVal DirName As String)
-            Me.ProcessImageDir(DirName)
+        Private Sub BuildImageLibrary()
+            Me.ProcessImageDir(Me.tbDefaultImageDir.Text)
             Me.ShowLibraryCount()
-            Return
 
-            '* Test Mode Only
-            If Me.TestMode Then
-                Dim FileElem As FileID
-                Me.tbLeftText.Text = "Image Library Dump (TEST MODE)"
-                For Each FileElem In ImageLibrary
-                    Me.tbLeftText.Text = Me.tbLeftText.Text + EOL + FileElem.FullPath
-                Next
-            End If
+            '* Test Mode Only - if library is bigger than 10 items DON'T use this
+            'If Me.TestMode Then
+            '    Dim FileElem As FileID
+            '    Me.tbLeftText.Text = "Image Library Dump (TEST MODE)"
+            '    For Each FileElem In ImageLibrary
+            '        Me.tbLeftText.Text = Me.tbLeftText.Text + EOL + FileElem.FullPath
+            '    Next
+            'End If
         End Sub
 
         Private Sub ShowLibraryCount()
@@ -4643,7 +4631,7 @@ Namespace JANIS
 
         Private Sub btnReIndexImgLib_Click(sender As System.Object, e As System.EventArgs) Handles btnReIndexImgLib.Click
             Me.ClearImageLibrary()
-            Me.BuildImageLibrary(Me.tbDefaultImageDir.Tag)  '* Use the SAVED value, in case prefs weren't saved.
+            Me.BuildImageLibrary()
         End Sub
 
 
@@ -4861,22 +4849,11 @@ Namespace JANIS
         '=================================================================================================
         '* BEGIN SLIDESHOW STUFF
 
-        Private Sub FTreeAutoExpand(ByRef ftree As ExpTreeLib.ExpTree, ByVal fpath As String)
-            '* This subroutine assigns the path to the foldertree if the path exists.
-            '* Determine if the directory exists
-            If System.IO.Directory.Exists(fpath) Then
-                Try
-                    ftree.ExpandANode(fpath)
-                Catch ex As Exception
-                End Try
-            End If
-        End Sub
-
         Private Sub AddToSlideList(ByVal fnams As System.Windows.Forms.ListBox.SelectedObjectCollection)
             'Yup.
             Dim fobj As Object
             For Each fobj In fnams
-                Me.lbSlideList.Items.Add(Me.FileListBox1.Path + "\" + fobj)
+                Me.lbSlideList.Items.Add(Me.tvSlideFolders.SelectedNode.Name & "\" & fobj)
             Next
         End Sub
         Private Sub btnRemoveSlides_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnRemoveSlides.Click
@@ -4893,7 +4870,7 @@ Namespace JANIS
             End If
         End Sub
         Private Sub btnAddSlide_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnAddSlide.Click
-            Me.AddToSlideList(Me.FileListBox1.SelectedItems)
+            Me.AddToSlideList(Me.lbGfxFiles.SelectedItems)
         End Sub
         Private Sub btnClearSlideList_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnClearSlideList.Click
             If Me.lbSlideList.Items.Count < 1 Then Return
@@ -4901,31 +4878,166 @@ Namespace JANIS
             Me.StopSlideShow()
             Me.lbSlideList.Items.Clear()     '** Empty the list first
         End Sub
-        Private Sub FileListBox1_DoubleClick(ByVal sender As Object, ByVal e As System.EventArgs) Handles FileListBox1.DoubleClick
+
+        Private Sub lbGfxFiles_DoubleClick(ByVal sender As Object, e As System.EventArgs) Handles lbGfxFiles.DoubleClick
             Me.AddToSlideList(sender.SelectedItems)
         End Sub
-        Private Sub FileListBox1_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles FileListBox1.SelectedIndexChanged
-            If Me.FileListBox1.SelectedItems.Count = 1 Then
+        Private Sub lbGfxFiles_SelectedIndexChanged(sender As Object, e As EventArgs) Handles lbGfxFiles.SelectedIndexChanged
+            If Me.lbGfxFiles.SelectedItems.Count = 1 Then
                 Try
-                    Me.picSlidePreview.Image = Image.FromFile(Me.FileListBox1.Path + "\" + Me.FileListBox1.SelectedItem)
-                Catch
-                    '* If error, show nothing. I don't care what the error was about.
+                    Me.picSlidePreview.Image = Image.FromFile(Me.tvSlideFolders.SelectedNode.Name & "\" & Me.lbGfxFiles.SelectedItem.ToString)
+                Catch ex As Exception
+                    '* If error, clear image display. I don't care what the error was about.
                     Me.picSlidePreview.Image = Nothing
                 End Try
             Else
                 Me.picSlidePreview.Image = Nothing
             End If
         End Sub
-        Private Sub ExpTree1_ExpTreeNodeSelected(ByVal SelPath As String, ByVal Item As ExpTreeLib.CShItem) Handles ExpTree1.ExpTreeNodeSelected
-            Static PrevSelect As String
-            If SelPath <> PrevSelect Then
-                If System.IO.Directory.Exists(SelPath) Then
-                    Me.FileListBox1.Path = SelPath
-                Else
-                    Me.FileListBox1.Path = ""
+
+        Private Sub tvSlideFolders_Init(ByRef startPath As String)
+            With Me.tvSlideFolders
+                Try
+                    .ImageList = New ImageList
+                    .ImageList.Images.Add(Image.FromFile("forbidden.png"))
+                    .ImageList.Images.Add(Image.FromFile("hard-drive.png"))
+                    .ImageList.Images.Add(Image.FromFile("cd-rom.png"))
+                    .ImageList.Images.Add(Image.FromFile("web.png"))
+                    .ImageList.Images.Add(Image.FromFile("lock.png"))
+                    .ImageList.Images.Add(Image.FromFile("folder.png"))
+                    .Nodes.Clear()    '* Always start fresh
+                Catch ex As Exception
+                    MessageBox.Show("Could not fetch " & ex.Message, "tvSlideFolders_Init icon loading error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                End Try
+
+                tvSlideFolders_LoadDrives()
+                tvSlideFolders_SetFolder(startPath)
+            End With
+        End Sub
+        Private Sub tvSlideFolders_LoadDrives()
+            Dim driveArray As String() = Environment.GetLogicalDrives
+            Dim drive As String
+
+            For Each drive In driveArray
+                Dim di As New DriveInfo(drive)
+                Dim driveImage As Integer
+                Select Case di.DriveType
+                    Case DriveType.CDRom
+                        driveImage = 2
+                    Case DriveType.Network
+                        driveImage = 3
+                    Case DriveType.NoRootDirectory, DriveType.Unknown
+                        driveImage = 0
+                    Case Else
+                        driveImage = 1
+                End Select
+
+                Dim driveName As String = drive.TrimEnd("\"c)
+                Dim node As TreeNode = New TreeNode(driveName, driveImage, driveImage)
+                node.Name = driveName
+
+                If di.IsReady = True Then
+                    node.Nodes.Add("...")
                 End If
+
+                Me.tvSlideFolders.Nodes.Add(node)
+            Next
+            Me.tvSlideFolders.SelectedNode = Me.tvSlideFolders.Nodes(0)
+        End Sub
+        Private Sub tvSlideFolders_SetFolder(ByRef folder As String)
+            '* Expand the tvSlideFolders to match the supplied path, by climbing up from the beginning of the path to the leaf node.
+
+            If (folder Is Nothing) OrElse (folder = "") OrElse (Not System.IO.Directory.Exists(folder)) Then Exit Sub
+
+            Me.tvSlideFolders.CollapseAll()
+
+            '* we're gonna be messing about with the selected node over and over, so let's hide some stuff
+            'Me.tvSlideFolders.HideSelection = True
+            'Me.lbGfxFiles.Visible = False
+
+            Dim path_chunks As String() = folder.Split("\"c)
+
+            Dim path_so_far As String = ""
+            Dim FoundNode As TreeNode()
+            For Each chunk As String In path_chunks
+                '* expand 'em one level at a time, following the tree to our destination folder
+                If path_so_far <> "" Then path_so_far = path_so_far + "\"
+                path_so_far = path_so_far + chunk
+
+                '* there's only one, but this returns an array so we have to get the first one. This should autoexpand the node.
+                FoundNode = tvSlideFolders.Nodes.Find(path_so_far, True) '(0))
+                If (FoundNode Is Nothing) OrElse (FoundNode.Length = 0) Then Exit For
+
+                Me.tvSlideFolders.SelectedNode = FoundNode(0)
+                Me.tvSlideFolders.SelectedNode.Expand()
+            Next
+
+            'Me.tvSlideFolders.HideSelection = False
+            'Me.lbGfxFiles.Visible = True
+        End Sub
+        Private Sub tvSlideFolders_BeforeExpand(ByVal sender As System.Object, ByVal e As System.Windows.Forms.TreeViewCancelEventArgs) Handles tvSlideFolders.BeforeExpand
+            '* Expanding the folder nodes out one level
+            If e.Node.Nodes.Count > 0 Then
+                If (e.Node.Nodes(0).Text = "...") And (e.Node.Nodes(0).Name = "") Then
+                    e.Node.Nodes.Clear()
+
+                    '* get the list of sub directories
+                    Dim thisDir As String = e.Node.Name
+                    If thisDir.EndsWith(":") Then thisDir = thisDir + "\"
+                    Dim dirs As String() = Directory.GetDirectories(thisDir)
+
+                    For Each dir As String In dirs
+                        Dim di As DirectoryInfo = New DirectoryInfo(dir)
+                        Dim node As TreeNode = New TreeNode(di.Name, 5, 5)
+
+                        Try
+                            node.Name = dir  '* Name the node with directory's full path for use later
+                            If di.GetDirectories().Length > 0 Then  '* if the directory has sub directories add the place holder
+                                node.Nodes.Add("", "...", 0, 0)
+                            End If
+                        Catch ex As UnauthorizedAccessException
+                            '* display a locked folder icon for access denied
+                            node.ImageIndex = 4
+                            node.SelectedImageIndex = 4
+                        Catch ex As Exception
+                            MessageBox.Show(ex.Message, "SlidesFolderBrowser BeforeExpand Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                            node = Nothing
+                        Finally
+                            If Not (node Is Nothing) Then e.Node.Nodes.Add(node)
+                        End Try
+                    Next
+                End If
+            End If
+        End Sub
+        Private Sub tvSlideFolders_AfterSelect(sender As Object, e As TreeViewEventArgs) Handles tvSlideFolders.AfterSelect
+            '* Reflect the change of the selected folder in the graphics file selection & display
+            Static PrevSelect As String = ""
+            Dim SelPath As String = tvSlideFolders.SelectedNode.Name
+            If SelPath.EndsWith(":") Then SelPath = SelPath + "\" '* in case it's the root of a drive
+            If SelPath <> PrevSelect Then
+                PopulateGfxFiles(SelPath)
                 PrevSelect = SelPath
-                Me.picSlidePreview.Image = Nothing   '** Clear the preview img if we change dirs
+            End If
+        End Sub
+
+        Private Sub PopulateGfxFiles(Folder As String)
+            '* List all the graphics files in the selected folder in the lvGfxFiles control
+            ' MsgBox(Folder)
+            Me.picSlidePreview.Image = Nothing
+            Me.lbGfxFiles.Items.Clear()
+            If System.IO.Directory.Exists(Folder) Then
+                Try
+                    For Each ext As String In ImageFileExtensions
+                        'For Each foundfile As String In My.Computer.FileSystem.GetFiles(Folder, FileIO.SearchOption.SearchTopLevelOnly, "*" + ext).Select()
+                        For Each foundfile As String In Directory.GetFiles(Folder, "*" + ext)
+                            Dim newindex As Integer = Me.lbGfxFiles.Items.Add(My.Computer.FileSystem.GetFileInfo(foundfile).Name)
+                            'Me.lbGfxFiles.Items(newindex)
+                        Next
+                    Next
+                Catch ex As UnauthorizedAccessException
+                    MsgBox("JANIS does not have access to '" + Folder + "'.", MsgBoxStyle.OkOnly, "Permission Denied")
+                End Try
+
             End If
         End Sub
 
@@ -5616,7 +5728,7 @@ Namespace JANIS
             Me.AllScreensToFront()
             If RebuildImageLibrary Then
                 Me.ClearImageLibrary()
-                Me.BuildImageLibrary(Me.tbDefaultImageDir.Text)
+                Me.BuildImageLibrary()
             End If
         End Sub
         Private Sub SetDefaultPrefs()
@@ -5797,5 +5909,6 @@ Namespace JANIS
         Private Sub EasterEgg1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles EasterEgg1.Click
             MessageBox.Show("Pass it on...", "BILL LOVES BETSE", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly)
         End Sub
+
     End Class
 End Namespace

@@ -1,8 +1,9 @@
-﻿Imports System
+Imports System
 Imports System.IO
 
 Namespace JANIS
     Public Class BitmapFromDibStream
+        '* JANIS uses this to allow images from browsers to be drag-dropped into JANIS image display.
         Inherits Stream
         Private dib As Stream = Nothing
         Private header As Byte() = Nothing
