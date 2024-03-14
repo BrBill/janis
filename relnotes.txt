@@ -1,3 +1,20 @@
+v4.0: 2024-03-13 (dual) - ALPHA 0
+* Dropped obsolete ExpLibTree component; rebuilt slide directory navigator from scratch.
+* Known bug: new slide directory navigator doesn't autoexpand image folder correctly.
+* Now supports .EXIF and .TIFF image files
+* Ported to Visual Studio 2022 (last version created with VS 2010).
+* Ready to port to Single-Screen, which is the end goal. One JANIS to rule them all.
+
+v3.3.0: 2018-08-22 (dual) - BETA
+* New "CSz Shield" scoreboard with pleasing color scheme and fonts.
+* Score display is identical on either monitor, although board can appear on just one.
+* Hot Buttons now have a little left and right arrow that displays HB graphic on either
+  left monitor, right monitor, or both monitors, depending on where the HB is clicked.
+* Main window resized and layout updated so it fits on a laptop screen.
+* Accidentally built in debug mode for Portland Beta. Dumb.
+* Attempted workaround for .NET bug where error dialogs cause JANIS to lose app focus.
+  So far, it does not seem to work.
+
 v3.2.1: 2014-05-19 (dual), 2018-06-27 (single)
 *  Changed text and score displays to use dropshadows and shading effects.
 *  Image fill-the-screen simplified greatly.

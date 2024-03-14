@@ -11,7 +11,7 @@ Namespace JANIS
         '* System Constants
         '***************
         Const MAX_THINGS As Integer = 9
-        Const EOL As String = Chr(13) + Chr(10)
+        Const EOL As String = Chr(13) & Chr(10)
         Const DEFAULT_SLIDESHOW_DIR As String = "\SlideShows"
         Const DEFAULT_HOTBUTTON_DIR As String = "\HotButtons"
         Const SLIDES_STOPPED As Integer = 0
@@ -26,7 +26,7 @@ Namespace JANIS
             Public Name As String = ""   ' The name of this file.
             Public ReadOnly Property FullPath() As String
                 Get
-                    Return Path + "\" + Name
+                    Return Path & "\" & Name
                 End Get
             End Property
         End Class
@@ -3905,7 +3905,7 @@ Namespace JANIS
         End Sub
 
         Private Sub InitializeSettings()
-            PREFS_FILE = ROOT_SUPPORT_DIR + "\JANIS.ini"
+            PREFS_FILE = ROOT_SUPPORT_DIR & "\JANIS.ini"
 
             '* Get the working dimensions of the primary monitor
             Dim workingArea As System.Drawing.Rectangle
@@ -3928,10 +3928,10 @@ Namespace JANIS
             '* If the default support dirs aren't there, create them
             Dim MyDir As String = Dir(ROOT_SUPPORT_DIR, FileAttribute.Directory)
             If MyDir = "" Then MkDir(ROOT_SUPPORT_DIR)
-            MyDir = Dir(ROOT_SUPPORT_DIR + DEFAULT_SLIDESHOW_DIR, FileAttribute.Directory)
-            If MyDir = "" Then MkDir(ROOT_SUPPORT_DIR + DEFAULT_SLIDESHOW_DIR)
-            MyDir = Dir(ROOT_SUPPORT_DIR + DEFAULT_HOTBUTTON_DIR, FileAttribute.Directory)
-            If MyDir = "" Then MkDir(ROOT_SUPPORT_DIR + DEFAULT_HOTBUTTON_DIR)
+            MyDir = Dir(ROOT_SUPPORT_DIR & DEFAULT_SLIDESHOW_DIR, FileAttribute.Directory)
+            If MyDir = "" Then MkDir(ROOT_SUPPORT_DIR & DEFAULT_SLIDESHOW_DIR)
+            MyDir = Dir(ROOT_SUPPORT_DIR & DEFAULT_HOTBUTTON_DIR, FileAttribute.Directory)
+            If MyDir = "" Then MkDir(ROOT_SUPPORT_DIR & DEFAULT_HOTBUTTON_DIR)
         End Sub
 
         Private Sub ListBox_KeyPress(ByVal sender As System.Object, ByVal e As KeyPressEventArgs) Handles lbGfxFiles.KeyPress, lbSlideList.KeyPress
@@ -4062,7 +4062,7 @@ Namespace JANIS
                     FileOpen(fn, [of].FileName, OpenMode.Input)
                 Catch e As Exception
                     FileErr = True
-                    MessageBox.Show("An error occurred opening file '" + [of].FileName + "'.", "File Error")
+                    MessageBox.Show("An error occurred opening file '" & [of].FileName & "'.", "File Error")
                 End Try
                 If Not FileErr Then
                     Doc = InputString(fn, LOF(fn))
@@ -4105,7 +4105,7 @@ Namespace JANIS
 
         Private Sub tbFontSize_KeyUp(ByVal sender As System.Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles tbLeftFontSize.KeyUp, tbRightFontSize.KeyUp, tbDefaultFontSize.KeyUp
             Dim fsiz As Single
-            'tbLeftText.Text = "KeyCode: " + CStr(e.KeyCode) + Chr(13) + "KeyData: " + CStr(e.KeyData) + Chr(13) + "KeyValue: " + CStr(e.KeyValue)
+            'tbLeftText.Text = "KeyCode: " & CStr(e.KeyCode) & Chr(13) & "KeyData: " & CStr(e.KeyData) & Chr(13) & "KeyValue: " & CStr(e.KeyValue)
 
             '*** FIRST, zero sizes or smaller = unhandled exception. Don't allow.
             If (sender.Text = "") Then
@@ -4153,7 +4153,7 @@ Namespace JANIS
                 Me.RS.AdjustSize(sRatio)
 
                 Me.tbRightText.Text = "TEST MODE"
-                Me.Text = Me.Text + "   **** TEST MODE ****"
+                Me.Text = Me.Text & "   **** TEST MODE ****"
 
                 '* ONLY FOR TESTING MONITOR DISCONNECTION
                 'Me.LS.Left = SystemInformation.PrimaryMonitorSize.Width  'Force the window onto screen 2
@@ -4164,9 +4164,9 @@ Namespace JANIS
                 ' TESTING ONLY Me.LS.Left = Me.Left + Me.Width + 1
                 Me.RS.Left = Me.LS.Left + Me.LS.Width 'Right screen starts where the left screen stops
                 Me.tbRightText.Text = "Arena Mode"
-                Me.Text = Me.Text + " - Arena Mode"
+                Me.Text = Me.Text & " - Arena Mode"
             End If
-            Me.tbRightText.Text = Me.tbRightText.Text + EOL + EOL + SystemInformation.MonitorCount.ToString + " monitors found"
+            Me.tbRightText.Text = Me.tbRightText.Text & EOL & EOL & SystemInformation.MonitorCount.ToString & " monitors found"
         End Sub
 
         Private Sub DisplayTextScreen(ByVal Scr As fmScreen, ByVal s As String, ByVal hue As Color, ByVal fontsize As Single)
@@ -4250,7 +4250,7 @@ Namespace JANIS
         '        s = s.Split(New Char() {"["c, "]"c})(1)
         '        Dim sa() As String = s.Split(New Char() {"="c, ","c})
         '        If sa.GetLength(0) > 6 Then
-        '            s = sa(1) + "," + sa(3) + "," + sa(5) + "," + sa(7)
+        '            s = sa(1) & "," & sa(3) & "," & sa(5) & "," & sa(7)
         '        End If
         '
         '        ' now s holds a string that ColorConverter can understand
@@ -4485,7 +4485,7 @@ Namespace JANIS
 
             Dim CheckFileName As FileID
             Dim UpdateStarted As Boolean = False
-            CompareText = "*" + CompareText + "*"   '* wrap for fuzzy search
+            CompareText = "*" & CompareText & "*"   '* wrap for fuzzy search
             For Each CheckFileName In ImageLibrary
                 '* Does this filename contain the supplied text?
                 If CheckFileName.Name.ToLower Like CompareText Then
@@ -4619,13 +4619,13 @@ Namespace JANIS
             '    Dim FileElem As FileID
             '    Me.tbLeftText.Text = "Image Library Dump (TEST MODE)"
             '    For Each FileElem In ImageLibrary
-            '        Me.tbLeftText.Text = Me.tbLeftText.Text + EOL + FileElem.FullPath
+            '        Me.tbLeftText.Text = Me.tbLeftText.Text & EOL & FileElem.FullPath
             '    Next
             'End If
         End Sub
 
         Private Sub ShowLibraryCount()
-            Me.lblLibraryCount.Text = "Images in Search Library: " + Me.ImageLibrary.Count.ToString
+            Me.lblLibraryCount.Text = "Images in Search Library: " & Me.ImageLibrary.Count.ToString
             System.Windows.Forms.Application.DoEvents()
         End Sub
 
@@ -4654,7 +4654,7 @@ Namespace JANIS
                 NextName = Dir(".", FileAttribute.Directory)
                 If NextName <> ".xvpics" Then '* GIMP non-image files to ignore
                     While NextName <> ""
-                        WholeName = DirName + "\" + NextName
+                        WholeName = DirName & "\" & NextName
                         '* Dirs go into DirList for future processing. Filenames get added to Image Library.
                         If My.Computer.FileSystem.DirectoryExists(WholeName) Then
                             '*If (GetAttr(WholeName) And FileAttribute.Directory) = FileAttribute.Directory Then
@@ -4700,7 +4700,7 @@ Namespace JANIS
                     Me.clbThings.Items.Add(Me.tbNewThing.Text)
                     Me.tbNewThing.ResetText()
                 Else
-                    MessageBox.Show("The list has already reached its max number of Things (" + MAX_THINGS.ToString + "). If you need to add an item, remove another item first.", "Too many Things", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly)
+                    MessageBox.Show("The list has already reached its max number of Things (" & MAX_THINGS.ToString & "). If you need to add an item, remove another item first.", "Too many Things", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly)
                 End If
                 Me.tbNewThing.Focus()
                 Me.clbThings.SelectedIndex = -1
@@ -4726,7 +4726,7 @@ Namespace JANIS
         End Sub
         Private Sub btnRemoveThing_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnRemoveThing.Click
             If (Me.clbThings.SelectedIndex >= 0) Then
-                Dim prompt As String = "Are you sure you want to remove Thing: '" + Me.clbThings.SelectedItem + "' ?"
+                Dim prompt As String = "Are you sure you want to remove Thing: '" & Me.clbThings.SelectedItem & "' ?"
                 If AskIfSure(prompt) Then
                     ' Set focus to tbNewThing to avoid index errors when
                     ' focus is in substitution boxes.
@@ -4808,9 +4808,9 @@ Namespace JANIS
             Dim i As Integer
             Dim s As String = ""
             For i = 0 To (Me.clbThings.Items.Count - 1)
-                If i > 0 Then s = s + EOL
-                If Me.clbThings.CheckedIndices.Contains(i) Then s = s + ChrW(&H25BA)
-                s = s + (i + 1).ToString + ". " + Me.clbThings.Items.Item(i)
+                If i > 0 Then s = s & EOL
+                If Me.clbThings.CheckedIndices.Contains(i) Then s = s & ChrW(&H25BA)
+                s = s & (i + 1).ToString & ". " & Me.clbThings.Items.Item(i)
             Next
 
             If (Me.clbThings.Items.Count > 4) Then
@@ -4822,14 +4822,14 @@ Namespace JANIS
                     ThingsFontSize = 18
                 End If
             End If
-            ' s = s + " " + s.Length.ToString
+            ' s = s & " " & s.Length.ToString
 
             If sender.name <> "btnListRight" Then DisplayTextScreen(Me.LS, s, Me.clbThings.BackColor, ThingsFontSize)
             If sender.name <> "btnListLeft" Then DisplayTextScreen(Me.RS, s, Me.clbThings.BackColor, ThingsFontSize)
         End Sub
         Private Sub btnShowThing_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnShowThingLeft.Click, btnShowThingRight.Click, btnShowThingBoth.Click
             Dim s As String
-            s = Me.tbCurrentThing.Text + EOL + EOL + Me.tbSubstitutions.Text
+            s = Me.tbCurrentThing.Text & EOL & EOL & Me.tbSubstitutions.Text
             If sender.name <> "btnShowThingRight" Then DisplayTextScreen(Me.LS, s, Me.clbThings.BackColor, 19)
             If sender.name <> "btnShowThingLeft" Then DisplayTextScreen(Me.RS, s, Me.clbThings.BackColor, 19)
         End Sub
@@ -4961,8 +4961,8 @@ Namespace JANIS
             Dim FoundNode As TreeNode()
             For Each chunk As String In path_chunks
                 '* expand 'em one level at a time, following the tree to our destination folder
-                If path_so_far <> "" Then path_so_far = path_so_far + "\"
-                path_so_far = path_so_far + chunk
+                If path_so_far <> "" Then path_so_far = path_so_far & "\"
+                path_so_far = path_so_far & chunk
 
                 '* there's only one, but this returns an array so we have to get the first one. This should autoexpand the node.
                 FoundNode = tvSlideFolders.Nodes.Find(path_so_far, True) '(0))
@@ -4983,7 +4983,7 @@ Namespace JANIS
 
                     '* get the list of sub directories
                     Dim thisDir As String = e.Node.Name
-                    If thisDir.EndsWith(":") Then thisDir = thisDir + "\"
+                    If thisDir.EndsWith(":") Then thisDir = thisDir & "\"
                     Dim dirs As String() = Directory.GetDirectories(thisDir)
 
                     For Each dir As String In dirs
@@ -5013,7 +5013,7 @@ Namespace JANIS
             '* Reflect the change of the selected folder in the graphics file selection & display
             Static PrevSelect As String = ""
             Dim SelPath As String = tvSlideFolders.SelectedNode.Name
-            If SelPath.EndsWith(":") Then SelPath = SelPath + "\" '* in case it's the root of a drive
+            If SelPath.EndsWith(":") Then SelPath = SelPath & "\" '* in case it's the root of a drive
             If SelPath <> PrevSelect Then
                 PopulateGfxFiles(SelPath)
                 PrevSelect = SelPath
@@ -5028,14 +5028,14 @@ Namespace JANIS
             If System.IO.Directory.Exists(Folder) Then
                 Try
                     For Each ext As String In ImageFileExtensions
-                        'For Each foundfile As String In My.Computer.FileSystem.GetFiles(Folder, FileIO.SearchOption.SearchTopLevelOnly, "*" + ext).Select()
-                        For Each foundfile As String In Directory.GetFiles(Folder, "*" + ext)
+                        'For Each foundfile As String In My.Computer.FileSystem.GetFiles(Folder, FileIO.SearchOption.SearchTopLevelOnly, "*" & ext).Select()
+                        For Each foundfile As String In Directory.GetFiles(Folder, "*" & ext)
                             Dim newindex As Integer = Me.lbGfxFiles.Items.Add(My.Computer.FileSystem.GetFileInfo(foundfile).Name)
                             'Me.lbGfxFiles.Items(newindex)
                         Next
                     Next
                 Catch ex As UnauthorizedAccessException
-                    MsgBox("JANIS does not have access to '" + Folder + "'.", MsgBoxStyle.OkOnly, "Permission Denied")
+                    MsgBox("JANIS does not have access to '" & Folder & "'.", MsgBoxStyle.OkOnly, "Permission Denied")
                 End Try
 
             End If
@@ -5085,7 +5085,7 @@ Namespace JANIS
             Dim [of] As New OpenFileDialog()
             With [of]
                 .Filter = "JANIS SlideShow(*.JSL)|*.JSL"
-                .InitialDirectory = ROOT_SUPPORT_DIR + DEFAULT_SLIDESHOW_DIR
+                .InitialDirectory = ROOT_SUPPORT_DIR & DEFAULT_SLIDESHOW_DIR
                 If .ShowDialog(Me) = DialogResult.OK Then fn = .FileName Else fn = ""
                 .Dispose()
             End With
@@ -5108,7 +5108,7 @@ Namespace JANIS
             Dim sf As New SaveFileDialog()
             With sf
                 .Filter = "JANIS Slideshow(*.JSL)|*.JSL"
-                .InitialDirectory = ROOT_SUPPORT_DIR + DEFAULT_SLIDESHOW_DIR
+                .InitialDirectory = ROOT_SUPPORT_DIR & DEFAULT_SLIDESHOW_DIR
                 If .ShowDialog(Me) = DialogResult.OK Then
                     Dim fn As Integer = FreeFile()
                     FileOpen(fn, .FileName, OpenMode.Output)
@@ -5132,7 +5132,7 @@ Namespace JANIS
                     FileOpen(fn, slidefile, OpenMode.Input)
                 Catch ex As Exception
                     FileErr = True
-                    MessageBox.Show("An error occurred opening slideshow file '" + slidefile + "'.", "File Error")
+                    MessageBox.Show("An error occurred opening slideshow file '" & slidefile & "'.", "File Error")
                 End Try
                 If Not FileErr Then
                     Dim s As String = ""
@@ -5393,7 +5393,7 @@ Namespace JANIS
             Dim [of] As New OpenFileDialog()
             With [of]
                 .Filter = "JANIS HotButtons File(*.JHB)|*.JHB"
-                .InitialDirectory = ROOT_SUPPORT_DIR + DEFAULT_HOTBUTTON_DIR
+                .InitialDirectory = ROOT_SUPPORT_DIR & DEFAULT_HOTBUTTON_DIR
                 If .ShowDialog(Me) = DialogResult.OK Then fn = .FileName Else fn = ""
                 .Dispose()
             End With
@@ -5407,7 +5407,7 @@ Namespace JANIS
                 FileOpen(fn, hbfile, OpenMode.Input)
             Catch ex As Exception
                 FileErr = True
-                MessageBox.Show("An error occurred opening HotButtons file '" + hbfile + "'.", "File Error")
+                MessageBox.Show("An error occurred opening HotButtons file '" & hbfile & "'.", "File Error")
             End Try
             If Not FileErr Then
                 Dim i As Integer = 0
@@ -5434,13 +5434,13 @@ Namespace JANIS
             Dim sf As New SaveFileDialog()
             With sf
                 .Filter = "JANIS HotButtons File(*.JHB)|*.JHB"
-                .InitialDirectory = ROOT_SUPPORT_DIR + DEFAULT_HOTBUTTON_DIR
+                .InitialDirectory = ROOT_SUPPORT_DIR & DEFAULT_HOTBUTTON_DIR
                 If .ShowDialog(Me) = DialogResult.OK Then
                     Dim fn As Integer = FreeFile()
                     FileOpen(fn, .FileName, OpenMode.Output)
                     Dim i As Integer
                     For i = 0 To 9
-                        PrintLine(fn, Me.HotButton(i).Text + "¶" + Me.HotButton(i).Tag)
+                        PrintLine(fn, Me.HotButton(i).Text & "¶" & Me.HotButton(i).Tag)
                     Next
                     FileClose(fn)
                     Me.HotButtonsChanged = False
@@ -5643,7 +5643,7 @@ Namespace JANIS
                     FileOpen(fn, filename, OpenMode.Input)
                 Catch ex As Exception
                     FileErr = True
-                    MessageBox.Show("An error occurred opening file '" + filename + "'.", "File Error")
+                    MessageBox.Show("An error occurred opening file '" & filename & "'.", "File Error")
                 End Try
                 If Not FileErr Then
                     Input(fn, s)
@@ -5897,8 +5897,8 @@ Namespace JANIS
                 bgColor = System.Drawing.Color.Red
             End If
 
-            If Me.nudCountdownHours.Value > 0 Then TimeText = Me.nudCountdownHours.Value.ToString + ":"
-            TimeText = TimeText + Format(Me.nudCountdownMinutes.Value, "00") + ":" + Format(Me.nudCountdownSeconds.Value, "00")
+            If Me.nudCountdownHours.Value > 0 Then TimeText = Me.nudCountdownHours.Value.ToString & ":"
+            TimeText = TimeText & Format(Me.nudCountdownMinutes.Value, "00") & ":" & Format(Me.nudCountdownSeconds.Value, "00")
 
             Me.LS.ShowCountdownText(TimeText, bgColor, Me.cbCountdownVisible.Checked)
             Me.RS.ShowCountdownText(TimeText, bgColor, Me.cbCountdownVisible.Checked)
