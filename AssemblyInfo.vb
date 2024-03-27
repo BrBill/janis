@@ -13,7 +13,7 @@ Imports System.Runtime.InteropServices
 <Assembly: AssemblyDescription("The Improv Assistant")> 
 <Assembly: AssemblyCompany("Easy Being Productions")> 
 <Assembly: AssemblyProduct("DUAL DISPLAY")> 
-<Assembly: AssemblyCopyright("2004-2014")> 
+<Assembly: AssemblyCopyright("2004-2024")> 
 <Assembly: AssemblyTrademark("")> 
 <Assembly: CLSCompliant(True)> 
 
@@ -30,7 +30,7 @@ Imports System.Runtime.InteropServices
 ' You can specify all the values or you can default the Build and Revision Numbers 
 ' by using the '*' as shown below:
 
-<Assembly: AssemblyVersion("3.2.*")> 
+<Assembly: AssemblyVersion("4.0.*")> 
 
-<Assembly: AssemblyFileVersionAttribute("3.2.1.0")> 
+<Assembly: AssemblyFileVersionAttribute("4.0.0.0")> 
 <Assembly: NeutralResourcesLanguageAttribute("en")> 
