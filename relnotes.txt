@@ -1,3 +1,9 @@
+v4.0.1: 2024-04-06 (single) - Official relase
+* Can now drag images to main monitor preview (from a browser, etc.) to instant show.
+* Fixed incorrect "wait" cursor setting for image load/paste controls back to normal.
+* Arena/Test Mode notices not copied to left textbox. Title bar only.
+* Simplified names of some controls that weren't left/right based anymore.
+
 v4.0: 2024-03-27 (single) - BETA 1
 * Dropped obsolete ExpLibTree component; rebuilt slide directory navigator from scratch.
 * Now supports .EXIF and .TIFF image files.

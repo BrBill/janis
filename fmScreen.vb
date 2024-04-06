@@ -113,7 +113,7 @@ Public Class fmScreen
         Me.lblTeamLocLeft.ForeColor = System.Drawing.Color.White
         Me.lblTeamLocLeft.Location = New System.Drawing.Point(25, 41)
         Me.lblTeamLocLeft.Name = "lblTeamLocLeft"
-        Me.lblTeamLocLeft.Size = New System.Drawing.Size(440, 77)
+        Me.lblTeamLocLeft.Size = New System.Drawing.Size(454, 77)
         Me.lblTeamLocLeft.TabIndex = 8
         Me.lblTeamLocLeft.Text = "Team City" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10)
         Me.lblTeamLocLeft.TextAlign = System.Drawing.ContentAlignment.BottomLeft
@@ -126,7 +126,7 @@ Public Class fmScreen
         Me.lblTeamNameLeft.ForeColor = System.Drawing.Color.White
         Me.lblTeamNameLeft.Location = New System.Drawing.Point(25, 109)
         Me.lblTeamNameLeft.Name = "lblTeamNameLeft"
-        Me.lblTeamNameLeft.Size = New System.Drawing.Size(440, 77)
+        Me.lblTeamNameLeft.Size = New System.Drawing.Size(454, 77)
         Me.lblTeamNameLeft.TabIndex = 9
         Me.lblTeamNameLeft.Text = "Team Name"
         Me.lblTeamNameLeft.UseCompatibleTextRendering = True
@@ -163,9 +163,9 @@ Public Class fmScreen
         Me.lblTeamLocRight.BackColor = System.Drawing.Color.Maroon
         Me.lblTeamLocRight.Font = New System.Drawing.Font("Roboto Slab", 46.0!, System.Drawing.FontStyle.Bold)
         Me.lblTeamLocRight.ForeColor = System.Drawing.Color.White
-        Me.lblTeamLocRight.Location = New System.Drawing.Point(815, 41)
+        Me.lblTeamLocRight.Location = New System.Drawing.Point(801, 41)
         Me.lblTeamLocRight.Name = "lblTeamLocRight"
-        Me.lblTeamLocRight.Size = New System.Drawing.Size(440, 77)
+        Me.lblTeamLocRight.Size = New System.Drawing.Size(454, 77)
         Me.lblTeamLocRight.TabIndex = 12
         Me.lblTeamLocRight.Text = "Team City" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10)
         Me.lblTeamLocRight.TextAlign = System.Drawing.ContentAlignment.BottomRight
@@ -177,9 +177,9 @@ Public Class fmScreen
         Me.lblTeamNameRight.BackColor = System.Drawing.Color.Maroon
         Me.lblTeamNameRight.Font = New System.Drawing.Font("Roboto Slab", 46.0!, System.Drawing.FontStyle.Bold)
         Me.lblTeamNameRight.ForeColor = System.Drawing.Color.White
-        Me.lblTeamNameRight.Location = New System.Drawing.Point(815, 109)
+        Me.lblTeamNameRight.Location = New System.Drawing.Point(801, 109)
         Me.lblTeamNameRight.Name = "lblTeamNameRight"
-        Me.lblTeamNameRight.Size = New System.Drawing.Size(440, 77)
+        Me.lblTeamNameRight.Size = New System.Drawing.Size(454, 77)
         Me.lblTeamNameRight.TabIndex = 13
         Me.lblTeamNameRight.Text = "Team Name"
         Me.lblTeamNameRight.TextAlign = System.Drawing.ContentAlignment.TopRight

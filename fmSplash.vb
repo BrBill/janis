@@ -5,7 +5,7 @@ Public Class fmSplash
         Public Title As String = "JANIS"
         Public MajorVersion As Integer = 4
         Public MinorVersion As Integer = 0
-        Public Iteration As Integer = 0
+        Public Iteration As Integer = 1
         Public ProductName As String = "DUAL SCREEN"
         Public Copyright As String = "2004-2024"
     End Class
