@@ -162,7 +162,7 @@ Public Class fmColorDialog
         '
         'Panel1
         '
-        Me.Panel1.BackColor = System.Drawing.Color.White
+        Me.Panel1.BackColor = System.Drawing.Color.WhiteSmoke
         Me.Panel1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.Panel1.Location = New System.Drawing.Point(8, 8)
         Me.Panel1.Name = "Panel1"
