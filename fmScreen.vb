@@ -96,7 +96,7 @@ Public Class fmScreen
         '
         'picGraphic
         '
-        Me.picGraphic.Image = Global.JANIS.My.Resources.Resources.ScoreTemplate
+        Me.picGraphic.Image = My.Resources.ScoreTemplate
         Me.picGraphic.InitialImage = Nothing
         Me.picGraphic.Location = New System.Drawing.Point(0, 0)
         Me.picGraphic.Name = "picGraphic"

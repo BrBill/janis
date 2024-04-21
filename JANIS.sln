@@ -16,12 +16,15 @@ Global
 		{C05E3E3B-82AD-4E50-9BCD-D78C8F0C4866}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C05E3E3B-82AD-4E50-9BCD-D78C8F0C4866}.Debug|x86.ActiveCfg = Debug|x86
 		{C05E3E3B-82AD-4E50-9BCD-D78C8F0C4866}.Debug|x86.Build.0 = Debug|x86
-		{C05E3E3B-82AD-4E50-9BCD-D78C8F0C4866}.Release|Any CPU.ActiveCfg = Debug|x86
-		{C05E3E3B-82AD-4E50-9BCD-D78C8F0C4866}.Release|Any CPU.Build.0 = Debug|x86
+		{C05E3E3B-82AD-4E50-9BCD-D78C8F0C4866}.Release|Any CPU.ActiveCfg = Release|x86
+		{C05E3E3B-82AD-4E50-9BCD-D78C8F0C4866}.Release|Any CPU.Build.0 = Release|x86
 		{C05E3E3B-82AD-4E50-9BCD-D78C8F0C4866}.Release|x86.ActiveCfg = Release|x86
 		{C05E3E3B-82AD-4E50-9BCD-D78C8F0C4866}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {64A192F2-BDE5-4213-AA4A-DB8900D9F59A}
 	EndGlobalSection
 EndGlobal

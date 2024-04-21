@@ -11,8 +11,8 @@ Imports System.Runtime.InteropServices
 
 <Assembly: AssemblyTitle("JANIS")> 
 <Assembly: AssemblyDescription("The Improv Assistant")> 
-<Assembly: AssemblyCompany("Easy Being Productions")> 
-<Assembly: AssemblyProduct("DUAL DISPLAY")> 
+<Assembly: AssemblyCompany("Easy Being Productions")>
+<Assembly: AssemblyProduct("JANIS_Single")>
 <Assembly: AssemblyCopyright("2004-2024")> 
 <Assembly: AssemblyTrademark("")> 
 <Assembly: CLSCompliant(True)> 

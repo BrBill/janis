@@ -4509,12 +4509,12 @@ Namespace JANIS
             With Me.tvSlideFolders
                 Try
                     .ImageList = New ImageList
-                    .ImageList.Images.Add(Image.FromFile("forbidden.png"))
-                    .ImageList.Images.Add(Image.FromFile("hard-drive.png"))
-                    .ImageList.Images.Add(Image.FromFile("cd-rom.png"))
-                    .ImageList.Images.Add(Image.FromFile("web.png"))
-                    .ImageList.Images.Add(Image.FromFile("lock.png"))
-                    .ImageList.Images.Add(Image.FromFile("folder.png"))
+                    .ImageList.Images.Add(My.Resources.forbidden)
+                    .ImageList.Images.Add(My.Resources.harddrive)
+                    .ImageList.Images.Add(My.Resources.cdrom)
+                    .ImageList.Images.Add(My.Resources.web)
+                    .ImageList.Images.Add(My.Resources.lock)
+                    .ImageList.Images.Add(My.Resources.folder)
                     .Nodes.Clear()    '* Always start fresh
                 Catch ex As Exception
                     MessageBox.Show(Me, "Could not fetch " & ex.Message, "tvSlideFolders_Init icon loading error", MessageBoxButtons.OK, MessageBoxIcon.Error)
