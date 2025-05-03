@@ -228,7 +228,7 @@ Namespace JANIS
         Friend WithEvents menuAdd1Left As System.Windows.Forms.MenuItem
         Friend WithEvents Label10 As System.Windows.Forms.Label
         Friend WithEvents Label11 As System.Windows.Forms.Label
-        Friend WithEvents TextBox1 As System.Windows.Forms.TextBox
+        Friend WithEvents tbAboutHeader As System.Windows.Forms.TextBox
         Friend WithEvents TextBox2 As System.Windows.Forms.TextBox
         Friend WithEvents Label12 As System.Windows.Forms.Label
         Friend WithEvents btnWhammy As System.Windows.Forms.Button
@@ -572,8 +572,8 @@ Namespace JANIS
             Me.cbLoadDefaultSlides = New System.Windows.Forms.CheckBox()
             Me.cbLoadDefaultHB = New System.Windows.Forms.CheckBox()
             Me.tpAbout = New System.Windows.Forms.TabPage()
+            Me.tbAboutHeader = New System.Windows.Forms.TextBox()
             Me.TextBox2 = New System.Windows.Forms.TextBox()
-            Me.TextBox1 = New System.Windows.Forms.TextBox()
             Me.SlideTimer = New System.Windows.Forms.Timer(Me.components)
             Me.pnlPicBack = New System.Windows.Forms.Panel()
             Me.picLeft = New System.Windows.Forms.PictureBox()
@@ -2927,13 +2927,30 @@ Namespace JANIS
             'tpAbout
             '
             Me.tpAbout.BackColor = System.Drawing.SystemColors.Window
+            Me.tpAbout.Controls.Add(Me.tbAboutHeader)
             Me.tpAbout.Controls.Add(Me.TextBox2)
-            Me.tpAbout.Controls.Add(Me.TextBox1)
             Me.tpAbout.Location = New System.Drawing.Point(4, 28)
             Me.tpAbout.Name = "tpAbout"
             Me.tpAbout.Size = New System.Drawing.Size(988, 372)
             Me.tpAbout.TabIndex = 3
             Me.tpAbout.Text = "About JANIS"
+            '
+            'tbAboutHeader
+            '
+            Me.tbAboutHeader.BackColor = System.Drawing.SystemColors.Window
+            Me.tbAboutHeader.BorderStyle = System.Windows.Forms.BorderStyle.None
+            Me.tbAboutHeader.Font = New System.Drawing.Font("Arial", 15.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+            Me.tbAboutHeader.ForeColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(64, Byte), Integer))
+            Me.tbAboutHeader.Location = New System.Drawing.Point(8, 20)
+            Me.tbAboutHeader.Multiline = True
+            Me.tbAboutHeader.Name = "tbAboutHeader"
+            Me.tbAboutHeader.ReadOnly = True
+            Me.tbAboutHeader.Size = New System.Drawing.Size(972, 105)
+            Me.tbAboutHeader.TabIndex = 230
+            Me.tbAboutHeader.TabStop = False
+            Me.tbAboutHeader.Text = "JANIS" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Version 4.0.2 Released May 3, 2025" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "by Bill Cernansky (bill@easybeing.com)" &
+    "" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "© 2004-2025 Easy Being Productions"
+            Me.tbAboutHeader.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
             '
             'TextBox2
             '
@@ -2950,23 +2967,6 @@ Namespace JANIS
             Me.TextBox2.TabStop = False
             Me.TextBox2.Text = resources.GetString("TextBox2.Text")
             Me.TextBox2.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
-            '
-            'TextBox1
-            '
-            Me.TextBox1.BackColor = System.Drawing.SystemColors.Window
-            Me.TextBox1.BorderStyle = System.Windows.Forms.BorderStyle.None
-            Me.TextBox1.Font = New System.Drawing.Font("Arial", 15.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.TextBox1.ForeColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(64, Byte), Integer))
-            Me.TextBox1.Location = New System.Drawing.Point(8, 20)
-            Me.TextBox1.Multiline = True
-            Me.TextBox1.Name = "TextBox1"
-            Me.TextBox1.ReadOnly = True
-            Me.TextBox1.Size = New System.Drawing.Size(972, 105)
-            Me.TextBox1.TabIndex = 230
-            Me.TextBox1.TabStop = False
-            Me.TextBox1.Text = "JANIS" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Version 4.0.1 Released April 6, 2024" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "by Bill Cernansky (bill@easybeing.co" &
-    "m)" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "© 2003-2024 Easy Being Productions"
-            Me.TextBox1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
             '
             'SlideTimer
             '
@@ -3511,6 +3511,8 @@ Namespace JANIS
                 Me.picLeft.AllowDrop = True
 
                 Me.LS = New fmScreen()
+                '* Save the label message heights because the timer screws around with them and needs to restore them
+                Me.LS.lblMsg.Tag = Me.LS.lblMsg.Height
 
                 Me.VerifyInfrastructure()
 
@@ -3531,11 +3533,7 @@ Namespace JANIS
                 End If
 
 
-                '* Save the label message heights because the timer screws around with them and needs to restore them
-                Me.LS.lblMsg.Tag = Me.LS.lblMsg.Height
-
-                '* Show the audience display early, because it might take time to
-                '* load the image library and we don't need the audience to see the O/S desktop.
+                '* Show the audience display early, so loading image library doesn't delay its appearance
                 Me.LS.Show()
 
                 Me.tvSlideFolders_Init(Me.tbDefaultImageDir.Text)

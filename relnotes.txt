@@ -1,3 +1,7 @@
+v4.0.2: 2025-05-03 (single)
+* Fixed horrible, 15-year-old text display failure bug caused by loading defaults that
+  differed from 00:05:00. Finally, the long global nightmare is over. 
+
 v4.0.1: 2024-04-06 (single) - Official relase
 * Can now drag images to main monitor preview (from a browser, etc.) to instant show.
 * Fixed incorrect "wait" cursor setting for image load/paste controls back to normal.

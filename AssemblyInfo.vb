@@ -13,7 +13,7 @@ Imports System.Runtime.InteropServices
 <Assembly: AssemblyDescription("The Improv Assistant")> 
 <Assembly: AssemblyCompany("Easy Being Productions")>
 <Assembly: AssemblyProduct("JANIS_Single")>
-<Assembly: AssemblyCopyright("2004-2024")> 
+<Assembly: AssemblyCopyright("2004-2025")>
 <Assembly: AssemblyTrademark("")> 
 <Assembly: CLSCompliant(True)> 
 
@@ -32,5 +32,5 @@ Imports System.Runtime.InteropServices
 
 <Assembly: AssemblyVersion("4.0.*")>
 
-<Assembly: AssemblyFileVersionAttribute("4.0.1.0")>
+<Assembly: AssemblyFileVersionAttribute("4.0.2")>
 <Assembly: NeutralResourcesLanguageAttribute("en")> 
