@@ -45,7 +45,7 @@ Namespace JANIS
         Private PREFS_FILE As String
         Private splash As fmSplash
         Private TestMode As Boolean = False
-        Dim DisplayModeAdjustment As Single = 1.0         ' Divide font setting by this for display. Differs for test/arena mode.
+        Dim DisplayModeAdjustment As Single = 0.7     ' Divide font setting by this for display. Differs for test/arena mode.
         Dim DisplayToEntryFontRatio As Single = 123 / 42  ' This is the size ratio of fonts in the display vs. in the textbox
         Dim DisplayFontRatio As Single = 33 / 80          ' The "should be" size ratio of display to what I once thought it was.
         Dim DEFAULT_COUNTDOWN_COLOR As System.Drawing.Color = System.Drawing.Color.FromArgb(CType(CType(48, Byte), Integer), CType(CType(48, Byte), Integer), CType(CType(48, Byte), Integer))
@@ -159,7 +159,7 @@ Namespace JANIS
         Friend WithEvents menuAdd5Right As System.Windows.Forms.MenuItem
         Friend WithEvents menuSubtract5Right As System.Windows.Forms.MenuItem
         Friend WithEvents grpPasteImage As GroupBox
-        Friend WithEvents picLeft As System.Windows.Forms.PictureBox
+        Friend WithEvents picDisplayed As System.Windows.Forms.PictureBox
         Friend WithEvents btnPicLoadFile As System.Windows.Forms.Button
         Friend WithEvents btnLeftScoreColor As System.Windows.Forms.Button
         Friend WithEvents btnRightScoreColor As System.Windows.Forms.Button
@@ -234,7 +234,6 @@ Namespace JANIS
         Friend WithEvents btnWhammy As System.Windows.Forms.Button
         Friend WithEvents btnClearSlideList As System.Windows.Forms.Button
         Friend WithEvents btnShowLeftText As System.Windows.Forms.Button
-        Friend WithEvents btnDocLoadBoth As System.Windows.Forms.Button
         Friend WithEvents btnDocLoadRight As System.Windows.Forms.Button
         Friend WithEvents btnDocLoadLeft As System.Windows.Forms.Button
         Friend WithEvents EasterEgg1 As System.Windows.Forms.MenuItem
@@ -345,7 +344,7 @@ Namespace JANIS
         Friend WithEvents tbDefaultImageDir As System.Windows.Forms.TextBox
         Friend WithEvents btnClearTextBoth As System.Windows.Forms.Button
         Friend WithEvents CountdownTimer As System.Windows.Forms.Timer
-        Friend WithEvents cbExpandPicLeft As System.Windows.Forms.CheckBox
+        Friend WithEvents cbExpandpicDisplayed As System.Windows.Forms.CheckBox
         Friend WithEvents tpImgSearch As System.Windows.Forms.TabPage
         Friend WithEvents btnImgSearch As System.Windows.Forms.Button
         Friend WithEvents btnSearchImgAddSlide As System.Windows.Forms.Button
@@ -358,6 +357,7 @@ Namespace JANIS
         Friend WithEvents Label32 As System.Windows.Forms.Label
         Friend WithEvents lblLibraryCount As System.Windows.Forms.Label
         Friend WithEvents btnPasteImage As System.Windows.Forms.Button
+        Friend WithEvents lblDisplayedStatus As Label
 
 
         <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
@@ -394,7 +394,6 @@ Namespace JANIS
             Me.btnShowLeftText = New System.Windows.Forms.Button()
             Me.grpLoadText = New System.Windows.Forms.GroupBox()
             Me.btnDocLoadLeft = New System.Windows.Forms.Button()
-            Me.btnDocLoadBoth = New System.Windows.Forms.Button()
             Me.btnDocLoadRight = New System.Windows.Forms.Button()
             Me.grpClearText = New System.Windows.Forms.GroupBox()
             Me.btnClearTextLeft = New System.Windows.Forms.Button()
@@ -576,9 +575,10 @@ Namespace JANIS
             Me.TextBox2 = New System.Windows.Forms.TextBox()
             Me.SlideTimer = New System.Windows.Forms.Timer(Me.components)
             Me.pnlPicBack = New System.Windows.Forms.Panel()
-            Me.picLeft = New System.Windows.Forms.PictureBox()
+            Me.lblDisplayedStatus = New System.Windows.Forms.Label()
+            Me.picDisplayed = New System.Windows.Forms.PictureBox()
             Me.CountdownTimer = New System.Windows.Forms.Timer(Me.components)
-            Me.cbExpandPicLeft = New System.Windows.Forms.CheckBox()
+            Me.cbExpandpicDisplayed = New System.Windows.Forms.CheckBox()
             Me.lblLibraryCount = New System.Windows.Forms.Label()
             Me.btnPasteImage = New System.Windows.Forms.Button()
             Me.gbCountdownControls = New System.Windows.Forms.GroupBox()
@@ -639,7 +639,7 @@ Namespace JANIS
             CType(Me.nudDefaultSlideDelay, System.ComponentModel.ISupportInitialize).BeginInit()
             Me.tpAbout.SuspendLayout()
             Me.pnlPicBack.SuspendLayout()
-            CType(Me.picLeft, System.ComponentModel.ISupportInitialize).BeginInit()
+            CType(Me.picDisplayed, System.ComponentModel.ISupportInitialize).BeginInit()
             Me.gbCountdownControls.SuspendLayout()
             CType(Me.nudCountdownWarnSeconds, System.ComponentModel.ISupportInitialize).BeginInit()
             CType(Me.nudCountdownWarnMinutes, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -921,6 +921,7 @@ Namespace JANIS
             Me.btnShowRightText.Size = New System.Drawing.Size(68, 48)
             Me.btnShowRightText.TabIndex = 79
             Me.btnShowRightText.Text = "y"
+            Me.ToolTip1.SetToolTip(Me.btnShowRightText, "Display Text")
             '
             'btnShowLeftText
             '
@@ -930,52 +931,47 @@ Namespace JANIS
             Me.btnShowLeftText.Size = New System.Drawing.Size(68, 48)
             Me.btnShowLeftText.TabIndex = 78
             Me.btnShowLeftText.Text = "y"
+            Me.ToolTip1.SetToolTip(Me.btnShowLeftText, "Display Text")
             '
             'grpLoadText
             '
             Me.grpLoadText.Controls.Add(Me.btnDocLoadLeft)
-            Me.grpLoadText.Controls.Add(Me.btnDocLoadBoth)
             Me.grpLoadText.Controls.Add(Me.btnDocLoadRight)
             Me.grpLoadText.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.grpLoadText.Location = New System.Drawing.Point(422, 197)
+            Me.grpLoadText.Location = New System.Drawing.Point(422, 192)
             Me.grpLoadText.Name = "grpLoadText"
             Me.grpLoadText.RightToLeft = System.Windows.Forms.RightToLeft.Yes
-            Me.grpLoadText.Size = New System.Drawing.Size(148, 52)
+            Me.grpLoadText.Size = New System.Drawing.Size(148, 70)
             Me.grpLoadText.TabIndex = 74
             Me.grpLoadText.TabStop = False
             Me.grpLoadText.Text = "Load Text File"
             '
             'btnDocLoadLeft
             '
-            Me.btnDocLoadLeft.Font = New System.Drawing.Font("Wingdings", 14.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
+            Me.btnDocLoadLeft.BackgroundImage = Global.JANIS.My.Resources.Resources.left_arrow
+            Me.btnDocLoadLeft.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
+            Me.btnDocLoadLeft.FlatAppearance.BorderSize = 0
+            Me.btnDocLoadLeft.FlatAppearance.MouseDownBackColor = System.Drawing.Color.DimGray
+            Me.btnDocLoadLeft.Font = New System.Drawing.Font("Arial Narrow", 20.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
             Me.btnDocLoadLeft.Location = New System.Drawing.Point(2, 18)
             Me.btnDocLoadLeft.Name = "btnDocLoadLeft"
-            Me.btnDocLoadLeft.Size = New System.Drawing.Size(47, 28)
+            Me.btnDocLoadLeft.Size = New System.Drawing.Size(47, 46)
             Me.btnDocLoadLeft.TabIndex = 75
             Me.btnDocLoadLeft.Tag = "Left"
-            Me.btnDocLoadLeft.Text = "ï"
             Me.btnDocLoadLeft.TextAlign = System.Drawing.ContentAlignment.TopCenter
-            '
-            'btnDocLoadBoth
-            '
-            Me.btnDocLoadBoth.Font = New System.Drawing.Font("Wingdings", 14.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
-            Me.btnDocLoadBoth.Location = New System.Drawing.Point(50, 18)
-            Me.btnDocLoadBoth.Name = "btnDocLoadBoth"
-            Me.btnDocLoadBoth.Size = New System.Drawing.Size(47, 28)
-            Me.btnDocLoadBoth.TabIndex = 76
-            Me.btnDocLoadBoth.Tag = "Both"
-            Me.btnDocLoadBoth.Text = "ó"
-            Me.btnDocLoadBoth.TextAlign = System.Drawing.ContentAlignment.TopCenter
             '
             'btnDocLoadRight
             '
-            Me.btnDocLoadRight.Font = New System.Drawing.Font("Wingdings", 14.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
+            Me.btnDocLoadRight.BackgroundImage = Global.JANIS.My.Resources.Resources.right_arrow
+            Me.btnDocLoadRight.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
+            Me.btnDocLoadRight.FlatAppearance.BorderSize = 0
+            Me.btnDocLoadRight.FlatAppearance.MouseDownBackColor = System.Drawing.Color.DimGray
+            Me.btnDocLoadRight.Font = New System.Drawing.Font("Arial Narrow", 20.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
             Me.btnDocLoadRight.Location = New System.Drawing.Point(98, 18)
             Me.btnDocLoadRight.Name = "btnDocLoadRight"
-            Me.btnDocLoadRight.Size = New System.Drawing.Size(47, 28)
+            Me.btnDocLoadRight.Size = New System.Drawing.Size(47, 46)
             Me.btnDocLoadRight.TabIndex = 77
             Me.btnDocLoadRight.Tag = "Right"
-            Me.btnDocLoadRight.Text = "ð"
             Me.btnDocLoadRight.TextAlign = System.Drawing.ContentAlignment.TopCenter
             '
             'grpClearText
@@ -984,10 +980,10 @@ Namespace JANIS
             Me.grpClearText.Controls.Add(Me.btnClearTextBoth)
             Me.grpClearText.Controls.Add(Me.btnClearTextRight)
             Me.grpClearText.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.grpClearText.Location = New System.Drawing.Point(422, 98)
+            Me.grpClearText.Location = New System.Drawing.Point(422, 92)
             Me.grpClearText.Name = "grpClearText"
             Me.grpClearText.RightToLeft = System.Windows.Forms.RightToLeft.No
-            Me.grpClearText.Size = New System.Drawing.Size(148, 52)
+            Me.grpClearText.Size = New System.Drawing.Size(148, 70)
             Me.grpClearText.TabIndex = 70
             Me.grpClearText.TabStop = False
             Me.grpClearText.Text = "Clear Text"
@@ -995,39 +991,48 @@ Namespace JANIS
             'btnClearTextLeft
             '
             Me.btnClearTextLeft.BackColor = System.Drawing.Color.Transparent
-            Me.btnClearTextLeft.Font = New System.Drawing.Font("Wingdings", 14.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
+            Me.btnClearTextLeft.BackgroundImage = Global.JANIS.My.Resources.Resources.left_arrow
+            Me.btnClearTextLeft.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
+            Me.btnClearTextLeft.FlatAppearance.BorderSize = 0
+            Me.btnClearTextLeft.FlatAppearance.MouseDownBackColor = System.Drawing.Color.DimGray
+            Me.btnClearTextLeft.Font = New System.Drawing.Font("Arial Narrow", 20.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
             Me.btnClearTextLeft.ForeColor = System.Drawing.SystemColors.WindowText
             Me.btnClearTextLeft.Location = New System.Drawing.Point(2, 18)
             Me.btnClearTextLeft.Name = "btnClearTextLeft"
-            Me.btnClearTextLeft.Size = New System.Drawing.Size(47, 28)
+            Me.btnClearTextLeft.Size = New System.Drawing.Size(47, 46)
             Me.btnClearTextLeft.TabIndex = 71
-            Me.btnClearTextLeft.Text = "ï"
             Me.btnClearTextLeft.TextAlign = System.Drawing.ContentAlignment.TopCenter
             Me.btnClearTextLeft.UseVisualStyleBackColor = False
             '
             'btnClearTextBoth
             '
             Me.btnClearTextBoth.BackColor = System.Drawing.Color.Transparent
-            Me.btnClearTextBoth.Font = New System.Drawing.Font("Wingdings", 14.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
+            Me.btnClearTextBoth.BackgroundImage = Global.JANIS.My.Resources.Resources.left_right_arrow
+            Me.btnClearTextBoth.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
+            Me.btnClearTextBoth.FlatAppearance.BorderSize = 0
+            Me.btnClearTextBoth.FlatAppearance.MouseDownBackColor = System.Drawing.Color.DimGray
+            Me.btnClearTextBoth.Font = New System.Drawing.Font("Arial Narrow", 20.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
             Me.btnClearTextBoth.ForeColor = System.Drawing.SystemColors.WindowText
             Me.btnClearTextBoth.Location = New System.Drawing.Point(50, 18)
             Me.btnClearTextBoth.Name = "btnClearTextBoth"
-            Me.btnClearTextBoth.Size = New System.Drawing.Size(47, 28)
+            Me.btnClearTextBoth.Size = New System.Drawing.Size(47, 46)
             Me.btnClearTextBoth.TabIndex = 72
-            Me.btnClearTextBoth.Text = "ó"
             Me.btnClearTextBoth.TextAlign = System.Drawing.ContentAlignment.TopCenter
             Me.btnClearTextBoth.UseVisualStyleBackColor = False
             '
             'btnClearTextRight
             '
             Me.btnClearTextRight.BackColor = System.Drawing.Color.Transparent
-            Me.btnClearTextRight.Font = New System.Drawing.Font("Wingdings", 14.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
+            Me.btnClearTextRight.BackgroundImage = Global.JANIS.My.Resources.Resources.right_arrow
+            Me.btnClearTextRight.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
+            Me.btnClearTextRight.FlatAppearance.BorderSize = 0
+            Me.btnClearTextRight.FlatAppearance.MouseDownBackColor = System.Drawing.Color.DimGray
+            Me.btnClearTextRight.Font = New System.Drawing.Font("Arial Narrow", 20.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
             Me.btnClearTextRight.ForeColor = System.Drawing.SystemColors.WindowText
             Me.btnClearTextRight.Location = New System.Drawing.Point(98, 18)
             Me.btnClearTextRight.Name = "btnClearTextRight"
-            Me.btnClearTextRight.Size = New System.Drawing.Size(47, 28)
+            Me.btnClearTextRight.Size = New System.Drawing.Size(47, 46)
             Me.btnClearTextRight.TabIndex = 73
-            Me.btnClearTextRight.Text = "ð"
             Me.btnClearTextRight.TextAlign = System.Drawing.ContentAlignment.TopCenter
             Me.btnClearTextRight.UseVisualStyleBackColor = False
             '
@@ -1690,6 +1695,8 @@ Namespace JANIS
             Me.nudDelay.Size = New System.Drawing.Size(56, 31)
             Me.nudDelay.TabIndex = 127
             Me.nudDelay.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+            Me.ToolTip1.SetToolTip(Me.nudDelay, "Length of time that each slide will display (videos in slideshow will not adhere " &
+        "to this setting)")
             Me.nudDelay.Value = New Decimal(New Integer() {15, 0, 0, 0})
             '
             'Label8
@@ -2975,37 +2982,49 @@ Namespace JANIS
             'pnlPicBack
             '
             Me.pnlPicBack.BackColor = System.Drawing.Color.Black
-            Me.pnlPicBack.Controls.Add(Me.picLeft)
+            Me.pnlPicBack.Controls.Add(Me.lblDisplayedStatus)
+            Me.pnlPicBack.Controls.Add(Me.picDisplayed)
             Me.pnlPicBack.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
             Me.pnlPicBack.Location = New System.Drawing.Point(4, 57)
             Me.pnlPicBack.Name = "pnlPicBack"
             Me.pnlPicBack.Size = New System.Drawing.Size(272, 153)
             Me.pnlPicBack.TabIndex = 14
             '
-            'picLeft
+            'lblDisplayedStatus
             '
-            Me.picLeft.BackColor = System.Drawing.Color.Transparent
-            Me.picLeft.ImageLocation = ""
-            Me.picLeft.Location = New System.Drawing.Point(0, 0)
-            Me.picLeft.Name = "picLeft"
-            Me.picLeft.Size = New System.Drawing.Size(272, 153)
-            Me.picLeft.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
-            Me.picLeft.TabIndex = 28
-            Me.picLeft.TabStop = False
-            Me.ToolTip1.SetToolTip(Me.picLeft, "Drag images here from a browser to display instantly")
+            Me.lblDisplayedStatus.BackColor = System.Drawing.Color.DarkGray
+            Me.lblDisplayedStatus.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+            Me.lblDisplayedStatus.Location = New System.Drawing.Point(61, 10)
+            Me.lblDisplayedStatus.Name = "lblDisplayedStatus"
+            Me.lblDisplayedStatus.Size = New System.Drawing.Size(150, 20)
+            Me.lblDisplayedStatus.TabIndex = 29
+            Me.lblDisplayedStatus.Text = "Currently Displayed"
+            Me.lblDisplayedStatus.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+            '
+            'picDisplayed
+            '
+            Me.picDisplayed.BackColor = System.Drawing.Color.Transparent
+            Me.picDisplayed.ImageLocation = ""
+            Me.picDisplayed.Location = New System.Drawing.Point(0, 0)
+            Me.picDisplayed.Name = "picDisplayed"
+            Me.picDisplayed.Size = New System.Drawing.Size(272, 153)
+            Me.picDisplayed.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
+            Me.picDisplayed.TabIndex = 28
+            Me.picDisplayed.TabStop = False
+            Me.ToolTip1.SetToolTip(Me.picDisplayed, "Drag images here from a browser to display instantly")
             '
             'CountdownTimer
             '
             Me.CountdownTimer.Interval = 10
             '
-            'cbExpandPicLeft
+            'cbExpandpicDisplayed
             '
-            Me.cbExpandPicLeft.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.cbExpandPicLeft.Location = New System.Drawing.Point(282, 98)
-            Me.cbExpandPicLeft.Name = "cbExpandPicLeft"
-            Me.cbExpandPicLeft.Size = New System.Drawing.Size(84, 24)
-            Me.cbExpandPicLeft.TabIndex = 14
-            Me.cbExpandPicLeft.Text = "Expand"
+            Me.cbExpandpicDisplayed.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+            Me.cbExpandpicDisplayed.Location = New System.Drawing.Point(282, 98)
+            Me.cbExpandpicDisplayed.Name = "cbExpandpicDisplayed"
+            Me.cbExpandpicDisplayed.Size = New System.Drawing.Size(84, 24)
+            Me.cbExpandpicDisplayed.TabIndex = 14
+            Me.cbExpandpicDisplayed.Text = "Stretch"
             '
             'lblLibraryCount
             '
@@ -3089,7 +3108,8 @@ Namespace JANIS
             '
             'Label34
             '
-            Me.Label34.ForeColor = System.Drawing.Color.Red
+            Me.Label34.BackColor = System.Drawing.Color.Red
+            Me.Label34.ForeColor = System.Drawing.Color.Black
             Me.Label34.Location = New System.Drawing.Point(28, 70)
             Me.Label34.Name = "Label34"
             Me.Label34.Size = New System.Drawing.Size(85, 20)
@@ -3404,7 +3424,7 @@ Namespace JANIS
             Me.grpPasteImage.Size = New System.Drawing.Size(271, 52)
             Me.grpPasteImage.TabIndex = 15
             Me.grpPasteImage.TabStop = False
-            Me.grpPasteImage.Text = "Show Image"
+            Me.grpPasteImage.Text = "Choose Image"
             '
             'fmMain
             '
@@ -3418,7 +3438,7 @@ Namespace JANIS
             Me.Controls.Add(Me.gbCountdownControls)
             Me.Controls.Add(Me.grpPasteImage)
             Me.Controls.Add(Me.lblLibraryCount)
-            Me.Controls.Add(Me.cbExpandPicLeft)
+            Me.Controls.Add(Me.cbExpandpicDisplayed)
             Me.Controls.Add(Me.pnlPicBack)
             Me.Controls.Add(Me.btnHot10)
             Me.Controls.Add(Me.btnHot9)
@@ -3484,7 +3504,7 @@ Namespace JANIS
             Me.tpAbout.ResumeLayout(False)
             Me.tpAbout.PerformLayout()
             Me.pnlPicBack.ResumeLayout(False)
-            CType(Me.picLeft, System.ComponentModel.ISupportInitialize).EndInit()
+            CType(Me.picDisplayed, System.ComponentModel.ISupportInitialize).EndInit()
             Me.gbCountdownControls.ResumeLayout(False)
             CType(Me.nudCountdownWarnSeconds, System.ComponentModel.ISupportInitialize).EndInit()
             CType(Me.nudCountdownWarnMinutes, System.ComponentModel.ISupportInitialize).EndInit()
@@ -3508,7 +3528,7 @@ Namespace JANIS
                 Me.InitiateQuietShutdown()
             Else
                 Me.InitializeSettings()
-                Me.picLeft.AllowDrop = True
+                Me.picDisplayed.AllowDrop = True
 
                 Me.LS = New fmScreen()
                 '* Save the label message heights because the timer screws around with them and needs to restore them
@@ -3530,8 +3550,9 @@ Namespace JANIS
                 If Not (Me.cbDisplayDefaultImage.Checked Or Me.cbPlaySlidesAtStart.Checked) Then
                     '* Me.DisplayTextScreen(Me.LS, Me.tbLeftText.Text, Me.tbLeftText.BackColor, CSng(Me.tbLeftFontSize.Text) * Me.DisplayFontRatio)  'For debugging
                     Me.LS.Blackout()
+                    Me.picDisplayed.ImageLocation = ""
+                    Me.picDisplayed.Image = Nothing
                 End If
-
 
                 '* Show the audience display early, so loading image library doesn't delay its appearance
                 Me.LS.Show()
@@ -3644,8 +3665,14 @@ Namespace JANIS
             End If
         End Sub
 
+        Private Sub ShowScreenPreview()
+            Application.DoEvents()
+            Dim img As Bitmap = LS.CaptureWindowImage()
+            Me.picDisplayed.Image = img
+        End Sub
+
         Private Sub btnShowScore_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnShowScore.Click
-            Me.picLeft.Image = Nothing
+            Me.picDisplayed.Image = Nothing
             Me.DisplayScore()
         End Sub
         Private Sub btnLeftScoreColor_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnLeftScoreColor.Click
@@ -3692,7 +3719,7 @@ Namespace JANIS
         Private Sub btnShowRightText_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnShowRightText.Click
             Me.DisplayTextScreen(Me.LS, Me.tbRightText.Text, Me.tbRightText.BackColor, CSng(Me.tbRightFontSize.Text) * Me.DisplayFontRatio)
         End Sub
-        Private Sub btnDocLoad_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnDocLoadLeft.Click, btnDocLoadRight.Click, btnDocLoadBoth.Click
+        Private Sub btnDocLoad_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnDocLoadLeft.Click, btnDocLoadRight.Click
             '* Load the contents of a document into the left, right, or both text entry boxes
             Dim Doc As String = LoadDoc()
             If Doc <> "" Then
@@ -3749,8 +3776,8 @@ Namespace JANIS
 
             '* Shut them down, Artoo! Shut them all down!
             Me.LS.Blackout()
-            Me.picLeft.ImageLocation = ""
-            Me.picLeft.Image = Nothing
+            Me.picDisplayed.ImageLocation = ""
+            Me.picDisplayed.Image = Nothing
         End Sub
 
         Private Sub tbFontSize_KeyUp(ByVal sender As System.Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles tbLeftFontSize.KeyUp, tbRightFontSize.KeyUp, tbDefaultFontSize.KeyUp
@@ -3788,7 +3815,7 @@ Namespace JANIS
 
         Private Sub SetMonitorDisplayMode()
             If SystemInformation.MonitorCount <= 1 Then        '* We're in test mode
-                Dim sRatio As Integer = 4
+                Dim sRatio As Integer = 5
                 Me.TestMode = True
                 Me.DisplayModeAdjustment = sRatio * sRatio  '* = w x h
 
@@ -3821,19 +3848,21 @@ Namespace JANIS
             Me.StopSlideShow()
 
             '* Blank out the corresponding graphics preview
-            Me.picLeft.Image = Nothing
+            Me.picDisplayed.Image = Nothing
 
-            If TestMode Then fontsize = fontsize * 4.006
+            If TestMode Then fontsize = fontsize * 7.2
             Scr.SetTextShadows(cbShadowsEnabled.Checked)
             Scr.ShowText(s, hue, CSng(Me.DisplayToEntryFontRatio * fontsize / Me.DisplayModeAdjustment))
+            Me.ShowScreenPreview()
         End Sub
 
         Private Sub DisplayScore()
             '* First, stop the slideshow if it's running.
             Me.StopSlideShow()
-            Me.picLeft.ImageLocation = ""
-            Me.picLeft.Image = Nothing
+            Me.picDisplayed.ImageLocation = ""
+            Me.picDisplayed.Image = Nothing
             Me.LS.ShowScore(Me.tbLeftScore.Text, Me.tbLeftLoc.Text, Me.tbLeftTeam.Text, Me.tbRightScore.Text, Me.tbRightLoc.Text, Me.tbRightTeam.Text)
+            Me.ShowScreenPreview()
         End Sub
 
         Private Sub AddScore(ByVal Side As String, ByVal Points As Integer)
@@ -3960,14 +3989,16 @@ Namespace JANIS
                 If KillSlideShow Then Me.StopSlideShow()
 
                 '* Show displays first for speed.
-                Me.LS.ShowImage(img, Me.cbExpandPicLeft.Checked)
-                Me.PreviewImage(Me.picLeft, img, Me.cbExpandPicLeft.Checked)
+                Me.LS.ShowImage(img, Me.cbExpandpicDisplayed.Checked)
+                If Not SLIDES_WHAMMY Then
+                    Me.PreviewImage(Me.picDisplayed, img, Me.cbExpandpicDisplayed.Checked)
+                End If
 
                 Me.AllScreensToFront()
             End If
         End Sub
 
-        Private Sub DisplayRawImageBoth(ByRef img As Image, ByVal expand As Boolean)
+        Private Sub DisplayRawImage(ByRef img As Image, ByVal expand As Boolean)
             If img Is Nothing Then Exit Sub
             Me.LS.ShowImage(img, expand)
         End Sub
@@ -3976,7 +4007,7 @@ Namespace JANIS
             ''* If this is a web image, call with filename.
             'If fnam Like "http:*" Then
             '    Me.LS.ShowURLImage(fnam)
-            '    Me.PreviewURL(Me.picLeft, fnam)
+            '    Me.PreviewURL(Me.picDisplayed, fnam)
             'Else
             Dim img As Image
             Try
@@ -4028,7 +4059,7 @@ Namespace JANIS
             End If
         End Sub
 
-        Private Sub picDisplay_DragDrop(ByVal sender As Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles btnPicLoadFile.DragDrop, btnPasteImage.DragDrop, picLeft.DragDrop
+        Private Sub picDisplay_DragDrop(ByVal sender As Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles btnPicLoadFile.DragDrop, btnPasteImage.DragDrop, picDisplayed.DragDrop
             '* Hopefully, we can drag-drop an image from an external source onto one of these picture boxes and have it
             '* display there. This works really well with Firefox.
             Dim img As Image
@@ -4048,7 +4079,7 @@ Namespace JANIS
 
         End Sub
 
-        Private Sub picDisplay_DragEnter(ByVal sender As Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles picLeft.DragEnter, btnPicLoadFile.DragEnter, btnPasteImage.DragEnter
+        Private Sub picDisplay_DragEnter(ByVal sender As Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles picDisplayed.DragEnter, btnPicLoadFile.DragEnter, btnPasteImage.DragEnter
             '* This routine says that the pic preview boxes and "Display" buttons
             '* can accept dropped string copy only.
             If (e.Data.GetDataPresent(DataFormats.Dib) Or e.Data.GetDataPresent(DataFormats.Bitmap)) Then
@@ -4754,7 +4785,7 @@ Namespace JANIS
             End If
         End Sub
 
-        Private Sub SelectRandomSlide()
+        Private Sub PreSelectRandomSlide()
             '* Select a random slide and buffer it into BufferedSlide.
             If Me.lbSlideList.Items.Count < 2 And Not (Me.BufferedSlide Is Nothing) Then Return
             Dim NewIndex As Integer
@@ -4786,7 +4817,7 @@ Namespace JANIS
             If Me.lbSlideList.Items.Count < 1 Then Return
             Me.lbSlideList.SelectionMode = SelectionMode.One
             If Me.SlidesStatus = SLIDES_WHAMMY Then
-                Me.SelectRandomSlide()
+                Me.PreSelectRandomSlide()
             ElseIf SlidesStatus <> SLIDES_PAUSED Then
                 Me.lbSlideList.SelectedIndex = 0
             End If
@@ -4800,7 +4831,10 @@ Namespace JANIS
             Dim WhammyWasActive As Boolean = (Me.SlidesStatus = SLIDES_WHAMMY)
             Me.SlideTimer.Stop()
             Me.SlidesStatus = SLIDES_STOPPED
-            If WhammyWasActive Then Me.DisplayImageFile(Me.lbSlideList.SelectedItem, False)
+            If WhammyWasActive Then
+                Me.lblDisplayedStatus.Text = "Currently Displayed"
+                Me.DisplayImageFile(Me.lbSlideList.SelectedItem, False)
+            End If
             Me.SetPauseButtonColor(False)
             Me.SetPlayButtonColor(False)
             Me.lbSlideList.SelectionMode = SelectionMode.MultiExtended
@@ -4845,8 +4879,8 @@ Namespace JANIS
                         Me.StopSlideShow()
                         Return
                     ElseIf Me.SlidesStatus = SLIDES_WHAMMY Then
-                        Me.DisplayRawImageBoth(Me.BufferedSlide, False)   '* maintain ratio for all images during whammy, for smoothness/speed
-                        Me.SelectRandomSlide()                            '* Set Me.BufferedSlide to a random slide
+                        Me.DisplayRawImage(Me.BufferedSlide, False)   '* maintain ratio for all images during whammy, for smoothness/speed
+                        Me.PreSelectRandomSlide()                        '* Set Me.BufferedSlide to a random slide
                     Else
                         If .SelectedIndex < (.Items.Count - 1) Then
                             .SelectedIndex += 1
@@ -4923,6 +4957,7 @@ Namespace JANIS
             If Me.lbSlideList.Items.Count < 1 Then Return
 
             'If Me.SlidesStatus <> SLIDES_STOPPED Then Me.StopSlideShow()
+            Me.lblDisplayedStatus.Text = "WHAMMY Running"
             Me.SlidesStatus = SLIDES_WHAMMY
             Me.StartSlideShow()
             Dim WaitForm As New fmClickWait(Me)
@@ -5454,6 +5489,7 @@ Namespace JANIS
             TimeText = TimeText & Format(Me.nudCountdownMinutes.Value, "00") & ":" & Format(Me.nudCountdownSeconds.Value, "00")
 
             Me.LS.ShowCountdownText(TimeText, bgColor, Me.cbCountdownVisible.Checked)
+            Me.ShowScreenPreview()
         End Sub
 
         '=================================================================================================
