@@ -207,7 +207,7 @@ Public Class fmColorDialog
         '
         'Panel6
         '
-        Me.Panel6.BackColor = System.Drawing.Color.Black
+        Me.Panel6.BackColor = System.Drawing.Color.FromArgb(CType(CType(1, Byte), Integer), CType(CType(1, Byte), Integer), CType(CType(1, Byte), Integer))
         Me.Panel6.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.Panel6.Location = New System.Drawing.Point(8, 128)
         Me.Panel6.Name = "Panel6"

@@ -191,9 +191,9 @@ Public Class fmScreen
         '
         'fmScreen
         '
-        Me.AutoScaleBaseSize = New System.Drawing.Size(8, 19)
+        Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None
         Me.BackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(176, Byte), Integer))
-        Me.ClientSize = New System.Drawing.Size(1920, 1081)
+        Me.ClientSize = New System.Drawing.Size(1920, 1080)
         Me.Controls.Add(Me.lblTeamNameRight)
         Me.Controls.Add(Me.lblTeamLocRight)
         Me.Controls.Add(Me.lblScoreRight)
@@ -452,37 +452,9 @@ Public Class fmScreen
 
 
 #Region "Private Functions and Subs"
-    'Private Sub fmScreen_Resize(sender As Object, e As EventArgs) Handles Me.Resize
-    '    Dim scaleW As Double = Me.Width / WINDOW_BASE_WIDTH
-    '    Dim scaleH As Double = Me.Height / WINDOW_BASE_HEIGHT
-    '    MsgBox("Width: " + Me.Width.ToString + ", Height is " + Me.Height.ToString, MsgBoxStyle.OkOnly, "SizeInfo")
-
-    '    RescaleControl(lblScoreLeft, scaleW, scaleH)
-    '    RescaleControl(lblScoreRight, scaleW, scaleH)
-    '    RescaleControl(lblTeamNameLeft, scaleW, scaleH)
-    '    RescaleControl(lblTeamNameRight, scaleW, scaleH)
-    '    RescaleControl(lblTeamLocLeft, scaleW, scaleH)
-    '    RescaleControl(lblTeamLocRight, scaleW, scaleH)
-    '    RescaleControl(lblMsg, scaleW, scaleH)
-    '    RescaleControl(lblCountdown, scaleW, scaleH)
-    '    picGraphic.Width = Me.Width
-    '    picGraphic.Height = Me.Height
-    'End Sub
-
-    'Private Sub RescaleControl(ctrl As Control, scaleW As Double, scaleH As Double)
-    '    ctrl.Left = CInt(ctrl.Left * scaleW)
-    '    ctrl.Top = CInt(ctrl.Top * scaleH)
-    '    ctrl.Width = CInt(ctrl.Width * scaleW)
-    '    ctrl.Height = CInt(ctrl.Height * scaleH)
-    '    If TypeOf ctrl Is Label Or TypeOf ctrl Is gLabel.gLabel Then
-    '        Dim oldFont As Font = ctrl.Font
-    '        ctrl.Font = New Font(oldFont.FontFamily, Convert.ToSingle(oldFont.Size * Math.Min(scaleW, scaleH)), oldFont.Style)
-    '    End If
-    'End Sub
-
-
     Private Function Limited_Score(ByVal score As String) As Integer
         '* If the score is too big or too small, it will be too wide to display
+        If score = "" Then Return ""
         Return Math.Min(Math.Max(Convert.ToInt32(score), MIN_SCORE), MAX_SCORE).ToString
     End Function
 

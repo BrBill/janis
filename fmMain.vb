@@ -148,7 +148,6 @@ Namespace JANIS
         Friend WithEvents tbLeftScore As System.Windows.Forms.TextBox
         Friend WithEvents tbRightScore As System.Windows.Forms.TextBox
         Friend WithEvents Label3 As System.Windows.Forms.Label
-        Friend WithEvents Label4 As System.Windows.Forms.Label
         Friend WithEvents btnShowScore As System.Windows.Forms.Button
         Friend WithEvents MainMenu1 As System.Windows.Forms.MainMenu
         Friend WithEvents menuSubtract1Left As System.Windows.Forms.MenuItem
@@ -372,7 +371,6 @@ Namespace JANIS
             Me.tbLeftScore = New System.Windows.Forms.TextBox()
             Me.tbRightScore = New System.Windows.Forms.TextBox()
             Me.Label3 = New System.Windows.Forms.Label()
-            Me.Label4 = New System.Windows.Forms.Label()
             Me.btnShowScore = New System.Windows.Forms.Button()
             Me.MainMenu1 = New System.Windows.Forms.MainMenu(Me.components)
             Me.menuDummy = New System.Windows.Forms.MenuItem()
@@ -663,16 +661,17 @@ Namespace JANIS
             '
             'btnBlackout
             '
-            Me.btnBlackout.BackColor = System.Drawing.SystemColors.Control
+            Me.btnBlackout.BackColor = System.Drawing.Color.Black
             Me.btnBlackout.FlatAppearance.BorderColor = System.Drawing.SystemColors.Control
+            Me.btnBlackout.FlatStyle = System.Windows.Forms.FlatStyle.Popup
             Me.btnBlackout.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.btnBlackout.ForeColor = System.Drawing.SystemColors.ControlText
+            Me.btnBlackout.ForeColor = System.Drawing.Color.White
             Me.btnBlackout.Location = New System.Drawing.Point(440, 170)
             Me.btnBlackout.Name = "btnBlackout"
             Me.btnBlackout.Size = New System.Drawing.Size(112, 40)
             Me.btnBlackout.TabIndex = 19
             Me.btnBlackout.Text = " &BLACKOUT"
-            Me.btnBlackout.UseVisualStyleBackColor = True
+            Me.btnBlackout.UseVisualStyleBackColor = False
             '
             'tbLeftTeam
             '
@@ -723,12 +722,12 @@ Namespace JANIS
             'tbLeftScore
             '
             Me.tbLeftScore.BackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(176, Byte), Integer))
-            Me.tbLeftScore.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold)
+            Me.tbLeftScore.Font = New System.Drawing.Font("Microsoft Sans Serif", 18.0!, System.Drawing.FontStyle.Bold)
             Me.tbLeftScore.ForeColor = System.Drawing.Color.White
-            Me.tbLeftScore.Location = New System.Drawing.Point(395, 25)
+            Me.tbLeftScore.Location = New System.Drawing.Point(390, 2)
             Me.tbLeftScore.MaxLength = 3
             Me.tbLeftScore.Name = "tbLeftScore"
-            Me.tbLeftScore.Size = New System.Drawing.Size(60, 26)
+            Me.tbLeftScore.Size = New System.Drawing.Size(70, 35)
             Me.tbLeftScore.TabIndex = 11
             Me.tbLeftScore.Text = "0"
             Me.tbLeftScore.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
@@ -737,12 +736,12 @@ Namespace JANIS
             'tbRightScore
             '
             Me.tbRightScore.BackColor = System.Drawing.Color.Maroon
-            Me.tbRightScore.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold)
+            Me.tbRightScore.Font = New System.Drawing.Font("Microsoft Sans Serif", 18.0!, System.Drawing.FontStyle.Bold)
             Me.tbRightScore.ForeColor = System.Drawing.Color.White
-            Me.tbRightScore.Location = New System.Drawing.Point(543, 25)
+            Me.tbRightScore.Location = New System.Drawing.Point(532, 2)
             Me.tbRightScore.MaxLength = 3
             Me.tbRightScore.Name = "tbRightScore"
-            Me.tbRightScore.Size = New System.Drawing.Size(60, 26)
+            Me.tbRightScore.Size = New System.Drawing.Size(70, 35)
             Me.tbRightScore.TabIndex = 13
             Me.tbRightScore.Text = "0"
             Me.tbRightScore.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
@@ -751,31 +750,21 @@ Namespace JANIS
             'Label3
             '
             Me.Label3.BackColor = System.Drawing.Color.Transparent
-            Me.Label3.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.Label3.Location = New System.Drawing.Point(394, 2)
+            Me.Label3.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!)
+            Me.Label3.Location = New System.Drawing.Point(462, 2)
             Me.Label3.Name = "Label3"
-            Me.Label3.Size = New System.Drawing.Size(61, 24)
+            Me.Label3.Size = New System.Drawing.Size(70, 35)
             Me.Label3.TabIndex = 10
             Me.Label3.Text = "Score"
             Me.Label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
             '
-            'Label4
-            '
-            Me.Label4.BackColor = System.Drawing.Color.Transparent
-            Me.Label4.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.Label4.Location = New System.Drawing.Point(540, 3)
-            Me.Label4.Name = "Label4"
-            Me.Label4.Size = New System.Drawing.Size(60, 24)
-            Me.Label4.TabIndex = 12
-            Me.Label4.Text = "Score"
-            Me.Label4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-            '
             'btnShowScore
             '
             Me.btnShowScore.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.btnShowScore.Location = New System.Drawing.Point(452, 88)
+            Me.btnShowScore.Location = New System.Drawing.Point(452, 74)
             Me.btnShowScore.Name = "btnShowScore"
-            Me.btnShowScore.Size = New System.Drawing.Size(88, 40)
+            Me.btnShowScore.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
+            Me.btnShowScore.Size = New System.Drawing.Size(88, 49)
             Me.btnShowScore.TabIndex = 18
             Me.btnShowScore.Text = "SHOW SCORE"
             '
@@ -918,6 +907,7 @@ Namespace JANIS
             Me.btnShowRightText.Font = New System.Drawing.Font("Wingdings", 27.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
             Me.btnShowRightText.Location = New System.Drawing.Point(752, 305)
             Me.btnShowRightText.Name = "btnShowRightText"
+            Me.btnShowRightText.Padding = New System.Windows.Forms.Padding(4, 0, 0, 0)
             Me.btnShowRightText.Size = New System.Drawing.Size(68, 48)
             Me.btnShowRightText.TabIndex = 79
             Me.btnShowRightText.Text = "y"
@@ -928,6 +918,7 @@ Namespace JANIS
             Me.btnShowLeftText.Font = New System.Drawing.Font("Wingdings", 27.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
             Me.btnShowLeftText.Location = New System.Drawing.Point(168, 305)
             Me.btnShowLeftText.Name = "btnShowLeftText"
+            Me.btnShowLeftText.Padding = New System.Windows.Forms.Padding(4, 0, 0, 0)
             Me.btnShowLeftText.Size = New System.Drawing.Size(68, 48)
             Me.btnShowLeftText.TabIndex = 78
             Me.btnShowLeftText.Text = "y"
@@ -952,6 +943,7 @@ Namespace JANIS
             Me.btnDocLoadLeft.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
             Me.btnDocLoadLeft.FlatAppearance.BorderSize = 0
             Me.btnDocLoadLeft.FlatAppearance.MouseDownBackColor = System.Drawing.Color.DimGray
+            Me.btnDocLoadLeft.FlatStyle = System.Windows.Forms.FlatStyle.Flat
             Me.btnDocLoadLeft.Font = New System.Drawing.Font("Arial Narrow", 20.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
             Me.btnDocLoadLeft.Location = New System.Drawing.Point(2, 18)
             Me.btnDocLoadLeft.Name = "btnDocLoadLeft"
@@ -966,6 +958,7 @@ Namespace JANIS
             Me.btnDocLoadRight.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
             Me.btnDocLoadRight.FlatAppearance.BorderSize = 0
             Me.btnDocLoadRight.FlatAppearance.MouseDownBackColor = System.Drawing.Color.DimGray
+            Me.btnDocLoadRight.FlatStyle = System.Windows.Forms.FlatStyle.Flat
             Me.btnDocLoadRight.Font = New System.Drawing.Font("Arial Narrow", 20.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
             Me.btnDocLoadRight.Location = New System.Drawing.Point(98, 18)
             Me.btnDocLoadRight.Name = "btnDocLoadRight"
@@ -995,6 +988,7 @@ Namespace JANIS
             Me.btnClearTextLeft.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
             Me.btnClearTextLeft.FlatAppearance.BorderSize = 0
             Me.btnClearTextLeft.FlatAppearance.MouseDownBackColor = System.Drawing.Color.DimGray
+            Me.btnClearTextLeft.FlatStyle = System.Windows.Forms.FlatStyle.Flat
             Me.btnClearTextLeft.Font = New System.Drawing.Font("Arial Narrow", 20.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
             Me.btnClearTextLeft.ForeColor = System.Drawing.SystemColors.WindowText
             Me.btnClearTextLeft.Location = New System.Drawing.Point(2, 18)
@@ -1011,6 +1005,7 @@ Namespace JANIS
             Me.btnClearTextBoth.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
             Me.btnClearTextBoth.FlatAppearance.BorderSize = 0
             Me.btnClearTextBoth.FlatAppearance.MouseDownBackColor = System.Drawing.Color.DimGray
+            Me.btnClearTextBoth.FlatStyle = System.Windows.Forms.FlatStyle.Flat
             Me.btnClearTextBoth.Font = New System.Drawing.Font("Arial Narrow", 20.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
             Me.btnClearTextBoth.ForeColor = System.Drawing.SystemColors.WindowText
             Me.btnClearTextBoth.Location = New System.Drawing.Point(50, 18)
@@ -1027,6 +1022,7 @@ Namespace JANIS
             Me.btnClearTextRight.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
             Me.btnClearTextRight.FlatAppearance.BorderSize = 0
             Me.btnClearTextRight.FlatAppearance.MouseDownBackColor = System.Drawing.Color.DimGray
+            Me.btnClearTextRight.FlatStyle = System.Windows.Forms.FlatStyle.Flat
             Me.btnClearTextRight.Font = New System.Drawing.Font("Arial Narrow", 20.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
             Me.btnClearTextRight.ForeColor = System.Drawing.SystemColors.WindowText
             Me.btnClearTextRight.Location = New System.Drawing.Point(98, 18)
@@ -1641,29 +1637,32 @@ Namespace JANIS
             '
             Me.btnPauseSlides.Font = New System.Drawing.Font("Webdings", 15.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
             Me.btnPauseSlides.ForeColor = System.Drawing.Color.Blue
-            Me.btnPauseSlides.Location = New System.Drawing.Point(822, 334)
+            Me.btnPauseSlides.Location = New System.Drawing.Point(822, 333)
             Me.btnPauseSlides.Name = "btnPauseSlides"
-            Me.btnPauseSlides.Size = New System.Drawing.Size(36, 32)
+            Me.btnPauseSlides.Size = New System.Drawing.Size(36, 33)
             Me.btnPauseSlides.TabIndex = 131
             Me.btnPauseSlides.Text = ";"
+            Me.ToolTip1.SetToolTip(Me.btnPauseSlides, "Pause")
             '
             'btnNextSlide
             '
             Me.btnNextSlide.Font = New System.Drawing.Font("Webdings", 14.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
-            Me.btnNextSlide.Location = New System.Drawing.Point(906, 334)
+            Me.btnNextSlide.Location = New System.Drawing.Point(906, 333)
             Me.btnNextSlide.Name = "btnNextSlide"
-            Me.btnNextSlide.Size = New System.Drawing.Size(36, 32)
+            Me.btnNextSlide.Size = New System.Drawing.Size(36, 33)
             Me.btnNextSlide.TabIndex = 133
             Me.btnNextSlide.Text = "8"
+            Me.ToolTip1.SetToolTip(Me.btnNextSlide, "Next slide")
             '
             'btnPrevSlide
             '
             Me.btnPrevSlide.Font = New System.Drawing.Font("Webdings", 14.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
-            Me.btnPrevSlide.Location = New System.Drawing.Point(738, 334)
+            Me.btnPrevSlide.Location = New System.Drawing.Point(738, 333)
             Me.btnPrevSlide.Name = "btnPrevSlide"
-            Me.btnPrevSlide.Size = New System.Drawing.Size(36, 32)
+            Me.btnPrevSlide.Size = New System.Drawing.Size(36, 33)
             Me.btnPrevSlide.TabIndex = 129
             Me.btnPrevSlide.Text = "7"
+            Me.ToolTip1.SetToolTip(Me.btnPrevSlide, "Back to previous slide")
             '
             'btnClearSlideList
             '
@@ -1790,40 +1789,44 @@ Namespace JANIS
             '
             Me.btnStopSlides.Font = New System.Drawing.Font("Webdings", 14.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
             Me.btnStopSlides.ForeColor = System.Drawing.Color.Red
-            Me.btnStopSlides.Location = New System.Drawing.Point(864, 334)
+            Me.btnStopSlides.Location = New System.Drawing.Point(864, 333)
             Me.btnStopSlides.Name = "btnStopSlides"
-            Me.btnStopSlides.Size = New System.Drawing.Size(36, 32)
+            Me.btnStopSlides.Size = New System.Drawing.Size(36, 33)
             Me.btnStopSlides.TabIndex = 132
             Me.btnStopSlides.Text = "<"
+            Me.ToolTip1.SetToolTip(Me.btnStopSlides, "Stop")
             '
             'btnLastSlide
             '
             Me.btnLastSlide.Font = New System.Drawing.Font("Webdings", 14.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
-            Me.btnLastSlide.Location = New System.Drawing.Point(948, 334)
+            Me.btnLastSlide.Location = New System.Drawing.Point(948, 333)
             Me.btnLastSlide.Name = "btnLastSlide"
-            Me.btnLastSlide.Size = New System.Drawing.Size(36, 32)
+            Me.btnLastSlide.Size = New System.Drawing.Size(36, 33)
             Me.btnLastSlide.TabIndex = 134
             Me.btnLastSlide.Text = ":"
+            Me.ToolTip1.SetToolTip(Me.btnLastSlide, "Jump to last slide")
             '
             'btnPlaySlides
             '
             Me.btnPlaySlides.Font = New System.Drawing.Font("Webdings", 14.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
             Me.btnPlaySlides.ForeColor = System.Drawing.Color.Green
-            Me.btnPlaySlides.Location = New System.Drawing.Point(780, 334)
+            Me.btnPlaySlides.Location = New System.Drawing.Point(780, 333)
             Me.btnPlaySlides.Name = "btnPlaySlides"
             Me.btnPlaySlides.RightToLeft = System.Windows.Forms.RightToLeft.No
-            Me.btnPlaySlides.Size = New System.Drawing.Size(36, 32)
+            Me.btnPlaySlides.Size = New System.Drawing.Size(36, 33)
             Me.btnPlaySlides.TabIndex = 130
             Me.btnPlaySlides.Text = "4"
+            Me.ToolTip1.SetToolTip(Me.btnPlaySlides, "Play")
             '
             'btnFirstSlide
             '
             Me.btnFirstSlide.Font = New System.Drawing.Font("Webdings", 14.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
-            Me.btnFirstSlide.Location = New System.Drawing.Point(693, 334)
+            Me.btnFirstSlide.Location = New System.Drawing.Point(693, 333)
             Me.btnFirstSlide.Name = "btnFirstSlide"
-            Me.btnFirstSlide.Size = New System.Drawing.Size(36, 32)
+            Me.btnFirstSlide.Size = New System.Drawing.Size(36, 33)
             Me.btnFirstSlide.TabIndex = 128
             Me.btnFirstSlide.Text = "9"
+            Me.ToolTip1.SetToolTip(Me.btnFirstSlide, "Jump back to first slide")
             '
             'lbSlideList
             '
@@ -3069,6 +3072,7 @@ Namespace JANIS
             Me.gbCountdownControls.Controls.Add(Me.nudCountdownHours)
             Me.gbCountdownControls.Controls.Add(Me.btnResetCountdown)
             Me.gbCountdownControls.Controls.Add(Me.btnStartCountdown)
+            Me.gbCountdownControls.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
             Me.gbCountdownControls.Location = New System.Drawing.Point(719, 57)
             Me.gbCountdownControls.Name = "gbCountdownControls"
             Me.gbCountdownControls.Size = New System.Drawing.Size(272, 153)
@@ -3109,6 +3113,7 @@ Namespace JANIS
             'Label34
             '
             Me.Label34.BackColor = System.Drawing.Color.Red
+            Me.Label34.Font = New System.Drawing.Font("Arial", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
             Me.Label34.ForeColor = System.Drawing.Color.Black
             Me.Label34.Location = New System.Drawing.Point(28, 70)
             Me.Label34.Name = "Label34"
@@ -3146,6 +3151,7 @@ Namespace JANIS
             '
             'Label33
             '
+            Me.Label33.Font = New System.Drawing.Font("Arial", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
             Me.Label33.Location = New System.Drawing.Point(28, 42)
             Me.Label33.Name = "Label33"
             Me.Label33.Size = New System.Drawing.Size(85, 20)
@@ -3156,7 +3162,7 @@ Namespace JANIS
             'cbCountdownVisible
             '
             Me.cbCountdownVisible.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.cbCountdownVisible.Location = New System.Drawing.Point(112, 110)
+            Me.cbCountdownVisible.Location = New System.Drawing.Point(112, 112)
             Me.cbCountdownVisible.Name = "cbCountdownVisible"
             Me.cbCountdownVisible.Size = New System.Drawing.Size(67, 22)
             Me.cbCountdownVisible.TabIndex = 33
@@ -3192,9 +3198,9 @@ Namespace JANIS
             '
             'btnResetCountdown
             '
-            Me.btnResetCountdown.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+            Me.btnResetCountdown.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
             Me.btnResetCountdown.ForeColor = System.Drawing.SystemColors.ControlText
-            Me.btnResetCountdown.Location = New System.Drawing.Point(31, 110)
+            Me.btnResetCountdown.Location = New System.Drawing.Point(30, 110)
             Me.btnResetCountdown.Name = "btnResetCountdown"
             Me.btnResetCountdown.Size = New System.Drawing.Size(60, 24)
             Me.btnResetCountdown.TabIndex = 32
@@ -3428,7 +3434,7 @@ Namespace JANIS
             '
             'fmMain
             '
-            Me.AutoScaleBaseSize = New System.Drawing.Size(6, 16)
+            Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None
             Me.ClientSize = New System.Drawing.Size(996, 702)
             Me.Controls.Add(Me.tbRightLoc)
             Me.Controls.Add(Me.Label41)
@@ -3455,7 +3461,6 @@ Namespace JANIS
             Me.Controls.Add(Me.btnRightScoreColor)
             Me.Controls.Add(Me.btnLeftScoreColor)
             Me.Controls.Add(Me.btnShowScore)
-            Me.Controls.Add(Me.Label4)
             Me.Controls.Add(Me.Label3)
             Me.Controls.Add(Me.tbRightScore)
             Me.Controls.Add(Me.tbLeftScore)
@@ -3470,6 +3475,7 @@ Namespace JANIS
             Me.MaximizeBox = False
             Me.MaximumSize = New System.Drawing.Size(1012, 762)
             Me.Menu = Me.MainMenu1
+            Me.MinimumSize = New System.Drawing.Size(1012, 738)
             Me.Name = "fmMain"
             Me.StartPosition = System.Windows.Forms.FormStartPosition.Manual
             Me.Text = "JANIS"
@@ -3861,6 +3867,8 @@ Namespace JANIS
             Me.StopSlideShow()
             Me.picDisplayed.ImageLocation = ""
             Me.picDisplayed.Image = Nothing
+            If Me.tbLeftScore.Text = "" Then Me.tbLeftScore.Text = "0"
+            If Me.tbRightScore.Text = "" Then Me.tbRightScore.Text = "0"
             Me.LS.ShowScore(Me.tbLeftScore.Text, Me.tbLeftLoc.Text, Me.tbLeftTeam.Text, Me.tbRightScore.Text, Me.tbRightLoc.Text, Me.tbRightTeam.Text)
             Me.ShowScreenPreview()
         End Sub
@@ -4842,7 +4850,7 @@ Namespace JANIS
 
         Private Sub SetPauseButtonColor(ByVal pause_on As Boolean)
             With Me.btnPauseSlides
-                Dim backclr As System.Drawing.Color = Me.btnStopSlides.BackColor
+                Dim backclr As System.Drawing.Color = Me.btnStopSlides.BackColor  '* use a reference color from a button that never changes
                 If pause_on Then
                     .BackColor = System.Drawing.Color.Blue
                     .ForeColor = backclr
@@ -4854,7 +4862,7 @@ Namespace JANIS
         End Sub
         Private Sub SetPlayButtonColor(ByVal play_on As Boolean)
             With Me.btnPlaySlides
-                Dim backclr As System.Drawing.Color = Me.btnStopSlides.BackColor
+                Dim backclr As System.Drawing.Color = Me.btnStopSlides.BackColor   '* use a reference color from a button that never changes
                 If play_on Then
                     .BackColor = System.Drawing.Color.Green
                     .ForeColor = backclr
