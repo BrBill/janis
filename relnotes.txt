@@ -1,3 +1,14 @@
+Upcoming release, part 1: 2025-09-15 (single)
+* Supported audience screen resolution is now 1080p. 720p is no longer supported.
+  1080p is the only supported resolution at this time.
+* Beautified some UI elements, notably buttons on the text display tab.
+* Eliminated the button that loads a text file into BOTH text display entry fields.
+* The "currently displayed" image that duplicates what the audience sees now shows
+  scoreboard updates and text displays. Formerly this was for graphics and slides only.
+  The only time it doesn't show a preview is during WHAMMY use.
+* Re-tuned the text display so that it more closely matches the fit of text in the
+  text entry fields to what the audience monitor shows.
+
 v4.0.2: 2025-05-03 (single)
 * Fixed horrible, 15-year-old text display failure bug caused by loading defaults that
   differed from 00:05:00. Finally, the long global nightmare is over. 
