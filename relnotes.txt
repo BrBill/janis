@@ -1,4 +1,12 @@
-Upcoming release, part 1: 2025-09-15 (single)
+Upcoming release, part 2:
+* Updated some visual elements and added some tooltips for clarity/modernity.
+* Fixed bug where blank score caused exception throw.
+* Color picker: replaced black with almost black so choosing that color for
+  a team wouldn't cause problems with scoreboard flood fills.
+* Deleted some screen scaling test code.
+* 
+
+Upcoming release, part 1: 2025-09-16 (single)
 * Supported audience screen resolution is now 1080p. 720p is no longer supported.
   1080p is the only supported resolution at this time.
 * Beautified some UI elements, notably buttons on the text display tab.
@@ -10,8 +18,8 @@ Upcoming release, part 1: 2025-09-15 (single)
   text entry fields to what the audience monitor shows.
 
 v4.0.2: 2025-05-03 (single)
-* Fixed horrible, 15-year-old text display failure bug caused by loading defaults that
-  differed from 00:05:00. Finally, the long global nightmare is over. 
+* Fixed 15-year-old text display failure bug caused by loading countdown timer
+  defaults that differed from 00:05:00. Finally, the long global nightmare is over. 
 
 v4.0.1: 2024-04-06 (single) - Official relase
 * Can now drag images to main monitor preview (from a browser, etc.) to instant show.
