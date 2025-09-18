@@ -1,10 +1,22 @@
+Upcoming release, part 3:
+* Media Library now catalogs videos in addition to images.
+* Got video stuff working in the Image Search (now Media Search) tab.
+* Renamed a bunch of controls, subs & functions Image --> Media.
+* Created some of the infrastructure for the Windows Media control in fmScreen.
+* Removed dead code and dead comments.
+* Plenty more to do, including:
+  * determining where to put video controls (play/stop/pause/etc.);
+  * setting up drag-and-drop to work w/video;
+  * handling videos in slideshows
+  * sending video to the big screen (w/sound)
+  * finding a place to put a mute checkbox for video playback
+
 Upcoming release, part 2:
 * Updated some visual elements and added some tooltips for clarity/modernity.
 * Fixed bug where blank score caused exception throw.
 * Color picker: replaced black with almost black so choosing that color for
   a team wouldn't cause problems with scoreboard flood fills.
-* Deleted some screen scaling test code.
-* 
+* Deleted some unnecessary screen scaling test code.
 
 Upcoming release, part 1: 2025-09-16 (single)
 * Supported audience screen resolution is now 1080p. 720p is no longer supported.

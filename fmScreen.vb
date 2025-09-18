@@ -42,6 +42,7 @@ Public Class fmScreen
     'It can be modified using the Windows Form Designer.
     'Do not modify it using the code editor.
     Friend WithEvents FadeTimer As System.Windows.Forms.Timer
+    Friend WithEvents AxMediaPlayer As AxWMPLib.AxWindowsMediaPlayer
     Friend WithEvents picGraphic As System.Windows.Forms.PictureBox
     Friend WithEvents lblMsg As gLabel.gLabel
     Friend WithEvents lblCountdown As System.Windows.Forms.Label
@@ -54,6 +55,7 @@ Public Class fmScreen
     Friend WithEvents lblTeamNameRight As System.Windows.Forms.Label
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(fmScreen))
         Me.lblMsg = New gLabel.gLabel()
         Me.lblCountdown = New System.Windows.Forms.Label()
         Me.lblTeamLocLeft = New System.Windows.Forms.Label()
@@ -64,7 +66,9 @@ Public Class fmScreen
         Me.lblTeamNameRight = New System.Windows.Forms.Label()
         Me.FadeTimer = New System.Windows.Forms.Timer(Me.components)
         Me.picGraphic = New System.Windows.Forms.PictureBox()
+        Me.AxMediaPlayer = New AxWMPLib.AxWindowsMediaPlayer()
         CType(Me.picGraphic, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.AxMediaPlayer, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'lblMsg
@@ -92,7 +96,7 @@ Public Class fmScreen
         Me.lblCountdown.TabIndex = 7
         Me.lblCountdown.Text = "00:00:00"
         Me.lblCountdown.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        Me.lblCountdown.Visible = False
+        Me.lblCountdown.Hide()
         '
         'lblTeamLocLeft
         '
@@ -189,6 +193,19 @@ Public Class fmScreen
         Me.picGraphic.TabIndex = 0
         Me.picGraphic.TabStop = False
         '
+        'AxMediaPlayer
+        '
+        Me.AxMediaPlayer.Enabled = True
+        Me.AxMediaPlayer.Location = New System.Drawing.Point(0, 0)
+        Me.AxMediaPlayer.MaximumSize = New System.Drawing.Size(1920, 1080)
+        Me.AxMediaPlayer.MinimumSize = New System.Drawing.Size(1920, 1080)
+        Me.AxMediaPlayer.Name = "AxMediaPlayer"
+        Me.AxMediaPlayer.OcxState = CType(resources.GetObject("AxMediaPlayer.OcxState"), System.Windows.Forms.AxHost.State)
+        Me.AxMediaPlayer.Size = New System.Drawing.Size(1920, 1080)
+        Me.AxMediaPlayer.TabIndex = 14
+        Me.AxMediaPlayer.TabStop = False
+        Me.AxMediaPlayer.Hide()
+        '
         'fmScreen
         '
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None
@@ -203,6 +220,7 @@ Public Class fmScreen
         Me.Controls.Add(Me.lblCountdown)
         Me.Controls.Add(Me.lblMsg)
         Me.Controls.Add(Me.picGraphic)
+        Me.Controls.Add(Me.AxMediaPlayer)
         Me.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!)
         Me.ForeColor = System.Drawing.Color.White
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None
@@ -214,6 +232,7 @@ Public Class fmScreen
         Me.StartPosition = System.Windows.Forms.FormStartPosition.Manual
         Me.TopMost = True
         CType(Me.picGraphic, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.AxMediaPlayer, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
@@ -221,6 +240,9 @@ Public Class fmScreen
 #End Region
 
     Public Sub fmScreen_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+        Me.AxMediaPlayer.Hide()
+        Me.AxMediaPlayer.uiMode = "none"
+
         Me.lblScoreLeft.Font = CustomFont.GetInstance(Me.lblScoreLeft.Font.Size, FontStyle.Bold)
         Me.lblScoreRight.Font = Me.lblScoreLeft.Font
         Me.lblTeamNameLeft.Font = CustomFont.GetInstance(Me.lblTeamNameLeft.Font.Size, FontStyle.Bold)
@@ -228,7 +250,7 @@ Public Class fmScreen
         Me.lblTeamLocLeft.Font = Me.lblTeamNameLeft.Font
         Me.lblTeamLocRight.Font = Me.lblTeamNameLeft.Font
         '* Let's get all the elements stacked in the right order.
-        ' Me.AXWVideoPlayer.BringToFront()  No need to do this, because we want it in back.
+        ' Me.AxMediaPlayer.BringToFront()  No need to do this, because we want it in back.
         Me.picGraphic.BringToFront()
         Me.lblMsg.BringToFront()
         Me.lblTeamLocLeft.BringToFront()
@@ -238,6 +260,21 @@ Public Class fmScreen
         Me.lblScoreLeft.BringToFront()
         Me.lblScoreRight.BringToFront()
         Me.lblCountdown.BringToFront()
+
+        With Me.AxMediaPlayer
+            .Ctlenabled = False
+            .uiMode = "none"
+            .fullScreen = False
+            .stretchToFit = True
+            With .settings
+                .mute = True
+                .autoStart = False
+                .invokeURLs = False
+                .playCount = 1
+                .volume = 0
+            End With
+        End With
+
     End Sub
 
     Public Sub fmScreen_MouseEnter(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.MouseEnter, picGraphic.MouseEnter, lblMsg.MouseEnter
@@ -266,6 +303,7 @@ Public Class fmScreen
     End Sub
 
     Public Sub AdjustSize(ByVal sRatio As Integer)
+        '* Adjust the size of the form and all its controls by the supplied ratio. This makes it possible for Test Mode to work with no second monitor.
         '* Hack: resizing the height and width does WEIRD things to the team name field locations, so save them and use them later.
 
         With Me
@@ -319,6 +357,10 @@ Public Class fmScreen
             .picGraphic.Top = .picGraphic.Top / sRatio
             .picGraphic.Height = .picGraphic.Height / sRatio
             .picGraphic.Width = .picGraphic.Width / sRatio
+            .AxMediaPlayer.Left = .picGraphic.Left
+            .AxMediaPlayer.Top = .picGraphic.Top
+            .AxMediaPlayer.Height = .picGraphic.Height
+            .AxMediaPlayer.Width = .picGraphic.Width
         End With
     End Sub
 
@@ -326,15 +368,16 @@ Public Class fmScreen
         '* Black out the screen and turn off visible stuff
 
         Me.BackColor = System.Drawing.Color.Black
-        Me.picGraphic.Visible = False
+        StopMediaPlayer()
+        Me.picGraphic.Hide()
         Me.picGraphic.ImageLocation = ""
-        Me.lblMsg.Visible = False
-        Me.lblTeamLocLeft.Visible = False
-        Me.lblTeamLocRight.Visible = False
-        Me.lblTeamNameLeft.Visible = False
-        Me.lblTeamNameRight.Visible = False
-        Me.lblScoreLeft.Visible = False
-        Me.lblScoreRight.Visible = False
+        Me.lblMsg.Hide()
+        Me.lblTeamLocLeft.Hide()
+        Me.lblTeamLocRight.Hide()
+        Me.lblTeamNameLeft.Hide()
+        Me.lblTeamNameRight.Hide()
+        Me.lblScoreLeft.Hide()
+        Me.lblScoreRight.Hide()
     End Sub
 
     Public Function CaptureWindowImage() As Bitmap
@@ -349,18 +392,19 @@ Public Class fmScreen
     End Sub
 
     Public Sub ShowText(ByVal txt As String, ByVal BackColor As System.Drawing.Color, ByVal fontsize As Integer)
-        Me.lblTeamLocLeft.Visible = False
-        Me.lblTeamLocRight.Visible = False
-        Me.lblTeamNameLeft.Visible = False
-        Me.lblTeamNameRight.Visible = False
-        Me.lblScoreLeft.Visible = False
-        Me.lblScoreRight.Visible = False
-        Me.picGraphic.Visible = False
+        StopMediaPlayer()
+        Me.lblTeamLocLeft.Hide()
+        Me.lblTeamLocRight.Hide()
+        Me.lblTeamNameLeft.Hide()
+        Me.lblTeamNameRight.Hide()
+        Me.lblScoreLeft.Hide()
+        Me.lblScoreRight.Hide()
+        Me.picGraphic.Hide()
         Me.picGraphic.ImageLocation = ""
         Me.lblMsg.Font = New Font(Me.lblMsg.Font.Name, fontsize, Me.lblMsg.Font.Style)
         Me.lblMsg.BackColor = BackColor
         Me.lblMsg.Text = txt
-        Me.lblMsg.Visible = True
+        Me.lblMsg.Show()
     End Sub
 
     Public Sub ShowScore(ByVal scrLeft As String, ByVal locLeft As String, ByVal nameLeft As String, ByVal scrRight As String, ByVal locRight As String, ByVal nameRight As String)
@@ -374,14 +418,15 @@ Public Class fmScreen
         Me.lblTeamLocRight.Text = locRight
         Me.lblTeamNameRight.Text = nameRight
 
-        Me.lblMsg.Visible = False
+        StopMediaPlayer()
+        Me.lblMsg.Hide()
         Me.picGraphic.Image = Me.ScoreboardBitMap
-        Me.picGraphic.Visible = True
+        Me.picGraphic.Show()
 
-        Me.lblTeamLocLeft.Visible = True
-        Me.lblTeamNameLeft.Visible = True
-        Me.lblTeamLocRight.Visible = True
-        Me.lblTeamNameRight.Visible = True
+        Me.lblTeamLocLeft.Show()
+        Me.lblTeamNameLeft.Show()
+        Me.lblTeamLocRight.Show()
+        Me.lblTeamNameRight.Show()
 
         If Me.lblScoreLeft.Text <> scrLeft Then
             Me.lblScoreLeft.Text = Me.Limited_Score(scrLeft)
@@ -391,21 +436,22 @@ Public Class fmScreen
             Me.lblScoreRight.Text = Me.Limited_Score(scrRight)
             FadeBuff(Me.lblScoreRight, RightTeamColor)
         End If
-        Me.lblScoreLeft.Visible = True
-        Me.lblScoreRight.Visible = True
+        Me.lblScoreLeft.Show()
+        Me.lblScoreRight.Show()
     End Sub
 
     Public Sub ShowImage(ByRef Img As Image, ByVal Expand As Boolean)
         If Img Is Nothing Then Exit Sub
 
         Me.BackColor = System.Drawing.Color.Black
-        Me.lblTeamLocLeft.Visible = False
-        Me.lblTeamLocRight.Visible = False
-        Me.lblTeamNameLeft.Visible = False
-        Me.lblTeamNameRight.Visible = False
-        Me.lblScoreLeft.Visible = False
-        Me.lblScoreRight.Visible = False
-        Me.lblMsg.Visible = False
+        StopMediaPlayer()
+        Me.lblTeamLocLeft.Hide()
+        Me.lblTeamLocRight.Hide()
+        Me.lblTeamNameLeft.Hide()
+        Me.lblTeamNameRight.Hide()
+        Me.lblScoreLeft.Hide()
+        Me.lblScoreRight.Hide()
+        Me.lblMsg.Hide()
 
         If Expand Then
             Me.picGraphic.SizeMode = PictureBoxSizeMode.StretchImage
@@ -414,27 +460,13 @@ Public Class fmScreen
         End If
 
         Me.picGraphic.Image = Img
-        Me.picGraphic.Visible = True
+        Me.picGraphic.Show()
     End Sub
 
-    'Public Sub ShowURLImage(ByRef url As String)
-    '    If url = "" Then Exit Sub
-
-    '    Me.BackColor = System.Drawing.Color.Black
-    '    Me.lblScore.Visible = False
-    '    Me.lblTeamName.Visible = False
-    '    Me.lblMsg.Visible = False
-
-    '    '* when loading URL, we always maintain size ratio because we don't know pic info.
-    '    Me.picGraphic.SizeMode = PictureBoxSizeMode.Zoom
-
-    '    Try
-    '        Me.picGraphic.Load(url)
-    '        Me.picGraphic.Visible = True
-    '    Catch ex As Exception
-    '    End Try
-
-    'End Sub
+    Public Sub StopMediaPlayer()
+        Me.AxMediaPlayer.Hide()
+        Me.AxMediaPlayer.close()
+    End Sub
 
     Public Sub ShowCountdownText(ByVal CountdownText As String, ByVal BackColor As System.Drawing.Color, ByVal CountdownVisible As Boolean)
         '* Change the size of the message window to accomodate the countdown timer

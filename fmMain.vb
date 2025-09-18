@@ -1,6 +1,7 @@
 Imports System
-Imports System.IO
 Imports System.Environment
+Imports System.IO
+Imports System.Linq
 Imports System.Runtime.InteropServices
 
 Namespace JANIS
@@ -50,8 +51,12 @@ Namespace JANIS
         Dim DisplayFontRatio As Single = 33 / 80          ' The "should be" size ratio of display to what I once thought it was.
         Dim DEFAULT_COUNTDOWN_COLOR As System.Drawing.Color = System.Drawing.Color.FromArgb(CType(CType(48, Byte), Integer), CType(CType(48, Byte), Integer), CType(CType(48, Byte), Integer))
 
+        Private VideoFileExtensions() As String = {".ASF", ".AVI", ".M2TS", ".M4V", ".MP4", ".MP4V", ".MPG", ".MPEG", ".WMV"}   '* Modern .MOV files not playable by Windows Media Player control w/o extra codecs
         Private ImageFileExtensions() As String = {".BMP", ".GIF", ".JPG", ".PNG", ".WMF", ".EXIF", ".TIFF"}
-        Private ImageLibrary As New Collection()
+        Private MediaLibrary As New Collection()
+        Private MediaFileExtensions() As String = VideoFileExtensions.Concat(ImageFileExtensions).ToArray()
+
+
 
         Private LS As fmScreen      '* The audience screen
 
@@ -64,6 +69,7 @@ Namespace JANIS
         Private DragMethod As String
         Private CountdownSeconds As Integer = 300
         Private CountdownWarnSeconds As Integer
+        Private PreviousSelectedTab As TabPage = Nothing
         Public ComponentsDoneInitializing As Boolean = False
 
 
@@ -89,7 +95,7 @@ Namespace JANIS
             'This call is required by the Windows Form Designer.
             InitializeComponent()
 
-            'Add any initialization after the InitializeComponent() call
+            ' Add any initialization after the InitializeComponent() call
             Me.ComponentsDoneInitializing = True
         End Sub
 
@@ -201,7 +207,7 @@ Namespace JANIS
         Friend WithEvents btnRemoveThing As System.Windows.Forms.Button
         Friend WithEvents clbThings As System.Windows.Forms.CheckedListBox
         Friend WithEvents tvSlideFolders As System.Windows.Forms.TreeView
-        Friend WithEvents lbGfxFiles As System.Windows.Forms.ListBox
+        Friend WithEvents lbMediaFiles As System.Windows.Forms.ListBox
         Friend WithEvents lbSlideList As System.Windows.Forms.ListBox
         Friend WithEvents Label6 As System.Windows.Forms.Label
         Friend WithEvents btnThingDown As System.Windows.Forms.Button
@@ -217,7 +223,9 @@ Namespace JANIS
         Friend WithEvents btnLastSlide As System.Windows.Forms.Button
         Friend WithEvents btnPlaySlides As System.Windows.Forms.Button
         Friend WithEvents btnFirstSlide As System.Windows.Forms.Button
+        Friend WithEvents pnlMediaSearchPreview As Panel
         Friend WithEvents picSlidePreview As System.Windows.Forms.PictureBox
+        Friend WithEvents AxMediaSearchPreview As AxWMPLib.AxWindowsMediaPlayer
         Friend WithEvents SlideTimer As System.Windows.Forms.Timer
         Friend WithEvents Label7 As System.Windows.Forms.Label
         Friend WithEvents Label8 As System.Windows.Forms.Label
@@ -302,7 +310,7 @@ Namespace JANIS
         Friend WithEvents btnClearTextRight As System.Windows.Forms.Button
         Friend WithEvents btnClearTextLeft As System.Windows.Forms.Button
         Friend WithEvents Label16 As System.Windows.Forms.Label
-        Friend WithEvents pnlPicBack As System.Windows.Forms.Panel
+        Friend WithEvents pnlDisplayed As System.Windows.Forms.Panel
         Friend WithEvents tbDefaultSlideShow As System.Windows.Forms.TextBox
         Friend WithEvents tbDefaultHBFile As System.Windows.Forms.TextBox
         Friend WithEvents tbDefaultImageFile As System.Windows.Forms.TextBox
@@ -346,15 +354,15 @@ Namespace JANIS
         Friend WithEvents cbExpandpicDisplayed As System.Windows.Forms.CheckBox
         Friend WithEvents tpImgSearch As System.Windows.Forms.TabPage
         Friend WithEvents btnImgSearch As System.Windows.Forms.Button
-        Friend WithEvents btnSearchImgAddSlide As System.Windows.Forms.Button
-        Friend WithEvents btnSearchImgShow As System.Windows.Forms.Button
+        Friend WithEvents btnSearchMediaAddSlide As System.Windows.Forms.Button
+        Friend WithEvents btnSearchMediaShow As System.Windows.Forms.Button
         Friend WithEvents picImgSearchPreview As System.Windows.Forms.PictureBox
         Friend WithEvents Label20 As System.Windows.Forms.Label
         Friend WithEvents comboImgSearchText As System.Windows.Forms.ComboBox
-        Friend WithEvents lbImgResults As System.Windows.Forms.ListBox
+        Friend WithEvents lbMediaResults As System.Windows.Forms.ListBox
         Friend WithEvents Label21 As System.Windows.Forms.Label
         Friend WithEvents Label32 As System.Windows.Forms.Label
-        Friend WithEvents lblLibraryCount As System.Windows.Forms.Label
+        Friend WithEvents lblMediaLibraryCount As System.Windows.Forms.Label
         Friend WithEvents btnPasteImage As System.Windows.Forms.Button
         Friend WithEvents lblDisplayedStatus As Label
 
@@ -422,12 +430,12 @@ Namespace JANIS
             Me.tpImgSearch = New System.Windows.Forms.TabPage()
             Me.Label32 = New System.Windows.Forms.Label()
             Me.Label21 = New System.Windows.Forms.Label()
-            Me.lbImgResults = New System.Windows.Forms.ListBox()
+            Me.lbMediaResults = New System.Windows.Forms.ListBox()
             Me.comboImgSearchText = New System.Windows.Forms.ComboBox()
             Me.Label20 = New System.Windows.Forms.Label()
             Me.btnImgSearch = New System.Windows.Forms.Button()
-            Me.btnSearchImgAddSlide = New System.Windows.Forms.Button()
-            Me.btnSearchImgShow = New System.Windows.Forms.Button()
+            Me.btnSearchMediaAddSlide = New System.Windows.Forms.Button()
+            Me.btnSearchMediaShow = New System.Windows.Forms.Button()
             Me.picImgSearchPreview = New System.Windows.Forms.PictureBox()
             Me.tp5Things = New System.Windows.Forms.TabPage()
             Me.tbCurrentThing = New System.Windows.Forms.TextBox()
@@ -447,7 +455,7 @@ Namespace JANIS
             Me.btnThingDown = New System.Windows.Forms.Button()
             Me.btnThingUp = New System.Windows.Forms.Button()
             Me.tpSlides = New System.Windows.Forms.TabPage()
-            Me.lbGfxFiles = New System.Windows.Forms.ListBox()
+            Me.lbMediaFiles = New System.Windows.Forms.ListBox()
             Me.tvSlideFolders = New System.Windows.Forms.TreeView()
             Me.btnWhammy = New System.Windows.Forms.Button()
             Me.btnPauseSlides = New System.Windows.Forms.Button()
@@ -572,12 +580,12 @@ Namespace JANIS
             Me.tbAboutHeader = New System.Windows.Forms.TextBox()
             Me.TextBox2 = New System.Windows.Forms.TextBox()
             Me.SlideTimer = New System.Windows.Forms.Timer(Me.components)
-            Me.pnlPicBack = New System.Windows.Forms.Panel()
+            Me.pnlDisplayed = New System.Windows.Forms.Panel()
             Me.lblDisplayedStatus = New System.Windows.Forms.Label()
             Me.picDisplayed = New System.Windows.Forms.PictureBox()
             Me.CountdownTimer = New System.Windows.Forms.Timer(Me.components)
             Me.cbExpandpicDisplayed = New System.Windows.Forms.CheckBox()
-            Me.lblLibraryCount = New System.Windows.Forms.Label()
+            Me.lblMediaLibraryCount = New System.Windows.Forms.Label()
             Me.btnPasteImage = New System.Windows.Forms.Button()
             Me.gbCountdownControls = New System.Windows.Forms.GroupBox()
             Me.Label37 = New System.Windows.Forms.Label()
@@ -611,6 +619,8 @@ Namespace JANIS
             Me.Label41 = New System.Windows.Forms.Label()
             Me.tbRightLoc = New System.Windows.Forms.TextBox()
             Me.grpPasteImage = New System.Windows.Forms.GroupBox()
+            Me.pnlMediaSearchPreview = New System.Windows.Forms.Panel()
+            Me.AxMediaSearchPreview = New AxWMPLib.AxWindowsMediaPlayer()
             Label19 = New System.Windows.Forms.Label()
             Me.TabControl1.SuspendLayout()
             Me.tpScreenText.SuspendLayout()
@@ -636,7 +646,7 @@ Namespace JANIS
             Me.grpDefaultColorsLeft.SuspendLayout()
             CType(Me.nudDefaultSlideDelay, System.ComponentModel.ISupportInitialize).BeginInit()
             Me.tpAbout.SuspendLayout()
-            Me.pnlPicBack.SuspendLayout()
+            Me.pnlDisplayed.SuspendLayout()
             CType(Me.picDisplayed, System.ComponentModel.ISupportInitialize).BeginInit()
             Me.gbCountdownControls.SuspendLayout()
             CType(Me.nudCountdownWarnSeconds, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -646,6 +656,8 @@ Namespace JANIS
             CType(Me.nudCountdownMinutes, System.ComponentModel.ISupportInitialize).BeginInit()
             CType(Me.nudCountdownHours, System.ComponentModel.ISupportInitialize).BeginInit()
             Me.grpPasteImage.SuspendLayout()
+            Me.pnlMediaSearchPreview.SuspendLayout()
+            CType(Me.AxMediaSearchPreview, System.ComponentModel.ISupportInitialize).BeginInit()
             Me.SuspendLayout()
             '
             'Label19
@@ -656,7 +668,7 @@ Namespace JANIS
             Label19.Name = "Label19"
             Label19.Size = New System.Drawing.Size(243, 21)
             Label19.TabIndex = 90
-            Label19.Text = "Image Preview:"
+            Label19.Text = "Media Preview:"
             Label19.TextAlign = System.Drawing.ContentAlignment.BottomCenter
             '
             'btnBlackout
@@ -1264,21 +1276,21 @@ Namespace JANIS
             '
             'tpImgSearch
             '
+            Me.tpImgSearch.Controls.Add(Me.pnlMediaSearchPreview)
             Me.tpImgSearch.Controls.Add(Me.Label32)
             Me.tpImgSearch.Controls.Add(Me.Label21)
-            Me.tpImgSearch.Controls.Add(Me.lbImgResults)
+            Me.tpImgSearch.Controls.Add(Me.lbMediaResults)
             Me.tpImgSearch.Controls.Add(Me.comboImgSearchText)
             Me.tpImgSearch.Controls.Add(Me.Label20)
             Me.tpImgSearch.Controls.Add(Me.btnImgSearch)
-            Me.tpImgSearch.Controls.Add(Me.btnSearchImgAddSlide)
-            Me.tpImgSearch.Controls.Add(Me.btnSearchImgShow)
+            Me.tpImgSearch.Controls.Add(Me.btnSearchMediaAddSlide)
+            Me.tpImgSearch.Controls.Add(Me.btnSearchMediaShow)
             Me.tpImgSearch.Controls.Add(Label19)
-            Me.tpImgSearch.Controls.Add(Me.picImgSearchPreview)
             Me.tpImgSearch.Location = New System.Drawing.Point(4, 28)
             Me.tpImgSearch.Name = "tpImgSearch"
             Me.tpImgSearch.Size = New System.Drawing.Size(988, 372)
             Me.tpImgSearch.TabIndex = 6
-            Me.tpImgSearch.Text = "Image Search"
+            Me.tpImgSearch.Text = "Media Search"
             '
             'Label32
             '
@@ -1290,7 +1302,7 @@ Namespace JANIS
             Me.Label32.Name = "Label32"
             Me.Label32.Size = New System.Drawing.Size(402, 40)
             Me.Label32.TabIndex = 91
-            Me.Label32.Text = "Hint: Drag Image Preview to a Hot Button to assign it instantly!"
+            Me.Label32.Text = "Hint: Drag Media Preview to a Hot Button to assign it instantly!"
             Me.Label32.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
             '
             'Label21
@@ -1304,16 +1316,16 @@ Namespace JANIS
             Me.Label21.Text = "Search Results"
             Me.Label21.TextAlign = System.Drawing.ContentAlignment.BottomLeft
             '
-            'lbImgResults
+            'lbMediaResults
             '
-            Me.lbImgResults.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.lbImgResults.HorizontalScrollbar = True
-            Me.lbImgResults.ItemHeight = 18
-            Me.lbImgResults.Location = New System.Drawing.Point(12, 162)
-            Me.lbImgResults.Name = "lbImgResults"
-            Me.lbImgResults.Size = New System.Drawing.Size(962, 202)
-            Me.lbImgResults.Sorted = True
-            Me.lbImgResults.TabIndex = 95
+            Me.lbMediaResults.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+            Me.lbMediaResults.HorizontalScrollbar = True
+            Me.lbMediaResults.ItemHeight = 18
+            Me.lbMediaResults.Location = New System.Drawing.Point(12, 162)
+            Me.lbMediaResults.Name = "lbMediaResults"
+            Me.lbMediaResults.Size = New System.Drawing.Size(962, 202)
+            Me.lbMediaResults.Sorted = True
+            Me.lbMediaResults.TabIndex = 95
             '
             'comboImgSearchText
             '
@@ -1343,29 +1355,29 @@ Namespace JANIS
             Me.btnImgSearch.TabIndex = 82
             Me.btnImgSearch.Text = "SEARCH"
             '
-            'btnSearchImgAddSlide
+            'btnSearchMediaAddSlide
             '
-            Me.btnSearchImgAddSlide.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.btnSearchImgAddSlide.Location = New System.Drawing.Point(688, 116)
-            Me.btnSearchImgAddSlide.Name = "btnSearchImgAddSlide"
-            Me.btnSearchImgAddSlide.Size = New System.Drawing.Size(164, 34)
-            Me.btnSearchImgAddSlide.TabIndex = 93
-            Me.btnSearchImgAddSlide.Text = " ADD TO SLIDESHOW"
-            Me.ToolTip1.SetToolTip(Me.btnSearchImgAddSlide, "Add the selected slide to the end of the slide show list.")
+            Me.btnSearchMediaAddSlide.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+            Me.btnSearchMediaAddSlide.Location = New System.Drawing.Point(688, 116)
+            Me.btnSearchMediaAddSlide.Name = "btnSearchMediaAddSlide"
+            Me.btnSearchMediaAddSlide.Size = New System.Drawing.Size(164, 34)
+            Me.btnSearchMediaAddSlide.TabIndex = 93
+            Me.btnSearchMediaAddSlide.Text = " ADD TO SLIDESHOW"
+            Me.ToolTip1.SetToolTip(Me.btnSearchMediaAddSlide, "Add the selected slide to the end of the slide show list.")
             '
-            'btnSearchImgShow
+            'btnSearchMediaShow
             '
-            Me.btnSearchImgShow.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.btnSearchImgShow.Location = New System.Drawing.Point(716, 72)
-            Me.btnSearchImgShow.Name = "btnSearchImgShow"
-            Me.btnSearchImgShow.Size = New System.Drawing.Size(110, 34)
-            Me.btnSearchImgShow.TabIndex = 92
-            Me.btnSearchImgShow.Text = "SHOW IMAGE"
+            Me.btnSearchMediaShow.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+            Me.btnSearchMediaShow.Location = New System.Drawing.Point(703, 72)
+            Me.btnSearchMediaShow.Name = "btnSearchMediaShow"
+            Me.btnSearchMediaShow.Size = New System.Drawing.Size(134, 34)
+            Me.btnSearchMediaShow.TabIndex = 92
+            Me.btnSearchMediaShow.Text = "DISPLAY MEDIA"
             '
             'picImgSearchPreview
             '
             Me.picImgSearchPreview.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
-            Me.picImgSearchPreview.Location = New System.Drawing.Point(316, 24)
+            Me.picImgSearchPreview.Location = New System.Drawing.Point(0, 0)
             Me.picImgSearchPreview.Name = "picImgSearchPreview"
             Me.picImgSearchPreview.Size = New System.Drawing.Size(240, 135)
             Me.picImgSearchPreview.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
@@ -1567,7 +1579,7 @@ Namespace JANIS
             '
             'tpSlides
             '
-            Me.tpSlides.Controls.Add(Me.lbGfxFiles)
+            Me.tpSlides.Controls.Add(Me.lbMediaFiles)
             Me.tpSlides.Controls.Add(Me.tvSlideFolders)
             Me.tpSlides.Controls.Add(Me.btnWhammy)
             Me.tpSlides.Controls.Add(Me.btnPauseSlides)
@@ -1598,17 +1610,17 @@ Namespace JANIS
             Me.tpSlides.TabIndex = 2
             Me.tpSlides.Text = "Slide Show"
             '
-            'lbGfxFiles
+            'lbMediaFiles
             '
-            Me.lbGfxFiles.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!)
-            Me.lbGfxFiles.FormattingEnabled = True
-            Me.lbGfxFiles.ItemHeight = 16
-            Me.lbGfxFiles.Location = New System.Drawing.Point(268, 152)
-            Me.lbGfxFiles.Name = "lbGfxFiles"
-            Me.lbGfxFiles.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended
-            Me.lbGfxFiles.Size = New System.Drawing.Size(250, 212)
-            Me.lbGfxFiles.Sorted = True
-            Me.lbGfxFiles.TabIndex = 113
+            Me.lbMediaFiles.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!)
+            Me.lbMediaFiles.FormattingEnabled = True
+            Me.lbMediaFiles.ItemHeight = 16
+            Me.lbMediaFiles.Location = New System.Drawing.Point(268, 152)
+            Me.lbMediaFiles.Name = "lbMediaFiles"
+            Me.lbMediaFiles.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended
+            Me.lbMediaFiles.Size = New System.Drawing.Size(250, 212)
+            Me.lbMediaFiles.Sorted = True
+            Me.lbMediaFiles.TabIndex = 113
             '
             'tvSlideFolders
             '
@@ -1883,8 +1895,9 @@ Namespace JANIS
             Me.lblHBinstructions.Name = "lblHBinstructions"
             Me.lblHBinstructions.Size = New System.Drawing.Size(168, 129)
             Me.lblHBinstructions.TabIndex = 136
-            Me.lblHBinstructions.Text = "Image shortcuts that you can define for quick access to stored images. Select a n" &
-    "ame && image for each button. Save lists of buttons for specific uses."
+            Me.lblHBinstructions.Text = "Shortcuts that you can define for quick access to stored images and videos. Selec" &
+    "t a name && image or video for each button. Save lists of buttons for specific u" &
+    "ses."
             Me.lblHBinstructions.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
             '
             'btnSaveHB
@@ -2064,7 +2077,7 @@ Namespace JANIS
             Me.Label14.Name = "Label14"
             Me.Label14.Size = New System.Drawing.Size(328, 20)
             Me.Label14.TabIndex = 142
-            Me.Label14.Text = "Image File"
+            Me.Label14.Text = "Image / Video File"
             Me.Label14.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
             '
             'Label13
@@ -2982,16 +2995,16 @@ Namespace JANIS
             '
             Me.SlideTimer.Interval = 8000
             '
-            'pnlPicBack
+            'pnlDisplayed
             '
-            Me.pnlPicBack.BackColor = System.Drawing.Color.Black
-            Me.pnlPicBack.Controls.Add(Me.lblDisplayedStatus)
-            Me.pnlPicBack.Controls.Add(Me.picDisplayed)
-            Me.pnlPicBack.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.pnlPicBack.Location = New System.Drawing.Point(4, 57)
-            Me.pnlPicBack.Name = "pnlPicBack"
-            Me.pnlPicBack.Size = New System.Drawing.Size(272, 153)
-            Me.pnlPicBack.TabIndex = 14
+            Me.pnlDisplayed.BackColor = System.Drawing.Color.Black
+            Me.pnlDisplayed.Controls.Add(Me.lblDisplayedStatus)
+            Me.pnlDisplayed.Controls.Add(Me.picDisplayed)
+            Me.pnlDisplayed.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+            Me.pnlDisplayed.Location = New System.Drawing.Point(4, 57)
+            Me.pnlDisplayed.Name = "pnlDisplayed"
+            Me.pnlDisplayed.Size = New System.Drawing.Size(272, 153)
+            Me.pnlDisplayed.TabIndex = 14
             '
             'lblDisplayedStatus
             '
@@ -3029,20 +3042,20 @@ Namespace JANIS
             Me.cbExpandpicDisplayed.TabIndex = 14
             Me.cbExpandpicDisplayed.Text = "Stretch"
             '
-            'lblLibraryCount
+            'lblMediaLibraryCount
             '
-            Me.lblLibraryCount.BackColor = System.Drawing.Color.PaleTurquoise
-            Me.lblLibraryCount.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-            Me.lblLibraryCount.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.lblLibraryCount.Location = New System.Drawing.Point(719, 225)
-            Me.lblLibraryCount.Name = "lblLibraryCount"
-            Me.lblLibraryCount.Size = New System.Drawing.Size(272, 24)
-            Me.lblLibraryCount.TabIndex = 35
-            Me.lblLibraryCount.Text = "Images in Search Library:"
-            Me.lblLibraryCount.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-            Me.ToolTip1.SetToolTip(Me.lblLibraryCount, "Double-Click this message to re-index the image search library." & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Useful if you've" &
+            Me.lblMediaLibraryCount.BackColor = System.Drawing.Color.PaleTurquoise
+            Me.lblMediaLibraryCount.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+            Me.lblMediaLibraryCount.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+            Me.lblMediaLibraryCount.Location = New System.Drawing.Point(719, 225)
+            Me.lblMediaLibraryCount.Name = "lblMediaLibraryCount"
+            Me.lblMediaLibraryCount.Size = New System.Drawing.Size(272, 24)
+            Me.lblMediaLibraryCount.TabIndex = 35
+            Me.lblMediaLibraryCount.Text = "Items in Media Library:"
+            Me.lblMediaLibraryCount.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+            Me.ToolTip1.SetToolTip(Me.lblMediaLibraryCount, "Double-Click this message to re-index the image search library." & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Useful if you've" &
         " added new images while JANIS is running.")
-            Me.lblLibraryCount.UseMnemonic = False
+            Me.lblMediaLibraryCount.UseMnemonic = False
             '
             'btnPasteImage
             '
@@ -3432,6 +3445,26 @@ Namespace JANIS
             Me.grpPasteImage.TabStop = False
             Me.grpPasteImage.Text = "Choose Image"
             '
+            'pnlMediaSearchPreview
+            '
+            Me.pnlMediaSearchPreview.Controls.Add(Me.picImgSearchPreview)
+            Me.pnlMediaSearchPreview.Controls.Add(Me.AxMediaSearchPreview)
+            Me.pnlMediaSearchPreview.Location = New System.Drawing.Point(316, 24)
+            Me.pnlMediaSearchPreview.Name = "pnlMediaSearchPreview"
+            Me.pnlMediaSearchPreview.Size = New System.Drawing.Size(240, 135)
+            Me.pnlMediaSearchPreview.TabIndex = 96
+            '
+            'AxMediaSearchPreview
+            '
+            Me.AxMediaSearchPreview.Enabled = True
+            Me.AxMediaSearchPreview.Location = New System.Drawing.Point(0, 0)
+            Me.AxMediaSearchPreview.Name = "AxMediaSearchPreview"
+            Me.AxMediaSearchPreview.OcxState = CType(resources.GetObject("AxMediaSearchPreview.OcxState"), System.Windows.Forms.AxHost.State)
+            Me.AxMediaSearchPreview.Size = New System.Drawing.Size(240, 135)
+            Me.AxMediaSearchPreview.TabIndex = 70
+            Me.AxMediaSearchPreview.TabStop = False
+            Me.AxMediaSearchPreview.Visible = False
+            '
             'fmMain
             '
             Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None
@@ -3443,9 +3476,9 @@ Namespace JANIS
             Me.Controls.Add(Me.btnReIndexImgLib)
             Me.Controls.Add(Me.gbCountdownControls)
             Me.Controls.Add(Me.grpPasteImage)
-            Me.Controls.Add(Me.lblLibraryCount)
+            Me.Controls.Add(Me.lblMediaLibraryCount)
             Me.Controls.Add(Me.cbExpandpicDisplayed)
-            Me.Controls.Add(Me.pnlPicBack)
+            Me.Controls.Add(Me.pnlDisplayed)
             Me.Controls.Add(Me.btnHot10)
             Me.Controls.Add(Me.btnHot9)
             Me.Controls.Add(Me.btnHot8)
@@ -3509,7 +3542,7 @@ Namespace JANIS
             CType(Me.nudDefaultSlideDelay, System.ComponentModel.ISupportInitialize).EndInit()
             Me.tpAbout.ResumeLayout(False)
             Me.tpAbout.PerformLayout()
-            Me.pnlPicBack.ResumeLayout(False)
+            Me.pnlDisplayed.ResumeLayout(False)
             CType(Me.picDisplayed, System.ComponentModel.ISupportInitialize).EndInit()
             Me.gbCountdownControls.ResumeLayout(False)
             CType(Me.nudCountdownWarnSeconds, System.ComponentModel.ISupportInitialize).EndInit()
@@ -3519,6 +3552,8 @@ Namespace JANIS
             CType(Me.nudCountdownMinutes, System.ComponentModel.ISupportInitialize).EndInit()
             CType(Me.nudCountdownHours, System.ComponentModel.ISupportInitialize).EndInit()
             Me.grpPasteImage.ResumeLayout(False)
+            Me.pnlMediaSearchPreview.ResumeLayout(False)
+            CType(Me.AxMediaSearchPreview, System.ComponentModel.ISupportInitialize).EndInit()
             Me.ResumeLayout(False)
             Me.PerformLayout()
 
@@ -3534,7 +3569,6 @@ Namespace JANIS
                 Me.InitiateQuietShutdown()
             Else
                 Me.InitializeSettings()
-                Me.picDisplayed.AllowDrop = True
 
                 Me.LS = New fmScreen()
                 '* Save the label message heights because the timer screws around with them and needs to restore them
@@ -3566,7 +3600,7 @@ Namespace JANIS
                 Me.tvSlideFolders_Init(Me.tbDefaultImageDir.Text)
 
                 Me.splash.SetStatus("Building Image Library...")
-                Me.BuildImageLibrary()
+                Me.BuildMediaLibrary()
                 Me.Opacity = 100          '* Make visible again
             End If
         End Sub
@@ -3629,6 +3663,24 @@ Namespace JANIS
 
             Me.HotButtonsChanged = False
             Me.cbHBActive.Checked = True    '* default to "can see"
+            Me.picDisplayed.AllowDrop = True
+            Me.PreviousSelectedTab = TabControl1.SelectedTab
+
+            With Me.AxMediaSearchPreview
+                .Ctlenabled = False
+                .uiMode = "none"
+                .fullScreen = False
+                .stretchToFit = True
+                With .settings
+                    .mute = True
+                    .autoStart = False
+                    .invokeURLs = False
+                    .playCount = 1
+                    .volume = 0
+                End With
+            End With
+            ' Also mute any other AxWMP controls later
+
         End Sub
         Private Sub VerifyInfrastructure()
             '* If the default support dirs aren't there, create them
@@ -3640,7 +3692,7 @@ Namespace JANIS
             If MyDir = "" Then MkDir(ROOT_SUPPORT_DIR & DEFAULT_HOTBUTTON_DIR)
         End Sub
 
-        Private Sub ListBox_KeyPress(ByVal sender As System.Object, ByVal e As KeyPressEventArgs) Handles lbGfxFiles.KeyPress, lbSlideList.KeyPress
+        Private Sub ListBox_KeyPress(ByVal sender As System.Object, ByVal e As KeyPressEventArgs) Handles lbMediaFiles.KeyPress, lbSlideList.KeyPress
             ' Ctrl-A will select all.
             If e.KeyChar = Chr(1) Then
                 If sender.SelectionMode.ToString Like "*Multi*" Then
@@ -3706,6 +3758,7 @@ Namespace JANIS
                 Me.tbCurrentThing.BackColor = newcolor
             End If
         End Sub
+
         Private Sub btnClearTextLeft_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnClearTextLeft.Click
             Me.tbLeftText.Text = ""
             Me.tbLeftText.Focus()
@@ -3726,13 +3779,13 @@ Namespace JANIS
             Me.DisplayTextScreen(Me.LS, Me.tbRightText.Text, Me.tbRightText.BackColor, CSng(Me.tbRightFontSize.Text) * Me.DisplayFontRatio)
         End Sub
         Private Sub btnDocLoad_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnDocLoadLeft.Click, btnDocLoadRight.Click
-            '* Load the contents of a document into the left, right, or both text entry boxes
+            '* Load the contents of a document into the left or right text entry boxes
             Dim Doc As String = LoadDoc()
             If Doc <> "" Then
-                If sender.Tag <> "Left" Then  '* This will work for Right and Both
+                If sender.Tag <> "Left" Then
                     Me.tbRightText.Text = Doc
                 End If
-                If sender.Tag <> "Right" Then '* This will work for Left and Both
+                If sender.Tag <> "Right" Then
                     Me.tbLeftText.Text = Doc
                 End If
             End If
@@ -3958,13 +4011,22 @@ Namespace JANIS
         End Function
 
         '=================================================================================================
-        '* BEGIN IMAGE STUFF
+        '* BEGIN IMAGE/MEDIA STUFF
+
+        Private Sub TabControl1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles TabControl1.SelectedIndexChanged
+            If TabControl1.SelectedTab.Name <> "tpImgSearch" AndAlso PreviousSelectedTab.Name = "tpImgSearch" Then
+                '* Switched away from the image search tab, so stop any preview video that might be running
+                StopPreviewSearchVideo()
+            End If
+            PreviousSelectedTab = TabControl1.SelectedTab
+        End Sub
+
 
         Private Sub PreviewImage(ByRef picture As PictureBox, ByRef Img As Image, ByVal Expand As Boolean)
             If Img Is Nothing Then Exit Sub
 
             'picture.Visible = False
-            Me.pnlPicBack.BackColor = System.Drawing.Color.Black
+            Me.pnlDisplayed.BackColor = System.Drawing.Color.Black
             If Expand Then
                 picture.SizeMode = PictureBoxSizeMode.StretchImage
             Else
@@ -3974,21 +4036,6 @@ Namespace JANIS
             picture.Image = Img
             picture.Visible = True
         End Sub
-        'Private Sub PreviewURL(ByRef picture As PictureBox, ByVal url As String)
-        '    If url = "" Then Exit Sub
-
-        '    'picture.Visible = False
-
-        '    '* when loading URL, we always maintain size ratio because we don't know pic info.
-        '    Me.pnlPicBack.BackColor = System.Drawing.Color.Black
-        '    picture.SizeMode = PictureBoxSizeMode.Zoom
-
-        '    Try
-        '        picture.Load(url)
-        '        picture.Visible = True
-        '    Catch ex As Exception
-        '    End Try
-        'End Sub
 
         Private Sub Present_Image(ByRef img As Image, Optional ByVal KillSlideShow As Boolean = True)
             '* Display this image to the display and preview.
@@ -4100,7 +4147,7 @@ Namespace JANIS
         Private Sub btnImgSearch_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnImgSearch.Click
             '* Empty the results listbox first
             Me.picImgSearchPreview.Image = Nothing
-            With Me.lbImgResults
+            With Me.lbMediaResults
                 .SelectedIndex = -1   '* select none
                 If .Items.Count > 0 Then .Items.Clear()
             End With
@@ -4137,19 +4184,19 @@ Namespace JANIS
             Dim CheckFileName As FileID
             Dim UpdateStarted As Boolean = False
             CompareText = "*" & CompareText & "*"   '* wrap for fuzzy search
-            For Each CheckFileName In ImageLibrary
+            For Each CheckFileName In MediaLibrary
                 '* Does this filename contain the supplied text?
                 If CheckFileName.Name.ToLower Like CompareText Then
                     If Not UpdateStarted Then
-                        Me.lbImgResults.BeginUpdate()
+                        Me.lbMediaResults.BeginUpdate()
                         UpdateStarted = True
                     End If
-                    Me.lbImgResults.Items.Add(CheckFileName.FullPath)
+                    Me.lbMediaResults.Items.Add(CheckFileName.FullPath)
                 End If
             Next
             If UpdateStarted Then
-                Me.lbImgResults.EndUpdate()
-                Me.lbImgResults.SelectedIndex = 0  '* show the image of the first match
+                Me.lbMediaResults.EndUpdate()
+                Me.lbMediaResults.SelectedIndex = 0  '* show the image of the first match
             End If
         End Sub
 
@@ -4160,44 +4207,75 @@ Namespace JANIS
             Me.AcceptButton = Nothing
         End Sub
 
-        Private Sub btnSearchImgShow_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnSearchImgShow.Click, lbImgResults.DoubleClick
+        Private Sub btnSearchMediaShow_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnSearchMediaShow.Click, lbMediaResults.DoubleClick
             If Me.picImgSearchPreview.Image IsNot Nothing Then
                 Me.Present_Image(Me.picImgSearchPreview.Image)
             End If
         End Sub
-        'Private Sub lbImgResults_DoubleClick(sender As Object, e As EventArgs) Handles lbImgResults.DoubleClick
+        'Private Sub lbMediaResults_DoubleClick(sender As Object, e As EventArgs) Handles lbMediaResults.DoubleClick
 
         'End Sub
 
 
-        Private Sub btnSearchImgAddSlide_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnSearchImgAddSlide.Click
-            Me.lbSlideList.Items.Add(Me.lbImgResults.SelectedItem)
+        Private Sub btnSearchMediaAddSlide_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnSearchMediaAddSlide.Click
+            Me.lbSlideList.Items.Add(Me.lbMediaResults.SelectedItem)
         End Sub
 
-        Private Sub PreviewSearchPic()
+        Private Sub PreviewSearchMedia()
             Static PrevSelect As String
-            If Me.lbImgResults.SelectedItems.Count = 1 Then
-                If Me.lbImgResults.SelectedItem <> PrevSelect Then
-                    PrevSelect = Me.lbImgResults.SelectedItem
-                    Try
-                        Me.picImgSearchPreview.Image = Image.FromFile(Me.lbImgResults.SelectedItem)
-                    Catch
-                        Me.picImgSearchPreview.Image = Nothing
-                    End Try
+            If Me.lbMediaResults.SelectedItems.Count = 1 Then
+                If Me.lbMediaResults.SelectedItem <> PrevSelect Then
+                    PrevSelect = Me.lbMediaResults.SelectedItem
+                    StopPreviewSearchVideo()  '* No-op if not playing
+
+                    If IsVideoFile(Me.lbMediaResults.SelectedItem) Then
+                        PlayPreviewSearchVideo(Me.lbMediaResults.SelectedItem)
+                    Else
+                        ShowPreviewSearchImage(Me.lbMediaResults.SelectedItem)
+                    End If
                 End If
             Else
                 Me.picImgSearchPreview.Image = Nothing
+                StopPreviewSearchVideo()
                 PrevSelect = ""
             End If
         End Sub
 
-        Private Sub lbImgResults_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles lbImgResults.SelectedIndexChanged
-            Me.PreviewSearchPic()
+        Private Sub StopPreviewSearchVideo()
+            If AxMediaSearchPreview.playState = WMPLib.WMPPlayState.wmppsPlaying Then
+                AxMediaSearchPreview.Ctlcontrols.stop()
+                AxMediaSearchPreview.close()
+            End If
         End Sub
-        Private Sub lbImgResults_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles lbImgResults.MouseDown
+        Private Sub PlayPreviewSearchVideo(fnam As String)
+            Me.picImgSearchPreview.Hide()
+            Me.picImgSearchPreview.Image = Nothing
+            Me.AxMediaSearchPreview.Show()
+            Try
+                Me.AxMediaSearchPreview.URL = fnam
+                Me.AxMediaSearchPreview.Ctlcontrols.play()
+            Catch ex As Exception
+                Me.AxMediaSearchPreview.close()
+            End Try
+        End Sub
+        Private Sub ShowPreviewSearchImage(fnam As String)
+            Me.AxMediaSearchPreview.Hide()
+            Me.picImgSearchPreview.Show()
+            Try
+                Me.picImgSearchPreview.Image = Image.FromFile(fnam)
+            Catch
+                Me.picImgSearchPreview.Image = Nothing
+            End Try
+            Me.AxMediaSearchPreview.close()
+        End Sub
+
+        Private Sub lbMediaResults_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles lbMediaResults.SelectedIndexChanged
+            Me.PreviewSearchMedia()
+        End Sub
+        Private Sub lbMediaResults_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles lbMediaResults.MouseDown
             ' ----- Prepare the draggable content.
-            If Me.lbImgResults.SelectedIndex >= 0 Then
-                Me.PreviewSearchPic()
+            If Me.lbMediaResults.SelectedIndex >= 0 Then
+                Me.PreviewSearchMedia()
 
                 ' ----- Don't start the drag yet. Wait until we move a
                 '       certain amount.
@@ -4205,37 +4283,38 @@ Namespace JANIS
                    (SystemInformation.DragSize.Width / 2),
                    e.Y - (SystemInformation.DragSize.Height / 2)),
                    SystemInformation.DragSize)
-                Me.DragMethod = "from_lbImgResults"
+                Me.DragMethod = "from_lbMediaResults"
             End If
         End Sub
-        Private Sub lbImgResults_MouseMove(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles lbImgResults.MouseMove
+        Private Sub lbMediaResults_MouseMove(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles lbMediaResults.MouseMove
             ' ----- Ignore if not dragging from this control.
-            If (Me.DragMethod <> "from_lbImgResults") Then Return
+            If (Me.DragMethod <> "from_lbMediaResults") Then Return
 
             ' ----- Have we left the drag boundary?
             'If (DragBounds.Contains(e.X, e.Y) = False) Then
             ' ----- Start the drag-and-drop operation.
-            'If (lbImgResults.DoDragDrop(lbImgResults.SelectedItems, _
+            'If (lbMediaResults.DoDragDrop(lbMediaResults.SelectedItems, _
             '      DragDropEffects.Move) = DragDropEffects.Move) Then
-            If Me.lbImgResults.SelectedIndex >= 0 Then
-                Me.lbImgResults.DoDragDrop(Me.lbImgResults.SelectedItem, DragDropEffects.Copy)
+            If Me.lbMediaResults.SelectedIndex >= 0 Then
+                Me.lbMediaResults.DoDragDrop(Me.lbMediaResults.SelectedItem, DragDropEffects.Copy)
             End If
-            '        Me.lbImgResults.DoDragDrop(Me.lbImgResults.SelectedItem, DragDropEffects.Copy)
+            '        Me.lbMediaResults.DoDragDrop(Me.lbMediaResults.SelectedItem, DragDropEffects.Copy)
             'End If
             Me.DragMethod = ""
             'End If
         End Sub
-        Private Sub lbImgResults_MouseUp(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles lbImgResults.MouseUp
+        Private Sub lbMediaResults_MouseUp(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles lbMediaResults.MouseUp
             ' ----- End of drag-and-drop.
             Me.DragMethod = ""
         End Sub
 
         Private Sub picImgSearchPreview_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles picImgSearchPreview.MouseDown
             '* This routine defines picImgSearchPreview as a draggable entity, text copy only (for image filename)
-            If (Not sender.Image Is Nothing) And (Me.lbImgResults.SelectedIndex >= 0) Then
-                Me.lbImgResults.DoDragDrop(Me.lbImgResults.SelectedItem, DragDropEffects.Copy)
+            If (Not sender.Image Is Nothing) And (Me.lbMediaResults.SelectedIndex >= 0) Then
+                Me.lbMediaResults.DoDragDrop(Me.lbMediaResults.SelectedItem, DragDropEffects.Copy)
             End If
         End Sub
+
         Private Sub btnHot_DragEnter(ByVal sender As Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles btnHot1.DragEnter, btnHot2.DragEnter, btnHot3.DragEnter, btnHot4.DragEnter, btnHot5.DragEnter, btnHot6.DragEnter, btnHot7.DragEnter, btnHot8.DragEnter, btnHot9.DragEnter, btnHot10.DragEnter
             '* This routine says that hot buttons can accept dropped string copy only.
             If (e.Data.GetDataPresent(DataFormats.Text)) Then
@@ -4260,38 +4339,38 @@ Namespace JANIS
             End If
         End Sub
 
-        Private Sub ClearImageLibrary()
-            Me.ImageLibrary.Clear()
-            Me.ShowLibraryCount()
+        Private Sub ClearMediaLibrary()
+            Me.MediaLibrary.Clear()
+            Me.ShowMediaLibraryCount()
         End Sub
 
-        Private Sub BuildImageLibrary()
-            Me.ProcessImageDir(Me.tbDefaultImageDir.Text)
-            Me.ShowLibraryCount()
+        Private Sub BuildMediaLibrary()
+            Me.ProcessMediaDir(Me.tbDefaultImageDir.Text)
+            Me.ShowMediaLibraryCount()
 
             '* Test Mode Only - if library is bigger than 10 items DON'T use this
             'If Me.TestMode Then
             '    Dim FileElem As FileID
             '    Me.tbLeftText.Text = "Image Library Dump (TEST MODE)"
-            '    For Each FileElem In ImageLibrary
+            '    For Each FileElem In MediaLibrary
             '        Me.tbLeftText.Text = Me.tbLeftText.Text & EOL & FileElem.FullPath
             '    Next
             'End If
         End Sub
 
-        Private Sub ShowLibraryCount()
-            Me.lblLibraryCount.Text = "Images in Search Library: " & Me.ImageLibrary.Count.ToString
+        Private Sub ShowMediaLibraryCount()
+            Me.lblMediaLibraryCount.Text = "Items in Media Library: " & Me.MediaLibrary.Count.ToString
             System.Windows.Forms.Application.DoEvents()
         End Sub
 
         Private Sub btnReIndexImgLib_Click(sender As System.Object, e As System.EventArgs) Handles btnReIndexImgLib.Click
-            Me.ClearImageLibrary()
-            Me.BuildImageLibrary()
+            Me.ClearMediaLibrary()
+            Me.BuildMediaLibrary()
         End Sub
 
 
-        Private Sub ProcessImageDir(ByVal DirName As String)
-            '* A recursive function to add all graphics file names into the ImageLibrary list.
+        Private Sub ProcessMediaDir(ByVal DirName As String)
+            '* A recursive function to add all graphics file names into the MediaLibrary list.
             '* The list is for searching later.
             '* PASS DIRECTORIES ONLY
 
@@ -4310,24 +4389,24 @@ Namespace JANIS
                 If NextName <> ".xvpics" Then '* GIMP non-image files to ignore
                     While NextName <> ""
                         WholeName = DirName & "\" & NextName
-                        '* Dirs go into DirList for future processing. Filenames get added to Image Library.
+                        '* Dirs go into DirList for future processing. Filenames get added to Media Library.
                         If My.Computer.FileSystem.DirectoryExists(WholeName) Then
                             '*If (GetAttr(WholeName) And FileAttribute.Directory) = FileAttribute.Directory Then
                             DirList.Add(WholeName)
-                        ElseIf IsImageFile(NextName) Then
+                        ElseIf IsMediaFile(NextName) Then
                             Dim FileElem As New FileID()  '* Need a new instance each iteration
                             FileElem.Path = DirName
                             FileElem.Name = NextName
-                            Me.ImageLibrary.Add(FileElem)
+                            Me.MediaLibrary.Add(FileElem)
                             '* Occasionally show progress on building the library
-                            If (Me.ImageLibrary.Count Mod 250) = 0 Then Me.ShowLibraryCount()
+                            If (Me.MediaLibrary.Count Mod 250) = 0 Then Me.ShowMediaLibraryCount()
                         End If
                         NextName = Dir()
                     End While
 
                     Dim NextDir As String
                     For Each NextDir In DirList
-                        Me.ProcessImageDir(NextDir)
+                        Me.ProcessMediaDir(NextDir)
                     Next
                     ChDir(PrevDir)
                 End If
@@ -4344,6 +4423,28 @@ Namespace JANIS
             '* If the extension is in the global image extension list, return true.
             Return (Array.IndexOf(Me.ImageFileExtensions, ext) >= 0)
         End Function
+
+        Private Function IsVideoFile(ByVal fnam As String) As Boolean
+            '* Match file extension against known video extensions.
+            '* If it matches, return true; else return false.
+            Dim fi As New FileInfo(fnam)
+            Dim ext As String = fi.Extension.ToUpper
+
+            '* If the extension is in the global image extension list, return true.
+            Return (Array.IndexOf(Me.VideoFileExtensions, ext) >= 0)
+        End Function
+
+        Private Function IsMediaFile(ByVal fnam As String) As Boolean
+            '* Match file extension against known image extensions.
+            '* If it matches, return true; else return false.
+            Dim fi As New FileInfo(fnam)
+            Dim ext As String = fi.Extension.ToUpper
+
+            '* If the extension is in the global image extension list, return true.
+            Return (Array.IndexOf(Me.MediaFileExtensions, ext) >= 0)
+        End Function
+
+
 
 
         '=================================================================================================
@@ -4517,7 +4618,7 @@ Namespace JANIS
             End If
         End Sub
         Private Sub btnAddSlide_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnAddSlide.Click
-            Me.AddToSlideList(Me.lbGfxFiles.SelectedItems)
+            Me.AddToSlideList(Me.lbMediaFiles.SelectedItems)
         End Sub
         Private Sub btnClearSlideList_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnClearSlideList.Click
             If Me.lbSlideList.Items.Count < 1 Then Return
@@ -4526,13 +4627,13 @@ Namespace JANIS
             Me.lbSlideList.Items.Clear()     '** Empty the list first
         End Sub
 
-        Private Sub lbGfxFiles_DoubleClick(ByVal sender As Object, e As System.EventArgs) Handles lbGfxFiles.DoubleClick
+        Private Sub lbMediaFiles_DoubleClick(ByVal sender As Object, e As System.EventArgs) Handles lbMediaFiles.DoubleClick
             Me.AddToSlideList(sender.SelectedItems)
         End Sub
-        Private Sub lbGfxFiles_SelectedIndexChanged(sender As Object, e As EventArgs) Handles lbGfxFiles.SelectedIndexChanged
-            If Me.lbGfxFiles.SelectedItems.Count = 1 Then
+        Private Sub lbMediaFiles_SelectedIndexChanged(sender As Object, e As EventArgs) Handles lbMediaFiles.SelectedIndexChanged
+            If Me.lbMediaFiles.SelectedItems.Count = 1 Then
                 Try
-                    Me.picSlidePreview.Image = Image.FromFile(Me.tvSlideFolders.SelectedNode.Name & "\" & Me.lbGfxFiles.SelectedItem.ToString)
+                    Me.picSlidePreview.Image = Image.FromFile(Me.tvSlideFolders.SelectedNode.Name & "\" & Me.lbMediaFiles.SelectedItem.ToString)
                 Catch ex As Exception
                     '* If error, clear image display. I don't care what the error was about.
                     Me.picSlidePreview.Image = Nothing
@@ -4602,7 +4703,7 @@ Namespace JANIS
 
             '* we're gonna be messing about with the selected node over and over, so let's hide some stuff
             'Me.tvSlideFolders.HideSelection = True
-            'Me.lbGfxFiles.Visible = False
+            'Me.lbMediaFiles.Visible = False
 
             Dim path_chunks As String() = folder.Split("\"c)
 
@@ -4663,23 +4764,23 @@ Namespace JANIS
             Dim SelPath As String = tvSlideFolders.SelectedNode.Name
             If SelPath.EndsWith(":") Then SelPath = SelPath & "\" '* in case it's the root of a drive
             If SelPath <> PrevSelect Then
-                PopulateGfxFiles(SelPath)
+                PopulateMediaFiles(SelPath)
                 PrevSelect = SelPath
             End If
         End Sub
 
-        Private Sub PopulateGfxFiles(Folder As String)
-            '* List all the graphics files in the selected folder in the lvGfxFiles control
+        Private Sub PopulateMediaFiles(Folder As String)
+            '* List all the graphics and video files in the selected folder in the lvGfxFiles control
             ' MessageBox.Show(Me, Folder)
             Me.picSlidePreview.Image = Nothing
-            Me.lbGfxFiles.Items.Clear()
+            Me.lbMediaFiles.Items.Clear()
             If System.IO.Directory.Exists(Folder) Then
                 Try
-                    For Each ext As String In ImageFileExtensions
+                    For Each ext As String In MediaFileExtensions
                         'For Each foundfile As String In My.Computer.FileSystem.GetFiles(Folder, FileIO.SearchOption.SearchTopLevelOnly, "*" & ext).Select()
                         For Each foundfile As String In Directory.GetFiles(Folder, "*" & ext)
-                            Dim newindex As Integer = Me.lbGfxFiles.Items.Add(My.Computer.FileSystem.GetFileInfo(foundfile).Name)
-                            'Me.lbGfxFiles.Items(newindex)
+                            Dim newindex As Integer = Me.lbMediaFiles.Items.Add(My.Computer.FileSystem.GetFileInfo(foundfile).Name)
+                            'Me.lbMediaFiles.Items(newindex)
                         Next
                     Next
                 Catch ex As UnauthorizedAccessException
@@ -5300,7 +5401,7 @@ Namespace JANIS
         Private Sub SavePrefsToFile(ByVal filename As String)
             If Not PrefsChanged() Then Exit Sub
 
-            Dim RebuildImageLibrary As Boolean = (Me.tbDefaultImageDir.Text <> Me.tbDefaultImageDir.Tag)
+            Dim RebuildMediaLibrary As Boolean = (Me.tbDefaultImageDir.Text <> Me.tbDefaultImageDir.Tag)
 
             Dim fn As Integer = FreeFile()
             FileOpen(fn, filename, OpenMode.Output)
@@ -5323,9 +5424,9 @@ Namespace JANIS
             FileClose(fn)
             Me.StorePrefs()
             Me.AllScreensToFront()
-            If RebuildImageLibrary Then
-                Me.ClearImageLibrary()
-                Me.BuildImageLibrary()
+            If RebuildMediaLibrary Then
+                Me.ClearMediaLibrary()
+                Me.BuildMediaLibrary()
             End If
         End Sub
         Private Sub SetDefaultPrefs()
