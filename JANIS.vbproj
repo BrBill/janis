@@ -222,6 +222,8 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\right-arrow.png" />
+    <Content Include="Resources\sound-off-red.png" />
+    <Content Include="Resources\sound-on-green.png" />
     <Content Include="Resources\web.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

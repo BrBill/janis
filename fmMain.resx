@@ -132,6 +132,15 @@
   <metadata name="grpClearText.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
+  <metadata name="ToolTip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>374, 3</value>
+  </metadata>
+  <metadata name="grpLoadText.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="grpClearText.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
   <data name="AxMediaSearchPreview.OcxState" mimetype="application/x-microsoft.net.object.binary.base64">
     <value>
         AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
@@ -144,11 +153,11 @@
 </value>
   </data>
   <data name="TextBox2.Text" xml:space="preserve">
-    <value>This program may only be used by ComedySportz, or by explicit permission of the author, Bill Cernansky.
+    <value>This program is free. There are no warrantees. guarantees, or manatees. To request help or report bugs, contact Bill via email.
 
 Special thanks to:
 
-MaryAnn Rambo &amp;  CSz-Portland;
+MaryAnn Rambo, Portland Comedy Theater, and CSz Worldwide;
 
 Wade Minter &amp; Andrew Berkowitz, whose "Mx. Voice" software is an inspiration;
 
@@ -159,8 +168,17 @@ CTRL-SHIFT-B reveals the truth.</value>
   <metadata name="SlideTimer.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>21, 2</value>
   </metadata>
+  <metadata name="ToolTip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>374, 3</value>
+  </metadata>
+  <metadata name="ToolTip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>374, 3</value>
+  </metadata>
   <metadata name="CountdownTimer.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>228, 3</value>
+  </metadata>
+  <metadata name="VideoEventTimer.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>474, 3</value>
   </metadata>
   <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>32</value>

@@ -170,7 +170,26 @@ Namespace My.Resources
             End Get
         End Property
         
-       
+        '''<summary>
+        '''  Looks up a localized resource of type System.Drawing.Bitmap.
+        '''</summary>
+        Friend ReadOnly Property sound_off_red() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("sound-off-red", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized resource of type System.Drawing.Bitmap.
+        '''</summary>
+        Friend ReadOnly Property sound_on_green() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("sound-on-green", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
         '''<summary>
         '''  Looks up a localized resource of type System.Drawing.Bitmap.
         '''</summary>

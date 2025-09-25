@@ -1,3 +1,14 @@
+Upcoming release, part 4:
+* Video playback now works at a minimal level
+  * only stops when it ends or something else is displayed
+  * Muting and volume is all BROKEN on playback. It always behaves like it's muted
+    regardless of mute and volume settings. Wow, the WMP control sucks.
+  * When videos display, the operator preview panel updates once a second
+* Retooled and moved scoring controls
+* Moved operator remote viewer to center of top pane
+  * Still relocating other controls
+
+
 Upcoming release, part 3:
 * Media Library now catalogs videos in addition to images.
 * Got video stuff working in the Image Search (now Media Search) tab.

@@ -1,8 +1,9 @@
-Imports System
-Imports System.Environment
+'Imports System
+'Imports System.Environment
 Imports System.IO
 Imports System.Linq
-Imports System.Runtime.InteropServices
+'Imports System.Runtime.InteropServices
+Imports System.Threading.Tasks
 
 Namespace JANIS
     Public Class fmMain
@@ -51,12 +52,11 @@ Namespace JANIS
         Dim DisplayFontRatio As Single = 33 / 80          ' The "should be" size ratio of display to what I once thought it was.
         Dim DEFAULT_COUNTDOWN_COLOR As System.Drawing.Color = System.Drawing.Color.FromArgb(CType(CType(48, Byte), Integer), CType(CType(48, Byte), Integer), CType(CType(48, Byte), Integer))
 
-        Private VideoFileExtensions() As String = {".ASF", ".AVI", ".M2TS", ".M4V", ".MP4", ".MP4V", ".MPG", ".MPEG", ".WMV"}   '* Modern .MOV files not playable by Windows Media Player control w/o extra codecs
-        Private ImageFileExtensions() As String = {".BMP", ".GIF", ".JPG", ".PNG", ".WMF", ".EXIF", ".TIFF"}
+        '* NOTE: Many .MOV files are not playable by Windows Media Player w/o additional codecs (technically a purchased Microsoft Store app is required)
+        Private VideoFileExtensions() As String = {".ASF", ".AVI", ".M2TS", ".M4V", ".MP4", ".MP4V", ".MPG", ".MPEG", ".WMV"}
+        Private ImageFileExtensions() As String = {".BMP", ".GIF", ".JPG", ".JPEG", ".PNG", ".WMF", ".EXIF", ".TIFF"}
         Private MediaLibrary As New Collection()
         Private MediaFileExtensions() As String = VideoFileExtensions.Concat(ImageFileExtensions).ToArray()
-
-
 
         Private LS As fmScreen      '* The audience screen
 
@@ -153,7 +153,6 @@ Namespace JANIS
         Friend WithEvents Label2 As System.Windows.Forms.Label
         Friend WithEvents tbLeftScore As System.Windows.Forms.TextBox
         Friend WithEvents tbRightScore As System.Windows.Forms.TextBox
-        Friend WithEvents Label3 As System.Windows.Forms.Label
         Friend WithEvents btnShowScore As System.Windows.Forms.Button
         Friend WithEvents MainMenu1 As System.Windows.Forms.MainMenu
         Friend WithEvents menuSubtract1Left As System.Windows.Forms.MenuItem
@@ -163,9 +162,9 @@ Namespace JANIS
         Friend WithEvents menuSubtract1Right As System.Windows.Forms.MenuItem
         Friend WithEvents menuAdd5Right As System.Windows.Forms.MenuItem
         Friend WithEvents menuSubtract5Right As System.Windows.Forms.MenuItem
-        Friend WithEvents grpPasteImage As GroupBox
-        Friend WithEvents picDisplayed As System.Windows.Forms.PictureBox
-        Friend WithEvents btnPicLoadFile As System.Windows.Forms.Button
+        Friend WithEvents grpInstantMedia As GroupBox
+        Friend WithEvents picRemoteViewer As System.Windows.Forms.PictureBox
+        Friend WithEvents btnMediaLoadFile As System.Windows.Forms.Button
         Friend WithEvents btnLeftScoreColor As System.Windows.Forms.Button
         Friend WithEvents btnRightScoreColor As System.Windows.Forms.Button
         Friend WithEvents TabControl1 As System.Windows.Forms.TabControl
@@ -187,6 +186,7 @@ Namespace JANIS
         Friend WithEvents pnlTextColorRight3 As System.Windows.Forms.Panel
         Friend WithEvents pnlTextColorRight2 As System.Windows.Forms.Panel
         Friend WithEvents pnlTextColorRight1 As System.Windows.Forms.Panel
+        Friend WithEvents cbMuteVideo As CheckBox
         Friend WithEvents tbRightText As System.Windows.Forms.TextBox
         Friend WithEvents tbLeftText As System.Windows.Forms.TextBox
         Friend WithEvents btnListLeft As System.Windows.Forms.Button
@@ -310,7 +310,7 @@ Namespace JANIS
         Friend WithEvents btnClearTextRight As System.Windows.Forms.Button
         Friend WithEvents btnClearTextLeft As System.Windows.Forms.Button
         Friend WithEvents Label16 As System.Windows.Forms.Label
-        Friend WithEvents pnlDisplayed As System.Windows.Forms.Panel
+        Friend WithEvents pnlRemoteViewer As System.Windows.Forms.Panel
         Friend WithEvents tbDefaultSlideShow As System.Windows.Forms.TextBox
         Friend WithEvents tbDefaultHBFile As System.Windows.Forms.TextBox
         Friend WithEvents tbDefaultImageFile As System.Windows.Forms.TextBox
@@ -351,7 +351,6 @@ Namespace JANIS
         Friend WithEvents tbDefaultImageDir As System.Windows.Forms.TextBox
         Friend WithEvents btnClearTextBoth As System.Windows.Forms.Button
         Friend WithEvents CountdownTimer As System.Windows.Forms.Timer
-        Friend WithEvents cbExpandpicDisplayed As System.Windows.Forms.CheckBox
         Friend WithEvents tpImgSearch As System.Windows.Forms.TabPage
         Friend WithEvents btnImgSearch As System.Windows.Forms.Button
         Friend WithEvents btnSearchMediaAddSlide As System.Windows.Forms.Button
@@ -363,8 +362,10 @@ Namespace JANIS
         Friend WithEvents Label21 As System.Windows.Forms.Label
         Friend WithEvents Label32 As System.Windows.Forms.Label
         Friend WithEvents lblMediaLibraryCount As System.Windows.Forms.Label
-        Friend WithEvents btnPasteImage As System.Windows.Forms.Button
-        Friend WithEvents lblDisplayedStatus As Label
+        Friend WithEvents btnPasteMedia As System.Windows.Forms.Button
+        Friend WithEvents lblRemoteStatus As Label
+        Friend WithEvents VideoEventTimer As Timer
+
 
 
         <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
@@ -378,7 +379,6 @@ Namespace JANIS
             Me.Label2 = New System.Windows.Forms.Label()
             Me.tbLeftScore = New System.Windows.Forms.TextBox()
             Me.tbRightScore = New System.Windows.Forms.TextBox()
-            Me.Label3 = New System.Windows.Forms.Label()
             Me.btnShowScore = New System.Windows.Forms.Button()
             Me.MainMenu1 = New System.Windows.Forms.MainMenu(Me.components)
             Me.menuDummy = New System.Windows.Forms.MenuItem()
@@ -391,7 +391,7 @@ Namespace JANIS
             Me.menuAdd5Right = New System.Windows.Forms.MenuItem()
             Me.menuSubtract5Right = New System.Windows.Forms.MenuItem()
             Me.EasterEgg1 = New System.Windows.Forms.MenuItem()
-            Me.btnPicLoadFile = New System.Windows.Forms.Button()
+            Me.btnMediaLoadFile = New System.Windows.Forms.Button()
             Me.btnLeftScoreColor = New System.Windows.Forms.Button()
             Me.btnRightScoreColor = New System.Windows.Forms.Button()
             Me.TabControl1 = New System.Windows.Forms.TabControl()
@@ -428,6 +428,9 @@ Namespace JANIS
             Me.pnlTextColorLeft2 = New System.Windows.Forms.Panel()
             Me.pnlTextColorLeft1 = New System.Windows.Forms.Panel()
             Me.tpImgSearch = New System.Windows.Forms.TabPage()
+            Me.pnlMediaSearchPreview = New System.Windows.Forms.Panel()
+            Me.picImgSearchPreview = New System.Windows.Forms.PictureBox()
+            Me.AxMediaSearchPreview = New AxWMPLib.AxWindowsMediaPlayer()
             Me.Label32 = New System.Windows.Forms.Label()
             Me.Label21 = New System.Windows.Forms.Label()
             Me.lbMediaResults = New System.Windows.Forms.ListBox()
@@ -436,7 +439,6 @@ Namespace JANIS
             Me.btnImgSearch = New System.Windows.Forms.Button()
             Me.btnSearchMediaAddSlide = New System.Windows.Forms.Button()
             Me.btnSearchMediaShow = New System.Windows.Forms.Button()
-            Me.picImgSearchPreview = New System.Windows.Forms.PictureBox()
             Me.tp5Things = New System.Windows.Forms.TabPage()
             Me.tbCurrentThing = New System.Windows.Forms.TextBox()
             Me.Label12 = New System.Windows.Forms.Label()
@@ -580,13 +582,13 @@ Namespace JANIS
             Me.tbAboutHeader = New System.Windows.Forms.TextBox()
             Me.TextBox2 = New System.Windows.Forms.TextBox()
             Me.SlideTimer = New System.Windows.Forms.Timer(Me.components)
-            Me.pnlDisplayed = New System.Windows.Forms.Panel()
-            Me.lblDisplayedStatus = New System.Windows.Forms.Label()
-            Me.picDisplayed = New System.Windows.Forms.PictureBox()
+            Me.pnlRemoteViewer = New System.Windows.Forms.Panel()
+            Me.cbMuteVideo = New System.Windows.Forms.CheckBox()
+            Me.lblRemoteStatus = New System.Windows.Forms.Label()
+            Me.picRemoteViewer = New System.Windows.Forms.PictureBox()
             Me.CountdownTimer = New System.Windows.Forms.Timer(Me.components)
-            Me.cbExpandpicDisplayed = New System.Windows.Forms.CheckBox()
             Me.lblMediaLibraryCount = New System.Windows.Forms.Label()
-            Me.btnPasteImage = New System.Windows.Forms.Button()
+            Me.btnPasteMedia = New System.Windows.Forms.Button()
             Me.gbCountdownControls = New System.Windows.Forms.GroupBox()
             Me.Label37 = New System.Windows.Forms.Label()
             Me.Label36 = New System.Windows.Forms.Label()
@@ -618,9 +620,8 @@ Namespace JANIS
             Me.tbLeftLoc = New System.Windows.Forms.TextBox()
             Me.Label41 = New System.Windows.Forms.Label()
             Me.tbRightLoc = New System.Windows.Forms.TextBox()
-            Me.grpPasteImage = New System.Windows.Forms.GroupBox()
-            Me.pnlMediaSearchPreview = New System.Windows.Forms.Panel()
-            Me.AxMediaSearchPreview = New AxWMPLib.AxWindowsMediaPlayer()
+            Me.grpInstantMedia = New System.Windows.Forms.GroupBox()
+            Me.VideoEventTimer = New System.Windows.Forms.Timer(Me.components)
             Label19 = New System.Windows.Forms.Label()
             Me.TabControl1.SuspendLayout()
             Me.tpScreenText.SuspendLayout()
@@ -629,7 +630,9 @@ Namespace JANIS
             Me.grpRightColors.SuspendLayout()
             Me.grpLeftColors.SuspendLayout()
             Me.tpImgSearch.SuspendLayout()
+            Me.pnlMediaSearchPreview.SuspendLayout()
             CType(Me.picImgSearchPreview, System.ComponentModel.ISupportInitialize).BeginInit()
+            CType(Me.AxMediaSearchPreview, System.ComponentModel.ISupportInitialize).BeginInit()
             Me.tp5Things.SuspendLayout()
             Me.grpThingsColor.SuspendLayout()
             Me.tpSlides.SuspendLayout()
@@ -646,8 +649,8 @@ Namespace JANIS
             Me.grpDefaultColorsLeft.SuspendLayout()
             CType(Me.nudDefaultSlideDelay, System.ComponentModel.ISupportInitialize).BeginInit()
             Me.tpAbout.SuspendLayout()
-            Me.pnlDisplayed.SuspendLayout()
-            CType(Me.picDisplayed, System.ComponentModel.ISupportInitialize).BeginInit()
+            Me.pnlRemoteViewer.SuspendLayout()
+            CType(Me.picRemoteViewer, System.ComponentModel.ISupportInitialize).BeginInit()
             Me.gbCountdownControls.SuspendLayout()
             CType(Me.nudCountdownWarnSeconds, System.ComponentModel.ISupportInitialize).BeginInit()
             CType(Me.nudCountdownWarnMinutes, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -655,9 +658,7 @@ Namespace JANIS
             CType(Me.nudCountdownSeconds, System.ComponentModel.ISupportInitialize).BeginInit()
             CType(Me.nudCountdownMinutes, System.ComponentModel.ISupportInitialize).BeginInit()
             CType(Me.nudCountdownHours, System.ComponentModel.ISupportInitialize).BeginInit()
-            Me.grpPasteImage.SuspendLayout()
-            Me.pnlMediaSearchPreview.SuspendLayout()
-            CType(Me.AxMediaSearchPreview, System.ComponentModel.ISupportInitialize).BeginInit()
+            Me.grpInstantMedia.SuspendLayout()
             Me.SuspendLayout()
             '
             'Label19
@@ -676,13 +677,14 @@ Namespace JANIS
             Me.btnBlackout.BackColor = System.Drawing.Color.Black
             Me.btnBlackout.FlatAppearance.BorderColor = System.Drawing.SystemColors.Control
             Me.btnBlackout.FlatStyle = System.Windows.Forms.FlatStyle.Popup
-            Me.btnBlackout.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+            Me.btnBlackout.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
             Me.btnBlackout.ForeColor = System.Drawing.Color.White
-            Me.btnBlackout.Location = New System.Drawing.Point(440, 170)
+            Me.btnBlackout.Location = New System.Drawing.Point(76, 180)
             Me.btnBlackout.Name = "btnBlackout"
-            Me.btnBlackout.Size = New System.Drawing.Size(112, 40)
+            Me.btnBlackout.Size = New System.Drawing.Size(160, 65)
             Me.btnBlackout.TabIndex = 19
-            Me.btnBlackout.Text = " &BLACKOUT"
+            Me.btnBlackout.Text = " &BLACKOUT!"
+            Me.ToolTip1.SetToolTip(Me.btnBlackout, "Hotkey: ALT-B")
             Me.btnBlackout.UseVisualStyleBackColor = False
             '
             'tbLeftTeam
@@ -736,7 +738,7 @@ Namespace JANIS
             Me.tbLeftScore.BackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(176, Byte), Integer))
             Me.tbLeftScore.Font = New System.Drawing.Font("Microsoft Sans Serif", 18.0!, System.Drawing.FontStyle.Bold)
             Me.tbLeftScore.ForeColor = System.Drawing.Color.White
-            Me.tbLeftScore.Location = New System.Drawing.Point(390, 2)
+            Me.tbLeftScore.Location = New System.Drawing.Point(386, 2)
             Me.tbLeftScore.MaxLength = 3
             Me.tbLeftScore.Name = "tbLeftScore"
             Me.tbLeftScore.Size = New System.Drawing.Size(70, 35)
@@ -750,7 +752,7 @@ Namespace JANIS
             Me.tbRightScore.BackColor = System.Drawing.Color.Maroon
             Me.tbRightScore.Font = New System.Drawing.Font("Microsoft Sans Serif", 18.0!, System.Drawing.FontStyle.Bold)
             Me.tbRightScore.ForeColor = System.Drawing.Color.White
-            Me.tbRightScore.Location = New System.Drawing.Point(532, 2)
+            Me.tbRightScore.Location = New System.Drawing.Point(542, 2)
             Me.tbRightScore.MaxLength = 3
             Me.tbRightScore.Name = "tbRightScore"
             Me.tbRightScore.Size = New System.Drawing.Size(70, 35)
@@ -759,26 +761,16 @@ Namespace JANIS
             Me.tbRightScore.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
             Me.ToolTip1.SetToolTip(Me.tbRightScore, "Right Team Instant ScoreKeys:" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "F5: +1, F6: -1, F7: +5, F8: -5")
             '
-            'Label3
-            '
-            Me.Label3.BackColor = System.Drawing.Color.Transparent
-            Me.Label3.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!)
-            Me.Label3.Location = New System.Drawing.Point(462, 2)
-            Me.Label3.Name = "Label3"
-            Me.Label3.Size = New System.Drawing.Size(70, 35)
-            Me.Label3.TabIndex = 10
-            Me.Label3.Text = "Score"
-            Me.Label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-            '
             'btnShowScore
             '
             Me.btnShowScore.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.btnShowScore.Location = New System.Drawing.Point(452, 74)
+            Me.btnShowScore.Location = New System.Drawing.Point(459, 2)
             Me.btnShowScore.Name = "btnShowScore"
             Me.btnShowScore.Padding = New System.Windows.Forms.Padding(0, 2, 0, 0)
-            Me.btnShowScore.Size = New System.Drawing.Size(88, 49)
+            Me.btnShowScore.Size = New System.Drawing.Size(78, 35)
             Me.btnShowScore.TabIndex = 18
-            Me.btnShowScore.Text = "SHOW SCORE"
+            Me.btnShowScore.Text = "SCORE!"
+            Me.ToolTip1.SetToolTip(Me.btnShowScore, "Hover over scores to see scoring hot keys")
             '
             'MainMenu1
             '
@@ -845,15 +837,15 @@ Namespace JANIS
             Me.EasterEgg1.Shortcut = System.Windows.Forms.Shortcut.CtrlShiftB
             Me.EasterEgg1.Text = "Bill Loves Betse!"
             '
-            'btnPicLoadFile
+            'btnMediaLoadFile
             '
-            Me.btnPicLoadFile.AllowDrop = True
-            Me.btnPicLoadFile.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!)
-            Me.btnPicLoadFile.Location = New System.Drawing.Point(6, 20)
-            Me.btnPicLoadFile.Name = "btnPicLoadFile"
-            Me.btnPicLoadFile.Size = New System.Drawing.Size(119, 28)
-            Me.btnPicLoadFile.TabIndex = 16
-            Me.btnPicLoadFile.Text = "LOAD FILE"
+            Me.btnMediaLoadFile.AllowDrop = True
+            Me.btnMediaLoadFile.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!)
+            Me.btnMediaLoadFile.Location = New System.Drawing.Point(3, 18)
+            Me.btnMediaLoadFile.Name = "btnMediaLoadFile"
+            Me.btnMediaLoadFile.Size = New System.Drawing.Size(119, 28)
+            Me.btnMediaLoadFile.TabIndex = 16
+            Me.btnMediaLoadFile.Text = "LOAD FILE"
             '
             'btnLeftScoreColor
             '
@@ -1292,6 +1284,36 @@ Namespace JANIS
             Me.tpImgSearch.TabIndex = 6
             Me.tpImgSearch.Text = "Media Search"
             '
+            'pnlMediaSearchPreview
+            '
+            Me.pnlMediaSearchPreview.Controls.Add(Me.picImgSearchPreview)
+            Me.pnlMediaSearchPreview.Controls.Add(Me.AxMediaSearchPreview)
+            Me.pnlMediaSearchPreview.Location = New System.Drawing.Point(316, 24)
+            Me.pnlMediaSearchPreview.Name = "pnlMediaSearchPreview"
+            Me.pnlMediaSearchPreview.Size = New System.Drawing.Size(240, 135)
+            Me.pnlMediaSearchPreview.TabIndex = 96
+            '
+            'picImgSearchPreview
+            '
+            Me.picImgSearchPreview.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+            Me.picImgSearchPreview.Location = New System.Drawing.Point(0, 0)
+            Me.picImgSearchPreview.Name = "picImgSearchPreview"
+            Me.picImgSearchPreview.Size = New System.Drawing.Size(240, 135)
+            Me.picImgSearchPreview.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
+            Me.picImgSearchPreview.TabIndex = 69
+            Me.picImgSearchPreview.TabStop = False
+            '
+            'AxMediaSearchPreview
+            '
+            Me.AxMediaSearchPreview.Enabled = True
+            Me.AxMediaSearchPreview.Location = New System.Drawing.Point(0, 0)
+            Me.AxMediaSearchPreview.Name = "AxMediaSearchPreview"
+            Me.AxMediaSearchPreview.OcxState = CType(resources.GetObject("AxMediaSearchPreview.OcxState"), System.Windows.Forms.AxHost.State)
+            Me.AxMediaSearchPreview.Size = New System.Drawing.Size(240, 135)
+            Me.AxMediaSearchPreview.TabIndex = 70
+            Me.AxMediaSearchPreview.TabStop = False
+            Me.AxMediaSearchPreview.Visible = False
+            '
             'Label32
             '
             Me.Label32.BackColor = System.Drawing.Color.LemonChiffon
@@ -1334,6 +1356,7 @@ Namespace JANIS
             Me.comboImgSearchText.Name = "comboImgSearchText"
             Me.comboImgSearchText.Size = New System.Drawing.Size(293, 26)
             Me.comboImgSearchText.TabIndex = 81
+            Me.ToolTip1.SetToolTip(Me.comboImgSearchText, "Use * for wildcard")
             '
             'Label20
             '
@@ -1343,7 +1366,7 @@ Namespace JANIS
             Me.Label20.Name = "Label20"
             Me.Label20.Size = New System.Drawing.Size(296, 36)
             Me.Label20.TabIndex = 80
-            Me.Label20.Text = "Search for text in the filenames in the Image Search Library (see Preferences):"
+            Me.Label20.Text = "Media Library text search" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "(manage in Preferences):"
             Me.Label20.TextAlign = System.Drawing.ContentAlignment.BottomCenter
             '
             'btnImgSearch
@@ -1373,16 +1396,6 @@ Namespace JANIS
             Me.btnSearchMediaShow.Size = New System.Drawing.Size(134, 34)
             Me.btnSearchMediaShow.TabIndex = 92
             Me.btnSearchMediaShow.Text = "DISPLAY MEDIA"
-            '
-            'picImgSearchPreview
-            '
-            Me.picImgSearchPreview.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
-            Me.picImgSearchPreview.Location = New System.Drawing.Point(0, 0)
-            Me.picImgSearchPreview.Name = "picImgSearchPreview"
-            Me.picImgSearchPreview.Size = New System.Drawing.Size(240, 135)
-            Me.picImgSearchPreview.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
-            Me.picImgSearchPreview.TabIndex = 69
-            Me.picImgSearchPreview.TabStop = False
             '
             'tp5Things
             '
@@ -2971,8 +2984,8 @@ Namespace JANIS
             Me.tbAboutHeader.Size = New System.Drawing.Size(972, 105)
             Me.tbAboutHeader.TabIndex = 230
             Me.tbAboutHeader.TabStop = False
-            Me.tbAboutHeader.Text = "JANIS" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Version 4.0.2 Released May 3, 2025" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "by Bill Cernansky (bill@easybeing.com)" &
-    "" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "© 2004-2025 Easy Being Productions"
+            Me.tbAboutHeader.Text = "JANIS v4.0.2" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Released May 3, 2025" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "by Bill Cernansky (bill@easybeing.com)" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "© 200" &
+    "4-2025 Easy Being Productions"
             Me.tbAboutHeader.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
             '
             'TextBox2
@@ -2995,52 +3008,61 @@ Namespace JANIS
             '
             Me.SlideTimer.Interval = 8000
             '
-            'pnlDisplayed
+            'pnlRemoteViewer
             '
-            Me.pnlDisplayed.BackColor = System.Drawing.Color.Black
-            Me.pnlDisplayed.Controls.Add(Me.lblDisplayedStatus)
-            Me.pnlDisplayed.Controls.Add(Me.picDisplayed)
-            Me.pnlDisplayed.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.pnlDisplayed.Location = New System.Drawing.Point(4, 57)
-            Me.pnlDisplayed.Name = "pnlDisplayed"
-            Me.pnlDisplayed.Size = New System.Drawing.Size(272, 153)
-            Me.pnlDisplayed.TabIndex = 14
+            Me.pnlRemoteViewer.BackColor = System.Drawing.Color.Black
+            Me.pnlRemoteViewer.Controls.Add(Me.cbMuteVideo)
+            Me.pnlRemoteViewer.Controls.Add(Me.lblRemoteStatus)
+            Me.pnlRemoteViewer.Controls.Add(Me.picRemoteViewer)
+            Me.pnlRemoteViewer.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+            Me.pnlRemoteViewer.Location = New System.Drawing.Point(316, 56)
+            Me.pnlRemoteViewer.Name = "pnlRemoteViewer"
+            Me.pnlRemoteViewer.Size = New System.Drawing.Size(364, 204)
+            Me.pnlRemoteViewer.TabIndex = 14
             '
-            'lblDisplayedStatus
+            'cbMuteVideo
             '
-            Me.lblDisplayedStatus.BackColor = System.Drawing.Color.DarkGray
-            Me.lblDisplayedStatus.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.lblDisplayedStatus.Location = New System.Drawing.Point(61, 10)
-            Me.lblDisplayedStatus.Name = "lblDisplayedStatus"
-            Me.lblDisplayedStatus.Size = New System.Drawing.Size(150, 20)
-            Me.lblDisplayedStatus.TabIndex = 29
-            Me.lblDisplayedStatus.Text = "Currently Displayed"
-            Me.lblDisplayedStatus.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+            Me.cbMuteVideo.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+            Me.cbMuteVideo.Appearance = System.Windows.Forms.Appearance.Button
+            Me.cbMuteVideo.BackgroundImage = Global.JANIS.My.Resources.Resources.sound_on_green
+            Me.cbMuteVideo.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
+            Me.cbMuteVideo.CheckAlign = System.Drawing.ContentAlignment.MiddleRight
+            Me.cbMuteVideo.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+            Me.cbMuteVideo.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+            Me.cbMuteVideo.Location = New System.Drawing.Point(0, 173)
+            Me.cbMuteVideo.Name = "cbMuteVideo"
+            Me.cbMuteVideo.Size = New System.Drawing.Size(30, 30)
+            Me.cbMuteVideo.TabIndex = 48
+            Me.ToolTip1.SetToolTip(Me.cbMuteVideo, "Video Sound is ON")
             '
-            'picDisplayed
+            'lblRemoteStatus
             '
-            Me.picDisplayed.BackColor = System.Drawing.Color.Transparent
-            Me.picDisplayed.ImageLocation = ""
-            Me.picDisplayed.Location = New System.Drawing.Point(0, 0)
-            Me.picDisplayed.Name = "picDisplayed"
-            Me.picDisplayed.Size = New System.Drawing.Size(272, 153)
-            Me.picDisplayed.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
-            Me.picDisplayed.TabIndex = 28
-            Me.picDisplayed.TabStop = False
-            Me.ToolTip1.SetToolTip(Me.picDisplayed, "Drag images here from a browser to display instantly")
+            Me.lblRemoteStatus.BackColor = System.Drawing.Color.DarkGray
+            Me.lblRemoteStatus.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+            Me.lblRemoteStatus.Location = New System.Drawing.Point(107, 10)
+            Me.lblRemoteStatus.Name = "lblRemoteStatus"
+            Me.lblRemoteStatus.Size = New System.Drawing.Size(150, 20)
+            Me.lblRemoteStatus.TabIndex = 29
+            Me.lblRemoteStatus.Text = "Audience Display"
+            Me.lblRemoteStatus.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+            Me.ToolTip1.SetToolTip(Me.lblRemoteStatus, "Video playback mirrors 1x/second")
+            Me.lblRemoteStatus.UseWaitCursor = True
+            '
+            'picRemoteViewer
+            '
+            Me.picRemoteViewer.BackColor = System.Drawing.Color.Transparent
+            Me.picRemoteViewer.ImageLocation = ""
+            Me.picRemoteViewer.Location = New System.Drawing.Point(0, 0)
+            Me.picRemoteViewer.Name = "picRemoteViewer"
+            Me.picRemoteViewer.Size = New System.Drawing.Size(364, 204)
+            Me.picRemoteViewer.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
+            Me.picRemoteViewer.TabIndex = 28
+            Me.picRemoteViewer.TabStop = False
+            Me.ToolTip1.SetToolTip(Me.picRemoteViewer, "Drag images here from a browser to display instantly")
             '
             'CountdownTimer
             '
             Me.CountdownTimer.Interval = 10
-            '
-            'cbExpandpicDisplayed
-            '
-            Me.cbExpandpicDisplayed.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.cbExpandpicDisplayed.Location = New System.Drawing.Point(282, 98)
-            Me.cbExpandpicDisplayed.Name = "cbExpandpicDisplayed"
-            Me.cbExpandpicDisplayed.Size = New System.Drawing.Size(84, 24)
-            Me.cbExpandpicDisplayed.TabIndex = 14
-            Me.cbExpandpicDisplayed.Text = "Stretch"
             '
             'lblMediaLibraryCount
             '
@@ -3057,16 +3079,16 @@ Namespace JANIS
         " added new images while JANIS is running.")
             Me.lblMediaLibraryCount.UseMnemonic = False
             '
-            'btnPasteImage
+            'btnPasteMedia
             '
-            Me.btnPasteImage.AllowDrop = True
-            Me.btnPasteImage.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!)
-            Me.btnPasteImage.Location = New System.Drawing.Point(141, 20)
-            Me.btnPasteImage.Name = "btnPasteImage"
-            Me.btnPasteImage.Size = New System.Drawing.Size(124, 28)
-            Me.btnPasteImage.TabIndex = 17
-            Me.btnPasteImage.Text = "PASTE CLIPBOARD"
-            Me.ToolTip1.SetToolTip(Me.btnPasteImage, "Copy image from browser, etc. and paste here to display.")
+            Me.btnPasteMedia.AllowDrop = True
+            Me.btnPasteMedia.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!)
+            Me.btnPasteMedia.Location = New System.Drawing.Point(3, 50)
+            Me.btnPasteMedia.Name = "btnPasteMedia"
+            Me.btnPasteMedia.Size = New System.Drawing.Size(119, 28)
+            Me.btnPasteMedia.TabIndex = 17
+            Me.btnPasteMedia.Text = "PASTE CLIPBOARD"
+            Me.ToolTip1.SetToolTip(Me.btnPasteMedia, "Copy image from browser, etc. and paste here to display.")
             '
             'gbCountdownControls
             '
@@ -3125,7 +3147,7 @@ Namespace JANIS
             '
             'Label34
             '
-            Me.Label34.BackColor = System.Drawing.Color.Red
+            Me.Label34.BackColor = System.Drawing.Color.LightCoral
             Me.Label34.Font = New System.Drawing.Font("Arial", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
             Me.Label34.ForeColor = System.Drawing.Color.Black
             Me.Label34.Location = New System.Drawing.Point(28, 70)
@@ -3432,53 +3454,37 @@ Namespace JANIS
             Me.tbRightLoc.TabIndex = 6
             Me.tbRightLoc.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
             '
-            'grpPasteImage
+            'grpInstantMedia
             '
-            Me.grpPasteImage.Controls.Add(Me.btnPasteImage)
-            Me.grpPasteImage.Controls.Add(Me.btnPicLoadFile)
-            Me.grpPasteImage.Cursor = System.Windows.Forms.Cursors.Arrow
-            Me.grpPasteImage.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.grpPasteImage.Location = New System.Drawing.Point(5, 212)
-            Me.grpPasteImage.Name = "grpPasteImage"
-            Me.grpPasteImage.Size = New System.Drawing.Size(271, 52)
-            Me.grpPasteImage.TabIndex = 15
-            Me.grpPasteImage.TabStop = False
-            Me.grpPasteImage.Text = "Choose Image"
+            Me.grpInstantMedia.Controls.Add(Me.btnPasteMedia)
+            Me.grpInstantMedia.Controls.Add(Me.btnMediaLoadFile)
+            Me.grpInstantMedia.Cursor = System.Windows.Forms.Cursors.Arrow
+            Me.grpInstantMedia.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+            Me.grpInstantMedia.Location = New System.Drawing.Point(95, 66)
+            Me.grpInstantMedia.Name = "grpInstantMedia"
+            Me.grpInstantMedia.RightToLeft = System.Windows.Forms.RightToLeft.Yes
+            Me.grpInstantMedia.Size = New System.Drawing.Size(126, 82)
+            Me.grpInstantMedia.TabIndex = 15
+            Me.grpInstantMedia.TabStop = False
+            Me.grpInstantMedia.Text = "Images && Videos"
             '
-            'pnlMediaSearchPreview
+            'VideoEventTimer
             '
-            Me.pnlMediaSearchPreview.Controls.Add(Me.picImgSearchPreview)
-            Me.pnlMediaSearchPreview.Controls.Add(Me.AxMediaSearchPreview)
-            Me.pnlMediaSearchPreview.Location = New System.Drawing.Point(316, 24)
-            Me.pnlMediaSearchPreview.Name = "pnlMediaSearchPreview"
-            Me.pnlMediaSearchPreview.Size = New System.Drawing.Size(240, 135)
-            Me.pnlMediaSearchPreview.TabIndex = 96
-            '
-            'AxMediaSearchPreview
-            '
-            Me.AxMediaSearchPreview.Enabled = True
-            Me.AxMediaSearchPreview.Location = New System.Drawing.Point(0, 0)
-            Me.AxMediaSearchPreview.Name = "AxMediaSearchPreview"
-            Me.AxMediaSearchPreview.OcxState = CType(resources.GetObject("AxMediaSearchPreview.OcxState"), System.Windows.Forms.AxHost.State)
-            Me.AxMediaSearchPreview.Size = New System.Drawing.Size(240, 135)
-            Me.AxMediaSearchPreview.TabIndex = 70
-            Me.AxMediaSearchPreview.TabStop = False
-            Me.AxMediaSearchPreview.Visible = False
+            Me.VideoEventTimer.Interval = 1000
             '
             'fmMain
             '
             Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None
-            Me.ClientSize = New System.Drawing.Size(996, 702)
+            Me.ClientSize = New System.Drawing.Size(996, 699)
             Me.Controls.Add(Me.tbRightLoc)
             Me.Controls.Add(Me.Label41)
             Me.Controls.Add(Me.tbLeftLoc)
             Me.Controls.Add(Me.Label15)
             Me.Controls.Add(Me.btnReIndexImgLib)
             Me.Controls.Add(Me.gbCountdownControls)
-            Me.Controls.Add(Me.grpPasteImage)
+            Me.Controls.Add(Me.grpInstantMedia)
             Me.Controls.Add(Me.lblMediaLibraryCount)
-            Me.Controls.Add(Me.cbExpandpicDisplayed)
-            Me.Controls.Add(Me.pnlDisplayed)
+            Me.Controls.Add(Me.pnlRemoteViewer)
             Me.Controls.Add(Me.btnHot10)
             Me.Controls.Add(Me.btnHot9)
             Me.Controls.Add(Me.btnHot8)
@@ -3494,7 +3500,6 @@ Namespace JANIS
             Me.Controls.Add(Me.btnRightScoreColor)
             Me.Controls.Add(Me.btnLeftScoreColor)
             Me.Controls.Add(Me.btnShowScore)
-            Me.Controls.Add(Me.Label3)
             Me.Controls.Add(Me.tbRightScore)
             Me.Controls.Add(Me.tbLeftScore)
             Me.Controls.Add(Me.Label2)
@@ -3506,7 +3511,7 @@ Namespace JANIS
             Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
             Me.Location = New System.Drawing.Point(220, 30)
             Me.MaximizeBox = False
-            Me.MaximumSize = New System.Drawing.Size(1012, 762)
+            Me.MaximumSize = New System.Drawing.Size(1012, 738)
             Me.Menu = Me.MainMenu1
             Me.MinimumSize = New System.Drawing.Size(1012, 738)
             Me.Name = "fmMain"
@@ -3521,7 +3526,9 @@ Namespace JANIS
             Me.grpRightColors.ResumeLayout(False)
             Me.grpLeftColors.ResumeLayout(False)
             Me.tpImgSearch.ResumeLayout(False)
+            Me.pnlMediaSearchPreview.ResumeLayout(False)
             CType(Me.picImgSearchPreview, System.ComponentModel.ISupportInitialize).EndInit()
+            CType(Me.AxMediaSearchPreview, System.ComponentModel.ISupportInitialize).EndInit()
             Me.tp5Things.ResumeLayout(False)
             Me.tp5Things.PerformLayout()
             Me.grpThingsColor.ResumeLayout(False)
@@ -3542,8 +3549,8 @@ Namespace JANIS
             CType(Me.nudDefaultSlideDelay, System.ComponentModel.ISupportInitialize).EndInit()
             Me.tpAbout.ResumeLayout(False)
             Me.tpAbout.PerformLayout()
-            Me.pnlDisplayed.ResumeLayout(False)
-            CType(Me.picDisplayed, System.ComponentModel.ISupportInitialize).EndInit()
+            Me.pnlRemoteViewer.ResumeLayout(False)
+            CType(Me.picRemoteViewer, System.ComponentModel.ISupportInitialize).EndInit()
             Me.gbCountdownControls.ResumeLayout(False)
             CType(Me.nudCountdownWarnSeconds, System.ComponentModel.ISupportInitialize).EndInit()
             CType(Me.nudCountdownWarnMinutes, System.ComponentModel.ISupportInitialize).EndInit()
@@ -3551,9 +3558,7 @@ Namespace JANIS
             CType(Me.nudCountdownSeconds, System.ComponentModel.ISupportInitialize).EndInit()
             CType(Me.nudCountdownMinutes, System.ComponentModel.ISupportInitialize).EndInit()
             CType(Me.nudCountdownHours, System.ComponentModel.ISupportInitialize).EndInit()
-            Me.grpPasteImage.ResumeLayout(False)
-            Me.pnlMediaSearchPreview.ResumeLayout(False)
-            CType(Me.AxMediaSearchPreview, System.ComponentModel.ISupportInitialize).EndInit()
+            Me.grpInstantMedia.ResumeLayout(False)
             Me.ResumeLayout(False)
             Me.PerformLayout()
 
@@ -3573,6 +3578,7 @@ Namespace JANIS
                 Me.LS = New fmScreen()
                 '* Save the label message heights because the timer screws around with them and needs to restore them
                 Me.LS.lblMsg.Tag = Me.LS.lblMsg.Height
+                Me.LS.SetVideoMute(Me.cbMuteVideo.Checked)
 
                 Me.VerifyInfrastructure()
 
@@ -3590,8 +3596,8 @@ Namespace JANIS
                 If Not (Me.cbDisplayDefaultImage.Checked Or Me.cbPlaySlidesAtStart.Checked) Then
                     '* Me.DisplayTextScreen(Me.LS, Me.tbLeftText.Text, Me.tbLeftText.BackColor, CSng(Me.tbLeftFontSize.Text) * Me.DisplayFontRatio)  'For debugging
                     Me.LS.Blackout()
-                    Me.picDisplayed.ImageLocation = ""
-                    Me.picDisplayed.Image = Nothing
+                    Me.picRemoteViewer.ImageLocation = ""
+                    Me.picRemoteViewer.Image = Nothing
                 End If
 
                 '* Show the audience display early, so loading image library doesn't delay its appearance
@@ -3663,9 +3669,13 @@ Namespace JANIS
 
             Me.HotButtonsChanged = False
             Me.cbHBActive.Checked = True    '* default to "can see"
-            Me.picDisplayed.AllowDrop = True
+            Me.picRemoteViewer.AllowDrop = True
             Me.PreviousSelectedTab = TabControl1.SelectedTab
 
+            Me.cbMuteVideo.Checked = False
+            Me.cbMuteVideo.BackgroundImage = My.Resources.sound_on_green
+
+            '* Search preview tab media player settings
             With Me.AxMediaSearchPreview
                 .Ctlenabled = False
                 .uiMode = "none"
@@ -3723,14 +3733,14 @@ Namespace JANIS
             End If
         End Sub
 
-        Private Sub ShowScreenPreview()
+        Private Sub ShowRemoteView()
             Application.DoEvents()
             Dim img As Bitmap = LS.CaptureWindowImage()
-            Me.picDisplayed.Image = img
+            Me.picRemoteViewer.Image = img
         End Sub
 
         Private Sub btnShowScore_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnShowScore.Click
-            Me.picDisplayed.Image = Nothing
+            Me.picRemoteViewer.Image = Nothing
             Me.DisplayScore()
         End Sub
         Private Sub btnLeftScoreColor_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnLeftScoreColor.Click
@@ -3835,8 +3845,8 @@ Namespace JANIS
 
             '* Shut them down, Artoo! Shut them all down!
             Me.LS.Blackout()
-            Me.picDisplayed.ImageLocation = ""
-            Me.picDisplayed.Image = Nothing
+            Me.picRemoteViewer.ImageLocation = ""
+            Me.picRemoteViewer.Image = Nothing
         End Sub
 
         Private Sub tbFontSize_KeyUp(ByVal sender As System.Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles tbLeftFontSize.KeyUp, tbRightFontSize.KeyUp, tbDefaultFontSize.KeyUp
@@ -3878,23 +3888,21 @@ Namespace JANIS
                 Me.TestMode = True
                 Me.DisplayModeAdjustment = sRatio * sRatio  '* = w x h
 
-                Me.LS.Left = Me.Left
-                Me.LS.Top = Me.Height + Me.Top
+                Me.LS.SetLeft(Me.Left)
+                Me.LS.SetTop(Me.Height + Me.Top)
                 Me.LS.AdjustSize(sRatio)
                 '* Following is only for Bill to use at home in home testing, when the 3 lines above are commented out
-                'Me.LS.Left = 0
+                'Me.LS.SetLeft(0)
 
                 Me.tbLeftText.Text = "TEST MODE"
                 Me.Text = Me.Text & "   **** TEST MODE ****"
 
                 '* ONLY FOR TESTING MONITOR DISCONNECTION
-                'Me.LS.Left = SystemInformation.PrimaryMonitorSize.Width  'Force the window onto screen 2
-                'Me.LS.Top = 0
+                'Me.LS.SetLeft(SystemInformation.PrimaryMonitorSize.Width)  'Force the window onto screen 2
+                'Me.LS.SetTop(0)
             Else  ' Full blown 2-monitor mode (control + display)
                 '* Dim Scrs As Screen() = System.Windows.Forms.Screen.AllScreens
-                Me.LS.Left = SystemInformation.PrimaryMonitorSize.Width  'Don't really need to set this, but I'm doing it anyway
-                ' TESTING ONLY Me.LS.Left = Me.Left + Me.Width + 1
-                ' Me.tbLeftText.Text = "Arena Mode"
+                Me.LS.SetLeft(SystemInformation.PrimaryMonitorSize.Width)
                 Me.Text = Me.Text & " - Arena Mode"
             End If
             ' Me.tbLeftText.Text = Me.tbLeftText.Text & EOL & EOL & (SystemInformation.MonitorCount - 1).ToString & " audience displays found"
@@ -3907,23 +3915,23 @@ Namespace JANIS
             Me.StopSlideShow()
 
             '* Blank out the corresponding graphics preview
-            Me.picDisplayed.Image = Nothing
+            Me.picRemoteViewer.Image = Nothing
 
             If TestMode Then fontsize = fontsize * 7.2
             Scr.SetTextShadows(cbShadowsEnabled.Checked)
             Scr.ShowText(s, hue, CSng(Me.DisplayToEntryFontRatio * fontsize / Me.DisplayModeAdjustment))
-            Me.ShowScreenPreview()
+            Me.ShowRemoteView()
         End Sub
 
         Private Sub DisplayScore()
             '* First, stop the slideshow if it's running.
             Me.StopSlideShow()
-            Me.picDisplayed.ImageLocation = ""
-            Me.picDisplayed.Image = Nothing
+            Me.picRemoteViewer.ImageLocation = ""
+            Me.picRemoteViewer.Image = Nothing
             If Me.tbLeftScore.Text = "" Then Me.tbLeftScore.Text = "0"
             If Me.tbRightScore.Text = "" Then Me.tbRightScore.Text = "0"
             Me.LS.ShowScore(Me.tbLeftScore.Text, Me.tbLeftLoc.Text, Me.tbLeftTeam.Text, Me.tbRightScore.Text, Me.tbRightLoc.Text, Me.tbRightTeam.Text)
-            Me.ShowScreenPreview()
+            Me.ShowRemoteView()
         End Sub
 
         Private Sub AddScore(ByVal Side As String, ByVal Points As Integer)
@@ -4022,48 +4030,40 @@ Namespace JANIS
         End Sub
 
 
-        Private Sub PreviewImage(ByRef picture As PictureBox, ByRef Img As Image, ByVal Expand As Boolean)
+        Private Sub AssignImageToPictureBox(ByRef picture As PictureBox, ByRef Img As Image)
             If Img Is Nothing Then Exit Sub
 
             'picture.Visible = False
-            Me.pnlDisplayed.BackColor = System.Drawing.Color.Black
-            If Expand Then
-                picture.SizeMode = PictureBoxSizeMode.StretchImage
-            Else
-                picture.SizeMode = PictureBoxSizeMode.Zoom
-            End If
+            Me.pnlRemoteViewer.BackColor = System.Drawing.Color.Black
 
+            picture.SizeMode = PictureBoxSizeMode.Zoom  '* fit to screen, keep aspect ratio
             picture.Image = Img
             picture.Visible = True
         End Sub
 
         Private Sub Present_Image(ByRef img As Image, Optional ByVal KillSlideShow As Boolean = True)
-            '* Display this image to the display and preview.
+            '* Display this image to the display and also the operator remote view box.
 
             If img IsNot Nothing Then
                 If KillSlideShow Then Me.StopSlideShow()
 
                 '* Show displays first for speed.
-                Me.LS.ShowImage(img, Me.cbExpandpicDisplayed.Checked)
+                Me.LS.ShowImage(img)
                 If Not SLIDES_WHAMMY Then
-                    Me.PreviewImage(Me.picDisplayed, img, Me.cbExpandpicDisplayed.Checked)
+                    '* Let the operator see what's showing remotely
+                    Me.AssignImageToPictureBox(Me.picRemoteViewer, img)
                 End If
 
                 Me.AllScreensToFront()
             End If
         End Sub
 
-        Private Sub DisplayRawImage(ByRef img As Image, ByVal expand As Boolean)
+        Private Sub DisplayRawImage(ByRef img As Image)
             If img Is Nothing Then Exit Sub
-            Me.LS.ShowImage(img, expand)
+            Me.LS.ShowImage(img)
         End Sub
 
         Private Sub DisplayImageFile(ByVal fnam As String, Optional ByVal KillSlideShow As Boolean = True)
-            ''* If this is a web image, call with filename.
-            'If fnam Like "http:*" Then
-            '    Me.LS.ShowURLImage(fnam)
-            '    Me.PreviewURL(Me.picDisplayed, fnam)
-            'Else
             Dim img As Image
             Try
                 img = Image.FromFile(fnam)
@@ -4078,19 +4078,26 @@ Namespace JANIS
         Private Function SelectImageFilename() As String
             '* Returns blank if you don't pick a legal file
             Dim fn As String = ""
+            Dim fileFilter As String = ""
+            For Each ext As String In ImageFileExtensions
+                fileFilter &= "*." & ext & ";"
+            Next
+            '* trim off the last semicolon
+            If fileFilter.EndsWith(";") Then fileFilter = fileFilter.Substring(0, fileFilter.Length - 1)
+
             Dim [of] As New OpenFileDialog()
             With [of]
-                .Filter = "Image Files(*.BMP;*.GIF;*.JPG;*.PNG;*.WMF)|*.BMP;*.GIF;*.JPG;*.PNG;*.WMF"
+                .Filter = "Image Files(" & fileFilter & ")|" & fileFilter
                 .InitialDirectory = Me.tbDefaultImageDir.Text
                 If .ShowDialog(Me) = DialogResult.OK Then
                     fn = .FileName
                 End If
-                .Dispose()        '* We made a new one, we have to dispose of it.
+                .Dispose()        '* We made a new file object, we have to dispose of it.
             End With
             Return fn
         End Function
 
-        Private Sub btnPicture_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnPicLoadFile.Click
+        Private Sub btnPicture_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnMediaLoadFile.Click
             Dim fn As String = SelectImageFilename()
             If fn <> "" Then
                 Dim img As Image
@@ -4104,17 +4111,17 @@ Namespace JANIS
             End If
         End Sub
 
-        Private Sub btnPasteImage_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnPasteImage.Click
+        Private Sub btnPasteMedia_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnPasteMedia.Click
             '* If there's a bitmap in the clipboard, paste it to the screens.
             If Clipboard.GetDataObject.GetDataPresent(GetType(System.Drawing.Bitmap)) Then
                 Dim img As Image = CType(Clipboard.GetDataObject.GetData(GetType(System.Drawing.Bitmap)), Bitmap)
                 Me.Present_Image(img)
             Else
-                MessageBox.Show(Me, "There is no usable image in the clipboard. Please copy an image to the clipboard and try again.", "Can't Paste Image")
+                MessageBox.Show(Me, "There Is no usable image In the clipboard. Please copy an image To the clipboard And Try again.", "Can't Paste Image")
             End If
         End Sub
 
-        Private Sub picDisplay_DragDrop(ByVal sender As Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles btnPicLoadFile.DragDrop, btnPasteImage.DragDrop, picDisplayed.DragDrop
+        Private Sub picDisplay_DragDrop(ByVal sender As Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles btnMediaLoadFile.DragDrop, btnPasteMedia.DragDrop, picRemoteViewer.DragDrop
             '* Hopefully, we can drag-drop an image from an external source onto one of these picture boxes and have it
             '* display there. This works really well with Firefox.
             Dim img As Image
@@ -4134,7 +4141,7 @@ Namespace JANIS
 
         End Sub
 
-        Private Sub picDisplay_DragEnter(ByVal sender As Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles picDisplayed.DragEnter, btnPicLoadFile.DragEnter, btnPasteImage.DragEnter
+        Private Sub picDisplay_DragEnter(ByVal sender As Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles picRemoteViewer.DragEnter, btnMediaLoadFile.DragEnter, btnPasteMedia.DragEnter
             '* This routine says that the pic preview boxes and "Display" buttons
             '* can accept dropped string copy only.
             If (e.Data.GetDataPresent(DataFormats.Dib) Or e.Data.GetDataPresent(DataFormats.Bitmap)) Then
@@ -4157,9 +4164,9 @@ Namespace JANIS
                 Exit Sub
             End If
 
-            '* Add an item to the combobox, removing the oldest one if we need the room.
-            '* If it's a match of a previous one, don't add anything.
-            '* Everything is stored and compared as lowercase for exact matching.
+            '* Add an item to the combobox dropdown list, removing the oldest one if we need the room.
+            '* If it's a match of a previous one, just move it to the top.
+            '* Everything is stored and compared as lowercase for easy matching.
             Dim CompareText As String = Me.comboImgSearchText.Text.ToLower
             With Me.comboImgSearchText
                 Dim OrigText As String = .Text
@@ -4207,18 +4214,56 @@ Namespace JANIS
             Me.AcceptButton = Nothing
         End Sub
 
-        Private Sub btnSearchMediaShow_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnSearchMediaShow.Click, lbMediaResults.DoubleClick
-            If Me.picImgSearchPreview.Image IsNot Nothing Then
-                Me.Present_Image(Me.picImgSearchPreview.Image)
+        Private Async Sub btnSearchMediaShow_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnSearchMediaShow.Click, lbMediaResults.DoubleClick
+            If Me.lbMediaResults.SelectedItem Is Nothing Then Exit Sub
+
+            If IsVideoFile(Me.lbMediaResults.SelectedItem) Then
+                Await Task.Delay(100)  '* Avoid failure if double-clicked too fast after selecting
+                Me.LaunchVideo(Me.lbMediaResults.SelectedItem)
+                Me.AssignImageToPictureBox(picRemoteViewer, Nothing)
+            Else '* is image file
+                If Me.picImgSearchPreview.Image IsNot Nothing Then
+                    Me.Present_Image(Me.picImgSearchPreview.Image)
+                End If
             End If
         End Sub
-        'Private Sub lbMediaResults_DoubleClick(sender As Object, e As EventArgs) Handles lbMediaResults.DoubleClick
-
-        'End Sub
-
 
         Private Sub btnSearchMediaAddSlide_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnSearchMediaAddSlide.Click
             Me.lbSlideList.Items.Add(Me.lbMediaResults.SelectedItem)
+            'MsgBox("Media player thinks its mute value is " & Me.LS.GetVideoMute().ToString & " and volume is " & Me.LS.AxMediaPlayer.settings.volume)
+        End Sub
+
+        Private Sub LaunchVideo(ByVal fnam As String)
+            Me.LS.SetVideoMute(cbMuteVideo.Checked)  '* Have to make sure mute and volume are set every time
+            Dim resultMessage As String = Me.LS.LaunchVideo(fnam)
+
+            If resultMessage IsNot Nothing Then
+                MsgBox(resultMessage, MsgBoxStyle.Exclamation, "Video Playback Error")
+            Else
+                Me.picRemoteViewer.Image = Nothing
+                Me.VideoEventTimer.Enabled = True
+            End If
+            Me.AllScreensToFront()
+        End Sub
+        Private Sub VideoEventTimer_Tick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles VideoEventTimer.Tick
+            If Me.LS.IsVideoPlaying() Then
+                '* Update remoteviewer with snapshot (this is once a second, currently)
+                Me.ShowRemoteView()
+            Else
+                Me.VideoEventTimer.Enabled = False
+            End If
+        End Sub
+        'Private Sub cbMuteVideo_CheckedChanged(sender As Object, e As EventArgs) Handles cbMuteVideo.CheckedChanged
+        'End Sub
+        Private Sub cbMuteVideo_CheckedChanged(sender As Object, e As EventArgs) Handles cbMuteVideo.CheckedChanged
+            If cbMuteVideo.Checked Then
+                cbMuteVideo.BackgroundImage = My.Resources.sound_off_red
+                ToolTip1.SetToolTip(cbMuteVideo, "Video sound is MUTED")
+            Else
+                cbMuteVideo.BackgroundImage = My.Resources.sound_on_green
+                ToolTip1.SetToolTip(cbMuteVideo, "Video sound is ON")
+            End If
+            Me.LS.SetVideoMute(cbMuteVideo.Checked)
         End Sub
 
         Private Sub PreviewSearchMedia()
@@ -4229,14 +4274,14 @@ Namespace JANIS
                     StopPreviewSearchVideo()  '* No-op if not playing
 
                     If IsVideoFile(Me.lbMediaResults.SelectedItem) Then
-                        PlayPreviewSearchVideo(Me.lbMediaResults.SelectedItem)
+                        Me.PlayPreviewSearchVideo(Me.lbMediaResults.SelectedItem)
                     Else
-                        ShowPreviewSearchImage(Me.lbMediaResults.SelectedItem)
+                        Me.ShowPreviewSearchImage(Me.lbMediaResults.SelectedItem)
                     End If
                 End If
             Else
                 Me.picImgSearchPreview.Image = Nothing
-                StopPreviewSearchVideo()
+                Me.StopPreviewSearchVideo()
                 PrevSelect = ""
             End If
         End Sub
@@ -4443,8 +4488,6 @@ Namespace JANIS
             '* If the extension is in the global image extension list, return true.
             Return (Array.IndexOf(Me.MediaFileExtensions, ext) >= 0)
         End Function
-
-
 
 
         '=================================================================================================
@@ -4941,7 +4984,7 @@ Namespace JANIS
             Me.SlideTimer.Stop()
             Me.SlidesStatus = SLIDES_STOPPED
             If WhammyWasActive Then
-                Me.lblDisplayedStatus.Text = "Currently Displayed"
+                Me.lblRemoteStatus.Text = "Currently Displayed"
                 Me.DisplayImageFile(Me.lbSlideList.SelectedItem, False)
             End If
             Me.SetPauseButtonColor(False)
@@ -4988,8 +5031,8 @@ Namespace JANIS
                         Me.StopSlideShow()
                         Return
                     ElseIf Me.SlidesStatus = SLIDES_WHAMMY Then
-                        Me.DisplayRawImage(Me.BufferedSlide, False)   '* maintain ratio for all images during whammy, for smoothness/speed
-                        Me.PreSelectRandomSlide()                        '* Set Me.BufferedSlide to a random slide
+                        Me.DisplayRawImage(Me.BufferedSlide)
+                        Me.PreSelectRandomSlide()                    '* Set Me.BufferedSlide to a random slide
                     Else
                         If .SelectedIndex < (.Items.Count - 1) Then
                             .SelectedIndex += 1
@@ -5066,7 +5109,7 @@ Namespace JANIS
             If Me.lbSlideList.Items.Count < 1 Then Return
 
             'If Me.SlidesStatus <> SLIDES_STOPPED Then Me.StopSlideShow()
-            Me.lblDisplayedStatus.Text = "WHAMMY Running"
+            Me.lblRemoteStatus.Text = "WHAMMY Running"
             Me.SlidesStatus = SLIDES_WHAMMY
             Me.StartSlideShow()
             Dim WaitForm As New fmClickWait(Me)
@@ -5598,7 +5641,7 @@ Namespace JANIS
             TimeText = TimeText & Format(Me.nudCountdownMinutes.Value, "00") & ":" & Format(Me.nudCountdownSeconds.Value, "00")
 
             Me.LS.ShowCountdownText(TimeText, bgColor, Me.cbCountdownVisible.Checked)
-            Me.ShowScreenPreview()
+            Me.ShowRemoteView()
         End Sub
 
         '=================================================================================================

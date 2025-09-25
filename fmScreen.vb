@@ -1,3 +1,5 @@
+Imports System.Runtime.Versioning
+
 Public Class fmScreen
     Inherits System.Windows.Forms.Form
 
@@ -92,11 +94,10 @@ Public Class fmScreen
         Me.lblCountdown.Font = New System.Drawing.Font("Arial Black", 105.0!, System.Drawing.FontStyle.Bold)
         Me.lblCountdown.Location = New System.Drawing.Point(0, 900)
         Me.lblCountdown.Name = "lblCountdown"
-        Me.lblCountdown.Size = New System.Drawing.Size(450, 180)
+        Me.lblCountdown.Size = New System.Drawing.Size(1920, 180)
         Me.lblCountdown.TabIndex = 7
         Me.lblCountdown.Text = "00:00:00"
         Me.lblCountdown.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        Me.lblCountdown.Hide()
         '
         'lblTeamLocLeft
         '
@@ -204,7 +205,6 @@ Public Class fmScreen
         Me.AxMediaPlayer.Size = New System.Drawing.Size(1920, 1080)
         Me.AxMediaPlayer.TabIndex = 14
         Me.AxMediaPlayer.TabStop = False
-        Me.AxMediaPlayer.Hide()
         '
         'fmScreen
         '
@@ -217,9 +217,9 @@ Public Class fmScreen
         Me.Controls.Add(Me.lblScoreLeft)
         Me.Controls.Add(Me.lblTeamNameLeft)
         Me.Controls.Add(Me.lblTeamLocLeft)
-        Me.Controls.Add(Me.lblCountdown)
         Me.Controls.Add(Me.lblMsg)
         Me.Controls.Add(Me.picGraphic)
+        Me.Controls.Add(Me.lblCountdown)
         Me.Controls.Add(Me.AxMediaPlayer)
         Me.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!)
         Me.ForeColor = System.Drawing.Color.White
@@ -268,10 +268,10 @@ Public Class fmScreen
             .stretchToFit = True
             With .settings
                 .mute = True
-                .autoStart = False
+                .autoStart = True
                 .invokeURLs = False
                 .playCount = 1
-                .volume = 0
+                .volume = 100
             End With
         End With
 
@@ -287,6 +287,14 @@ Public Class fmScreen
         '* Shareable function for public return of leftmost coordinate of this form.
         Return Me.Left
     End Function
+
+    Public Sub SetLeft(leftpos As Integer)
+        Me.Left = leftpos
+    End Sub
+    Public Sub SetTop(toppos As Integer)
+        Me.Top = toppos
+    End Sub
+
     Public Sub SetTeamColor(teamside As String, newcolor As Color)
         If teamside = "Left" Then
             Me.LeftTeamColor = newcolor
@@ -368,7 +376,7 @@ Public Class fmScreen
         '* Black out the screen and turn off visible stuff
 
         Me.BackColor = System.Drawing.Color.Black
-        StopMediaPlayer()
+        StopVideo()
         Me.picGraphic.Hide()
         Me.picGraphic.ImageLocation = ""
         Me.lblMsg.Hide()
@@ -392,7 +400,7 @@ Public Class fmScreen
     End Sub
 
     Public Sub ShowText(ByVal txt As String, ByVal BackColor As System.Drawing.Color, ByVal fontsize As Integer)
-        StopMediaPlayer()
+        StopVideo()
         Me.lblTeamLocLeft.Hide()
         Me.lblTeamLocRight.Hide()
         Me.lblTeamNameLeft.Hide()
@@ -418,7 +426,7 @@ Public Class fmScreen
         Me.lblTeamLocRight.Text = locRight
         Me.lblTeamNameRight.Text = nameRight
 
-        StopMediaPlayer()
+        StopVideo()
         Me.lblMsg.Hide()
         Me.picGraphic.Image = Me.ScoreboardBitMap
         Me.picGraphic.Show()
@@ -440,11 +448,11 @@ Public Class fmScreen
         Me.lblScoreRight.Show()
     End Sub
 
-    Public Sub ShowImage(ByRef Img As Image, ByVal Expand As Boolean)
+    Public Sub ShowImage(ByRef Img As Image)
         If Img Is Nothing Then Exit Sub
 
         Me.BackColor = System.Drawing.Color.Black
-        StopMediaPlayer()
+        StopVideo()
         Me.lblTeamLocLeft.Hide()
         Me.lblTeamLocRight.Hide()
         Me.lblTeamNameLeft.Hide()
@@ -453,19 +461,84 @@ Public Class fmScreen
         Me.lblScoreRight.Hide()
         Me.lblMsg.Hide()
 
-        If Expand Then
-            Me.picGraphic.SizeMode = PictureBoxSizeMode.StretchImage
-        Else
-            Me.picGraphic.SizeMode = PictureBoxSizeMode.Zoom
-        End If
+        Me.picGraphic.SizeMode = PictureBoxSizeMode.Zoom
 
         Me.picGraphic.Image = Img
         Me.picGraphic.Show()
     End Sub
 
-    Public Sub StopMediaPlayer()
+    Public Function LaunchVideo(ByVal fnam As String) As String
+        '* Returns an error message if there was a problem, otherwise returns Nothing
+        Dim resultMessage As String = Nothing
+        StopVideo()
+        Me.lblTeamLocLeft.Hide()
+        Me.lblTeamLocRight.Hide()
+        Me.lblTeamNameLeft.Hide()
+        Me.lblTeamNameRight.Hide()
+        Me.lblScoreLeft.Hide()
+        Me.lblScoreRight.Hide()
+        Me.lblMsg.Hide()
+        Me.picGraphic.Hide()
+        Me.AxMediaPlayer.Show()
+
+        Me.AxMediaPlayer.URL = fnam
+        Me.AxMediaPlayer.settings.mute = False
+        Me.AxMediaPlayer.settings.volume = 100
+        'MsgBox("Mute is " & mute.ToString)
+        Try
+            Me.AxMediaPlayer.Ctlcontrols.play()
+        Catch ex As Exception
+            resultMessage = "Error playing video file '" & fnam & "':" & vbCrLf & ex.Message ' & vbCrLf
+            StopVideo()
+        End Try
+        Return resultMessage
+    End Function
+    Public Function IsVideoPlaying() As Boolean
+        Return (Me.AxMediaPlayer.playState = WMPLib.WMPPlayState.wmppsPlaying)
+    End Function
+
+    Public Sub SetVideoMute(ByVal newMuteSetting As Boolean)
+        '* NEVER CHANGE the AxMediaPlayer.settings.mute property. It's hella broken. Once it's set to True, it STAYS muted regardless of further settings changes.
+        '* Always manage it with volume.
+        If newMuteSetting Then
+            Me.AxMediaPlayer.settings.volume = 0
+        Else
+            Me.AxMediaPlayer.settings.volume = 100
+        End If
+    End Sub
+    Public Function GetVideoMute() As Boolean
+        Return (Me.AxMediaPlayer.settings.volume.Equals(0))
+    End Function
+
+    Public Sub PauseVideo()
+        Me.AxMediaPlayer.Ctlcontrols.pause()
+    End Sub
+    Public Function ResumeVideo() As String
+        '* Returns an error message if there was a problem, otherwise returns Nothing
+        Dim resultMessage As String = Nothing
+        Me.lblTeamLocLeft.Hide()
+        Me.lblTeamLocRight.Hide()
+        Me.lblTeamNameLeft.Hide()
+        Me.lblTeamNameRight.Hide()
+        Me.lblScoreLeft.Hide()
+        Me.lblScoreRight.Hide()
+        Me.lblMsg.Hide()
+        Me.picGraphic.Hide()
+        Me.AxMediaPlayer.Show()
+
+
+        Try
+            Me.AxMediaPlayer.Ctlcontrols.play()
+        Catch ex As Exception
+            resultMessage = "Error playing video file:" & vbCrLf & ex.Message ' & vbCrLf
+            StopVideo()
+        End Try
+        Return resultMessage
+    End Function
+    Public Sub StopVideo()
         Me.AxMediaPlayer.Hide()
-        Me.AxMediaPlayer.close()
+        Me.AxMediaPlayer.Ctlcontrols.stop()
+        Me.AxMediaPlayer.settings.mute = True
     End Sub
 
     Public Sub ShowCountdownText(ByVal CountdownText As String, ByVal BackColor As System.Drawing.Color, ByVal CountdownVisible As Boolean)
