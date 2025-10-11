@@ -2,8 +2,11 @@
 'Imports System.Environment
 Imports System.IO
 Imports System.Linq
+'Imports System.Security.Principal
+
 'Imports System.Runtime.InteropServices
 Imports System.Threading.Tasks
+Imports AxWMPLib
 
 Namespace JANIS
     Public Class fmMain
@@ -27,7 +30,6 @@ Namespace JANIS
         Const SLIDES_PAUSED As Integer = 1
         Const SLIDES_PLAYING As Integer = 2
         Const SLIDES_WHAMMY As Integer = 3
-        Const HOTSIDE_PIXELS As Integer = 15
 
 
         Private Class FileID   ' Used by the image indexing system
@@ -63,6 +65,7 @@ Namespace JANIS
         Private ThingSubs(MAX_THINGS) As String           '* Substitutions for 5 Things
         Private SlidesStatus As Integer = SLIDES_STOPPED  '* Keep track of whether Slideshow is running
         Private SlideTimerTag As String = ""
+        Private PreSlideshowMuteState As Boolean = False  '* For returning to previous mute state in StopSlideShow()
         Private HotButtonsChanged As Boolean              '* Have we changed the hot buttons?
         Private BufferedSlide As Image = Nothing          '* For holding next whammy slide
         Private DragBounds As Rectangle
@@ -207,7 +210,7 @@ Namespace JANIS
         Friend WithEvents btnRemoveThing As System.Windows.Forms.Button
         Friend WithEvents clbThings As System.Windows.Forms.CheckedListBox
         Friend WithEvents tvSlideFolders As System.Windows.Forms.TreeView
-        Friend WithEvents lbMediaFiles As System.Windows.Forms.ListBox
+        Friend WithEvents lbSlideCandidates As System.Windows.Forms.ListBox
         Friend WithEvents lbSlideList As System.Windows.Forms.ListBox
         Friend WithEvents Label6 As System.Windows.Forms.Label
         Friend WithEvents btnThingDown As System.Windows.Forms.Button
@@ -226,6 +229,7 @@ Namespace JANIS
         Friend WithEvents pnlMediaSearchPreview As Panel
         Friend WithEvents picSlidePreview As System.Windows.Forms.PictureBox
         Friend WithEvents AxMediaSearchPreview As AxWMPLib.AxWindowsMediaPlayer
+        Friend WithEvents AxMediaSlidePreview As AxWMPLib.AxWindowsMediaPlayer
         Friend WithEvents SlideTimer As System.Windows.Forms.Timer
         Friend WithEvents Label7 As System.Windows.Forms.Label
         Friend WithEvents Label8 As System.Windows.Forms.Label
@@ -351,7 +355,7 @@ Namespace JANIS
         Friend WithEvents tbDefaultImageDir As System.Windows.Forms.TextBox
         Friend WithEvents btnClearTextBoth As System.Windows.Forms.Button
         Friend WithEvents CountdownTimer As System.Windows.Forms.Timer
-        Friend WithEvents tpImgSearch As System.Windows.Forms.TabPage
+        Friend WithEvents tpMediaSearch As System.Windows.Forms.TabPage
         Friend WithEvents btnImgSearch As System.Windows.Forms.Button
         Friend WithEvents btnSearchMediaAddSlide As System.Windows.Forms.Button
         Friend WithEvents btnSearchMediaShow As System.Windows.Forms.Button
@@ -427,7 +431,7 @@ Namespace JANIS
             Me.pnlTextColorLeft3 = New System.Windows.Forms.Panel()
             Me.pnlTextColorLeft2 = New System.Windows.Forms.Panel()
             Me.pnlTextColorLeft1 = New System.Windows.Forms.Panel()
-            Me.tpImgSearch = New System.Windows.Forms.TabPage()
+            Me.tpMediaSearch = New System.Windows.Forms.TabPage()
             Me.pnlMediaSearchPreview = New System.Windows.Forms.Panel()
             Me.picImgSearchPreview = New System.Windows.Forms.PictureBox()
             Me.AxMediaSearchPreview = New AxWMPLib.AxWindowsMediaPlayer()
@@ -457,7 +461,7 @@ Namespace JANIS
             Me.btnThingDown = New System.Windows.Forms.Button()
             Me.btnThingUp = New System.Windows.Forms.Button()
             Me.tpSlides = New System.Windows.Forms.TabPage()
-            Me.lbMediaFiles = New System.Windows.Forms.ListBox()
+            Me.lbSlideCandidates = New System.Windows.Forms.ListBox()
             Me.tvSlideFolders = New System.Windows.Forms.TreeView()
             Me.btnWhammy = New System.Windows.Forms.Button()
             Me.btnPauseSlides = New System.Windows.Forms.Button()
@@ -481,6 +485,7 @@ Namespace JANIS
             Me.btnFirstSlide = New System.Windows.Forms.Button()
             Me.lbSlideList = New System.Windows.Forms.ListBox()
             Me.picSlidePreview = New System.Windows.Forms.PictureBox()
+            Me.AxMediaSlidePreview = New AxWMPLib.AxWindowsMediaPlayer()
             Me.tpHotButtons = New System.Windows.Forms.TabPage()
             Me.btnClearHB = New System.Windows.Forms.Button()
             Me.lblHBinstructions = New System.Windows.Forms.Label()
@@ -629,7 +634,7 @@ Namespace JANIS
             Me.grpClearText.SuspendLayout()
             Me.grpRightColors.SuspendLayout()
             Me.grpLeftColors.SuspendLayout()
-            Me.tpImgSearch.SuspendLayout()
+            Me.tpMediaSearch.SuspendLayout()
             Me.pnlMediaSearchPreview.SuspendLayout()
             CType(Me.picImgSearchPreview, System.ComponentModel.ISupportInitialize).BeginInit()
             CType(Me.AxMediaSearchPreview, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -638,6 +643,7 @@ Namespace JANIS
             Me.tpSlides.SuspendLayout()
             CType(Me.nudDelay, System.ComponentModel.ISupportInitialize).BeginInit()
             CType(Me.picSlidePreview, System.ComponentModel.ISupportInitialize).BeginInit()
+            CType(Me.AxMediaSlidePreview, System.ComponentModel.ISupportInitialize).BeginInit()
             Me.tpHotButtons.SuspendLayout()
             Me.gbHB.SuspendLayout()
             Me.tpPrefs.SuspendLayout()
@@ -676,6 +682,7 @@ Namespace JANIS
             '
             Me.btnBlackout.BackColor = System.Drawing.Color.Black
             Me.btnBlackout.FlatAppearance.BorderColor = System.Drawing.SystemColors.Control
+            Me.btnBlackout.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Gray
             Me.btnBlackout.FlatStyle = System.Windows.Forms.FlatStyle.Popup
             Me.btnBlackout.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
             Me.btnBlackout.ForeColor = System.Drawing.Color.White
@@ -845,7 +852,7 @@ Namespace JANIS
             Me.btnMediaLoadFile.Name = "btnMediaLoadFile"
             Me.btnMediaLoadFile.Size = New System.Drawing.Size(119, 28)
             Me.btnMediaLoadFile.TabIndex = 16
-            Me.btnMediaLoadFile.Text = "LOAD FILE"
+            Me.btnMediaLoadFile.Text = "OPEN FILE"
             '
             'btnLeftScoreColor
             '
@@ -868,7 +875,7 @@ Namespace JANIS
             'TabControl1
             '
             Me.TabControl1.Controls.Add(Me.tpScreenText)
-            Me.TabControl1.Controls.Add(Me.tpImgSearch)
+            Me.TabControl1.Controls.Add(Me.tpMediaSearch)
             Me.TabControl1.Controls.Add(Me.tp5Things)
             Me.TabControl1.Controls.Add(Me.tpSlides)
             Me.TabControl1.Controls.Add(Me.tpHotButtons)
@@ -1266,23 +1273,23 @@ Namespace JANIS
             Me.pnlTextColorLeft1.TabIndex = 51
             Me.pnlTextColorLeft1.TabStop = True
             '
-            'tpImgSearch
+            'tpMediaSearch
             '
-            Me.tpImgSearch.Controls.Add(Me.pnlMediaSearchPreview)
-            Me.tpImgSearch.Controls.Add(Me.Label32)
-            Me.tpImgSearch.Controls.Add(Me.Label21)
-            Me.tpImgSearch.Controls.Add(Me.lbMediaResults)
-            Me.tpImgSearch.Controls.Add(Me.comboImgSearchText)
-            Me.tpImgSearch.Controls.Add(Me.Label20)
-            Me.tpImgSearch.Controls.Add(Me.btnImgSearch)
-            Me.tpImgSearch.Controls.Add(Me.btnSearchMediaAddSlide)
-            Me.tpImgSearch.Controls.Add(Me.btnSearchMediaShow)
-            Me.tpImgSearch.Controls.Add(Label19)
-            Me.tpImgSearch.Location = New System.Drawing.Point(4, 28)
-            Me.tpImgSearch.Name = "tpImgSearch"
-            Me.tpImgSearch.Size = New System.Drawing.Size(988, 372)
-            Me.tpImgSearch.TabIndex = 6
-            Me.tpImgSearch.Text = "Media Search"
+            Me.tpMediaSearch.Controls.Add(Me.pnlMediaSearchPreview)
+            Me.tpMediaSearch.Controls.Add(Me.Label32)
+            Me.tpMediaSearch.Controls.Add(Me.Label21)
+            Me.tpMediaSearch.Controls.Add(Me.lbMediaResults)
+            Me.tpMediaSearch.Controls.Add(Me.comboImgSearchText)
+            Me.tpMediaSearch.Controls.Add(Me.Label20)
+            Me.tpMediaSearch.Controls.Add(Me.btnImgSearch)
+            Me.tpMediaSearch.Controls.Add(Me.btnSearchMediaAddSlide)
+            Me.tpMediaSearch.Controls.Add(Me.btnSearchMediaShow)
+            Me.tpMediaSearch.Controls.Add(Label19)
+            Me.tpMediaSearch.Location = New System.Drawing.Point(4, 28)
+            Me.tpMediaSearch.Name = "tpMediaSearch"
+            Me.tpMediaSearch.Size = New System.Drawing.Size(988, 372)
+            Me.tpMediaSearch.TabIndex = 6
+            Me.tpMediaSearch.Text = "Media Search"
             '
             'pnlMediaSearchPreview
             '
@@ -1592,7 +1599,7 @@ Namespace JANIS
             '
             'tpSlides
             '
-            Me.tpSlides.Controls.Add(Me.lbMediaFiles)
+            Me.tpSlides.Controls.Add(Me.lbSlideCandidates)
             Me.tpSlides.Controls.Add(Me.tvSlideFolders)
             Me.tpSlides.Controls.Add(Me.btnWhammy)
             Me.tpSlides.Controls.Add(Me.btnPauseSlides)
@@ -1616,6 +1623,7 @@ Namespace JANIS
             Me.tpSlides.Controls.Add(Me.btnFirstSlide)
             Me.tpSlides.Controls.Add(Me.lbSlideList)
             Me.tpSlides.Controls.Add(Me.picSlidePreview)
+            Me.tpSlides.Controls.Add(Me.AxMediaSlidePreview)
             Me.tpSlides.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
             Me.tpSlides.Location = New System.Drawing.Point(4, 28)
             Me.tpSlides.Name = "tpSlides"
@@ -1623,17 +1631,17 @@ Namespace JANIS
             Me.tpSlides.TabIndex = 2
             Me.tpSlides.Text = "Slide Show"
             '
-            'lbMediaFiles
+            'lbSlideCandidates
             '
-            Me.lbMediaFiles.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!)
-            Me.lbMediaFiles.FormattingEnabled = True
-            Me.lbMediaFiles.ItemHeight = 16
-            Me.lbMediaFiles.Location = New System.Drawing.Point(268, 152)
-            Me.lbMediaFiles.Name = "lbMediaFiles"
-            Me.lbMediaFiles.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended
-            Me.lbMediaFiles.Size = New System.Drawing.Size(250, 212)
-            Me.lbMediaFiles.Sorted = True
-            Me.lbMediaFiles.TabIndex = 113
+            Me.lbSlideCandidates.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!)
+            Me.lbSlideCandidates.FormattingEnabled = True
+            Me.lbSlideCandidates.ItemHeight = 16
+            Me.lbSlideCandidates.Location = New System.Drawing.Point(268, 152)
+            Me.lbSlideCandidates.Name = "lbSlideCandidates"
+            Me.lbSlideCandidates.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended
+            Me.lbSlideCandidates.Size = New System.Drawing.Size(250, 212)
+            Me.lbSlideCandidates.Sorted = True
+            Me.lbSlideCandidates.TabIndex = 113
             '
             'tvSlideFolders
             '
@@ -1866,14 +1874,25 @@ Namespace JANIS
             '
             'picSlidePreview
             '
-            Me.picSlidePreview.BackColor = System.Drawing.SystemColors.ActiveBorder
+            Me.picSlidePreview.BackColor = System.Drawing.Color.Black
             Me.picSlidePreview.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
             Me.picSlidePreview.Location = New System.Drawing.Point(268, 20)
             Me.picSlidePreview.Name = "picSlidePreview"
             Me.picSlidePreview.Size = New System.Drawing.Size(184, 121)
-            Me.picSlidePreview.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
+            Me.picSlidePreview.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
             Me.picSlidePreview.TabIndex = 4
             Me.picSlidePreview.TabStop = False
+            '
+            'AxMediaSlidePreview
+            '
+            Me.AxMediaSlidePreview.Enabled = True
+            Me.AxMediaSlidePreview.Location = New System.Drawing.Point(268, 20)
+            Me.AxMediaSlidePreview.Name = "AxMediaSlidePreview"
+            Me.AxMediaSlidePreview.OcxState = CType(resources.GetObject("AxMediaSlidePreview.OcxState"), System.Windows.Forms.AxHost.State)
+            Me.AxMediaSlidePreview.Size = New System.Drawing.Size(184, 121)
+            Me.AxMediaSlidePreview.TabIndex = 135
+            Me.AxMediaSlidePreview.TabStop = False
+            Me.AxMediaSlidePreview.Visible = False
             '
             'tpHotButtons
             '
@@ -2409,7 +2428,7 @@ Namespace JANIS
             Me.cbHBActive.Anchor = System.Windows.Forms.AnchorStyles.Left
             Me.cbHBActive.CheckAlign = System.Drawing.ContentAlignment.MiddleRight
             Me.cbHBActive.Checked = True
-            Me.cbHBActive.CheckState = System.Windows.Forms.CheckState.Indeterminate
+            Me.cbHBActive.CheckState = System.Windows.Forms.CheckState.Checked
             Me.cbHBActive.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
             Me.cbHBActive.Location = New System.Drawing.Point(15, 8)
             Me.cbHBActive.Name = "cbHBActive"
@@ -2579,7 +2598,7 @@ Namespace JANIS
             Me.Label18.Name = "Label18"
             Me.Label18.Size = New System.Drawing.Size(240, 22)
             Me.Label18.TabIndex = 205
-            Me.Label18.Text = "Default image search directory:"
+            Me.Label18.Text = "Default media search directory:"
             Me.Label18.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
             '
             'tbDefaultFontSize
@@ -2935,7 +2954,7 @@ Namespace JANIS
             Me.cbDisplayDefaultImage.Name = "cbDisplayDefaultImage"
             Me.cbDisplayDefaultImage.Size = New System.Drawing.Size(240, 22)
             Me.cbDisplayDefaultImage.TabIndex = 208
-            Me.cbDisplayDefaultImage.Text = "Display image at program start:"
+            Me.cbDisplayDefaultImage.Text = "Display media at program start:"
             Me.cbDisplayDefaultImage.UseVisualStyleBackColor = False
             '
             'cbLoadDefaultSlides
@@ -2984,8 +3003,8 @@ Namespace JANIS
             Me.tbAboutHeader.Size = New System.Drawing.Size(972, 105)
             Me.tbAboutHeader.TabIndex = 230
             Me.tbAboutHeader.TabStop = False
-            Me.tbAboutHeader.Text = "JANIS v4.0.2" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Released May 3, 2025" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "by Bill Cernansky (bill@easybeing.com)" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "© 200" &
-    "4-2025 Easy Being Productions"
+            Me.tbAboutHeader.Text = "JANIS v5.0.0 ALPHA" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Released Oct. 6, 2025" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "by Bill Cernansky (bill@easybeing.com)" &
+    "" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "© 2004-2025 Easy Being Productions"
             Me.tbAboutHeader.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
             '
             'TextBox2
@@ -3087,7 +3106,7 @@ Namespace JANIS
             Me.btnPasteMedia.Name = "btnPasteMedia"
             Me.btnPasteMedia.Size = New System.Drawing.Size(119, 28)
             Me.btnPasteMedia.TabIndex = 17
-            Me.btnPasteMedia.Text = "PASTE CLIPBOARD"
+            Me.btnPasteMedia.Text = "PASTE IMAGE"
             Me.ToolTip1.SetToolTip(Me.btnPasteMedia, "Copy image from browser, etc. and paste here to display.")
             '
             'gbCountdownControls
@@ -3470,7 +3489,7 @@ Namespace JANIS
             '
             'VideoEventTimer
             '
-            Me.VideoEventTimer.Interval = 1000
+            Me.VideoEventTimer.Interval = 250
             '
             'fmMain
             '
@@ -3525,7 +3544,7 @@ Namespace JANIS
             Me.grpClearText.ResumeLayout(False)
             Me.grpRightColors.ResumeLayout(False)
             Me.grpLeftColors.ResumeLayout(False)
-            Me.tpImgSearch.ResumeLayout(False)
+            Me.tpMediaSearch.ResumeLayout(False)
             Me.pnlMediaSearchPreview.ResumeLayout(False)
             CType(Me.picImgSearchPreview, System.ComponentModel.ISupportInitialize).EndInit()
             CType(Me.AxMediaSearchPreview, System.ComponentModel.ISupportInitialize).EndInit()
@@ -3535,6 +3554,7 @@ Namespace JANIS
             Me.tpSlides.ResumeLayout(False)
             CType(Me.nudDelay, System.ComponentModel.ISupportInitialize).EndInit()
             CType(Me.picSlidePreview, System.ComponentModel.ISupportInitialize).EndInit()
+            CType(Me.AxMediaSlidePreview, System.ComponentModel.ISupportInitialize).EndInit()
             Me.tpHotButtons.ResumeLayout(False)
             Me.gbHB.ResumeLayout(False)
             Me.gbHB.PerformLayout()
@@ -3675,8 +3695,12 @@ Namespace JANIS
             Me.cbMuteVideo.Checked = False
             Me.cbMuteVideo.BackgroundImage = My.Resources.sound_on_green
 
-            '* Search preview tab media player settings
-            With Me.AxMediaSearchPreview
+            InitPreviewMediaPlayerCtl(Me.AxMediaSearchPreview)
+            InitPreviewMediaPlayerCtl(Me.AxMediaSlidePreview)
+        End Sub
+
+        Private Sub InitPreviewMediaPlayerCtl(ByRef AxCtl As AxWindowsMediaPlayer)
+            With AxCtl
                 .Ctlenabled = False
                 .uiMode = "none"
                 .fullScreen = False
@@ -3689,9 +3713,8 @@ Namespace JANIS
                     .volume = 0
                 End With
             End With
-            ' Also mute any other AxWMP controls later
-
         End Sub
+
         Private Sub VerifyInfrastructure()
             '* If the default support dirs aren't there, create them
             Dim MyDir As String = Dir(ROOT_SUPPORT_DIR, FileAttribute.Directory)
@@ -3702,7 +3725,7 @@ Namespace JANIS
             If MyDir = "" Then MkDir(ROOT_SUPPORT_DIR & DEFAULT_HOTBUTTON_DIR)
         End Sub
 
-        Private Sub ListBox_KeyPress(ByVal sender As System.Object, ByVal e As KeyPressEventArgs) Handles lbMediaFiles.KeyPress, lbSlideList.KeyPress
+        Private Sub ListBox_KeyPress(ByVal sender As System.Object, ByVal e As KeyPressEventArgs) Handles lbSlideCandidates.KeyPress, lbSlideList.KeyPress
             ' Ctrl-A will select all.
             If e.KeyChar = Chr(1) Then
                 If sender.SelectionMode.ToString Like "*Multi*" Then
@@ -3883,7 +3906,24 @@ Namespace JANIS
         End Sub
 
         Private Sub SetMonitorDisplayMode()
-            If SystemInformation.MonitorCount <= 1 Then        '* We're in test mode
+            Dim screens As Screen() = Screen.AllScreens
+
+            If screens.Length > 1 Then
+                ' Full blown 2-monitor mode (control + display)
+                ' Find the rightmost screen
+                Dim rightmostScreen As Screen = screens.OrderByDescending(Function(s) s.Bounds.X).First()
+                Dim upperLeft As Point = rightmostScreen.Bounds.Location
+
+                Me.LS.SetLeft(rightmostScreen.Bounds.Location.X)
+                Me.LS.SetTop(rightmostScreen.Bounds.Location.Y)
+
+                'Me.LS.SetLeft(monitor2TopLeft.X)
+                'Me.LS.SetTop(monitor2TopLeft.Y)
+                '* Me.LS.SetLeft(SystemInformation.PrimaryMonitorSize.Width)
+                Me.LS.SetTop(0)
+                Me.Text = Me.Text & " - Arena Mode"
+            Else
+                '* We're in test mode
                 Dim sRatio As Integer = 5
                 Me.TestMode = True
                 Me.DisplayModeAdjustment = sRatio * sRatio  '* = w x h
@@ -3900,10 +3940,6 @@ Namespace JANIS
                 '* ONLY FOR TESTING MONITOR DISCONNECTION
                 'Me.LS.SetLeft(SystemInformation.PrimaryMonitorSize.Width)  'Force the window onto screen 2
                 'Me.LS.SetTop(0)
-            Else  ' Full blown 2-monitor mode (control + display)
-                '* Dim Scrs As Screen() = System.Windows.Forms.Screen.AllScreens
-                Me.LS.SetLeft(SystemInformation.PrimaryMonitorSize.Width)
-                Me.Text = Me.Text & " - Arena Mode"
             End If
             ' Me.tbLeftText.Text = Me.tbLeftText.Text & EOL & EOL & (SystemInformation.MonitorCount - 1).ToString & " audience displays found"
             Me.Text = Me.Text & " (displays: " & (SystemInformation.MonitorCount - 1).ToString & ")"
@@ -3914,7 +3950,7 @@ Namespace JANIS
             '* Stop the slideshow if it's running.
             Me.StopSlideShow()
 
-            '* Blank out the corresponding graphics preview
+            '* Blank out the corresponding image viewer
             Me.picRemoteViewer.Image = Nothing
 
             If TestMode Then fontsize = fontsize * 7.2
@@ -4022,9 +4058,12 @@ Namespace JANIS
         '* BEGIN IMAGE/MEDIA STUFF
 
         Private Sub TabControl1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles TabControl1.SelectedIndexChanged
-            If TabControl1.SelectedTab.Name <> "tpImgSearch" AndAlso PreviousSelectedTab.Name = "tpImgSearch" Then
-                '* Switched away from the image search tab, so stop any preview video that might be running
+            '* Stop any preview videos that we are running in a tab if we switch away from that tab
+            '* Don't need to check for previous tab value = Nothing, because we initialized it in InitializeSettings(). It's never Nothing.
+            If (TabControl1.SelectedTab.Name <> "tpMediaSearch" AndAlso PreviousSelectedTab.Name = "tpMediaSearch") Then
                 StopPreviewSearchVideo()
+            ElseIf (TabControl1.SelectedTab.Name <> "tpSlides" AndAlso PreviousSelectedTab.Name = "tbSlides") Then
+                StopPreviewSlideVideo()
             End If
             PreviousSelectedTab = TabControl1.SelectedTab
         End Sub
@@ -4058,6 +4097,65 @@ Namespace JANIS
             End If
         End Sub
 
+        Private Async Sub LaunchVideo(ByVal fnam As String, Optional ByVal KillSlideShow As Boolean = True)
+            If KillSlideShow Then
+                Me.StopSlideShow()
+            End If
+
+            '* Audio only ever plays if slideshow's not active AND cbMutVideo is unchecked
+            Me.LS.SetVideoMute((Me.SlidesStatus <> SLIDES_STOPPED) Or cbMuteVideo.Checked)
+            Dim resultMessage As String = Me.LS.LaunchVideo(fnam)
+
+            If resultMessage IsNot Nothing Then
+                If Me.SlidesStatus = SLIDES_PLAYING Then
+                    If Me.lbSlideList.Items.Count > 1 Then
+                        Return '* Quietly move on to the next slide, similar to slideshow image failures
+                    End If
+                    Me.StopSlideShow()
+                End If
+                MsgBox(resultMessage, MsgBoxStyle.Exclamation, "Video Playback Error")
+            Else
+                If Me.SlidesStatus = SLIDES_PLAYING Then
+                    '* stop the slide timer so the video can play until it ends. The Video Timer will notice when it finishes and restart everything
+                    '* however, we still want to look like we're playing slides.
+                    Me.SlideTimer.Stop()
+                    Await Task.Delay(250) '* If this delay isn't here, the slideshow thinks the video is already over
+                End If
+                Me.picRemoteViewer.Image = Nothing
+                Me.VideoEventTimer.Start()
+            End If
+            Me.AllScreensToFront()
+        End Sub
+
+        Private Sub VideoEventTimer_Tick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles VideoEventTimer.Tick
+            If Me.LS.IsVideoPlaying() Then
+                '* Update remoteviewer with snapshot (this is once a second, currently)
+                Me.ShowRemoteView()
+            Else
+                Me.VideoEventTimer.Enabled = False
+                '* If we are mid-slideshow, then the video just ended, so re-enable the slideshow timer and advance
+                If Me.SlidesStatus = SLIDES_PLAYING Then  '* Whammy won't start if it contains any video so no need to check for it
+                    '* Pretend we were pausing the whole time and restart slideshow. A sensible kludge.
+                    Me.SlidesStatus = SLIDES_PAUSED
+                    If Me.lbSlideList.Items.Count > 1 Then Me.AdvanceOneSlide() '* If there's only one slide, we loop the video
+                    Me.StartSlideShow()
+                    '* Freaking elegant
+                End If
+            End If
+        End Sub
+        Private Sub cbMuteVideo_CheckedChanged(sender As Object, e As EventArgs) Handles cbMuteVideo.CheckedChanged
+            '* It looks like a button, but it's a checkbox!
+            If cbMuteVideo.Checked Then
+                cbMuteVideo.BackgroundImage = My.Resources.sound_off_red
+                ToolTip1.SetToolTip(cbMuteVideo, "Video sound is MUTED")
+            Else
+                cbMuteVideo.BackgroundImage = My.Resources.sound_on_green
+                ToolTip1.SetToolTip(cbMuteVideo, "Video sound is ON")
+            End If
+            Me.LS.SetVideoMute(cbMuteVideo.Checked)
+        End Sub
+
+
         Private Sub DisplayRawImage(ByRef img As Image)
             If img Is Nothing Then Exit Sub
             Me.LS.ShowImage(img)
@@ -4075,19 +4173,30 @@ Namespace JANIS
             'End If
         End Sub
 
-        Private Function SelectImageFilename() As String
+        Private Sub ShowMediaFile(ByVal fnam As String, Optional ByVal KillSlideShow As Boolean = True)
+            '* If the sender doesn't know if the filename is video or image, this is the subroutine they want.
+            If fnam = "" Then
+                Return
+            ElseIf IsVideoFile(fnam) Then
+                Me.LaunchVideo(fnam, KillSlideShow)
+            Else
+                Me.DisplayImageFile(fnam, KillSlideShow)
+            End If
+        End Sub
+
+        Private Function SelectMediaFilename() As String
             '* Returns blank if you don't pick a legal file
             Dim fn As String = ""
             Dim fileFilter As String = ""
-            For Each ext As String In ImageFileExtensions
-                fileFilter &= "*." & ext & ";"
+            For Each ext As String In MediaFileExtensions
+                fileFilter &= "*" & ext & ";"
             Next
             '* trim off the last semicolon
             If fileFilter.EndsWith(";") Then fileFilter = fileFilter.Substring(0, fileFilter.Length - 1)
 
             Dim [of] As New OpenFileDialog()
             With [of]
-                .Filter = "Image Files(" & fileFilter & ")|" & fileFilter
+                .Filter = "Media Files(" & fileFilter & ")|" & fileFilter
                 .InitialDirectory = Me.tbDefaultImageDir.Text
                 If .ShowDialog(Me) = DialogResult.OK Then
                     fn = .FileName
@@ -4097,13 +4206,18 @@ Namespace JANIS
             Return fn
         End Function
 
-        Private Sub btnPicture_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnMediaLoadFile.Click
-            Dim fn As String = SelectImageFilename()
-            If fn <> "" Then
+        Private Async Sub btnMediaLoadFile_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnMediaLoadFile.Click
+            Dim fnam As String = SelectMediaFilename()
+            If fnam = "" Then
+                Return
+            ElseIf IsVideoFile(fnam) Then
+                Await Task.Delay(100)   '* Avoid failure if things happen too fast
+                Me.LaunchVideo(fnam)
+                Me.AssignImageToPictureBox(picRemoteViewer, Nothing)
+            Else
                 Dim img As Image
-
                 Try
-                    img = Image.FromFile(fn)
+                    img = Image.FromFile(fnam)
                     Me.Present_Image(img)
                 Catch
                     '* Do nothing. Don't show the nonexistent image.
@@ -4113,6 +4227,7 @@ Namespace JANIS
 
         Private Sub btnPasteMedia_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnPasteMedia.Click
             '* If there's a bitmap in the clipboard, paste it to the screens.
+            '* It only works for images
             If Clipboard.GetDataObject.GetDataPresent(GetType(System.Drawing.Bitmap)) Then
                 Dim img As Image = CType(Clipboard.GetDataObject.GetData(GetType(System.Drawing.Bitmap)), Bitmap)
                 Me.Present_Image(img)
@@ -4138,7 +4253,6 @@ Namespace JANIS
             End If
 
             Me.Present_Image(img)
-
         End Sub
 
         Private Sub picDisplay_DragEnter(ByVal sender As Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles picRemoteViewer.DragEnter, btnMediaLoadFile.DragEnter, btnPasteMedia.DragEnter
@@ -4233,38 +4347,6 @@ Namespace JANIS
             'MsgBox("Media player thinks its mute value is " & Me.LS.GetVideoMute().ToString & " and volume is " & Me.LS.AxMediaPlayer.settings.volume)
         End Sub
 
-        Private Sub LaunchVideo(ByVal fnam As String)
-            Me.LS.SetVideoMute(cbMuteVideo.Checked)  '* Have to make sure mute and volume are set every time
-            Dim resultMessage As String = Me.LS.LaunchVideo(fnam)
-
-            If resultMessage IsNot Nothing Then
-                MsgBox(resultMessage, MsgBoxStyle.Exclamation, "Video Playback Error")
-            Else
-                Me.picRemoteViewer.Image = Nothing
-                Me.VideoEventTimer.Enabled = True
-            End If
-            Me.AllScreensToFront()
-        End Sub
-        Private Sub VideoEventTimer_Tick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles VideoEventTimer.Tick
-            If Me.LS.IsVideoPlaying() Then
-                '* Update remoteviewer with snapshot (this is once a second, currently)
-                Me.ShowRemoteView()
-            Else
-                Me.VideoEventTimer.Enabled = False
-            End If
-        End Sub
-        'Private Sub cbMuteVideo_CheckedChanged(sender As Object, e As EventArgs) Handles cbMuteVideo.CheckedChanged
-        'End Sub
-        Private Sub cbMuteVideo_CheckedChanged(sender As Object, e As EventArgs) Handles cbMuteVideo.CheckedChanged
-            If cbMuteVideo.Checked Then
-                cbMuteVideo.BackgroundImage = My.Resources.sound_off_red
-                ToolTip1.SetToolTip(cbMuteVideo, "Video sound is MUTED")
-            Else
-                cbMuteVideo.BackgroundImage = My.Resources.sound_on_green
-                ToolTip1.SetToolTip(cbMuteVideo, "Video sound is ON")
-            End If
-            Me.LS.SetVideoMute(cbMuteVideo.Checked)
-        End Sub
 
         Private Sub PreviewSearchMedia()
             Static PrevSelect As String
@@ -4298,6 +4380,9 @@ Namespace JANIS
             Me.AxMediaSearchPreview.Show()
             Try
                 Me.AxMediaSearchPreview.URL = fnam
+                If Me.AxMediaSearchPreview.currentMedia IsNot Nothing Then
+                    Me.AxMediaSearchPreview.Ctlcontrols.currentPosition = Me.AxMediaSearchPreview.currentMedia.duration / 4
+                End If
                 Me.AxMediaSearchPreview.Ctlcontrols.play()
             Catch ex As Exception
                 Me.AxMediaSearchPreview.close()
@@ -4371,15 +4456,21 @@ Namespace JANIS
         Private Overloads Sub btnHot_DragDrop(ByVal sender As Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles btnHot1.DragDrop, btnHot2.DragDrop, btnHot3.DragDrop, btnHot4.DragDrop, btnHot5.DragDrop, btnHot6.DragDrop, btnHot7.DragDrop, btnHot8.DragDrop, btnHot9.DragDrop, btnHot10.DragDrop
             '* This routine takes the dropped text and attaches it to the chosen hotbutton.
             Dim NewText As String = e.Data.GetData("Text")
-            Dim i As Integer
-            i = CInt(sender.Name.Substring(6)) - 1      '* the hot button index from the control name
             If NewText <> "" Then
+                Dim i As Integer = CInt(sender.Name.Substring(6)) - 1      '* the hot button index from the control name
+                Dim finfo As FileInfo
+
+                Try
+                    finfo = New FileInfo(NewText)
+                Catch ex As Exception
+                    '* Do nothing. This probably indicates that what was dropped is not a local filename. Likely a webpath.
+                    Return
+                End Try
                 Me.HotButton(i).Tag = NewText
                 Me.HotImage(i).Text = NewText
-                Dim fi As New FileInfo(NewText)
-                Dim namelength As Integer = fi.Name.Replace(fi.Extension, "").Length
+                Dim namelength As Integer = finfo.Name.Replace(finfo.Extension, "").Length
                 If namelength > Me.HotText(i).MaxLength Then namelength = Me.HotText(i).MaxLength
-                Me.HotText(i).Text = fi.Name.Substring(0, namelength).ToLower
+                Me.HotText(i).Text = finfo.Name.Substring(0, namelength).ToLower
                 Me.HotButtonsChanged = True
             End If
         End Sub
@@ -4661,7 +4752,7 @@ Namespace JANIS
             End If
         End Sub
         Private Sub btnAddSlide_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnAddSlide.Click
-            Me.AddToSlideList(Me.lbMediaFiles.SelectedItems)
+            Me.AddToSlideList(Me.lbSlideCandidates.SelectedItems)
         End Sub
         Private Sub btnClearSlideList_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnClearSlideList.Click
             If Me.lbSlideList.Items.Count < 1 Then Return
@@ -4670,20 +4761,72 @@ Namespace JANIS
             Me.lbSlideList.Items.Clear()     '** Empty the list first
         End Sub
 
-        Private Sub lbMediaFiles_DoubleClick(ByVal sender As Object, e As System.EventArgs) Handles lbMediaFiles.DoubleClick
+        Private Sub lbMediaFiles_DoubleClick(ByVal sender As Object, e As System.EventArgs) Handles lbSlideCandidates.DoubleClick
             Me.AddToSlideList(sender.SelectedItems)
         End Sub
-        Private Sub lbMediaFiles_SelectedIndexChanged(sender As Object, e As EventArgs) Handles lbMediaFiles.SelectedIndexChanged
-            If Me.lbMediaFiles.SelectedItems.Count = 1 Then
-                Try
-                    Me.picSlidePreview.Image = Image.FromFile(Me.tvSlideFolders.SelectedNode.Name & "\" & Me.lbMediaFiles.SelectedItem.ToString)
-                Catch ex As Exception
-                    '* If error, clear image display. I don't care what the error was about.
-                    Me.picSlidePreview.Image = Nothing
-                End Try
+        Private Sub lbMediaFiles_SelectedIndexChanged(sender As Object, e As EventArgs) Handles lbSlideCandidates.SelectedIndexChanged
+            Me.PreviewSlideMedia()
+        End Sub
+        Private Sub PreviewSlideMedia()
+            Static PrevSelect As String = ""
+            Dim filenameToPreview As String = Me.tvSlideFolders.SelectedNode.Name & "\" & Me.lbSlideCandidates.SelectedItem.ToString
+            If Me.lbSlideCandidates.SelectedItems.Count = 1 Then
+                If Me.lbSlideCandidates.SelectedItem <> PrevSelect Then
+                    PrevSelect = filenameToPreview
+                    StopPreviewSlideVideo()  '* No-op if not playing
+
+                    If IsVideoFile(filenameToPreview) Then
+                        Me.PlayPreviewSlideVideo(filenameToPreview)
+                    Else
+                        Me.ShowPreviewSlideImage(filenameToPreview)
+                    End If
+                End If
             Else
                 Me.picSlidePreview.Image = Nothing
+                Me.StopPreviewSlideVideo()
+                PrevSelect = ""
             End If
+        End Sub
+
+        Private Function GetMediaDuration(ByVal MediaFile As String) As Double
+            Try
+                Dim w As New WMPLib.WindowsMediaPlayer
+                Dim m As WMPLib.IWMPMedia = w.newMedia(MediaFile)
+                w.close()
+                Return m.duration
+            Catch ex As Exception
+                Return 0
+            End Try
+        End Function
+
+        Private Sub StopPreviewSlideVideo()
+            If AxMediaSlidePreview.playState = WMPLib.WMPPlayState.wmppsPlaying Then
+                AxMediaSlidePreview.Ctlcontrols.stop()
+                AxMediaSlidePreview.close()
+            End If
+        End Sub
+        Private Sub PlayPreviewSlideVideo(fnam As String)
+            Me.picSlidePreview.Hide()
+            Me.picSlidePreview.Image = Nothing
+            Me.AxMediaSlidePreview.Show()
+            Try
+                Me.AxMediaSlidePreview.URL = fnam
+                Me.AxMediaSlidePreview.Ctlcontrols.currentPosition = GetMediaDuration(fnam) / 4
+                Me.AxMediaSlidePreview.Ctlcontrols.play()
+            Catch ex As Exception
+                Me.AxMediaSlidePreview.close()
+            End Try
+        End Sub
+        Private Sub ShowPreviewSlideImage(fnam As String)
+            Me.AxMediaSlidePreview.Hide()
+            Me.AxMediaSlidePreview.close()
+            Me.picSlidePreview.Show()
+            Try
+                Me.picSlidePreview.Image = Image.FromFile(fnam)
+            Catch
+                '* If error, clear image display. I don't care what the error was about.
+                Me.picSlidePreview.Image = Nothing
+            End Try
         End Sub
 
         Private Sub tvSlideFolders_Init(ByRef startPath As String)
@@ -4807,22 +4950,22 @@ Namespace JANIS
             Dim SelPath As String = tvSlideFolders.SelectedNode.Name
             If SelPath.EndsWith(":") Then SelPath = SelPath & "\" '* in case it's the root of a drive
             If SelPath <> PrevSelect Then
-                PopulateMediaFiles(SelPath)
+                PopulateSlideCandidatesList(SelPath)
                 PrevSelect = SelPath
             End If
         End Sub
 
-        Private Sub PopulateMediaFiles(Folder As String)
-            '* List all the graphics and video files in the selected folder in the lvGfxFiles control
+        Private Sub PopulateSlideCandidatesList(Folder As String)
+            '* List all the graphics and video files in the selected folder in the lbSlideCandidates control
             ' MessageBox.Show(Me, Folder)
             Me.picSlidePreview.Image = Nothing
-            Me.lbMediaFiles.Items.Clear()
+            Me.lbSlideCandidates.Items.Clear()
             If System.IO.Directory.Exists(Folder) Then
                 Try
                     For Each ext As String In MediaFileExtensions
                         'For Each foundfile As String In My.Computer.FileSystem.GetFiles(Folder, FileIO.SearchOption.SearchTopLevelOnly, "*" & ext).Select()
                         For Each foundfile As String In Directory.GetFiles(Folder, "*" & ext)
-                            Dim newindex As Integer = Me.lbMediaFiles.Items.Add(My.Computer.FileSystem.GetFileInfo(foundfile).Name)
+                            Dim newindex As Integer = Me.lbSlideCandidates.Items.Add(My.Computer.FileSystem.GetFileInfo(foundfile).Name)
                             'Me.lbMediaFiles.Items(newindex)
                         Next
                     Next
@@ -4965,28 +5108,51 @@ Namespace JANIS
             Me.SlideTimer.Start()
         End Sub
         Private Sub StartSlideShow()
+            '* Starts a slideshow if not running. If Whammy mode, prefetches next whammy slide and shows it.
             If Me.SlidesStatus = SLIDES_PLAYING Then Return
             If Me.lbSlideList.Items.Count < 1 Then Return
             Me.lbSlideList.SelectionMode = SelectionMode.One
             If Me.SlidesStatus = SLIDES_WHAMMY Then
                 Me.PreSelectRandomSlide()
+
+                '* PreSlideshowMuteState was already set when Whammy button was clicked
+                If Me.cbMuteVideo.Enabled Then
+                    Me.cbMuteVideo.Checked = True
+                    Me.cbMuteVideo.Enabled = False
+                End If
             ElseIf SlidesStatus <> SLIDES_PAUSED Then
                 Me.lbSlideList.SelectedIndex = 0
+
+                '* Slideshows are SILENT.
+                Me.PreSlideshowMuteState = Me.cbMuteVideo.Checked
+                Me.cbMuteVideo.Checked = True
+                Me.cbMuteVideo.Enabled = False
             End If
-            Me.DisplayImageFile(Me.lbSlideList.SelectedItem, False)
+
+            Me.ShowSelectedSlide()
             Me.SetPauseButtonColor(False)
             Me.SetPlayButtonColor(True)
             If Me.SlidesStatus <> SLIDES_WHAMMY Then Me.SlidesStatus = SLIDES_PLAYING
             Me.StartSlideTimer()
         End Sub
-        Public Sub StopSlideShow()
+        Public Async Sub StopSlideShow()
             Dim WhammyWasActive As Boolean = (Me.SlidesStatus = SLIDES_WHAMMY)
             Me.SlideTimer.Stop()
             Me.SlidesStatus = SLIDES_STOPPED
+
             If WhammyWasActive Then
-                Me.lblRemoteStatus.Text = "Currently Displayed"
-                Me.DisplayImageFile(Me.lbSlideList.SelectedItem, False)
+                '* No worries about videos playing unmuted by accident, since Whammy doesn't play videos 
+                Me.lblRemoteStatus.Text = "Audience Display"
+                Me.ShowSelectedSlide()
+            Else
+                Me.LS.StopVideo()
+                Me.VideoEventTimer.Stop()
+                Await Task.Delay(100)
             End If
+
+            Me.cbMuteVideo.Enabled = True
+            Me.cbMuteVideo.Checked = (Not Me.LS.IsVideoPlaying) And Me.PreSlideshowMuteState
+
             Me.SetPauseButtonColor(False)
             Me.SetPlayButtonColor(False)
             Me.lbSlideList.SelectionMode = SelectionMode.MultiExtended
@@ -5022,27 +5188,24 @@ Namespace JANIS
         End Sub
 
         Private Sub SlideTimer_Tick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles SlideTimer.Tick
-            '* I "misused" the slide timer to check if there is already app instance at startup
+            '* I "misuse" the slide timer at startup to check if there is already an instance of the app running
             If Me.SlideTimerTag = "AppAlreadyRunning" Then
                 Me.Close()
-            Else
-                With Me.lbSlideList
-                    If .Items.Count < 1 Then
-                        Me.StopSlideShow()
-                        Return
-                    ElseIf Me.SlidesStatus = SLIDES_WHAMMY Then
-                        Me.DisplayRawImage(Me.BufferedSlide)
-                        Me.PreSelectRandomSlide()                    '* Set Me.BufferedSlide to a random slide
-                    Else
-                        If .SelectedIndex < (.Items.Count - 1) Then
-                            .SelectedIndex += 1
-                        Else
-                            .SelectedIndex = 0
-                        End If
-                        Me.DisplayImageFile(.SelectedItem, False)
-                    End If
-                End With
+                Return
             End If
+
+            With Me.lbSlideList
+                If .Items.Count < 1 Then
+                    Me.StopSlideShow()
+                    Return
+                ElseIf Me.SlidesStatus = SLIDES_WHAMMY Then
+                    Me.DisplayRawImage(Me.BufferedSlide)
+                    Me.PreSelectRandomSlide()                    '* Set Me.BufferedSlide to a random slide
+                Else
+                    Me.AdvanceOneSlide()
+                    Me.ShowSelectedSlide()
+                End If
+            End With
         End Sub
 
         Private Sub btnPlaySlides_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnPlaySlides.Click
@@ -5061,8 +5224,9 @@ Namespace JANIS
                 Me.StartSlideTimer()
                 Return
             End If
-            '** If we get here, Slides Status must be PLAYING
+            '** If we get here, current state is SLIDES_PLAYING
             Me.SlideTimer.Stop()
+            Me.LS.StopVideo()
             Me.SlidesStatus = SLIDES_PAUSED
             Me.SetPauseButtonColor(True)
         End Sub
@@ -5070,43 +5234,69 @@ Namespace JANIS
             If Me.SlidesStatus = SLIDES_STOPPED Or Me.SlidesStatus = SLIDES_WHAMMY Then Return
             If Me.SlidesStatus = SLIDES_PLAYING Then Me.SlideTimer.Stop() '* temporary stoppage
             Dim controlname As String = sender.Name
-            With Me.lbSlideList
-                Select Case controlname
-                    Case "btnFirstSlide"
-                        .SelectedIndex = 0
-                    Case "btnPrevSlide"
-                        If .SelectedIndex > 0 Then
-                            .SelectedIndex -= 1
-                        Else
-                            '** Roll over before the beginning
-                            .SelectedIndex = .Items.Count - 1
-                        End If
-                    Case "btnNextSlide"
-                        If .SelectedIndex < (.Items.Count - 1) Then
-                            .SelectedIndex += 1
-                        Else
-                            '** Roll over past the end
-                            .SelectedIndex = 0
-                        End If
-                    Case "btnLastSlide"
-                        .SelectedIndex = .Items.Count - 1
-                End Select
-                Me.DisplayImageFile(.SelectedItem, False)
-            End With
+            Select Case controlname
+                Case "btnFirstSlide"
+                    Me.GotoFirstSlide()
+                Case "btnPrevSlide"
+                    Me.BackUpOneSlide()
+                Case "btnNextSlide"
+                    Me.AdvanceOneSlide()
+                Case "btnLastSlide"
+                    Me.AdvanceToLastSlide()
+            End Select
+            Me.ShowSelectedSlide()
             If Me.SlidesStatus = SLIDES_PLAYING Then Me.StartSlideTimer()
         End Sub
+        Private Sub ShowSelectedSlide()
+            Dim KillSlideShow As Boolean = False  '* and always will be, but makes the calls clearer
+            Me.ShowMediaFile(Me.lbSlideList.SelectedItem, KillSlideShow)
+        End Sub
+        Private Sub GotoFirstSlide()
+            Me.lbSlideList.SelectedIndex = 0
+        End Sub
+        Private Sub BackUpOneSlide()
+            With Me.lbSlideList
+                If .SelectedIndex > 0 Then
+                    .SelectedIndex -= 1
+                Else
+                    '** Roll over before the beginning
+                    .SelectedIndex = .Items.Count - 1
+                End If
+            End With
+        End Sub
+        Private Sub AdvanceOneSlide()
+            With Me.lbSlideList
+                If .SelectedIndex < (.Items.Count - 1) Then
+                    .SelectedIndex += 1
+                Else
+                    '** Roll over past the end
+                    .SelectedIndex = 0
+                End If
+            End With
+        End Sub
+        Private Sub AdvanceToLastSlide()
+            Me.lbSlideList.SelectedIndex = Me.lbSlideList.Items.Count - 1
+        End Sub
+
+
         Private Sub lbSlideList_DoubleClick(ByVal sender As Object, ByVal e As System.EventArgs) Handles lbSlideList.DoubleClick
             '************************************************************************************
             '* A double click changes the slide immediately REGARDLESS OF MODE, except for WHAMMY
             '************************************************************************************
             If Me.SlidesStatus = SLIDES_WHAMMY Then Return
             If Me.SlidesStatus = SLIDES_PLAYING Then Me.SlideTimer.Stop() '* temporary stoppage
-            Me.DisplayImageFile(Me.lbSlideList.SelectedItem, False)
+            Me.ShowMediaFile(Me.lbSlideList.SelectedItem, False)
             If Me.SlidesStatus = SLIDES_PLAYING Then StartSlideTimer()
         End Sub
         Private Sub btnWhammy_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnWhammy.Click
             If Me.SlidesStatus = SLIDES_WHAMMY Then Return
             If Me.lbSlideList.Items.Count < 1 Then Return
+
+            '* If there are any videos in the slideshow list, Whammy is not allowed.
+            If Me.SlideListContainsVideoFile() Then
+                MessageBox.Show(Me, "The slide list contains video. Please remove all video files from the list before using WHAMMY.", "Whammy Can't Play Video", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button1)
+                Return
+            End If
 
             'If Me.SlidesStatus <> SLIDES_STOPPED Then Me.StopSlideShow()
             Me.lblRemoteStatus.Text = "WHAMMY Running"
@@ -5115,6 +5305,15 @@ Namespace JANIS
             Dim WaitForm As New fmClickWait(Me)
             WaitForm.Show() '* Will automatically stop the whammy slideshow when it closes
         End Sub
+
+        Private Function SlideListContainsVideoFile() As Boolean
+            For Each filename As String In Me.lbSlideList.Items
+                If Me.IsVideoFile(filename) Then
+                    Return True
+                End If
+            Next
+            Return False
+        End Function
 
 
         '=================================================================================================
@@ -5233,7 +5432,7 @@ Namespace JANIS
         End Sub
 
         Private Sub btnHBSelect_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnHBSelect1.Click, btnHBSelect2.Click, btnHBSelect3.Click, btnHBSelect4.Click, btnHBSelect5.Click, btnHBSelect6.Click, btnHBSelect7.Click, btnHBSelect8.Click, btnHBSelect9.Click, btnHBSelect10.Click
-            Dim fn As String = Me.SelectImageFilename()
+            Dim fn As String = Me.SelectMediaFilename()
             If fn <> "" Then
                 Dim i As Integer = CInt(sender.Tag)
                 Me.HotButton(i).Tag = fn
@@ -5254,11 +5453,9 @@ Namespace JANIS
         End Sub
 
         Private Sub btnHot_MouseClick(ByVal sender As System.Object, ByVal e As MouseEventArgs) Handles btnHot1.MouseClick, btnHot2.MouseClick, btnHot3.MouseClick, btnHot4.MouseClick, btnHot5.MouseClick, btnHot6.MouseClick, btnHot7.MouseClick, btnHot8.MouseClick, btnHot9.MouseClick, btnHot10.MouseClick
-            Dim img_name As String = sender.Tag
-            If img_name <> "" Then
-                '* First, stop the slideshow if it's running (KillSlideShow = True)
-                Me.DisplayImageFile(img_name, True)
-            End If
+            Dim fnam As String = sender.Tag
+            Dim KillSlideShow As Boolean = True
+            ShowMediaFile(fnam, KillSlideShow)
         End Sub
 
         '=================================================================================================
@@ -5291,7 +5488,7 @@ Namespace JANIS
             End If
         End Sub
         Private Sub btnChooseDefaultImage_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnChooseDefaultImage.Click
-            Dim fn As String = SelectImageFilename()
+            Dim fn As String = SelectMediaFilename()
             If fn <> "" Then Me.tbDefaultImageFile.Text = fn
         End Sub
 
@@ -5519,7 +5716,7 @@ Namespace JANIS
             Me.tbLeftFontSize.Text = Me.tbDefaultFontSize.Text
             Me.tbRightFontSize.Text = Me.tbDefaultFontSize.Text
             Me.LS.SetTextShadows(Me.cbShadowsEnabled.Checked)
-            If Me.cbDisplayDefaultImage.Checked Then Me.DisplayImageFile(Me.tbDefaultImageFile.Text)
+            If Me.cbDisplayDefaultImage.Checked Then Me.ShowMediaFile(Me.tbDefaultImageFile.Text)
             If Me.cbLoadDefaultHB.Checked Then
                 If Me.tbDefaultHBFile.Text <> "" Then Me.LoadHotButtons(Me.tbDefaultHBFile.Text)
             End If

@@ -1,6 +1,5 @@
 ﻿Imports System.Drawing.Imaging
 Imports System.Runtime.InteropServices
-Imports System.Threading
 
 'Algorithm based on this C code.
 'Scroll to the bottom of the page:-

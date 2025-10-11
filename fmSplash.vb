@@ -3,9 +3,9 @@ Public Class fmSplash
 
     Class ApplicationInformation
         Public Title As String = "JANIS"
-        Public MajorVersion As Integer = 4
+        Public MajorVersion As Integer = 5
         Public MinorVersion As Integer = 0
-        Public Iteration As Integer = 2
+        Public Iteration As Integer = 0
         Public ProductName As String = "SINGLE SCREEN"
         Public Copyright As String = "2004-2025"
     End Class

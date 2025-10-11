@@ -1,26 +1,31 @@
-Upcoming release, part 4:
-* Video playback now works at a minimal level
-  * only stops when it ends or something else is displayed
-  * Muting and volume is all BROKEN on playback. It always behaves like it's muted
-    regardless of mute and volume settings. Wow, the WMP control sucks.
-  * When videos display, the operator preview panel updates once a second
-* Retooled and moved scoring controls
-* Moved operator remote viewer to center of top pane
-  * Still relocating other controls
-
-
-Upcoming release, part 3:
-* Media Library now catalogs videos in addition to images.
-* Got video stuff working in the Image Search (now Media Search) tab.
-* Renamed a bunch of controls, subs & functions Image --> Media.
-* Created some of the infrastructure for the Windows Media control in fmScreen.
-* Removed dead code and dead comments.
 * Plenty more to do, including:
   * determining where to put video controls (play/stop/pause/etc.);
   * setting up drag-and-drop to work w/video;
+  * setting up hotbuttons to work w/video
   * handling videos in slideshows
-  * sending video to the big screen (w/sound)
-  * finding a place to put a mute checkbox for video playback
+  * handling videos from LOAD FILE (and maybe paste?)
+
+Upcoming release, part 5:
+
+https://youtu.be/s3pDMUWlA6I?si=QBBTe1hKPM45XjC8
+
+Upcoming release, part 4:
+* Video playback now works at a basic level
+  * only stops when it ends or something else is displayed --needs controls
+  * When videos display, the operator preview panel updates once a second
+* Retooled and moved scoring, image load/paste, and blackout controls
+* Moved operator remote view panel to center of top pane
+  * Labeled "Audience Display" b/c it mirrors what they see
+  * In-panel graphical sound control button (green: ON; red: MUTE)
+
+Upcoming release, part 3:
+* Media Library now catalogs videos in addition to images.
+* Video stuff 100% working in Media Search (was Image Search) tab.
+* Renamed a bunch of controls, subs & functions "Image" --> "Media".
+* Created the infrastructure for the Windows Media control in fmScreen.
+* Removed:
+  * dead code and comments
+  * the image "Expand" checkbox, which nobody uses
 
 Upcoming release, part 2:
 * Updated some visual elements and added some tooltips for clarity/modernity.
@@ -31,7 +36,7 @@ Upcoming release, part 2:
 
 Upcoming release, part 1: 2025-09-16 (single)
 * Supported audience screen resolution is now 1080p. 720p is no longer supported.
-  1080p is the only supported resolution at this time.
+  1080p is the ONLY supported resolution at this time.
 * Beautified some UI elements, notably buttons on the text display tab.
 * Eliminated the button that loads a text file into BOTH text display entry fields.
 * The "currently displayed" image that duplicates what the audience sees now shows

@@ -1,5 +1,3 @@
-Imports System.Runtime.Versioning
-
 Public Class fmScreen
     Inherits System.Windows.Forms.Form
 
@@ -224,7 +222,7 @@ Public Class fmScreen
         Me.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!)
         Me.ForeColor = System.Drawing.Color.White
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None
-        Me.Location = New System.Drawing.Point(1280, 0)
+        Me.Location = New System.Drawing.Point(1920, 0)
         Me.MaximizeBox = False
         Me.MinimizeBox = False
         Me.Name = "fmScreen"
@@ -267,7 +265,7 @@ Public Class fmScreen
             .fullScreen = False
             .stretchToFit = True
             With .settings
-                .mute = True
+                .mute = False
                 .autoStart = True
                 .invokeURLs = False
                 .playCount = 1
@@ -376,7 +374,7 @@ Public Class fmScreen
         '* Black out the screen and turn off visible stuff
 
         Me.BackColor = System.Drawing.Color.Black
-        StopVideo()
+        Me.StopVideo()
         Me.picGraphic.Hide()
         Me.picGraphic.ImageLocation = ""
         Me.lblMsg.Hide()
@@ -400,7 +398,7 @@ Public Class fmScreen
     End Sub
 
     Public Sub ShowText(ByVal txt As String, ByVal BackColor As System.Drawing.Color, ByVal fontsize As Integer)
-        StopVideo()
+        Me.StopVideo()
         Me.lblTeamLocLeft.Hide()
         Me.lblTeamLocRight.Hide()
         Me.lblTeamNameLeft.Hide()
@@ -426,7 +424,7 @@ Public Class fmScreen
         Me.lblTeamLocRight.Text = locRight
         Me.lblTeamNameRight.Text = nameRight
 
-        StopVideo()
+        Me.StopVideo()
         Me.lblMsg.Hide()
         Me.picGraphic.Image = Me.ScoreboardBitMap
         Me.picGraphic.Show()
@@ -452,7 +450,7 @@ Public Class fmScreen
         If Img Is Nothing Then Exit Sub
 
         Me.BackColor = System.Drawing.Color.Black
-        StopVideo()
+        Me.StopVideo()
         Me.lblTeamLocLeft.Hide()
         Me.lblTeamLocRight.Hide()
         Me.lblTeamNameLeft.Hide()
@@ -469,8 +467,11 @@ Public Class fmScreen
 
     Public Function LaunchVideo(ByVal fnam As String) As String
         '* Returns an error message if there was a problem, otherwise returns Nothing
+        '* NEVER modify the mute or volume settings here. They were set before we got here and that's what we want.
+
+        Static FirstInvoke As Boolean = True '* the first time a video is played, it takes a few milliseconds to start
         Dim resultMessage As String = Nothing
-        StopVideo()
+        Me.StopVideo()
         Me.lblTeamLocLeft.Hide()
         Me.lblTeamLocRight.Hide()
         Me.lblTeamNameLeft.Hide()
@@ -481,16 +482,22 @@ Public Class fmScreen
         Me.picGraphic.Hide()
         Me.AxMediaPlayer.Show()
 
+
         Me.AxMediaPlayer.URL = fnam
-        Me.AxMediaPlayer.settings.mute = False
-        Me.AxMediaPlayer.settings.volume = 100
-        'MsgBox("Mute is " & mute.ToString)
+        If FirstInvoke Then
+            '* The first time a video is launched, it can take a few milliseconds to start. Only need to do this once (I think).
+            System.Threading.Thread.Sleep(50)
+            Application.DoEvents()
+            FirstInvoke = False
+        End If
+
         Try
             Me.AxMediaPlayer.Ctlcontrols.play()
         Catch ex As Exception
             resultMessage = "Error playing video file '" & fnam & "':" & vbCrLf & ex.Message ' & vbCrLf
-            StopVideo()
+            Me.StopVideo()
         End Try
+
         Return resultMessage
     End Function
     Public Function IsVideoPlaying() As Boolean
@@ -531,14 +538,14 @@ Public Class fmScreen
             Me.AxMediaPlayer.Ctlcontrols.play()
         Catch ex As Exception
             resultMessage = "Error playing video file:" & vbCrLf & ex.Message ' & vbCrLf
-            StopVideo()
+            Me.StopVideo()
         End Try
         Return resultMessage
     End Function
     Public Sub StopVideo()
         Me.AxMediaPlayer.Hide()
         Me.AxMediaPlayer.Ctlcontrols.stop()
-        Me.AxMediaPlayer.settings.mute = True
+        Me.AxMediaPlayer.close()
     End Sub
 
     Public Sub ShowCountdownText(ByVal CountdownText As String, ByVal BackColor As System.Drawing.Color, ByVal CountdownVisible As Boolean)

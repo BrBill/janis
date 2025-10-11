@@ -1,6 +1,5 @@
-Imports System.Resources
-
 Imports System.Reflection
+Imports System.Resources
 Imports System.Runtime.InteropServices
 
 ' General Information about an assembly is controlled through the following 
@@ -9,16 +8,16 @@ Imports System.Runtime.InteropServices
 
 ' Review the values of the assembly attributes
 
-<Assembly: AssemblyTitle("JANIS")> 
-<Assembly: AssemblyDescription("The Improv Assistant")> 
+<Assembly: AssemblyTitle("JANIS")>
+<Assembly: AssemblyDescription("The Improv Assistant")>
 <Assembly: AssemblyCompany("Easy Being Productions")>
 <Assembly: AssemblyProduct("JANIS_Single")>
-<Assembly: AssemblyCopyright("2004-2025")>
-<Assembly: AssemblyTrademark("")> 
-<Assembly: CLSCompliant(True)> 
+<Assembly: AssemblyCopyright("2004-2026")>
+<Assembly: AssemblyTrademark("")>
+<Assembly: CLSCompliant(True)>
 
 'The following GUID is for the ID of the typelib if this project is exposed to COM
-<Assembly: Guid("0EF1FAEA-4597-4A59-9B0F-501530966DFC")> 
+<Assembly: Guid("0EF1FAEA-4597-4A59-9B0F-501530966DFC")>
 
 ' Version information for an assembly consists of the following four values:
 '
@@ -30,7 +29,7 @@ Imports System.Runtime.InteropServices
 ' You can specify all the values or you can default the Build and Revision Numbers 
 ' by using the '*' as shown below:
 
-<Assembly: AssemblyVersion("4.0.*")>
+<Assembly: AssemblyVersion("5.0.*")>
 
-<Assembly: AssemblyFileVersionAttribute("4.0.2")>
-<Assembly: NeutralResourcesLanguageAttribute("en")> 
+<Assembly: AssemblyFileVersionAttribute("5.0.0")>
+<Assembly: NeutralResourcesLanguageAttribute("en")>
