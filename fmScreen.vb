@@ -88,14 +88,15 @@ Public Class fmScreen
         '
         'lblCountdown
         '
-        Me.lblCountdown.BackColor = System.Drawing.Color.FromArgb(CType(CType(48, Byte), Integer), CType(CType(48, Byte), Integer), CType(CType(48, Byte), Integer))
-        Me.lblCountdown.Font = New System.Drawing.Font("Arial Black", 105.0!, System.Drawing.FontStyle.Bold)
-        Me.lblCountdown.Location = New System.Drawing.Point(0, 900)
+        Me.lblCountdown.BackColor = System.Drawing.Color.FromArgb(CType(CType(36, Byte), Integer), CType(CType(36, Byte), Integer), CType(CType(36, Byte), Integer))
+        Me.lblCountdown.Font = New System.Drawing.Font("Arial Black", 70.0!, System.Drawing.FontStyle.Bold)
+        Me.lblCountdown.Location = New System.Drawing.Point(0, 960)
         Me.lblCountdown.Name = "lblCountdown"
-        Me.lblCountdown.Size = New System.Drawing.Size(1920, 180)
+        Me.lblCountdown.Size = New System.Drawing.Size(1920, 120)
         Me.lblCountdown.TabIndex = 7
         Me.lblCountdown.Text = "00:00:00"
         Me.lblCountdown.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        Me.lblCountdown.Visible = False
         '
         'lblTeamLocLeft
         '
@@ -188,7 +189,7 @@ Public Class fmScreen
         Me.picGraphic.Location = New System.Drawing.Point(0, 0)
         Me.picGraphic.Name = "picGraphic"
         Me.picGraphic.Size = New System.Drawing.Size(1920, 1080)
-        Me.picGraphic.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
+        Me.picGraphic.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
         Me.picGraphic.TabIndex = 0
         Me.picGraphic.TabStop = False
         '
@@ -238,6 +239,7 @@ Public Class fmScreen
 #End Region
 
     Public Sub fmScreen_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+        Me.FadeTimer.Stop()     '* this shouldn't be running but it seems to launch at start
         Me.AxMediaPlayer.Hide()
         Me.AxMediaPlayer.uiMode = "none"
 
@@ -376,7 +378,7 @@ Public Class fmScreen
         Me.BackColor = System.Drawing.Color.Black
         Me.StopVideo()
         Me.picGraphic.Hide()
-        Me.picGraphic.ImageLocation = ""
+        Me.DisposeCurrentGraphicImage()
         Me.lblMsg.Hide()
         Me.lblTeamLocLeft.Hide()
         Me.lblTeamLocRight.Hide()
@@ -386,7 +388,7 @@ Public Class fmScreen
         Me.lblScoreRight.Hide()
     End Sub
 
-    Public Function CaptureWindowImage() As Bitmap
+    Public Function CaptureScreenImage() As Bitmap
         Dim bmp As New Bitmap(Me.Width, Me.Height)
         Using g As Graphics = Graphics.FromImage(bmp)
             g.CopyFromScreen(Me.Location, Point.Empty, Me.Size)
@@ -406,7 +408,8 @@ Public Class fmScreen
         Me.lblScoreLeft.Hide()
         Me.lblScoreRight.Hide()
         Me.picGraphic.Hide()
-        Me.picGraphic.ImageLocation = ""
+        Me.DisposeCurrentGraphicImage()
+
         Me.lblMsg.Font = New Font(Me.lblMsg.Font.Name, fontsize, Me.lblMsg.Font.Style)
         Me.lblMsg.BackColor = BackColor
         Me.lblMsg.Text = txt
@@ -423,10 +426,13 @@ Public Class fmScreen
         Me.lblTeamNameRight.BackColor = RightTeamColor
         Me.lblTeamLocRight.Text = locRight
         Me.lblTeamNameRight.Text = nameRight
+        Me.picGraphic.Hide()
+        Me.DisposeCurrentGraphicImage()
 
         Me.StopVideo()
         Me.lblMsg.Hide()
-        Me.picGraphic.Image = Me.ScoreboardBitMap
+        '* Must clone the score bitmap; otherwise disposing it later will dispose the referenced original (BAD).
+        Me.picGraphic.Image = Me.ScoreboardBitMap.Clone()
         Me.picGraphic.Show()
 
         Me.lblTeamLocLeft.Show()
@@ -458,8 +464,7 @@ Public Class fmScreen
         Me.lblScoreLeft.Hide()
         Me.lblScoreRight.Hide()
         Me.lblMsg.Hide()
-
-        Me.picGraphic.SizeMode = PictureBoxSizeMode.Zoom
+        Me.DisposeCurrentGraphicImage()
 
         Me.picGraphic.Image = Img
         Me.picGraphic.Show()
@@ -486,13 +491,14 @@ Public Class fmScreen
         Me.AxMediaPlayer.URL = fnam
         If FirstInvoke Then
             '* The first time a video is launched, it can take a few milliseconds to start. Only need to do this once (I think).
-            System.Threading.Thread.Sleep(50)
+            System.Threading.Thread.Sleep(100)
             Application.DoEvents()
             FirstInvoke = False
         End If
 
         Try
             Me.AxMediaPlayer.Ctlcontrols.play()
+            ' Application.DoEvents()
         Catch ex As Exception
             resultMessage = "Error playing video file '" & fnam & "':" & vbCrLf & ex.Message ' & vbCrLf
             Me.StopVideo()
@@ -502,6 +508,7 @@ Public Class fmScreen
     End Function
     Public Function IsVideoPlaying() As Boolean
         Return (Me.AxMediaPlayer.playState = WMPLib.WMPPlayState.wmppsPlaying)
+        ' Or Me.AxMediaPlayer.playState = WMPLib.WMPPlayState.wmppsTransitioning)
     End Function
 
     Public Sub SetVideoMute(ByVal newMuteSetting As Boolean)
@@ -523,6 +530,12 @@ Public Class fmScreen
     Public Function ResumeVideo() As String
         '* Returns an error message if there was a problem, otherwise returns Nothing
         Dim resultMessage As String = Nothing
+
+        '* Can only resume if it's currently paused
+        If Me.AxMediaPlayer.playState <> WMPLib.WMPPlayState.wmppsPaused Then
+            Return resultMessage
+        End If
+
         Me.lblTeamLocLeft.Hide()
         Me.lblTeamLocRight.Hide()
         Me.lblTeamNameLeft.Hide()
@@ -532,7 +545,6 @@ Public Class fmScreen
         Me.lblMsg.Hide()
         Me.picGraphic.Hide()
         Me.AxMediaPlayer.Show()
-
 
         Try
             Me.AxMediaPlayer.Ctlcontrols.play()
@@ -564,6 +576,13 @@ Public Class fmScreen
 
 
 #Region "Private Functions and Subs"
+    Private Sub DisposeCurrentGraphicImage()
+        If Me.picGraphic.Image IsNot Nothing Then
+            Me.picGraphic.Image.Dispose()
+            Me.picGraphic.Image = Nothing
+        End If
+    End Sub
+
     Private Function Limited_Score(ByVal score As String) As Integer
         '* If the score is too big or too small, it will be too wide to display
         If score = "" Then Return ""

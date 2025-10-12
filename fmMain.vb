@@ -31,7 +31,6 @@ Namespace JANIS
         Const SLIDES_PLAYING As Integer = 2
         Const SLIDES_WHAMMY As Integer = 3
 
-
         Private Class FileID   ' Used by the image indexing system
             Public Path As String = ""   ' The directory it sits in.
             Public Name As String = ""   ' The name of this file.
@@ -52,7 +51,8 @@ Namespace JANIS
         Dim DisplayModeAdjustment As Single = 0.7     ' Divide font setting by this for display. Differs for test/arena mode.
         Dim DisplayToEntryFontRatio As Single = 123 / 42  ' This is the size ratio of fonts in the display vs. in the textbox
         Dim DisplayFontRatio As Single = 33 / 80          ' The "should be" size ratio of display to what I once thought it was.
-        Dim DEFAULT_COUNTDOWN_COLOR As System.Drawing.Color = System.Drawing.Color.FromArgb(CType(CType(48, Byte), Integer), CType(CType(48, Byte), Integer), CType(CType(48, Byte), Integer))
+        Dim COUNTDOWN_DEFAULT_COLOR As System.Drawing.Color = System.Drawing.Color.FromArgb(CType(CType(42, Byte), Integer), CType(CType(42, Byte), Integer), CType(CType(42, Byte), Integer))
+        Dim COUNTDOWN_WARN_COLOR As System.Drawing.Color = System.Drawing.Color.FromArgb(CType(CType(192, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(0, Byte), Integer))
 
         '* NOTE: Many .MOV files are not playable by Windows Media Player w/o additional codecs (technically a purchased Microsoft Store app is required)
         Private VideoFileExtensions() As String = {".ASF", ".AVI", ".M2TS", ".M4V", ".MP4", ".MP4V", ".MPG", ".MPEG", ".WMV"}
@@ -3046,8 +3046,12 @@ Namespace JANIS
             Me.cbMuteVideo.BackgroundImage = Global.JANIS.My.Resources.Resources.sound_on_green
             Me.cbMuteVideo.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
             Me.cbMuteVideo.CheckAlign = System.Drawing.ContentAlignment.MiddleRight
+            Me.cbMuteVideo.FlatAppearance.BorderSize = 0
+            Me.cbMuteVideo.FlatAppearance.CheckedBackColor = System.Drawing.Color.Black
+            Me.cbMuteVideo.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Black
             Me.cbMuteVideo.FlatStyle = System.Windows.Forms.FlatStyle.Flat
             Me.cbMuteVideo.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+            Me.cbMuteVideo.ForeColor = System.Drawing.Color.Black
             Me.cbMuteVideo.Location = New System.Drawing.Point(0, 173)
             Me.cbMuteVideo.Name = "cbMuteVideo"
             Me.cbMuteVideo.Size = New System.Drawing.Size(30, 30)
@@ -3290,7 +3294,7 @@ Namespace JANIS
             '
             Me.btnHot10.AllowDrop = True
             Me.btnHot10.BackColor = System.Drawing.Color.Gray
-            Me.btnHot10.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.5!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+            Me.btnHot10.Font = New System.Drawing.Font("Segoe UI Emoji", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
             Me.btnHot10.ForeColor = System.Drawing.Color.White
             Me.btnHot10.Location = New System.Drawing.Point(895, 266)
             Me.btnHot10.Name = "btnHot10"
@@ -3304,7 +3308,7 @@ Namespace JANIS
             '
             Me.btnHot9.AllowDrop = True
             Me.btnHot9.BackColor = System.Drawing.Color.Gray
-            Me.btnHot9.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.5!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+            Me.btnHot9.Font = New System.Drawing.Font("Segoe UI Emoji", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
             Me.btnHot9.ForeColor = System.Drawing.Color.White
             Me.btnHot9.Location = New System.Drawing.Point(796, 266)
             Me.btnHot9.Name = "btnHot9"
@@ -3318,7 +3322,7 @@ Namespace JANIS
             '
             Me.btnHot8.AllowDrop = True
             Me.btnHot8.BackColor = System.Drawing.Color.Gray
-            Me.btnHot8.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.5!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+            Me.btnHot8.Font = New System.Drawing.Font("Segoe UI Emoji", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
             Me.btnHot8.ForeColor = System.Drawing.Color.White
             Me.btnHot8.Location = New System.Drawing.Point(697, 266)
             Me.btnHot8.Name = "btnHot8"
@@ -3332,7 +3336,7 @@ Namespace JANIS
             '
             Me.btnHot7.AllowDrop = True
             Me.btnHot7.BackColor = System.Drawing.Color.Gray
-            Me.btnHot7.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.5!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+            Me.btnHot7.Font = New System.Drawing.Font("Segoe UI Emoji", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
             Me.btnHot7.ForeColor = System.Drawing.Color.White
             Me.btnHot7.Location = New System.Drawing.Point(598, 266)
             Me.btnHot7.Name = "btnHot7"
@@ -3346,7 +3350,7 @@ Namespace JANIS
             '
             Me.btnHot6.AllowDrop = True
             Me.btnHot6.BackColor = System.Drawing.Color.Gray
-            Me.btnHot6.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.5!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+            Me.btnHot6.Font = New System.Drawing.Font("Segoe UI Emoji", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
             Me.btnHot6.ForeColor = System.Drawing.Color.White
             Me.btnHot6.Location = New System.Drawing.Point(499, 266)
             Me.btnHot6.Name = "btnHot6"
@@ -3360,7 +3364,7 @@ Namespace JANIS
             '
             Me.btnHot5.AllowDrop = True
             Me.btnHot5.BackColor = System.Drawing.Color.Gray
-            Me.btnHot5.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.5!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+            Me.btnHot5.Font = New System.Drawing.Font("Segoe UI Emoji", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
             Me.btnHot5.ForeColor = System.Drawing.Color.White
             Me.btnHot5.Location = New System.Drawing.Point(399, 266)
             Me.btnHot5.Name = "btnHot5"
@@ -3374,7 +3378,7 @@ Namespace JANIS
             '
             Me.btnHot4.AllowDrop = True
             Me.btnHot4.BackColor = System.Drawing.Color.Gray
-            Me.btnHot4.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.5!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+            Me.btnHot4.Font = New System.Drawing.Font("Segoe UI Emoji", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
             Me.btnHot4.ForeColor = System.Drawing.Color.White
             Me.btnHot4.Location = New System.Drawing.Point(300, 266)
             Me.btnHot4.Name = "btnHot4"
@@ -3388,7 +3392,7 @@ Namespace JANIS
             '
             Me.btnHot3.AllowDrop = True
             Me.btnHot3.BackColor = System.Drawing.Color.Gray
-            Me.btnHot3.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.5!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+            Me.btnHot3.Font = New System.Drawing.Font("Segoe UI Emoji", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
             Me.btnHot3.ForeColor = System.Drawing.Color.White
             Me.btnHot3.Location = New System.Drawing.Point(202, 266)
             Me.btnHot3.Name = "btnHot3"
@@ -3402,7 +3406,7 @@ Namespace JANIS
             '
             Me.btnHot2.AllowDrop = True
             Me.btnHot2.BackColor = System.Drawing.Color.Gray
-            Me.btnHot2.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.5!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+            Me.btnHot2.Font = New System.Drawing.Font("Segoe UI Emoji", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
             Me.btnHot2.ForeColor = System.Drawing.Color.White
             Me.btnHot2.Location = New System.Drawing.Point(103, 266)
             Me.btnHot2.Name = "btnHot2"
@@ -3416,7 +3420,7 @@ Namespace JANIS
             '
             Me.btnHot1.AllowDrop = True
             Me.btnHot1.BackColor = System.Drawing.Color.Gray
-            Me.btnHot1.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.5!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+            Me.btnHot1.Font = New System.Drawing.Font("Segoe UI Emoji", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
             Me.btnHot1.ForeColor = System.Drawing.Color.White
             Me.btnHot1.Location = New System.Drawing.Point(4, 266)
             Me.btnHot1.Name = "btnHot1"
@@ -3756,14 +3760,23 @@ Namespace JANIS
             End If
         End Sub
 
+        Private Sub ClearCurrentPictureboxImage(myPicBox As PictureBox)
+            If myPicBox.Image IsNot Nothing Then
+                myPicBox.Image.Dispose()
+                myPicBox.Image = Nothing
+            End If
+        End Sub
+
         Private Sub ShowRemoteView()
             Application.DoEvents()
-            Dim img As Bitmap = LS.CaptureWindowImage()
-            Me.picRemoteViewer.Image = img
+            Me.ClearCurrentPictureboxImage(Me.picRemoteViewer)
+            Me.picRemoteViewer.Image = Me.LS.CaptureScreenImage()
+        End Sub
+        Private Sub ClearRemoteViewer()
+            Me.ClearCurrentPictureboxImage(Me.picRemoteViewer)
         End Sub
 
         Private Sub btnShowScore_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnShowScore.Click
-            Me.picRemoteViewer.Image = Nothing
             Me.DisplayScore()
         End Sub
         Private Sub btnLeftScoreColor_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnLeftScoreColor.Click
@@ -3868,8 +3881,7 @@ Namespace JANIS
 
             '* Shut them down, Artoo! Shut them all down!
             Me.LS.Blackout()
-            Me.picRemoteViewer.ImageLocation = ""
-            Me.picRemoteViewer.Image = Nothing
+            Me.ClearCurrentPictureboxImage(Me.picRemoteViewer)
         End Sub
 
         Private Sub tbFontSize_KeyUp(ByVal sender As System.Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles tbLeftFontSize.KeyUp, tbRightFontSize.KeyUp, tbDefaultFontSize.KeyUp
@@ -3946,24 +3958,21 @@ Namespace JANIS
             Me.tbLeftText.Focus()
         End Sub
 
-        Private Sub DisplayTextScreen(ByVal Scr As fmScreen, ByVal s As String, ByVal hue As Color, ByVal fontsize As Single)
+        Private Sub DisplayTextScreen(ByVal Scr As fmScreen, ByVal text As String, ByVal hue As Color, ByVal fontsize As Single)
             '* Stop the slideshow if it's running.
             Me.StopSlideShow()
-
-            '* Blank out the corresponding image viewer
-            Me.picRemoteViewer.Image = Nothing
+            Me.ClearCurrentPictureboxImage(Me.picRemoteViewer)
 
             If TestMode Then fontsize = fontsize * 7.2
             Scr.SetTextShadows(cbShadowsEnabled.Checked)
-            Scr.ShowText(s, hue, CSng(Me.DisplayToEntryFontRatio * fontsize / Me.DisplayModeAdjustment))
+            Scr.ShowText(text, hue, CSng(Me.DisplayToEntryFontRatio * fontsize / Me.DisplayModeAdjustment))
             Me.ShowRemoteView()
         End Sub
 
         Private Sub DisplayScore()
             '* First, stop the slideshow if it's running.
             Me.StopSlideShow()
-            Me.picRemoteViewer.ImageLocation = ""
-            Me.picRemoteViewer.Image = Nothing
+            Me.ClearCurrentPictureboxImage(Me.picRemoteViewer)
             If Me.tbLeftScore.Text = "" Then Me.tbLeftScore.Text = "0"
             If Me.tbRightScore.Text = "" Then Me.tbRightScore.Text = "0"
             Me.LS.ShowScore(Me.tbLeftScore.Text, Me.tbLeftLoc.Text, Me.tbLeftTeam.Text, Me.tbRightScore.Text, Me.tbRightLoc.Text, Me.tbRightTeam.Text)
@@ -4040,8 +4049,8 @@ Namespace JANIS
             Me.LS.Select()
             Me.LS.BringToFront()
             Me.Select()
-            Me.BringToFront()
-            Me.Activate()
+            'Me.BringToFront()
+            'Me.Activate()
         End Sub
 
         Public Function AskIfSure(ByVal prompt As String) As Boolean
@@ -4071,11 +4080,7 @@ Namespace JANIS
 
         Private Sub AssignImageToPictureBox(ByRef picture As PictureBox, ByRef Img As Image)
             If Img Is Nothing Then Exit Sub
-
-            'picture.Visible = False
-            Me.pnlRemoteViewer.BackColor = System.Drawing.Color.Black
-
-            picture.SizeMode = PictureBoxSizeMode.Zoom  '* fit to screen, keep aspect ratio
+            Me.ClearCurrentPictureboxImage(picture)
             picture.Image = Img
             picture.Visible = True
         End Sub
@@ -4103,7 +4108,7 @@ Namespace JANIS
             End If
 
             '* Audio only ever plays if slideshow's not active AND cbMutVideo is unchecked
-            Me.LS.SetVideoMute((Me.SlidesStatus <> SLIDES_STOPPED) Or cbMuteVideo.Checked)
+            'Me.LS.SetVideoMute((Me.SlidesStatus <> SLIDES_STOPPED) Or cbMuteVideo.Checked)
             Dim resultMessage As String = Me.LS.LaunchVideo(fnam)
 
             If resultMessage IsNot Nothing Then
@@ -4112,16 +4117,17 @@ Namespace JANIS
                         Return '* Quietly move on to the next slide, similar to slideshow image failures
                     End If
                     Me.StopSlideShow()
+                Else
+                    MsgBox(resultMessage, MsgBoxStyle.Exclamation, "Video Playback Error")
                 End If
-                MsgBox(resultMessage, MsgBoxStyle.Exclamation, "Video Playback Error")
             Else
                 If Me.SlidesStatus = SLIDES_PLAYING Then
                     '* stop the slide timer so the video can play until it ends. The Video Timer will notice when it finishes and restart everything
                     '* however, we still want to look like we're playing slides.
                     Me.SlideTimer.Stop()
-                    Await Task.Delay(250) '* If this delay isn't here, the slideshow thinks the video is already over
+                    Await Task.Delay(450) '* If this delay isn't here, the slideshow thinks the video is already over (WHY???)
                 End If
-                Me.picRemoteViewer.Image = Nothing
+                Me.ClearCurrentPictureboxImage(Me.picRemoteViewer)
                 Me.VideoEventTimer.Start()
             End If
             Me.AllScreensToFront()
@@ -4133,6 +4139,8 @@ Namespace JANIS
                 Me.ShowRemoteView()
             Else
                 Me.VideoEventTimer.Enabled = False
+                Me.LS.StopVideo()
+                Me.ClearCurrentPictureboxImage(Me.picRemoteViewer)
                 '* If we are mid-slideshow, then the video just ended, so re-enable the slideshow timer and advance
                 If Me.SlidesStatus = SLIDES_PLAYING Then  '* Whammy won't start if it contains any video so no need to check for it
                     '* Pretend we were pausing the whole time and restart slideshow. A sensible kludge.
@@ -4325,7 +4333,7 @@ Namespace JANIS
             Me.AcceptButton = Me.btnImgSearch
         End Sub
         Private Sub comboImgSearchText_Leave(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles comboImgSearchText.Leave
-            Me.AcceptButton = Nothing
+            Me.AcceptButton = Nothing  '* unassign "default button" behavior
         End Sub
 
         Private Async Sub btnSearchMediaShow_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnSearchMediaShow.Click, lbMediaResults.DoubleClick
@@ -4362,7 +4370,7 @@ Namespace JANIS
                     End If
                 End If
             Else
-                Me.picImgSearchPreview.Image = Nothing
+                Me.ClearCurrentPictureboxImage(Me.picImgSearchPreview)
                 Me.StopPreviewSearchVideo()
                 PrevSelect = ""
             End If
@@ -4376,7 +4384,6 @@ Namespace JANIS
         End Sub
         Private Sub PlayPreviewSearchVideo(fnam As String)
             Me.picImgSearchPreview.Hide()
-            Me.picImgSearchPreview.Image = Nothing
             Me.AxMediaSearchPreview.Show()
             Try
                 Me.AxMediaSearchPreview.URL = fnam
@@ -4389,6 +4396,7 @@ Namespace JANIS
             End Try
         End Sub
         Private Sub ShowPreviewSearchImage(fnam As String)
+            Me.ClearCurrentPictureboxImage(Me.picImgSearchPreview)
             Me.AxMediaSearchPreview.Hide()
             Me.picImgSearchPreview.Show()
             Try
@@ -4471,6 +4479,7 @@ Namespace JANIS
                 Dim namelength As Integer = finfo.Name.Replace(finfo.Extension, "").Length
                 If namelength > Me.HotText(i).MaxLength Then namelength = Me.HotText(i).MaxLength
                 Me.HotText(i).Text = finfo.Name.Substring(0, namelength).ToLower
+                Me.HotButton(i).Text = MediaPrefix(NewText) & Me.HotText(i).Text
                 Me.HotButtonsChanged = True
             End If
         End Sub
@@ -4553,6 +4562,7 @@ Namespace JANIS
         Private Function IsImageFile(ByVal fnam As String) As Boolean
             '* Match file extension against known image extensions.
             '* If it matches, return true; else return false.
+            If fnam Is Nothing OrElse fnam = "" Then Return False
             Dim fi As New FileInfo(fnam)
             Dim ext As String = fi.Extension.ToUpper
 
@@ -4563,6 +4573,7 @@ Namespace JANIS
         Private Function IsVideoFile(ByVal fnam As String) As Boolean
             '* Match file extension against known video extensions.
             '* If it matches, return true; else return false.
+            If fnam Is Nothing OrElse fnam = "" Then Return False
             Dim fi As New FileInfo(fnam)
             Dim ext As String = fi.Extension.ToUpper
 
@@ -4573,6 +4584,7 @@ Namespace JANIS
         Private Function IsMediaFile(ByVal fnam As String) As Boolean
             '* Match file extension against known image extensions.
             '* If it matches, return true; else return false.
+            If fnam Is Nothing OrElse fnam = "" Then Return False
             Dim fi As New FileInfo(fnam)
             Dim ext As String = fi.Extension.ToUpper
 
@@ -4782,7 +4794,7 @@ Namespace JANIS
                     End If
                 End If
             Else
-                Me.picSlidePreview.Image = Nothing
+                Me.ClearCurrentPictureboxImage(Me.picSlidePreview)
                 Me.StopPreviewSlideVideo()
                 PrevSelect = ""
             End If
@@ -4807,7 +4819,6 @@ Namespace JANIS
         End Sub
         Private Sub PlayPreviewSlideVideo(fnam As String)
             Me.picSlidePreview.Hide()
-            Me.picSlidePreview.Image = Nothing
             Me.AxMediaSlidePreview.Show()
             Try
                 Me.AxMediaSlidePreview.URL = fnam
@@ -4820,6 +4831,7 @@ Namespace JANIS
         Private Sub ShowPreviewSlideImage(fnam As String)
             Me.AxMediaSlidePreview.Hide()
             Me.AxMediaSlidePreview.close()
+            Me.ClearCurrentPictureboxImage(Me.picSlidePreview)
             Me.picSlidePreview.Show()
             Try
                 Me.picSlidePreview.Image = Image.FromFile(fnam)
@@ -4958,7 +4970,7 @@ Namespace JANIS
         Private Sub PopulateSlideCandidatesList(Folder As String)
             '* List all the graphics and video files in the selected folder in the lbSlideCandidates control
             ' MessageBox.Show(Me, Folder)
-            Me.picSlidePreview.Image = Nothing
+            Me.ClearCurrentPictureboxImage(Me.picSlidePreview)
             Me.lbSlideCandidates.Items.Clear()
             If System.IO.Directory.Exists(Folder) Then
                 Try
@@ -5136,8 +5148,16 @@ Namespace JANIS
             Me.StartSlideTimer()
         End Sub
         Public Async Sub StopSlideShow()
+            If Me.SlidesStatus = SLIDES_STOPPED Then Return
+
             Dim WhammyWasActive As Boolean = (Me.SlidesStatus = SLIDES_WHAMMY)
             Me.SlideTimer.Stop()
+            Me.SetPauseButtonColor(False)
+            Me.SetPlayButtonColor(False)
+            Me.lbSlideList.SelectionMode = SelectionMode.MultiExtended
+
+            Me.cbMuteVideo.Enabled = True
+
             Me.SlidesStatus = SLIDES_STOPPED
 
             If WhammyWasActive Then
@@ -5150,12 +5170,8 @@ Namespace JANIS
                 Await Task.Delay(100)
             End If
 
-            Me.cbMuteVideo.Enabled = True
-            Me.cbMuteVideo.Checked = (Not Me.LS.IsVideoPlaying) And Me.PreSlideshowMuteState
+            Me.cbMuteVideo.Checked = Me.PreSlideshowMuteState
 
-            Me.SetPauseButtonColor(False)
-            Me.SetPlayButtonColor(False)
-            Me.lbSlideList.SelectionMode = SelectionMode.MultiExtended
         End Sub
 
         Private Sub SetPauseButtonColor(ByVal pause_on As Boolean)
@@ -5367,10 +5383,10 @@ Namespace JANIS
                     Dim s As String = ""
                     Input(fn, s)
                     Dim info() As String = Split(s, "¶")
-                    Me.HotButton(i).Text = info(0)
                     Me.HotText(i).Text = info(0)
                     Me.HotButton(i).Tag = info(1)
                     Me.HotImage(i).Text = info(1)
+                    Me.HotButton(i).Text = MediaPrefix(info(1)) & info(0)
                     i = i + 1
                 End While
                 FileClose(fn)
@@ -5392,7 +5408,7 @@ Namespace JANIS
                     FileOpen(fn, .FileName, OpenMode.Output)
                     Dim i As Integer
                     For i = 0 To 9
-                        PrintLine(fn, Me.HotButton(i).Text & "¶" & Me.HotButton(i).Tag)
+                        PrintLine(fn, Me.HotText(i).Text & "¶" & Me.HotButton(i).Tag)
                     Next
                     FileClose(fn)
                     Me.HotButtonsChanged = False
@@ -5435,6 +5451,7 @@ Namespace JANIS
             Dim fn As String = Me.SelectMediaFilename()
             If fn <> "" Then
                 Dim i As Integer = CInt(sender.Tag)
+                Me.HotButton(i).Text = MediaPrefix(Me.HotImage(i).Text) & HotText(i).Text  '* in case filetype changes
                 Me.HotButton(i).Tag = fn
                 Me.HotImage(i).Text = fn
                 Me.HotButtonsChanged = True
@@ -5442,7 +5459,8 @@ Namespace JANIS
         End Sub
 
         Private Sub tbHBtext_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tbHBtext1.TextChanged, tbHBtext2.TextChanged, tbHBtext3.TextChanged, tbHBtext4.TextChanged, tbHBtext5.TextChanged, tbHBtext6.TextChanged, tbHBtext7.TextChanged, tbHBtext8.TextChanged, tbHBtext9.TextChanged, tbHBtext10.TextChanged
-            Me.HotButton(CInt(sender.Tag)).Text = sender.Text
+            Dim buttonIndex As Integer = CInt(sender.Tag)
+            Me.HotButton(buttonIndex).Text = MediaPrefix(Me.HotImage(buttonIndex).Text) & Me.HotText(buttonIndex).Text
             Me.HotButtonsChanged = True
         End Sub
 
@@ -5454,9 +5472,15 @@ Namespace JANIS
 
         Private Sub btnHot_MouseClick(ByVal sender As System.Object, ByVal e As MouseEventArgs) Handles btnHot1.MouseClick, btnHot2.MouseClick, btnHot3.MouseClick, btnHot4.MouseClick, btnHot5.MouseClick, btnHot6.MouseClick, btnHot7.MouseClick, btnHot8.MouseClick, btnHot9.MouseClick, btnHot10.MouseClick
             Dim fnam As String = sender.Tag
-            Dim KillSlideShow As Boolean = True
-            ShowMediaFile(fnam, KillSlideShow)
+            Me.ShowMediaFile(fnam)    '* this stops slideshow if running
         End Sub
+
+        Private Function MediaPrefix(fnam As String) As String
+            If fnam IsNot Nothing AndAlso IsVideoFile(fnam) Then
+                Return "🎬"
+            End If
+            Return ""
+        End Function
 
         '=================================================================================================
         '* BEGIN PREFERENCES STUFF
@@ -5828,10 +5852,10 @@ Namespace JANIS
         Private Sub UpdateCountdown()
             If Not Me.ComponentsDoneInitializing Then Exit Sub '* OR ELSE unhandled exception at app launch
             Dim TimeText As String = ""
-            Dim bgColor As System.Drawing.Color = DEFAULT_COUNTDOWN_COLOR
+            Dim bgColor As System.Drawing.Color = COUNTDOWN_DEFAULT_COLOR
 
             If Me.CountdownSeconds <= Me.CountdownWarnSeconds Then
-                bgColor = System.Drawing.Color.Red
+                bgColor = COUNTDOWN_WARN_COLOR
             End If
 
             If Me.nudCountdownHours.Value > 0 Then TimeText = Me.nudCountdownHours.Value.ToString & ":"

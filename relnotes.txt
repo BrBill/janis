@@ -1,22 +1,30 @@
 * Plenty more to do, including:
-  * determining where to put video controls (play/stop/pause/etc.);
-  * setting up drag-and-drop to work w/video;
-  * setting up hotbuttons to work w/video
-  * handling videos in slideshows
-  * handling videos from LOAD FILE (and maybe paste?)
+  * determining where to put video controls (play/pause/stop/restart/scrubber?)
+  * setting up instant video play drag-and-drop to work by passing filename only
+  * BROKEN: video only plays from Media Search and Slideshow, not from LOAD FILE or hotbutton 
 
 Upcoming release, part 5:
-
-https://youtu.be/s3pDMUWlA6I?si=QBBTe1hKPM45XjC8
+* Fixed potential memory leaks in all PictureBoxes with assertive and consistent
+  image .Dispose() calls.
+* Added brief delay after launching video in slideshow, so the iterator doesn't
+  give up on it too soon.
+* Made the countdown clock smaller and its gray & red backgrounds darker.
+* Hot button titles display a little clapper symbol to indicate video files
 
 Upcoming release, part 4:
-* Video playback now works at a basic level
-  * only stops when it ends or something else is displayed --needs controls
-  * When videos display, the operator preview panel updates once a second
-* Retooled and moved scoring, image load/paste, and blackout controls
+* Video playback works. Can be started 3 ways: LOAD FILE, Media Search, Slideshow.
+* Videos in slideshows are always muted and cannot be unmuted. You're welcome.
+* There is no pause or stop control, and video only stops with:
+  * BLACKOUT
+  * Showing some other image or video (like starting a slideshow)
+  * Stop/Pause Slideshow, if running
+  * When videos display, the operator remote viewer updates every half second
+* Can only start from beginning. No scrubbing or repositioning at this time.
 * Moved operator remote view panel to center of top pane
   * Labeled "Audience Display" b/c it mirrors what they see
   * In-panel graphical sound control button (green: ON; red: MUTE)
+* Retooled and moved scoring, image load/paste, and blackout controls
+* Video drag-and-drop works, but only from media search to hotkey.
 
 Upcoming release, part 3:
 * Media Library now catalogs videos in addition to images.
