@@ -1,7 +1,7 @@
 Welcome to JANIS!
 
 Developers:
-* 'master' branch contains dual monitor version.
-* 'single' branch contains, um, single monitor version.
+* 'master' branch contains old, discontinued dual monitor version.
+* 'single' branch is for continued development of single monitor version.
 
 -Bill

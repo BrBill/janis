@@ -3003,7 +3003,7 @@ Namespace JANIS
             Me.tbAboutHeader.Size = New System.Drawing.Size(972, 105)
             Me.tbAboutHeader.TabIndex = 230
             Me.tbAboutHeader.TabStop = False
-            Me.tbAboutHeader.Text = "JANIS v5.0.0 ALPHA" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Released Oct. 6, 2025" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "by Bill Cernansky (bill@easybeing.com)" &
+            Me.tbAboutHeader.Text = "JANIS v5.0.0 ALPHA" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Released Oct. 6, 2025" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "by Bill Cernansky (boctorbill@gmail.com)" &
     "" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "© 2004-2025 Easy Being Productions"
             Me.tbAboutHeader.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
             '
@@ -4071,7 +4071,7 @@ Namespace JANIS
             '* Don't need to check for previous tab value = Nothing, because we initialized it in InitializeSettings(). It's never Nothing.
             If (TabControl1.SelectedTab.Name <> "tpMediaSearch" AndAlso PreviousSelectedTab.Name = "tpMediaSearch") Then
                 StopPreviewSearchVideo()
-            ElseIf (TabControl1.SelectedTab.Name <> "tpSlides" AndAlso PreviousSelectedTab.Name = "tbSlides") Then
+            ElseIf (TabControl1.SelectedTab.Name <> "tpSlides" AndAlso PreviousSelectedTab.Name = "tpSlides") Then
                 StopPreviewSlideVideo()
             End If
             PreviousSelectedTab = TabControl1.SelectedTab
