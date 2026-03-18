@@ -3,6 +3,20 @@
   * setting up instant video play drag-and-drop to work by passing filename only
   * BROKEN: video only plays from Media Search and Slideshow, not from LOAD FILE or hotbutton 
 
+Upcoming release, part 6:
+* Fixed bug in Present_Image() which was incorrectly checking value of Me.SlidesStatus
+* Rewrote fmMain.ShowMediaDir() to modernize it
+* Rewrote fmMain.ProcessMediaDir() to modernize it
+* Rewrote all file read/write routines to modernize the I/O
+* Fixed some fmMain.LoadHotButtons() vulnerabilities
+* Removed some unnecessary old cruft from the .vbproj file
+* Stop defining my own EOL and use built-in vbCrLf instead.
+* In fmMain.GetMediaDuration(), dispose of the WindowsMediaPlayer object to fix
+  memory leak.
+* In fmScreen.ShowImage() and fmMain.Present_Image(), create a new local copy of
+  the img passed in, to avoid errors changing images. This is because the code
+  is being so assertive with Dispose() of these image objects.
+
 Upcoming release, part 5:
 * Fixed potential memory leaks in all PictureBoxes with assertive and consistent
   image .Dispose() calls.
@@ -28,7 +42,7 @@ Upcoming release, part 4:
 
 Upcoming release, part 3:
 * Media Library now catalogs videos in addition to images.
-* Video stuff 100% working in Media Search (was Image Search) tab.
+* Video stuff in Media Search (was: Image Search) is working inside the tab.
 * Renamed a bunch of controls, subs & functions "Image" --> "Media".
 * Created the infrastructure for the Windows Media control in fmScreen.
 * Removed:

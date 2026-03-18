@@ -1,5 +1,6 @@
 'Imports System
 'Imports System.Environment
+Imports System.Collections.Generic
 Imports System.IO
 Imports System.Linq
 'Imports System.Security.Principal
@@ -23,7 +24,6 @@ Namespace JANIS
         '* System Constants
         '***************
         Const MAX_THINGS As Integer = 9
-        Const EOL As String = Chr(13) & Chr(10)
         Const DEFAULT_SLIDESHOW_DIR As String = "\SlideShows"
         Const DEFAULT_HOTBUTTON_DIR As String = "\HotButtons"
         Const SLIDES_STOPPED As Integer = 0
@@ -46,6 +46,8 @@ Namespace JANIS
         '***************
         Private ROOT_SUPPORT_DIR As String = "C:\JANIS"
         Private PREFS_FILE As String
+        Private CurrentPrefs As New Preferences()
+        Private SavedPrefs As New Preferences()
         Private splash As fmSplash
         Private TestMode As Boolean = False
         Dim DisplayModeAdjustment As Single = 0.7     ' Divide font setting by this for display. Differs for test/arena mode.
@@ -3636,10 +3638,10 @@ Namespace JANIS
         End Sub
 
         Private Sub fmMain_Closing(ByVal sender As System.Object, ByVal e As System.ComponentModel.CancelEventArgs) Handles MyBase.Closing
-            If Not SlideTimerTag = "AppAlreadyRunning" Then
-                Dim Ans As DialogResult
+            If Not Me.SlideTimerTag = "AppAlreadyRunning" Then
+                CurrentPrefs = ReadPrefsFromUI()
                 If Me.PrefsChanged() Then
-                    Ans = MessageBox.Show(Me, "Modifications to preferences have not been saved. Save them before closing?", "Preferences Have Changed", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button3)
+                    Dim Ans As DialogResult = MessageBox.Show(Me, "Modifications to preferences have not been saved. Save them before closing?", "Preferences Have Changed", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button3)
                     If Ans = DialogResult.Cancel Then
                         e.Cancel = True
                         Return
@@ -3735,7 +3737,7 @@ Namespace JANIS
                 If sender.SelectionMode.ToString Like "*Multi*" Then
                     '* Walk through and select all items in the listbox
                     Dim i As Integer
-                    For i = 0 To sender.Items.Count - 1
+                    For i = 0 To CInt(sender.Items.Count) - 1
                         sender.SetSelected(i, True)
                     Next i
                 End If
@@ -3840,22 +3842,15 @@ Namespace JANIS
 
         Private Function LoadDoc() As String
             Dim Doc As String = ""
-            Dim FileErr As Boolean = False
             Dim [of] As New OpenFileDialog()
             [of].Filter = "Text File (*.TXT)|*.TXT"
             [of].InitialDirectory = ROOT_SUPPORT_DIR
             If [of].ShowDialog(Me) = DialogResult.OK Then
-                Dim fn As Integer = FreeFile()
                 Try
-                    FileOpen(fn, [of].FileName, OpenMode.Input)
-                Catch e As Exception
-                    FileErr = True
+                    Doc = System.IO.File.ReadAllText([of].FileName)
+                Catch ex As Exception
                     MessageBox.Show(Me, "An error occurred opening file '" & [of].FileName & "'.", "File Error")
                 End Try
-                If Not FileErr Then
-                    Doc = InputString(fn, LOF(fn))
-                    FileClose(fn)
-                End If
             End If
             [of].Dispose()
             Return Doc
@@ -3953,7 +3948,7 @@ Namespace JANIS
                 'Me.LS.SetLeft(SystemInformation.PrimaryMonitorSize.Width)  'Force the window onto screen 2
                 'Me.LS.SetTop(0)
             End If
-            ' Me.tbLeftText.Text = Me.tbLeftText.Text & EOL & EOL & (SystemInformation.MonitorCount - 1).ToString & " audience displays found"
+            ' Me.tbLeftText.Text = Me.tbLeftText.Text & vbCrLf & vbCrLf & (SystemInformation.MonitorCount - 1).ToString & " audience displays found"
             Me.Text = Me.Text & " (displays: " & (SystemInformation.MonitorCount - 1).ToString & ")"
             Me.tbLeftText.Focus()
         End Sub
@@ -4078,14 +4073,14 @@ Namespace JANIS
         End Sub
 
 
-        Private Sub AssignImageToPictureBox(ByRef picture As PictureBox, ByRef Img As Image)
+        Private Sub AssignImageToPictureBox(ByVal picture As PictureBox, ByVal Img As Image)
             If Img Is Nothing Then Exit Sub
             Me.ClearCurrentPictureboxImage(picture)
             picture.Image = Img
             picture.Visible = True
         End Sub
 
-        Private Sub Present_Image(ByRef img As Image, Optional ByVal KillSlideShow As Boolean = True)
+        Private Sub Present_Image(ByVal img As Image, Optional ByVal KillSlideShow As Boolean = True)
             '* Display this image to the display and also the operator remote view box.
 
             If img IsNot Nothing Then
@@ -4093,9 +4088,9 @@ Namespace JANIS
 
                 '* Show displays first for speed.
                 Me.LS.ShowImage(img)
-                If Not SLIDES_WHAMMY Then
+                If Me.SlidesStatus <> SLIDES_WHAMMY Then
                     '* Let the operator see what's showing remotely
-                    Me.AssignImageToPictureBox(Me.picRemoteViewer, img)
+                    Me.AssignImageToPictureBox(Me.picRemoteViewer, New Bitmap(img))
                 End If
 
                 Me.AllScreensToFront()
@@ -4164,7 +4159,7 @@ Namespace JANIS
         End Sub
 
 
-        Private Sub DisplayRawImage(ByRef img As Image)
+        Private Sub DisplayRawImage(ByVal img As Image)
             If img Is Nothing Then Exit Sub
             Me.LS.ShowImage(img)
         End Sub
@@ -4245,7 +4240,7 @@ Namespace JANIS
         End Sub
 
         Private Sub picDisplay_DragDrop(ByVal sender As Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles btnMediaLoadFile.DragDrop, btnPasteMedia.DragDrop, picRemoteViewer.DragDrop
-            '* Hopefully, we can drag-drop an image from an external source onto one of these picture boxes and have it
+            '* Drag-drop an image from an external source onto one of these picture boxes and have it
             '* display there. This works really well with Firefox.
             Dim img As Image
 
@@ -4256,8 +4251,9 @@ Namespace JANIS
             Else
                 '* Device Independent Bitmap
                 Dim myStream As Stream = e.Data.GetData(DataFormats.Dib)
-                Dim bmp As BitmapFromDibStream = New BitmapFromDibStream(myStream)
-                img = New Bitmap(bmp)
+                Using bmp As New BitmapFromDibStream(myStream)
+                    img = New Bitmap(bmp)
+                End Using
             End If
 
             Me.Present_Image(img)
@@ -4411,6 +4407,7 @@ Namespace JANIS
             Me.PreviewSearchMedia()
         End Sub
         Private Sub lbMediaResults_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles lbMediaResults.MouseDown
+            'MsgBox("lbMediaResults_SelectedIndex is " & Str(lbMediaResults.SelectedIndex) & vbCrLf & "value is: " & lbMediaResults.SelectedItem)
             ' ----- Prepare the draggable content.
             If Me.lbMediaResults.SelectedIndex >= 0 Then
                 Me.PreviewSearchMedia()
@@ -4498,7 +4495,7 @@ Namespace JANIS
             '    Dim FileElem As FileID
             '    Me.tbLeftText.Text = "Image Library Dump (TEST MODE)"
             '    For Each FileElem In MediaLibrary
-            '        Me.tbLeftText.Text = Me.tbLeftText.Text & EOL & FileElem.FullPath
+            '        Me.tbLeftText.Text = Me.tbLeftText.Text & vbCrLf & FileElem.FullPath
             '    Next
             'End If
         End Sub
@@ -4519,43 +4516,38 @@ Namespace JANIS
             '* The list is for searching later.
             '* PASS DIRECTORIES ONLY
 
-            Dim DirList As New Collection()   '* of strings only
-            Dim PrevDir As String = CurDir()
-            Dim NextName As String
-            Dim WholeName As String
+            If Not System.IO.Directory.Exists(DirName) Then Exit Sub
 
             Try
-                ChDir(DirName)
+                For Each filePath As String In System.IO.Directory.GetFiles(DirName)
+                    Dim fileName As String = System.IO.Path.GetFileName(filePath)
+                    If fileName <> ".xvpics" AndAlso IsMediaFile(fileName) Then
+                        Dim fileElem As New FileID()
+                        fileElem.Path = DirName
+                        fileElem.Name = fileName
+                        Me.MediaLibrary.Add(fileElem)
+                        If (Me.MediaLibrary.Count Mod 250) = 0 Then Me.ShowMediaLibraryCount()
+                    End If
+                Next
+            Catch ex As UnauthorizedAccessException
+                Exit Sub  ' No rights to read this directory's files; skip it
             Catch ex As Exception
-                '* If no rights to look in that directory, skip it.
-                Exit Try
-            Finally
-                NextName = Dir(".", FileAttribute.Directory)
-                If NextName <> ".xvpics" Then '* GIMP non-image files to ignore
-                    While NextName <> ""
-                        WholeName = DirName & "\" & NextName
-                        '* Dirs go into DirList for future processing. Filenames get added to Media Library.
-                        If My.Computer.FileSystem.DirectoryExists(WholeName) Then
-                            '*If (GetAttr(WholeName) And FileAttribute.Directory) = FileAttribute.Directory Then
-                            DirList.Add(WholeName)
-                        ElseIf IsMediaFile(NextName) Then
-                            Dim FileElem As New FileID()  '* Need a new instance each iteration
-                            FileElem.Path = DirName
-                            FileElem.Name = NextName
-                            Me.MediaLibrary.Add(FileElem)
-                            '* Occasionally show progress on building the library
-                            If (Me.MediaLibrary.Count Mod 250) = 0 Then Me.ShowMediaLibraryCount()
-                        End If
-                        NextName = Dir()
-                    End While
-
-                    Dim NextDir As String
-                    For Each NextDir In DirList
-                        Me.ProcessMediaDir(NextDir)
-                    Next
-                    ChDir(PrevDir)
-                End If
+                Exit Sub  ' Any other file enumeration error; skip it
             End Try
+
+            ' Recurse into subdirectories
+            Dim subDirs As String()
+            Try
+                subDirs = System.IO.Directory.GetDirectories(DirName)
+            Catch ex As Exception
+                Exit Sub   '* If there aren't any, or if there's an error reading them, skip this subdir lookup.
+            End Try
+
+            For Each subDir As String In subDirs
+                If System.IO.Path.GetFileName(subDir) <> ".xvpics" Then
+                    Me.ProcessMediaDir(subDir)
+                End If
+            Next
 
         End Sub
 
@@ -4704,7 +4696,7 @@ Namespace JANIS
             Dim i As Integer
             Dim s As String = ""
             For i = 0 To (Me.clbThings.Items.Count - 1)
-                If i > 0 Then s = s & EOL
+                If i > 0 Then s = s & vbCrLf
                 If Me.clbThings.CheckedIndices.Contains(i) Then s = s & ChrW(&H25BA)
                 s = s & (i + 1).ToString & ". " & Me.clbThings.Items.Item(i)
             Next
@@ -4724,7 +4716,7 @@ Namespace JANIS
         End Sub
         Private Sub btnShowThing_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnShowThingLeft.Click
             Dim s As String
-            s = Me.tbCurrentThing.Text & EOL & EOL & Me.tbSubstitutions.Text
+            s = Me.tbCurrentThing.Text & vbCrLf & vbCrLf & Me.tbSubstitutions.Text
             DisplayTextScreen(Me.LS, s, Me.clbThings.BackColor, 19)
         End Sub
         Private Sub radioThingColor_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles radioThingColorLeft.CheckedChanged, radioThingColorRight.CheckedChanged
@@ -4781,6 +4773,7 @@ Namespace JANIS
         End Sub
         Private Sub PreviewSlideMedia()
             Static PrevSelect As String = ""
+            If Me.lbSlideCandidates.SelectedItem Is Nothing Then Exit Sub
             Dim filenameToPreview As String = Me.tvSlideFolders.SelectedNode.Name & "\" & Me.lbSlideCandidates.SelectedItem.ToString
             If Me.lbSlideCandidates.SelectedItems.Count = 1 Then
                 If Me.lbSlideCandidates.SelectedItem <> PrevSelect Then
@@ -4801,13 +4794,15 @@ Namespace JANIS
         End Sub
 
         Private Function GetMediaDuration(ByVal MediaFile As String) As Double
+            Dim w As WMPLib.WindowsMediaPlayer = Nothing
             Try
-                Dim w As New WMPLib.WindowsMediaPlayer
+                w = New WMPLib.WindowsMediaPlayer
                 Dim m As WMPLib.IWMPMedia = w.newMedia(MediaFile)
-                w.close()
                 Return m.duration
             Catch ex As Exception
                 Return 0
+            Finally
+                If w IsNot Nothing Then w.close()
             End Try
         End Function
 
@@ -4841,7 +4836,7 @@ Namespace JANIS
             End Try
         End Sub
 
-        Private Sub tvSlideFolders_Init(ByRef startPath As String)
+        Private Sub tvSlideFolders_Init(ByVal startPath As String)
             With Me.tvSlideFolders
                 Try
                     .ImageList = New ImageList
@@ -4890,7 +4885,7 @@ Namespace JANIS
             Next
             Me.tvSlideFolders.SelectedNode = Me.tvSlideFolders.Nodes(0)
         End Sub
-        Private Sub tvSlideFolders_SetFolder(ByRef folder As String)
+        Private Sub tvSlideFolders_SetFolder(ByVal folder As String)
             '* Expand the tvSlideFolders to match the supplied path, by climbing up from the beginning of the path to the leaf node.
 
             If (folder Is Nothing) OrElse (folder = "") OrElse (Not System.IO.Directory.Exists(folder)) Then Exit Sub
@@ -5057,13 +5052,15 @@ Namespace JANIS
                 .Filter = "JANIS Slideshow(*.JSL)|*.JSL"
                 .InitialDirectory = ROOT_SUPPORT_DIR & DEFAULT_SLIDESHOW_DIR
                 If .ShowDialog(Me) = DialogResult.OK Then
-                    Dim fn As Integer = FreeFile()
-                    FileOpen(fn, .FileName, OpenMode.Output)
-                    Dim i As Integer
-                    For i = 0 To (Me.lbSlideList.Items.Count - 1)
-                        PrintLine(fn, Me.lbSlideList.Items.Item(i))
-                    Next
-                    FileClose(fn)
+                    Try
+                        Dim lines As New List(Of String)
+                        For i As Integer = 0 To Me.lbSlideList.Items.Count - 1
+                            lines.Add(Me.lbSlideList.Items.Item(i))
+                        Next
+                        System.IO.File.WriteAllLines(.FileName, lines)
+                    Catch ex As Exception
+                        MessageBox.Show(Me, "An error occurred saving slideshow file '" & .FileName & "'.", "File Error")
+                    End Try
                 End If
                 .Dispose()
             End With
@@ -5071,25 +5068,15 @@ Namespace JANIS
         End Sub
 
         Private Sub LoadSlideShow(ByVal slidefile As String)
-            If slidefile <> "" Then
-                Me.lbSlideList.Items.Clear()     '** Empty the list first
-                Dim fn As Integer = FreeFile()
-                Dim FileErr As Boolean
-                Try
-                    FileOpen(fn, slidefile, OpenMode.Input)
-                Catch ex As Exception
-                    FileErr = True
-                    MessageBox.Show(Me, "An error occurred opening slideshow file '" & slidefile & "'.", "File Error")
-                End Try
-                If Not FileErr Then
-                    Dim s As String = ""
-                    While Not EOF(fn)
-                        Input(fn, s)
-                        Me.lbSlideList.Items.Add(s)
-                    End While
-                    FileClose(fn)
-                End If
-            End If
+            If slidefile = "" Then Return
+            Try
+                Me.lbSlideList.Items.Clear()
+                For Each line As String In System.IO.File.ReadAllLines(slidefile)
+                    If line <> "" Then Me.lbSlideList.Items.Add(line)
+                Next
+            Catch ex As Exception
+                MessageBox.Show(Me, "An error occurred opening slideshow file '" & slidefile & "'.", "File Error")
+            End Try
         End Sub
 
         Private Sub PreSelectRandomSlide()
@@ -5369,29 +5356,24 @@ Namespace JANIS
         End Function
 
         Private Sub LoadHotButtons(ByVal hbfile As String)
-            Dim fn As Integer = FreeFile()
-            Dim FileErr As Boolean
             Try
-                FileOpen(fn, hbfile, OpenMode.Input)
+                Dim lines As String() = System.IO.File.ReadAllLines(hbfile)
+                Dim i As Integer = 0
+                For Each line As String In lines
+                    If i > 9 Then Exit For
+                    Dim info() As String = Split(line, "¶")
+                    If info.Length >= 2 Then
+                        Me.HotText(i).Text = info(0)
+                        Me.HotButton(i).Tag = info(1)
+                        Me.HotImage(i).Text = info(1)
+                        Me.HotButton(i).Text = MediaPrefix(info(1)) & info(0)
+                    End If
+                    i += 1
+                Next
+                Me.HotButtonsChanged = False
             Catch ex As Exception
-                FileErr = True
                 MessageBox.Show(Me, "An error occurred opening HotButtons file '" & hbfile & "'.", "File Error")
             End Try
-            If Not FileErr Then
-                Dim i As Integer = 0
-                While Not EOF(fn)
-                    Dim s As String = ""
-                    Input(fn, s)
-                    Dim info() As String = Split(s, "¶")
-                    Me.HotText(i).Text = info(0)
-                    Me.HotButton(i).Tag = info(1)
-                    Me.HotImage(i).Text = info(1)
-                    Me.HotButton(i).Text = MediaPrefix(info(1)) & info(0)
-                    i = i + 1
-                End While
-                FileClose(fn)
-                Me.HotButtonsChanged = False
-            End If
             Me.AllScreensToFront()
         End Sub
 
@@ -5404,14 +5386,16 @@ Namespace JANIS
                 .Filter = "JANIS HotButtons File(*.JHB)|*.JHB"
                 .InitialDirectory = ROOT_SUPPORT_DIR & DEFAULT_HOTBUTTON_DIR
                 If .ShowDialog(Me) = DialogResult.OK Then
-                    Dim fn As Integer = FreeFile()
-                    FileOpen(fn, .FileName, OpenMode.Output)
-                    Dim i As Integer
-                    For i = 0 To 9
-                        PrintLine(fn, Me.HotText(i).Text & "¶" & Me.HotButton(i).Tag)
-                    Next
-                    FileClose(fn)
-                    Me.HotButtonsChanged = False
+                    Try
+                        Dim lines As New List(Of String)
+                        For i As Integer = 0 To 9
+                            lines.Add(Me.HotText(i).Text & "¶" & Me.HotButton(i).Tag)
+                        Next
+                        System.IO.File.WriteAllLines(.FileName, lines)
+                        Me.HotButtonsChanged = False
+                    Catch ex As Exception
+                        MessageBox.Show(Me, "An error occurred saving HotButtons file '" & .FileName & "'.", "File Error")
+                    End Try
                 End If
                 .Dispose()
             End With
@@ -5554,138 +5538,117 @@ Namespace JANIS
             Me.SavePrefsToFile(PREFS_FILE)
         End Sub
         Private Sub btnRevertPrefs_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnRevertPrefs.Click
-            '* The last saved values are stored in the TAG properties of all the controls on this tab.
-            '* Use them to put everything back.
-            Me.lblDefaultColorLeft.BackColor = Color.FromArgb(Me.lblDefaultColorLeft.Tag)
-            Me.lblDefaultColorRight.BackColor = Color.FromArgb(Me.lblDefaultColorRight.Tag)
-            Me.tbDefaultFontSize.Text = Me.tbDefaultFontSize.Tag
-            Me.cbShadowsEnabled.Checked = Me.cbShadowsEnabled.Tag
-            Me.tbDefaultImageDir.Text = Me.tbDefaultImageDir.Tag
-            Me.tbDefaultImageFile.Text = Me.tbDefaultImageFile.Tag
-            Me.cbDisplayDefaultImage.Checked = Me.cbDisplayDefaultImage.Tag
-            Me.tbDefaultHBFile.Text = Me.tbDefaultHBFile.Tag
-            Me.cbLoadDefaultHB.Checked = Me.cbLoadDefaultHB.Tag
-            Me.nudDefaultSlideDelay.Value = CInt(Me.nudDefaultSlideDelay.Tag)
-            Me.tbDefaultSlideShow.Text = Me.tbDefaultSlideShow.Tag
-            Me.cbPlaySlidesAtStart.Checked = Me.cbPlaySlidesAtStart.Tag
-            Me.cbLoadDefaultSlides.Checked = Me.cbLoadDefaultSlides.Tag
-            Me.nudDefaultCountdownHours.Value = CInt(Me.nudDefaultCountdownHours.Tag)
-            Me.nudDefaultCountdownMinutes.Value = CInt(Me.nudDefaultCountdownMinutes.Tag)
-            Me.nudDefaultCountdownSeconds.Value = CInt(Me.nudDefaultCountdownSeconds.Tag)
+            '* The last saved values are restored.
+            Me.ApplyPrefsToUI(SavedPrefs)
         End Sub
 
         Private Function PrefsChanged() As Boolean
-            If Me.lblDefaultColorLeft.BackColor.ToArgb <> Me.lblDefaultColorLeft.Tag Then Return True
-            If Me.lblDefaultColorRight.BackColor.ToArgb <> Me.lblDefaultColorRight.Tag Then Return True
-            If Me.tbDefaultFontSize.Text <> Me.tbDefaultFontSize.Tag Then Return True
-            If Me.cbShadowsEnabled.Checked <> Me.cbShadowsEnabled.Tag Then Return True
-            If Me.tbDefaultImageDir.Text <> Me.tbDefaultImageDir.Tag Then Return True
-            If Me.tbDefaultImageFile.Text <> Me.tbDefaultImageFile.Tag Then Return True
-            If Me.cbDisplayDefaultImage.Checked <> Me.cbDisplayDefaultImage.Tag Then Return True
-            If Me.tbDefaultHBFile.Text <> Me.tbDefaultHBFile.Tag Then Return True
-            If Me.cbLoadDefaultHB.Checked <> Me.cbLoadDefaultHB.Tag Then Return True
-            If Me.nudDefaultSlideDelay.Value <> Me.nudDefaultSlideDelay.Tag Then Return True
-            If Me.tbDefaultSlideShow.Text <> Me.tbDefaultSlideShow.Tag Then Return True
-            If Me.cbPlaySlidesAtStart.Checked <> Me.cbPlaySlidesAtStart.Tag Then Return True
-            If Me.cbLoadDefaultSlides.Checked <> Me.cbLoadDefaultSlides.Tag Then Return True
-            If Me.nudDefaultCountdownHours.Value <> Me.nudDefaultCountdownHours.Tag Then Return True
-            If Me.nudDefaultCountdownMinutes.Value <> Me.nudDefaultCountdownMinutes.Tag Then Return True
-            If Me.nudDefaultCountdownSeconds.Value <> Me.nudDefaultCountdownSeconds.Tag Then Return True
+            If CurrentPrefs.LeftTeamColor <> SavedPrefs.LeftTeamColor Then Return True
+            If CurrentPrefs.RightTeamColor <> SavedPrefs.RightTeamColor Then Return True
+            If CurrentPrefs.DefaultFontSize <> SavedPrefs.DefaultFontSize Then Return True
+            If CurrentPrefs.ShadowsEnabled <> SavedPrefs.ShadowsEnabled Then Return True
+            If CurrentPrefs.DefaultImageDir <> SavedPrefs.DefaultImageDir Then Return True
+            If CurrentPrefs.DefaultImageFile <> SavedPrefs.DefaultImageFile Then Return True
+            If CurrentPrefs.DisplayDefaultImage <> SavedPrefs.DisplayDefaultImage Then Return True
+            If CurrentPrefs.DefaultHBFile <> SavedPrefs.DefaultHBFile Then Return True
+            If CurrentPrefs.LoadDefaultHB <> SavedPrefs.LoadDefaultHB Then Return True
+            If CurrentPrefs.DefaultSlideDelay <> SavedPrefs.DefaultSlideDelay Then Return True
+            If CurrentPrefs.DefaultSlideShow <> SavedPrefs.DefaultSlideShow Then Return True
+            If CurrentPrefs.PlaySlidesAtStart <> SavedPrefs.PlaySlidesAtStart Then Return True
+            If CurrentPrefs.LoadDefaultSlides <> SavedPrefs.LoadDefaultSlides Then Return True
+            If CurrentPrefs.DefaultCountdownHours <> SavedPrefs.DefaultCountdownHours Then Return True
+            If CurrentPrefs.DefaultCountdownMinutes <> SavedPrefs.DefaultCountdownMinutes Then Return True
+            If CurrentPrefs.DefaultCountdownSeconds <> SavedPrefs.DefaultCountdownSeconds Then Return True
             Return False
         End Function
 
         Private Sub LoadPrefsFromFile(ByVal filename As String)
-            '* Determine if the file exists
-            Dim MyPrefsFile As New System.IO.FileInfo(filename)
-            If MyPrefsFile.Exists Then
-                Dim fn As Integer = FreeFile()
-                Dim s As String = ""
-                Dim FileErr As Boolean
-                Try
-                    FileOpen(fn, filename, OpenMode.Input)
-                Catch ex As Exception
-                    FileErr = True
-                    MessageBox.Show(Me, "An error occurred opening file '" & filename & "'.", "File Error")
-                End Try
-                If Not FileErr Then
-                    Input(fn, s)
-                    Me.lblDefaultColorLeft.BackColor = Color.FromArgb(CInt(s))
-                    Input(fn, s)
-                    Me.lblDefaultColorRight.BackColor = Color.FromArgb(CInt(s))
-                    Input(fn, Me.tbDefaultFontSize.Text)
-                    Input(fn, Me.tbDefaultImageDir.Text)
-                    Input(fn, s)
-                    Me.cbDisplayDefaultImage.Checked = (s = "True")
-                    Input(fn, Me.tbDefaultImageFile.Text)
-                    Input(fn, s)
-                    Me.cbLoadDefaultHB.Checked = (s = "True")
-                    Input(fn, Me.tbDefaultHBFile.Text)
-                    Input(fn, s)
-                    Me.nudDefaultSlideDelay.Value = CInt(s)
-                    Input(fn, s)
-                    Me.cbLoadDefaultSlides.Checked = (s = "True")
-                    Input(fn, Me.tbDefaultSlideShow.Text)
-                    Input(fn, s)
-                    Me.cbPlaySlidesAtStart.Checked = (s = "True")
-                    Try
-                        Input(fn, s)
-                    Catch ex As Exception
-                        FileErr = True
-                        Me.nudDefaultCountdownHours.Value = 0
-                        Me.nudDefaultCountdownMinutes.Value = 5
-                        Me.nudDefaultCountdownSeconds.Value = 0
-                    End Try
-                    If Not FileErr Then
-                        Me.nudDefaultCountdownHours.Value = CInt(s)
-                        Input(fn, s)
-                        Me.nudDefaultCountdownMinutes.Value = CInt(s)
-                        Input(fn, s)
-                        Me.nudDefaultCountdownSeconds.Value = CInt(s)
-                        Try
-                            Input(fn, s)
-                        Catch ex As Exception
-                            FileErr = True
-                            Me.cbShadowsEnabled.Checked = True
-                        End Try
-                        If Not FileErr Then
-                            Me.cbShadowsEnabled.Checked = (s = "True")
-                        End If
-                    End If
-                End If
-                FileClose(fn)
-                Me.StorePrefs()
-            Else
-                '* OK, the prefs file was not found. So load defaults and
-                '* write the prefs file with those defaults.
+            If Not System.IO.File.Exists(filename) Then
                 Me.SetDefaultPrefs()
                 Me.SavePrefsToFile(filename)
+                Me.AllScreensToFront()
+                Return
             End If
+
+            Try
+                Dim lines As String() = System.IO.File.ReadAllLines(filename)
+                Dim i As Integer = 0
+
+                Dim ReadLine As Func(Of String) = Function()
+                                                      If i < lines.Length Then
+                                                          Dim val As String = lines(i)
+                                                          i += 1
+                                                          Return val
+                                                      End If
+                                                      Return Nothing
+                                                  End Function
+
+                Dim p As New Preferences()
+                p.LeftTeamColor = Color.FromArgb(CInt(ReadLine()))
+                p.RightTeamColor = Color.FromArgb(CInt(ReadLine()))
+                p.DefaultFontSize = ReadLine()
+                p.DefaultImageDir = ReadLine()
+                p.DisplayDefaultImage = (ReadLine() = "True")
+                p.DefaultImageFile = ReadLine()
+                p.LoadDefaultHB = (ReadLine() = "True")
+                p.DefaultHBFile = ReadLine()
+                p.DefaultSlideDelay = CInt(ReadLine())
+                p.LoadDefaultSlides = (ReadLine() = "True")
+                p.DefaultSlideShow = ReadLine()
+                p.PlaySlidesAtStart = (ReadLine() = "True")
+
+                Dim countdownHours As String = ReadLine()
+                If countdownHours IsNot Nothing Then
+                    p.DefaultCountdownHours = CInt(countdownHours)
+                    p.DefaultCountdownMinutes = CInt(ReadLine())
+                    p.DefaultCountdownSeconds = CInt(ReadLine())
+                End If
+
+                Dim shadowsEnabled As String = ReadLine()
+                If shadowsEnabled IsNot Nothing Then p.ShadowsEnabled = (shadowsEnabled = "True")
+
+                CurrentPrefs = p
+                Me.ApplyPrefsToUI(p)
+
+            Catch ex As Exception
+                MessageBox.Show(Me, "An error occurred reading preferences file '" & filename & "'.", "File Error")
+                Me.SetDefaultPrefs()
+            End Try
+
+            Me.StorePrefs()
             Me.AllScreensToFront()
         End Sub
         Private Sub SavePrefsToFile(ByVal filename As String)
+            CurrentPrefs = ReadPrefsFromUI()
             If Not PrefsChanged() Then Exit Sub
 
-            Dim RebuildMediaLibrary As Boolean = (Me.tbDefaultImageDir.Text <> Me.tbDefaultImageDir.Tag)
+            Dim RebuildMediaLibrary As Boolean = (CurrentPrefs.DefaultImageDir <> SavedPrefs.DefaultImageDir)
 
-            Dim fn As Integer = FreeFile()
-            FileOpen(fn, filename, OpenMode.Output)
-            PrintLine(fn, Me.lblDefaultColorLeft.BackColor.ToArgb.ToString)
-            PrintLine(fn, Me.lblDefaultColorRight.BackColor.ToArgb.ToString)
-            PrintLine(fn, Me.tbDefaultFontSize.Text)
-            PrintLine(fn, Me.tbDefaultImageDir.Text)
-            PrintLine(fn, Me.cbDisplayDefaultImage.Checked.ToString)
-            PrintLine(fn, Me.tbDefaultImageFile.Text)
-            PrintLine(fn, Me.cbLoadDefaultHB.Checked.ToString)
-            PrintLine(fn, Me.tbDefaultHBFile.Text)
-            PrintLine(fn, Me.nudDefaultSlideDelay.Value.ToString)
-            PrintLine(fn, Me.cbLoadDefaultSlides.Checked.ToString)
-            PrintLine(fn, Me.tbDefaultSlideShow.Text)
-            PrintLine(fn, Me.cbPlaySlidesAtStart.Checked.ToString)
-            PrintLine(fn, Me.nudDefaultCountdownHours.Value.ToString)
-            PrintLine(fn, Me.nudDefaultCountdownMinutes.Value.ToString)
-            PrintLine(fn, Me.nudDefaultCountdownSeconds.Value.ToString)
-            PrintLine(fn, Me.cbShadowsEnabled.Checked.ToString)
-            FileClose(fn)
+            Try
+                Dim lines As New List(Of String) From {
+                    CurrentPrefs.LeftTeamColor.ToArgb().ToString(),
+                    CurrentPrefs.RightTeamColor.ToArgb().ToString(),
+                    CurrentPrefs.DefaultFontSize,
+                    CurrentPrefs.DefaultImageDir,
+                    CurrentPrefs.DisplayDefaultImage.ToString(),
+                    CurrentPrefs.DefaultImageFile,
+                    CurrentPrefs.LoadDefaultHB.ToString(),
+                    CurrentPrefs.DefaultHBFile,
+                    CurrentPrefs.DefaultSlideDelay.ToString(),
+                    CurrentPrefs.LoadDefaultSlides.ToString(),
+                    CurrentPrefs.DefaultSlideShow,
+                    CurrentPrefs.PlaySlidesAtStart.ToString(),
+                    CurrentPrefs.DefaultCountdownHours.ToString(),
+                    CurrentPrefs.DefaultCountdownMinutes.ToString(),
+                    CurrentPrefs.DefaultCountdownSeconds.ToString(),
+                    CurrentPrefs.ShadowsEnabled.ToString()
+                 }
+                System.IO.File.WriteAllLines(filename, lines)
+            Catch ex As Exception
+                MessageBox.Show(Me, "An error occurred saving preferences file '" & filename & "'.", "File Error")
+                Return
+            End Try
+
             Me.StorePrefs()
             Me.AllScreensToFront()
             If RebuildMediaLibrary Then
@@ -5695,43 +5658,50 @@ Namespace JANIS
         End Sub
         Private Sub SetDefaultPrefs()
             '* Reset the Preferences screen settings to factory defaults
-            Me.lblDefaultColorLeft.BackColor = Me.pnlDefaultTextColorLeft1.BackColor
-            Me.lblDefaultColorRight.BackColor = Me.pnlDefaultTextColorLeft2.BackColor
-            Me.tbDefaultFontSize.Text = "60"
-            Me.cbShadowsEnabled.Checked = True
-            Me.tbDefaultImageDir.Text = ROOT_SUPPORT_DIR
-            Me.tbDefaultImageFile.Text = ""
-            Me.cbDisplayDefaultImage.Checked = False
-            Me.tbDefaultHBFile.Text = ""
-            Me.cbLoadDefaultHB.Checked = False
-            Me.nudDefaultSlideDelay.Value = 15
-            Me.tbDefaultSlideShow.Text = ""
-            Me.cbPlaySlidesAtStart.Checked = False
-            Me.cbLoadDefaultSlides.Checked = False
-            Me.nudDefaultCountdownHours.Value = 0
-            Me.nudDefaultCountdownMinutes.Value = 5
-            Me.nudDefaultCountdownSeconds.Value = 0
+            CurrentPrefs = New Preferences()
+            Me.ApplyPrefsToUI(CurrentPrefs)
         End Sub
         Private Sub StorePrefs()
-            '* Stores whatever the current set of preferences is in the TAG properties of the controls on the
-            '* preferences tab. Compare later to see if things have changed or to restore to last happy prefs.
-            Me.lblDefaultColorLeft.Tag = Me.lblDefaultColorLeft.BackColor.ToArgb
-            Me.lblDefaultColorRight.Tag = Me.lblDefaultColorRight.BackColor.ToArgb
-            Me.tbDefaultFontSize.Tag = Me.tbDefaultFontSize.Text
-            Me.cbShadowsEnabled.Tag = Me.cbShadowsEnabled.Checked
-            Me.tbDefaultImageDir.Tag = Me.tbDefaultImageDir.Text
-            Me.tbDefaultImageFile.Tag = Me.tbDefaultImageFile.Text
-            Me.cbDisplayDefaultImage.Tag = Me.cbDisplayDefaultImage.Checked
-            Me.tbDefaultHBFile.Tag = Me.tbDefaultHBFile.Text
-            Me.cbLoadDefaultHB.Tag = Me.cbLoadDefaultHB.Checked
-            Me.nudDefaultSlideDelay.Tag = Me.nudDefaultSlideDelay.Value
-            Me.tbDefaultSlideShow.Tag = Me.tbDefaultSlideShow.Text
-            Me.cbPlaySlidesAtStart.Tag = Me.cbPlaySlidesAtStart.Checked
-            Me.cbLoadDefaultSlides.Tag = Me.cbLoadDefaultSlides.Checked
-            Me.nudDefaultCountdownHours.Tag = Me.nudDefaultCountdownHours.Value
-            Me.nudDefaultCountdownMinutes.Tag = Me.nudDefaultCountdownMinutes.Value
-            Me.nudDefaultCountdownSeconds.Tag = Me.nudDefaultCountdownSeconds.Value
+            Me.SavedPrefs = CurrentPrefs.Clone()
         End Sub
+        Private Sub ApplyPrefsToUI(ByVal p As Preferences)
+            Me.lblDefaultColorLeft.BackColor = p.LeftTeamColor
+            Me.lblDefaultColorRight.BackColor = p.RightTeamColor
+            Me.tbDefaultFontSize.Text = p.DefaultFontSize
+            Me.cbShadowsEnabled.Checked = p.ShadowsEnabled
+            Me.tbDefaultImageDir.Text = p.DefaultImageDir
+            Me.tbDefaultImageFile.Text = p.DefaultImageFile
+            Me.cbDisplayDefaultImage.Checked = p.DisplayDefaultImage
+            Me.tbDefaultHBFile.Text = p.DefaultHBFile
+            Me.cbLoadDefaultHB.Checked = p.LoadDefaultHB
+            Me.nudDefaultSlideDelay.Value = p.DefaultSlideDelay
+            Me.tbDefaultSlideShow.Text = p.DefaultSlideShow
+            Me.cbPlaySlidesAtStart.Checked = p.PlaySlidesAtStart
+            Me.cbLoadDefaultSlides.Checked = p.LoadDefaultSlides
+            Me.nudDefaultCountdownHours.Value = p.DefaultCountdownHours
+            Me.nudDefaultCountdownMinutes.Value = p.DefaultCountdownMinutes
+            Me.nudDefaultCountdownSeconds.Value = p.DefaultCountdownSeconds
+        End Sub
+        Private Function ReadPrefsFromUI() As Preferences
+            Dim p As New Preferences()
+            p.LeftTeamColor = Me.lblDefaultColorLeft.BackColor
+            p.RightTeamColor = Me.lblDefaultColorRight.BackColor
+            p.DefaultFontSize = Me.tbDefaultFontSize.Text
+            p.ShadowsEnabled = Me.cbShadowsEnabled.Checked
+            p.DefaultImageDir = Me.tbDefaultImageDir.Text
+            p.DefaultImageFile = Me.tbDefaultImageFile.Text
+            p.DisplayDefaultImage = Me.cbDisplayDefaultImage.Checked
+            p.DefaultHBFile = Me.tbDefaultHBFile.Text
+            p.LoadDefaultHB = Me.cbLoadDefaultHB.Checked
+            p.DefaultSlideDelay = Me.nudDefaultSlideDelay.Value
+            p.DefaultSlideShow = Me.tbDefaultSlideShow.Text
+            p.PlaySlidesAtStart = Me.cbPlaySlidesAtStart.Checked
+            p.LoadDefaultSlides = Me.cbLoadDefaultSlides.Checked
+            p.DefaultCountdownHours = Me.nudDefaultCountdownHours.Value
+            p.DefaultCountdownMinutes = Me.nudDefaultCountdownMinutes.Value
+            p.DefaultCountdownSeconds = Me.nudDefaultCountdownSeconds.Value
+            Return p
+        End Function
         Private Sub ApplyPrefs()
             Me.SetTeamColor("Left", Me.lblDefaultColorLeft.BackColor)
             Me.SetTeamColor("Right", Me.lblDefaultColorRight.BackColor)
@@ -5841,7 +5811,7 @@ Namespace JANIS
             Me.nudCountdownHours.Value = Me.nudDefaultCountdownHours.Value
             Me.nudCountdownMinutes.Value = Me.nudDefaultCountdownMinutes.Value
             Me.nudCountdownSeconds.Value = Me.nudDefaultCountdownSeconds.Value
-            Me.CountdownSeconds = Me.ComputeSeconds(Me.nudCountdownHours.Value, Me.nudCountdownMinutes.Value, Me.nudCountdownSeconds.Value)
+            Me.CountdownSeconds = Me.ComputeSeconds(CInt(Me.nudCountdownHours.Value), CInt(Me.nudCountdownMinutes.Value), CInt(Me.nudCountdownSeconds.Value))
             Me.UpdateCountdown()
         End Sub
 

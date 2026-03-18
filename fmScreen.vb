@@ -46,7 +46,6 @@ Public Class fmScreen
     Friend WithEvents picGraphic As System.Windows.Forms.PictureBox
     Friend WithEvents lblMsg As gLabel.gLabel
     Friend WithEvents lblCountdown As System.Windows.Forms.Label
-    Friend WithEvents GLabel1 As gLabel.gLabel
     Friend WithEvents lblTeamLocLeft As System.Windows.Forms.Label
     Friend WithEvents lblTeamNameLeft As System.Windows.Forms.Label
     Friend WithEvents lblScoreLeft As System.Windows.Forms.Label
@@ -452,7 +451,7 @@ Public Class fmScreen
         Me.lblScoreRight.Show()
     End Sub
 
-    Public Sub ShowImage(ByRef Img As Image)
+    Public Sub ShowImage(ByVal Img As Image)
         If Img Is Nothing Then Exit Sub
 
         Me.BackColor = System.Drawing.Color.Black
@@ -466,7 +465,7 @@ Public Class fmScreen
         Me.lblMsg.Hide()
         Me.DisposeCurrentGraphicImage()
 
-        Me.picGraphic.Image = Img
+        Me.picGraphic.Image = New Bitmap(Img)   '* Own copy; caller manages the original
         Me.picGraphic.Show()
     End Sub
 
@@ -583,7 +582,7 @@ Public Class fmScreen
         End If
     End Sub
 
-    Private Function Limited_Score(ByVal score As String) As Integer
+    Private Function Limited_Score(ByVal score As String) As String
         '* If the score is too big or too small, it will be too wide to display
         If score = "" Then Return ""
         Return Math.Min(Math.Max(Convert.ToInt32(score), MIN_SCORE), MAX_SCORE).ToString
@@ -608,7 +607,7 @@ Public Class fmScreen
         Return System.Drawing.Color.FromArgb(a, r, g, b)
     End Function
 
-    Private Sub FadeBuff(ByRef lbl As System.Windows.Forms.Label, ByVal buffcolor As System.Drawing.Color)
+    Private Sub FadeBuff(ByVal lbl As System.Windows.Forms.Label, ByVal buffcolor As System.Drawing.Color)
         lbl.ForeColor = buffcolor
         If Not Me.FadeTimer.Enabled Then Me.FadeTimer.Start()
     End Sub

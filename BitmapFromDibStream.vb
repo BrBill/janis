@@ -6,52 +6,64 @@ Namespace JANIS
         Inherits Stream
         Private dib As Stream = Nothing
         Private header As Byte() = Nothing
+
         Public Sub New(ByVal dib As Stream)
             Me.dib = dib
             makeHeader()
         End Sub
+
         Private Sub makeHeader()
-            Dim reader As New BinaryReader(dib)
+            Using reader As New BinaryReader(dib, System.Text.Encoding.Default, leaveOpen:=True)
+                Dim headerSize As Integer = reader.ReadInt32()
+                Dim pixelSize As Integer = CInt(dib.Length) - headerSize
+                Dim fileSize As Integer = 14 + headerSize + pixelSize
 
-            Dim headerSize As Integer = reader.ReadInt32()
-            Dim pixelSize As Integer = CInt(dib.Length) - headerSize
-            Dim fileSize As Integer = 14 + headerSize + pixelSize
+                'Dim bmp As New MemoryStream(14)
+                'Dim writer As New BinaryWriter(bmp)
 
-            Dim bmp As New MemoryStream(14)
-            Dim writer As New BinaryWriter(bmp)
+                ' Get the palette size
+                '                   * The Palette size is stored as an int32 at offset 32
+                '                   * Actually stored as number of colours, so multiply by 4
+                '                   
+                dib.Position = 32
+                Dim paletteSize As Integer = 4 * reader.ReadInt32()
 
-            ' Get the palette size
-            '                   * The Palette size is stored as an int32 at offset 32
-            '                   * Actually stored as number of colours, so multiply by 4
-            '                   
+                ' Get the palette size from the bbp if none was specified
+                If paletteSize = 0 Then
+                    ' Get the bits per pixel
+                    ' The bits per pixel is stored as an int16 at offset 14
+                    '                     
+                    dib.Position = 14
+                    Dim bpp As Integer = reader.ReadInt16()
 
-            dib.Position = 32
-            Dim paletteSize As Integer = 4 * reader.ReadInt32()
+                    ' Only set the palette size if the bpp < 16
+                    If bpp < 16 Then
+                        paletteSize = 4 * (2 << (bpp - 1))
+                    End If
+                End If
 
-            ' Get the palette size from the bbp if none was specified
-            If paletteSize = 0 Then
-                ' Get the bits per pixel
-                '                     * The bits per pixel is store as an int16 at offset 14
-                '                     
+                Using bmp As New MemoryStream(14)
+                    Using writer As New BinaryWriter(bmp, System.Text.Encoding.Default, leaveOpen:=True)
+                        writer.Write(CByte(AscW("B"c)))
+                        writer.Write(CByte(AscW("M"c)))
+                        writer.Write(fileSize)
+                        writer.Write(CInt(0))
+                        writer.Write(14 + headerSize + paletteSize)
+                    End Using
+                    header = bmp.GetBuffer()
+                End Using
+            End Using
+            dib.Position = 0
+        End Sub
 
-                dib.Position = 14
-                Dim bpp As Integer = reader.ReadInt16()
-
-                ' Only set the palette size if the bpp < 16
-                If bpp < 16 Then
-                    paletteSize = 4 * (2 << (bpp - 1))
+        Protected Overrides Sub Dispose(ByVal disposing As Boolean)
+            If disposing Then
+                If dib IsNot Nothing Then
+                    dib.Dispose()
+                    dib = Nothing
                 End If
             End If
-
-            ' 1. Write Bitmap File Header:			 
-            writer.Write(CByte(AscW("B"c)))
-            writer.Write(CByte(AscW("M"c)))
-            writer.Write(fileSize)
-            writer.Write(CInt(0))
-            writer.Write(14 + headerSize + paletteSize)
-            header = bmp.GetBuffer()
-            writer.Close()
-            dib.Position = 0
+            MyBase.Dispose(disposing)
         End Sub
 
         Public Overrides Function Read(ByVal buffer As Byte(), ByVal offset As Integer, ByVal count As Integer) As Integer
@@ -112,8 +124,6 @@ Namespace JANIS
                 End If
             End Set
         End Property
-
-
 
         Public Overrides Function Seek(ByVal offset As Long, ByVal origin As SeekOrigin) As Long
             Throw New Exception("The method or operation is not implemented.")
