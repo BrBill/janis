@@ -690,6 +690,6 @@ Public Class fmColorDialog
 #End Region
 
     Private Sub Color_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Panel1.Click, Panel2.Click, Panel3.Click, Panel4.Click, Panel5.Click, Panel6.Click, Panel7.Click, Panel8.Click, Panel9.Click, Panel10.Click, Panel11.Click, Panel12.Click, Panel13.Click, Panel14.Click, Panel15.Click, Panel16.Click, Panel17.Click, Panel18.Click, Panel19.Click, Panel20.Click, Panel21.Click, Panel22.Click, Panel23.Click, Panel24.Click, Panel25.Click, Panel26.Click, Panel27.Click, Panel28.Click, Panel29.Click, Panel30.Click, Panel31.Click, Panel32.Click, Panel33.Click, Panel34.Click, Panel35.Click, Panel36.Click, Panel37.Click, Panel38.Click, Panel39.Click, Panel40.Click, Panel41.Click, Panel42.Click, Panel43.Click, Panel44.Click, Panel45.Click, Panel46.Click, Panel47.Click, Panel48.Click
-        pnlSelected.BackColor = sender.BackColor
+        pnlSelected.BackColor = DirectCast(sender, Panel).BackColor
     End Sub
 End Class

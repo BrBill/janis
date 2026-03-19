@@ -36,7 +36,7 @@ Public Class Gfxfast
         stack.Push(New Point(x, y))
 
         Do Until stack.Count = 0
-            Dim p As Point = stack.Pop()
+            Dim p As Point = DirectCast(stack.Pop(), Point)
             Dim x1 As Integer = p.X
 
             'Find the leftmost pixel of the current span that 

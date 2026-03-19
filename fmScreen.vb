@@ -1,7 +1,7 @@
 Public Class fmScreen
     Inherits System.Windows.Forms.Form
 
-    Private ScoreboardBitMap As Bitmap = Global.JANIS.My.Resources.ScoreTemplate.Clone
+    Private ScoreboardBitMap As Bitmap = DirectCast(Global.JANIS.My.Resources.ScoreTemplate.Clone, Bitmap)
     Private ScoreboardColorAnchorLeft As Point = New Point(70, 110)    ' These are the scoreboard background locations that
     Private ScoreboardColorAnchorRight As Point = New Point(1210, 110) ' get flood-filled when team color changes
     Private LeftTeamColor As System.Drawing.Color = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(176, Byte), Integer))
@@ -318,52 +318,52 @@ Public Class fmScreen
             Dim LocTop As Integer = .lblTeamLocLeft.Top
             Dim RightLocLeft As Integer = .lblTeamLocRight.Left
             Dim RightTeamLeft As Integer = .lblTeamNameRight.Left
-            .Height = .Height / sRatio
-            .Width = .Width / sRatio
-            .lblScoreLeft.Left = .lblScoreLeft.Left / sRatio
-            .lblScoreLeft.Top = .lblScoreLeft.Top / sRatio
-            .lblScoreLeft.Height = .lblScoreLeft.Height / sRatio
-            .lblScoreLeft.Width = .lblScoreLeft.Width / sRatio
+            .Height = CInt(.Height / sRatio)
+            .Width = CInt(.Width / sRatio)
+            .lblScoreLeft.Left = CInt(.lblScoreLeft.Left / sRatio)
+            .lblScoreLeft.Top = CInt(.lblScoreLeft.Top / sRatio)
+            .lblScoreLeft.Height = CInt(.lblScoreLeft.Height / sRatio)
+            .lblScoreLeft.Width = CInt(.lblScoreLeft.Width / sRatio)
             .lblScoreLeft.Font = New Font(.lblScoreLeft.Font.FontFamily, CSng(Val(.lblScoreLeft.Font.Size) / sRatio), .lblScoreLeft.Font.Style)
-            .lblScoreRight.Left = .lblScoreRight.Left / sRatio
-            .lblScoreRight.Top = .lblScoreRight.Top / sRatio
-            .lblScoreRight.Height = .lblScoreRight.Height / sRatio
-            .lblScoreRight.Width = .lblScoreRight.Width / sRatio
+            .lblScoreRight.Left = CInt(.lblScoreRight.Left / sRatio)
+            .lblScoreRight.Top = CInt(.lblScoreRight.Top / sRatio)
+            .lblScoreRight.Height = CInt(.lblScoreRight.Height / sRatio)
+            .lblScoreRight.Width = CInt(.lblScoreRight.Width / sRatio)
             .lblScoreRight.Font = .lblScoreLeft.Font
-            .lblTeamNameLeft.Left = .lblTeamNameLeft.Left / sRatio
-            .lblTeamNameLeft.Top = NameTop / sRatio
-            .lblTeamNameLeft.Height = .lblTeamNameLeft.Height / sRatio
-            .lblTeamNameLeft.Width = .lblTeamNameLeft.Width / sRatio
+            .lblTeamNameLeft.Left = CInt(.lblTeamNameLeft.Left / sRatio)
+            .lblTeamNameLeft.Top = CInt(NameTop / sRatio)
+            .lblTeamNameLeft.Height = CInt(.lblTeamNameLeft.Height / sRatio)
+            .lblTeamNameLeft.Width = CInt(.lblTeamNameLeft.Width / sRatio)
             .lblTeamNameLeft.Font = New Font(.lblTeamNameLeft.Font.FontFamily, CSng(Val(.lblTeamNameLeft.Font.Size) / sRatio), .lblTeamNameLeft.Font.Style)
-            .lblTeamNameRight.Left = RightTeamLeft / sRatio
+            .lblTeamNameRight.Left = CInt(RightTeamLeft / sRatio)
             .lblTeamNameRight.Top = .lblTeamNameLeft.Top
-            .lblTeamNameRight.Height = .lblTeamNameRight.Height / sRatio
-            .lblTeamNameRight.Width = .lblTeamNameRight.Width / sRatio
+            .lblTeamNameRight.Height = CInt(.lblTeamNameRight.Height / sRatio)
+            .lblTeamNameRight.Width = CInt(.lblTeamNameRight.Width / sRatio)
             .lblTeamNameRight.Font = .lblTeamNameLeft.Font
-            .lblTeamLocLeft.Left = .lblTeamLocLeft.Left / sRatio
-            .lblTeamLocLeft.Top = LocTop / sRatio
-            .lblTeamLocLeft.Height = .lblTeamLocLeft.Height / sRatio
-            .lblTeamLocLeft.Width = .lblTeamLocLeft.Width / sRatio
+            .lblTeamLocLeft.Left = CInt(.lblTeamLocLeft.Left / sRatio)
+            .lblTeamLocLeft.Top = CInt(LocTop / sRatio)
+            .lblTeamLocLeft.Height = CInt(.lblTeamLocLeft.Height / sRatio)
+            .lblTeamLocLeft.Width = CInt(.lblTeamLocLeft.Width / sRatio)
             .lblTeamLocLeft.Font = .lblTeamNameLeft.Font
-            .lblTeamLocRight.Left = RightLocLeft / sRatio
+            .lblTeamLocRight.Left = CInt(RightLocLeft / sRatio)
             .lblTeamLocRight.Top = .lblTeamLocLeft.Top
-            .lblTeamLocRight.Height = .lblTeamLocRight.Height / sRatio
-            .lblTeamLocRight.Width = .lblTeamLocRight.Width / sRatio
+            .lblTeamLocRight.Height = CInt(.lblTeamLocRight.Height / sRatio)
+            .lblTeamLocRight.Width = CInt(.lblTeamLocRight.Width / sRatio)
             .lblTeamLocRight.Font = .lblTeamNameLeft.Font
-            .lblMsg.Left = .lblMsg.Left / sRatio
-            .lblMsg.Top = .lblMsg.Top / sRatio
-            .lblMsg.Height = .lblMsg.Height / sRatio
-            .lblMsg.Width = .lblMsg.Width / sRatio
+            .lblMsg.Left = CInt(.lblMsg.Left / sRatio)
+            .lblMsg.Top = CInt(.lblMsg.Top / sRatio)
+            .lblMsg.Height = CInt(.lblMsg.Height / sRatio)
+            .lblMsg.Width = CInt(.lblMsg.Width / sRatio)
             .lblMsg.Font = New Font(.lblMsg.Font.Name, CSng(Val(.lblMsg.Font.Size) / sRatio), .lblMsg.Font.Style)
-            .lblCountdown.Left = .lblCountdown.Left / sRatio
-            .lblCountdown.Top = .lblCountdown.Top / sRatio
-            .lblCountdown.Height = .lblCountdown.Height / sRatio
-            .lblCountdown.Width = .lblCountdown.Width / sRatio
+            .lblCountdown.Left = CInt(.lblCountdown.Left / sRatio)
+            .lblCountdown.Top = CInt(.lblCountdown.Top / sRatio)
+            .lblCountdown.Height = CInt(.lblCountdown.Height / sRatio)
+            .lblCountdown.Width = CInt(.lblCountdown.Width / sRatio)
             .lblCountdown.Font = New Font(.lblCountdown.Font.Name, CSng(Val(.lblCountdown.Font.Size) / sRatio), .lblCountdown.Font.Style)
-            .picGraphic.Left = .picGraphic.Left / sRatio
-            .picGraphic.Top = .picGraphic.Top / sRatio
-            .picGraphic.Height = .picGraphic.Height / sRatio
-            .picGraphic.Width = .picGraphic.Width / sRatio
+            .picGraphic.Left = CInt(.picGraphic.Left / sRatio)
+            .picGraphic.Top = CInt(.picGraphic.Top / sRatio)
+            .picGraphic.Height = CInt(.picGraphic.Height / sRatio)
+            .picGraphic.Width = CInt(.picGraphic.Width / sRatio)
             .AxMediaPlayer.Left = .picGraphic.Left
             .AxMediaPlayer.Top = .picGraphic.Top
             .AxMediaPlayer.Height = .picGraphic.Height
@@ -398,7 +398,7 @@ Public Class fmScreen
         Me.lblMsg.ShadowState = UseShadows
     End Sub
 
-    Public Sub ShowText(ByVal txt As String, ByVal BackColor As System.Drawing.Color, ByVal fontsize As Integer)
+    Public Sub ShowText(ByVal txt As String, ByVal BackColor As System.Drawing.Color, ByVal fontsize As Single)
         Me.StopVideo()
         Me.lblTeamLocLeft.Hide()
         Me.lblTeamLocRight.Hide()
@@ -431,7 +431,7 @@ Public Class fmScreen
         Me.StopVideo()
         Me.lblMsg.Hide()
         '* Must clone the score bitmap; otherwise disposing it later will dispose the referenced original (BAD).
-        Me.picGraphic.Image = Me.ScoreboardBitMap.Clone()
+        Me.picGraphic.Image = DirectCast(Me.ScoreboardBitMap.Clone(), Image)
         Me.picGraphic.Show()
 
         Me.lblTeamLocLeft.Show()
@@ -562,10 +562,11 @@ Public Class fmScreen
     Public Sub ShowCountdownText(ByVal CountdownText As String, ByVal BackColor As System.Drawing.Color, ByVal CountdownVisible As Boolean)
         '* Change the size of the message window to accomodate the countdown timer
         Me.lblCountdown.BringToFront()
+        Dim msgHeight As Integer = CInt(Me.lblMsg.Tag)
         If CountdownVisible Then
-            Me.lblMsg.Height = Me.lblMsg.Tag - Me.lblCountdown.Height
+            Me.lblMsg.Height = msgHeight - Me.lblCountdown.Height
         Else
-            Me.lblMsg.Height = Me.lblMsg.Tag
+            Me.lblMsg.Height = msgHeight
         End If
 
         Me.lblCountdown.BackColor = BackColor

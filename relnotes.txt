@@ -4,6 +4,7 @@
   * BROKEN: video only plays from Media Search and Slideshow, not from LOAD FILE or hotbutton 
 
 Upcoming release, part 6:
+* Project now builds with Option Strict On.
 * Fixed bug in Present_Image() which was incorrectly checking value of Me.SlidesStatus
 * Rewrote fmMain.ShowMediaDir() to modernize it
 * Rewrote fmMain.ProcessMediaDir() to modernize it

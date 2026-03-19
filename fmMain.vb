@@ -3732,13 +3732,14 @@ Namespace JANIS
         End Sub
 
         Private Sub ListBox_KeyPress(ByVal sender As System.Object, ByVal e As KeyPressEventArgs) Handles lbSlideCandidates.KeyPress, lbSlideList.KeyPress
+            Dim lbox As ListBox = DirectCast(sender, ListBox)
             ' Ctrl-A will select all.
             If e.KeyChar = Chr(1) Then
-                If sender.SelectionMode.ToString Like "*Multi*" Then
+                If lbox.SelectionMode.ToString Like "*Multi*" Then
                     '* Walk through and select all items in the listbox
                     Dim i As Integer
-                    For i = 0 To CInt(sender.Items.Count) - 1
-                        sender.SetSelected(i, True)
+                    For i = 0 To CInt(lbox.Items.Count) - 1
+                        lbox.SetSelected(i, True)
                     Next i
                 End If
                 e.Handled = True
@@ -3747,17 +3748,17 @@ Namespace JANIS
         Private Sub NumericEntry_KeyPress(ByVal sender As System.Object, ByVal e As System.Windows.Forms.KeyPressEventArgs) Handles tbLeftFontSize.KeyPress, tbRightFontSize.KeyPress, tbDefaultFontSize.KeyPress, tbLeftScore.KeyPress, tbRightScore.KeyPress
             ' Chr(1) is Ctrl-A. Chr(8) is BackSpace.
             If e.KeyChar = Chr(1) Then
-                sender.SelectAll()
+                DirectCast(sender, TextBox).SelectAll()
                 e.Handled = True
             ElseIf (e.KeyChar <> Chr(8)) And (e.KeyChar <> "-") And ((e.KeyChar < "0") Or (e.KeyChar > "9")) Then
-                'tbLeftText.Text = CStr(Asc(e.KeyChar))
+                'Keep this for later easy debugging of keystrokes: tbLeftText.Text = CStr(Asc(e.KeyChar))
                 e.Handled = True
             End If
         End Sub
         Private Sub tbTextEntry_KeyPress(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyPressEventArgs) Handles tbLeftText.KeyPress, tbRightText.KeyPress, tbLeftTeam.KeyPress, tbRightTeam.KeyPress, comboImgSearchText.KeyPress, tbSubstitutions.KeyPress, tbNewThing.KeyPress, tbHBtext1.KeyPress, tbHBtext2.KeyPress, tbHBtext3.KeyPress, tbHBtext4.KeyPress, tbHBtext5.KeyPress, tbHBtext6.KeyPress, tbHBtext7.KeyPress, tbHBtext8.KeyPress, tbHBtext9.KeyPress, tbHBtext10.KeyPress
             ' Ctrl-A will select all.
             If e.KeyChar = Chr(1) Then
-                sender.SelectAll()
+                DirectCast(sender, TextBox).SelectAll()
                 e.Handled = True
             End If
         End Sub
@@ -3782,11 +3783,13 @@ Namespace JANIS
             Me.DisplayScore()
         End Sub
         Private Sub btnLeftScoreColor_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnLeftScoreColor.Click
-            Dim newcolor As Color = PickColor(sender.Left, sender.Top, tbLeftScore.BackColor)
+            Dim btn As Button = DirectCast(sender, Button)
+            Dim newcolor As Color = PickColor(CInt(btn.Left), CInt(btn.Top), tbLeftScore.BackColor)
             Me.SetTeamColor("Left", newcolor)
         End Sub
         Private Sub btnRightScoreColor_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnRightScoreColor.Click
-            Dim newcolor As Color = PickColor(sender.Left - 100, sender.Top, tbRightScore.BackColor)
+            Dim btn As Button = DirectCast(sender, Button)
+            Dim newcolor As Color = PickColor(CInt(btn.Left) - 100, CInt(btn.Top), tbRightScore.BackColor)
             Me.SetTeamColor("Right", newcolor)
         End Sub
         Private Sub SetTeamColor(ByVal side As String, ByVal newcolor As Color)
@@ -3816,8 +3819,9 @@ Namespace JANIS
             Me.tbRightText.Focus()
         End Sub
         Private Sub btnClearTextBoth_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnClearTextBoth.Click
-            Me.btnClearTextLeft_Click(sender, e)
-            Me.btnClearTextRight_Click(sender, e)
+            Dim btn As Button = DirectCast(sender, Button)
+            Me.btnClearTextLeft_Click(btn, e)
+            Me.btnClearTextRight_Click(btn, e)
             Me.tbLeftText.Focus()
         End Sub
         Private Sub btnShowLeftText_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnShowLeftText.Click
@@ -3828,12 +3832,13 @@ Namespace JANIS
         End Sub
         Private Sub btnDocLoad_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnDocLoadLeft.Click, btnDocLoadRight.Click
             '* Load the contents of a document into the left or right text entry boxes
+            Dim btn As Button = DirectCast(sender, Button)
             Dim Doc As String = LoadDoc()
             If Doc <> "" Then
-                If sender.Tag <> "Left" Then
+                If btn.Tag.ToString <> "Left" Then
                     Me.tbRightText.Text = Doc
                 End If
-                If sender.Tag <> "Right" Then
+                If btn.Tag.ToString <> "Right" Then
                     Me.tbLeftText.Text = Doc
                 End If
             End If
@@ -3857,10 +3862,10 @@ Namespace JANIS
         End Function
 
         Private Sub pnlTextColorLeft_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles pnlTextColorLeft1.Click, pnlTextColorLeft2.Click, pnlTextColorLeft3.Click, pnlTextColorLeft4.Click, pnlTextColorLeft5.Click, pnlTextColorLeft6.Click
-            Me.tbLeftText.BackColor = sender.BackColor
+            Me.tbLeftText.BackColor = DirectCast(sender, Panel).BackColor
         End Sub
         Private Sub pnlTextColorRight_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles pnlTextColorRight1.Click, pnlTextColorRight2.Click, pnlTextColorRight3.Click, pnlTextColorRight4.Click, pnlTextColorRight5.Click, pnlTextColorRight6.Click
-            Me.tbRightText.BackColor = sender.BackColor
+            Me.tbRightText.BackColor = DirectCast(sender, Panel).BackColor
         End Sub
         Private Sub btnChooseTextColorLeft_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnChooseTextColorLeft.Click
             Me.tbLeftText.BackColor = Me.PickColor(50, 300, Me.tbLeftText.BackColor)
@@ -3880,19 +3885,20 @@ Namespace JANIS
         End Sub
 
         Private Sub tbFontSize_KeyUp(ByVal sender As System.Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles tbLeftFontSize.KeyUp, tbRightFontSize.KeyUp, tbDefaultFontSize.KeyUp
+            Dim tbox As TextBox = DirectCast(sender, TextBox)
             Dim fsiz As Single
-            'tbLeftText.Text = "KeyCode: " & CStr(e.KeyCode) & Chr(13) & "KeyData: " & CStr(e.KeyData) & Chr(13) & "KeyValue: " & CStr(e.KeyValue)
+            'tbLeftText.Text = "KeyCode: " & CStr(e.KeyCode) & vbCrLf & "KeyData: " & CStr(e.KeyData) & vbCrLf & "KeyValue: " & CStr(e.KeyValue)
 
             '*** FIRST, zero sizes or smaller = unhandled exception. Don't allow.
-            If (sender.Text = "") Then
+            If (tbox.Text = "") Then
                 fsiz = 1
             Else
-                fsiz = Val(sender.Text)
+                fsiz = CSng(tbox.Text)
             End If
             If fsiz < 1 Then fsiz = 1
-            If sender.Name = "tbLeftFontSize" Then
+            If tbox.Name = "tbLeftFontSize" Then
                 Me.tbLeftText.Font = New Font(Me.tbLeftText.Font.Name, (fsiz / Me.DisplayToEntryFontRatio), Me.tbLeftText.Font.Style)
-            ElseIf sender.Name = "tbRightFontSize" Then
+            ElseIf tbox.Name = "tbRightFontSize" Then
                 Me.tbRightText.Font = New Font(Me.tbRightText.Font.Name, (fsiz / Me.DisplayToEntryFontRatio), Me.tbRightText.Font.Style)
             End If '* don't do anything for tbDefaultFontSize - that's a startup setting
         End Sub
@@ -3958,9 +3964,9 @@ Namespace JANIS
             Me.StopSlideShow()
             Me.ClearCurrentPictureboxImage(Me.picRemoteViewer)
 
-            If TestMode Then fontsize = fontsize * 7.2
+            If TestMode Then fontsize = CSng(fontsize * 7.2)
             Scr.SetTextShadows(cbShadowsEnabled.Checked)
-            Scr.ShowText(text, hue, CSng(Me.DisplayToEntryFontRatio * fontsize / Me.DisplayModeAdjustment))
+            Scr.ShowText(text, hue, Me.DisplayToEntryFontRatio * fontsize / Me.DisplayModeAdjustment)
             Me.ShowRemoteView()
         End Sub
 
@@ -3982,7 +3988,7 @@ Namespace JANIS
             Else
                 tbSource = tbRightScore
             End If
-            score = Val(tbSource.Text) + Points
+            score = CInt(tbSource.Text) + Points
             If score > 999 Then score = 999
             If score < -99 Then score = -99
             tbSource.Text = score.ToString
@@ -3992,8 +3998,8 @@ Namespace JANIS
         Private Sub menuChangeScore(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles menuAdd1Left.Click, menuSubtract1Left.Click, menuAdd5Left.Click, menuSubtract5Left.Click, menuAdd1Right.Click, menuSubtract1Right.Click, menuAdd5Right.Click, menuSubtract5Right.Click
             'This is the function that does function-key mod of the score.
             'The function keys are bound to this (invisible) main menu object group
-            Dim MenuInfo() As String = Split(sender.Text)
-            Dim Points As Integer = Val(MenuInfo(0))
+            Dim MenuInfo() As String = Split(DirectCast(sender, MenuItem).Text)
+            Dim Points As Integer = CInt(MenuInfo(0))
             Me.AddScore(MenuInfo(1), Points)
         End Sub
 
@@ -4250,7 +4256,7 @@ Namespace JANIS
                 img = CType(e.Data.GetData(GetType(System.Drawing.Bitmap)), Bitmap)
             Else
                 '* Device Independent Bitmap
-                Dim myStream As Stream = e.Data.GetData(DataFormats.Dib)
+                Dim myStream As Stream = DirectCast(e.Data.GetData(DataFormats.Dib), Stream)
                 Using bmp As New BitmapFromDibStream(myStream)
                     img = New Bitmap(bmp)
                 End Using
@@ -4334,10 +4340,11 @@ Namespace JANIS
 
         Private Async Sub btnSearchMediaShow_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnSearchMediaShow.Click, lbMediaResults.DoubleClick
             If Me.lbMediaResults.SelectedItem Is Nothing Then Exit Sub
+            Dim mediaItem As String = Me.lbMediaResults.SelectedItem.ToString
 
-            If IsVideoFile(Me.lbMediaResults.SelectedItem) Then
+            If IsVideoFile(mediaItem) Then
                 Await Task.Delay(100)  '* Avoid failure if double-clicked too fast after selecting
-                Me.LaunchVideo(Me.lbMediaResults.SelectedItem)
+                Me.LaunchVideo(mediaItem)
                 Me.AssignImageToPictureBox(picRemoteViewer, Nothing)
             Else '* is image file
                 If Me.picImgSearchPreview.Image IsNot Nothing Then
@@ -4355,14 +4362,15 @@ Namespace JANIS
         Private Sub PreviewSearchMedia()
             Static PrevSelect As String
             If Me.lbMediaResults.SelectedItems.Count = 1 Then
-                If Me.lbMediaResults.SelectedItem <> PrevSelect Then
-                    PrevSelect = Me.lbMediaResults.SelectedItem
+                If Me.lbMediaResults.SelectedItem.ToString <> PrevSelect Then
+                    Dim mediaItem As String = Me.lbMediaResults.SelectedItem.ToString
+                    PrevSelect = mediaItem
                     StopPreviewSearchVideo()  '* No-op if not playing
 
-                    If IsVideoFile(Me.lbMediaResults.SelectedItem) Then
-                        Me.PlayPreviewSearchVideo(Me.lbMediaResults.SelectedItem)
+                    If IsVideoFile(mediaItem) Then
+                        Me.PlayPreviewSearchVideo(mediaItem)
                     Else
-                        Me.ShowPreviewSearchImage(Me.lbMediaResults.SelectedItem)
+                        Me.ShowPreviewSearchImage(mediaItem)
                     End If
                 End If
             Else
@@ -4415,8 +4423,8 @@ Namespace JANIS
                 ' ----- Don't start the drag yet. Wait until we move a
                 '       certain amount.
                 Me.DragBounds = New Rectangle(New Point(e.X -
-                   (SystemInformation.DragSize.Width / 2),
-                   e.Y - (SystemInformation.DragSize.Height / 2)),
+                   CInt(SystemInformation.DragSize.Width / 2),
+                   e.Y - CInt(SystemInformation.DragSize.Height / 2)),
                    SystemInformation.DragSize)
                 Me.DragMethod = "from_lbMediaResults"
             End If
@@ -4445,7 +4453,7 @@ Namespace JANIS
 
         Private Sub picImgSearchPreview_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles picImgSearchPreview.MouseDown
             '* This routine defines picImgSearchPreview as a draggable entity, text copy only (for image filename)
-            If (Not sender.Image Is Nothing) And (Me.lbMediaResults.SelectedIndex >= 0) Then
+            If (Not DirectCast(sender, PictureBox).Image Is Nothing) And (Me.lbMediaResults.SelectedIndex >= 0) Then
                 Me.lbMediaResults.DoDragDrop(Me.lbMediaResults.SelectedItem, DragDropEffects.Copy)
             End If
         End Sub
@@ -4460,9 +4468,9 @@ Namespace JANIS
         End Sub
         Private Overloads Sub btnHot_DragDrop(ByVal sender As Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles btnHot1.DragDrop, btnHot2.DragDrop, btnHot3.DragDrop, btnHot4.DragDrop, btnHot5.DragDrop, btnHot6.DragDrop, btnHot7.DragDrop, btnHot8.DragDrop, btnHot9.DragDrop, btnHot10.DragDrop
             '* This routine takes the dropped text and attaches it to the chosen hotbutton.
-            Dim NewText As String = e.Data.GetData("Text")
+            Dim NewText As String = e.Data.GetData("Text").ToString
             If NewText <> "" Then
-                Dim i As Integer = CInt(sender.Name.Substring(6)) - 1      '* the hot button index from the control name
+                Dim i As Integer = CInt(DirectCast(sender, Button).Name.Substring(6)) - 1      '* the hot button index from the control name
                 Dim finfo As FileInfo
 
                 Try
@@ -4618,7 +4626,7 @@ Namespace JANIS
         End Sub
         Private Sub btnRemoveThing_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnRemoveThing.Click
             If (Me.clbThings.SelectedIndex >= 0) Then
-                Dim prompt As String = "Are you sure you want to remove Thing: '" & Me.clbThings.SelectedItem & "' ?"
+                Dim prompt As String = "Are you sure you want to remove Thing: '" & Me.clbThings.SelectedItem.ToString & "' ?"
                 If AskIfSure(prompt) Then
                     ' Set focus to tbNewThing to avoid index errors when
                     ' focus is in substitution boxes.
@@ -4633,9 +4641,10 @@ Namespace JANIS
         End Sub
 
         Private Sub clbThings_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles clbThings.SelectedIndexChanged
-            If sender.SelectedIndex >= 0 Then
-                Me.tbCurrentThing.Text = sender.SelectedItem
-                Me.tbSubstitutions.Text = Me.ThingSubs(sender.SelectedIndex)
+            Dim clbox As CheckedListBox = DirectCast(sender, CheckedListBox)
+            If clbox.SelectedIndex >= 0 Then
+                Me.tbCurrentThing.Text = clbox.SelectedItem.ToString
+                Me.tbSubstitutions.Text = Me.ThingSubs(CInt(clbox.SelectedIndex))
                 Me.tbCurrentThing.Visible = True
                 Me.tbSubstitutions.Visible = True
                 Me.btnShowThingLeft.Visible = True
@@ -4681,13 +4690,13 @@ Namespace JANIS
         End Sub
 
         Private Sub tbSubstitutions_Leave(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tbSubstitutions.Leave
-            Me.ThingSubs(Me.clbThings.SelectedIndex) = sender.Text
+            Me.ThingSubs(Me.clbThings.SelectedIndex) = DirectCast(sender, TextBox).Text
         End Sub
 
         Private Sub tbCurrentThing_Leave(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tbCurrentThing.Leave
             Dim sel As Integer = Me.clbThings.SelectedIndex
             If sel >= 0 Then
-                Me.clbThings.Items(sel) = sender.Text
+                Me.clbThings.Items(sel) = DirectCast(sender, TextBox).Text
             End If
         End Sub
 
@@ -4698,7 +4707,7 @@ Namespace JANIS
             For i = 0 To (Me.clbThings.Items.Count - 1)
                 If i > 0 Then s = s & vbCrLf
                 If Me.clbThings.CheckedIndices.Contains(i) Then s = s & ChrW(&H25BA)
-                s = s & (i + 1).ToString & ". " & Me.clbThings.Items.Item(i)
+                s = s & (i + 1).ToString & ". " & Me.clbThings.Items.Item(i).ToString
             Next
 
             If (Me.clbThings.Items.Count > 4) Then
@@ -4720,9 +4729,10 @@ Namespace JANIS
             DisplayTextScreen(Me.LS, s, Me.clbThings.BackColor, 19)
         End Sub
         Private Sub radioThingColor_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles radioThingColorLeft.CheckedChanged, radioThingColorRight.CheckedChanged
-            Me.clbThings.BackColor = sender.BackColor
-            Me.tbSubstitutions.BackColor = sender.BackColor
-            Me.tbCurrentThing.BackColor = sender.BackColor
+            Dim radbtn As RadioButton = DirectCast(sender, RadioButton)
+            Me.clbThings.BackColor = radbtn.BackColor
+            Me.tbSubstitutions.BackColor = radbtn.BackColor
+            Me.tbCurrentThing.BackColor = radbtn.BackColor
         End Sub
 
         Private Sub tbNewThing_Enter(ByVal sender As Object, ByVal e As System.EventArgs) Handles tbNewThing.Enter
@@ -4739,7 +4749,7 @@ Namespace JANIS
             'Yup.
             Dim fobj As Object
             For Each fobj In fnams
-                Me.lbSlideList.Items.Add(Me.tvSlideFolders.SelectedNode.Name & "\" & fobj)
+                Me.lbSlideList.Items.Add(Me.tvSlideFolders.SelectedNode.Name & "\" & fobj.ToString)
             Next
         End Sub
         Private Sub btnRemoveSlides_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnRemoveSlides.Click
@@ -4766,7 +4776,7 @@ Namespace JANIS
         End Sub
 
         Private Sub lbMediaFiles_DoubleClick(ByVal sender As Object, e As System.EventArgs) Handles lbSlideCandidates.DoubleClick
-            Me.AddToSlideList(sender.SelectedItems)
+            Me.AddToSlideList(DirectCast(sender, ListBox).SelectedItems)
         End Sub
         Private Sub lbMediaFiles_SelectedIndexChanged(sender As Object, e As EventArgs) Handles lbSlideCandidates.SelectedIndexChanged
             Me.PreviewSlideMedia()
@@ -4774,9 +4784,10 @@ Namespace JANIS
         Private Sub PreviewSlideMedia()
             Static PrevSelect As String = ""
             If Me.lbSlideCandidates.SelectedItem Is Nothing Then Exit Sub
-            Dim filenameToPreview As String = Me.tvSlideFolders.SelectedNode.Name & "\" & Me.lbSlideCandidates.SelectedItem.ToString
+            Dim selectedItem As String = Me.lbSlideCandidates.SelectedItem.ToString
+            Dim filenameToPreview As String = Me.tvSlideFolders.SelectedNode.Name & "\" & selectedItem
             If Me.lbSlideCandidates.SelectedItems.Count = 1 Then
-                If Me.lbSlideCandidates.SelectedItem <> PrevSelect Then
+                If selectedItem <> PrevSelect Then
                     PrevSelect = filenameToPreview
                     StopPreviewSlideVideo()  '* No-op if not playing
 
@@ -5055,7 +5066,7 @@ Namespace JANIS
                     Try
                         Dim lines As New List(Of String)
                         For i As Integer = 0 To Me.lbSlideList.Items.Count - 1
-                            lines.Add(Me.lbSlideList.Items.Item(i))
+                            lines.Add(Me.lbSlideList.Items.Item(i).ToString)
                         Next
                         System.IO.File.WriteAllLines(.FileName, lines)
                     Catch ex As Exception
@@ -5089,7 +5100,7 @@ Namespace JANIS
             Loop While NewIndex = Me.lbSlideList.SelectedIndex
             Me.lbSlideList.SelectedIndex = NewIndex
             Try
-                Me.BufferedSlide = Image.FromFile(Me.lbSlideList.SelectedItem)
+                Me.BufferedSlide = Image.FromFile(Me.lbSlideList.SelectedItem.ToString)
             Catch ex As Exception
                 Me.BufferedSlide = Nothing
             End Try
@@ -5099,7 +5110,7 @@ Namespace JANIS
             If Me.SlidesStatus = SLIDES_WHAMMY Then
                 Me.SlideTimer.Interval = 333
             Else
-                Me.SlideTimer.Interval = Me.nudDelay.Value * 1000
+                Me.SlideTimer.Interval = CInt(Me.nudDelay.Value) * 1000
             End If
         End Sub
         Private Sub StartSlideTimer()
@@ -5236,7 +5247,7 @@ Namespace JANIS
         Private Sub btnChangeSlide_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnFirstSlide.Click, btnNextSlide.Click, btnPrevSlide.Click, btnLastSlide.Click
             If Me.SlidesStatus = SLIDES_STOPPED Or Me.SlidesStatus = SLIDES_WHAMMY Then Return
             If Me.SlidesStatus = SLIDES_PLAYING Then Me.SlideTimer.Stop() '* temporary stoppage
-            Dim controlname As String = sender.Name
+            Dim controlname As String = DirectCast(sender, Button).Name
             Select Case controlname
                 Case "btnFirstSlide"
                     Me.GotoFirstSlide()
@@ -5252,7 +5263,7 @@ Namespace JANIS
         End Sub
         Private Sub ShowSelectedSlide()
             Dim KillSlideShow As Boolean = False  '* and always will be, but makes the calls clearer
-            Me.ShowMediaFile(Me.lbSlideList.SelectedItem, KillSlideShow)
+            Me.ShowMediaFile(Me.lbSlideList.SelectedItem.ToString, KillSlideShow)
         End Sub
         Private Sub GotoFirstSlide()
             Me.lbSlideList.SelectedIndex = 0
@@ -5288,7 +5299,7 @@ Namespace JANIS
             '************************************************************************************
             If Me.SlidesStatus = SLIDES_WHAMMY Then Return
             If Me.SlidesStatus = SLIDES_PLAYING Then Me.SlideTimer.Stop() '* temporary stoppage
-            Me.ShowMediaFile(Me.lbSlideList.SelectedItem, False)
+            Me.ShowMediaFile(Me.lbSlideList.SelectedItem.ToString, False)
             If Me.SlidesStatus = SLIDES_PLAYING Then StartSlideTimer()
         End Sub
         Private Sub btnWhammy_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnWhammy.Click
@@ -5389,7 +5400,7 @@ Namespace JANIS
                     Try
                         Dim lines As New List(Of String)
                         For i As Integer = 0 To 9
-                            lines.Add(Me.HotText(i).Text & "¶" & Me.HotButton(i).Tag)
+                            lines.Add(Me.HotText(i).Text.ToString & "¶" & Me.HotButton(i).Tag.ToString)
                         Next
                         System.IO.File.WriteAllLines(.FileName, lines)
                         Me.HotButtonsChanged = False
@@ -5434,7 +5445,7 @@ Namespace JANIS
         Private Sub btnHBSelect_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnHBSelect1.Click, btnHBSelect2.Click, btnHBSelect3.Click, btnHBSelect4.Click, btnHBSelect5.Click, btnHBSelect6.Click, btnHBSelect7.Click, btnHBSelect8.Click, btnHBSelect9.Click, btnHBSelect10.Click
             Dim fn As String = Me.SelectMediaFilename()
             If fn <> "" Then
-                Dim i As Integer = CInt(sender.Tag)
+                Dim i As Integer = CInt(DirectCast(sender, Button).Tag)
                 Me.HotButton(i).Text = MediaPrefix(Me.HotImage(i).Text) & HotText(i).Text  '* in case filetype changes
                 Me.HotButton(i).Tag = fn
                 Me.HotImage(i).Text = fn
@@ -5443,7 +5454,7 @@ Namespace JANIS
         End Sub
 
         Private Sub tbHBtext_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tbHBtext1.TextChanged, tbHBtext2.TextChanged, tbHBtext3.TextChanged, tbHBtext4.TextChanged, tbHBtext5.TextChanged, tbHBtext6.TextChanged, tbHBtext7.TextChanged, tbHBtext8.TextChanged, tbHBtext9.TextChanged, tbHBtext10.TextChanged
-            Dim buttonIndex As Integer = CInt(sender.Tag)
+            Dim buttonIndex As Integer = CInt(DirectCast(sender, Button).Tag)
             Me.HotButton(buttonIndex).Text = MediaPrefix(Me.HotImage(buttonIndex).Text) & Me.HotText(buttonIndex).Text
             Me.HotButtonsChanged = True
         End Sub
@@ -5451,11 +5462,12 @@ Namespace JANIS
         Private Sub tbHBfile_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tbHBfile1.TextChanged, tbHBfile2.TextChanged, tbHBfile3.TextChanged, tbHBfile4.TextChanged, tbHBfile5.TextChanged, tbHBfile6.TextChanged, tbHBfile7.TextChanged, tbHBfile8.TextChanged, tbHBfile9.TextChanged, tbHBfile10.TextChanged
             '* Put the cursor at the end so that we can see the
             '* more sigificant part of the file name info
-            sender.SelectionStart = sender.TextLength
+            Dim tbox As TextBox = DirectCast(sender, TextBox)
+            tbox.SelectionStart = tbox.TextLength
         End Sub
 
         Private Sub btnHot_MouseClick(ByVal sender As System.Object, ByVal e As MouseEventArgs) Handles btnHot1.MouseClick, btnHot2.MouseClick, btnHot3.MouseClick, btnHot4.MouseClick, btnHot5.MouseClick, btnHot6.MouseClick, btnHot7.MouseClick, btnHot8.MouseClick, btnHot9.MouseClick, btnHot10.MouseClick
-            Dim fnam As String = sender.Tag
+            Dim fnam As String = DirectCast(sender, Button).Tag.ToString
             Me.ShowMediaFile(fnam)    '* this stops slideshow if running
         End Sub
 
@@ -5470,10 +5482,10 @@ Namespace JANIS
         '* BEGIN PREFERENCES STUFF
 
         Private Sub pnlDefaultTextColorLeft_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles pnlDefaultTextColorLeft1.Click, pnlDefaultTextColorLeft2.Click, pnlDefaultTextColorLeft3.Click, pnlDefaultTextColorLeft4.Click, pnlDefaultTextColorLeft5.Click, pnlDefaultTextColorLeft6.Click
-            Me.lblDefaultColorLeft.BackColor = sender.BackColor
+            Me.lblDefaultColorLeft.BackColor = DirectCast(sender, Panel).BackColor
         End Sub
         Private Sub pnlDefaultTextColorRight_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles pnlDefaultTextColorRight1.Click, pnlDefaultTextColorRight2.Click, pnlDefaultTextColorRight3.Click, pnlDefaultTextColorRight4.Click, pnlDefaultTextColorRight5.Click, pnlDefaultTextColorRight6.Click
-            Me.lblDefaultColorRight.BackColor = sender.BackColor
+            Me.lblDefaultColorRight.BackColor = DirectCast(sender, Panel).BackColor
         End Sub
         Private Sub btnChooseDefaultTextColorLeft_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnChooseDefaultTextColorLeft.Click
             Me.lblDefaultColorLeft.BackColor = PickColor(50, 300, Me.lblDefaultColorLeft.BackColor)
@@ -5487,9 +5499,10 @@ Namespace JANIS
         End Sub
 
         Private Sub cbDisplayDefaultImage_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbDisplayDefaultImage.CheckedChanged
-            Me.tbDefaultImageFile.Enabled = sender.Checked
-            Me.btnChooseDefaultImage.Enabled = sender.Checked
-            If sender.Checked Then
+            Dim checked As Boolean = DirectCast(sender, CheckBox).Checked
+            Me.tbDefaultImageFile.Enabled = checked
+            Me.btnChooseDefaultImage.Enabled = checked
+            If checked Then
                 Me.tbDefaultImageFile.BackColor = Color.FromName("Control")
             Else
                 Me.tbDefaultImageFile.BackColor = Color.FromName("ControlDark")
@@ -5501,9 +5514,10 @@ Namespace JANIS
         End Sub
 
         Private Sub cbLoadDefaultHB_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbLoadDefaultHB.CheckedChanged
-            Me.tbDefaultHBFile.Enabled = sender.Checked
-            Me.btnChooseDefaultHB.Enabled = sender.Checked
-            If sender.Checked Then
+            Dim checked As Boolean = DirectCast(sender, CheckBox).Checked
+            Me.tbDefaultHBFile.Enabled = checked
+            Me.btnChooseDefaultHB.Enabled = checked
+            If checked Then
                 Me.tbDefaultHBFile.BackColor = Color.FromName("Control")
             Else
                 Me.tbDefaultHBFile.BackColor = Color.FromName("ControlDark")
@@ -5515,10 +5529,11 @@ Namespace JANIS
         End Sub
 
         Private Sub cbLoadDefaultSlides_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbLoadDefaultSlides.CheckedChanged
-            Me.tbDefaultSlideShow.Enabled = sender.Checked
-            Me.btnChooseDefaultSlideShow.Enabled = sender.Checked
-            Me.cbPlaySlidesAtStart.Enabled = sender.Checked
-            If sender.Checked Then
+            Dim checked As Boolean = DirectCast(sender, CheckBox).Checked
+            Me.tbDefaultSlideShow.Enabled = checked
+            Me.btnChooseDefaultSlideShow.Enabled = checked
+            Me.cbPlaySlidesAtStart.Enabled = checked
+            If checked Then
                 Me.tbDefaultSlideShow.BackColor = Color.FromName("Control")
             Else
                 Me.tbDefaultSlideShow.BackColor = Color.FromName("ControlDark")
@@ -5782,12 +5797,12 @@ Namespace JANIS
         End Sub
 
         Private Sub CountdownWarnTimeChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles nudCountdownWarnHours.ValueChanged, nudCountdownWarnMinutes.ValueChanged, nudCountdownWarnSeconds.ValueChanged, nudCountdownWarnHours.TextChanged, nudCountdownWarnMinutes.TextChanged, nudCountdownWarnSeconds.TextChanged
-            Me.CountdownWarnSeconds = Me.ComputeSeconds(Me.nudCountdownWarnHours.Value, Me.nudCountdownWarnMinutes.Value, Me.nudCountdownWarnSeconds.Value)
+            Me.CountdownWarnSeconds = Me.ComputeSeconds(CInt(Me.nudCountdownWarnHours.Value), CInt(Me.nudCountdownWarnMinutes.Value), CInt(Me.nudCountdownWarnSeconds.Value))
         End Sub
 
         Private Sub StartCountdown()
             If Me.CountdownTimer.Enabled Then Exit Sub
-            Me.CountdownSeconds = Me.ComputeSeconds(Me.nudCountdownHours.Value, Me.nudCountdownMinutes.Value, Me.nudCountdownSeconds.Value)
+            Me.CountdownSeconds = Me.ComputeSeconds(CInt(Me.nudCountdownHours.Value), CInt(Me.nudCountdownMinutes.Value), CInt(Me.nudCountdownSeconds.Value))
             Me.CountdownTimer.Interval = 1000
             Me.nudCountdownHours.Enabled = False
             Me.nudCountdownMinutes.Enabled = False
