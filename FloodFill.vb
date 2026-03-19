@@ -13,113 +13,115 @@ Imports System.Runtime.InteropServices
 'contain multiple spans.
 '*****************************************************************************************
 
-Public Class Gfxfast
-    Public Shared Sub FloodFill(ByVal image As Bitmap, ByVal x As Integer, ByVal y As Integer, ByVal new_color As Color)
+Namespace JANIS
+    Public Class Gfxfast
+        Public Shared Sub FloodFill(ByVal image As Bitmap, ByVal x As Integer, ByVal y As Integer, ByVal new_color As Color)
 
-        Dim pixels As Integer() = GetPixels(image)
-        Dim newClr As Integer = new_color.ToArgb()
-        Dim oldClr As Integer = pixels(x + y * image.Width)
-        Dim spanAbove, spanBelow As Boolean
-        Dim width, height As Integer
+            Dim pixels As Integer() = GetPixels(image)
+            Dim newClr As Integer = new_color.ToArgb()
+            Dim oldClr As Integer = pixels(x + y * image.Width)
+            Dim spanAbove, spanBelow As Boolean
+            Dim width, height As Integer
 
-        If newClr = oldClr Then Return
+            If newClr = oldClr Then Return
 
-        'Very important optimization.        
-        'If we instead read height and width values from the bitmap itself
-        'from within the loops it will tank the performance hard.
-        width = image.Width
-        height = image.Height
+            'Very important optimization.        
+            'If we instead read height and width values from the bitmap itself
+            'from within the loops it will tank the performance hard.
+            width = image.Width
+            height = image.Height
 
-        'Dim stack As New Stack(Of Point)(4096)
-        Dim stack As New Stack(4096)
+            'Dim stack As New Stack(Of Point)(4096)
+            Dim stack As New Stack(4096)
 
-        stack.Push(New Point(x, y))
+            stack.Push(New Point(x, y))
 
-        Do Until stack.Count = 0
-            Dim p As Point = DirectCast(stack.Pop(), Point)
-            Dim x1 As Integer = p.X
+            Do Until stack.Count = 0
+                Dim p As Point = DirectCast(stack.Pop(), Point)
+                Dim x1 As Integer = p.X
 
-            'Find the leftmost pixel of the current span that 
-            'is in need of filling. This is where we start filling
-            'from
-            While x1 >= 0 AndAlso pixels(x1 + p.Y * width) = oldClr
-                x1 -= 1
-            End While
-
-            x1 += 1
-
-            spanAbove = False
-            spanBelow = False
-
-            While x1 < width AndAlso pixels(x1 + p.Y * width) = oldClr
-
-                'Start filling
-                pixels(x1 + p.Y * width) = newClr
-
-                'Check above the current pixel for a fillable pixel
-                If Not spanAbove AndAlso p.Y > 0 AndAlso pixels(x1 + (p.Y - 1) * width) = oldClr Then
-
-                    stack.Push(New Point(x1, p.Y - 1))
-                    spanAbove = True
-
-                    'If we encounter an unfillable pixel above we set spanAbove to False to allow
-                    'us to add another span on this same scanline if we eventually encounter
-                    'a fillable pixel. This is what allows us to fill around islands and other
-                    'complex arrangements
-                ElseIf spanAbove AndAlso p.Y > 0 AndAlso pixels(x1 + (p.Y - 1) * width) <> oldClr Then
-
-                    spanAbove = False
-
-                End If
-
-                'Check below the current pixel for a fillable pixel
-                If Not spanBelow AndAlso p.Y < height - 1 AndAlso pixels(x1 + (p.Y + 1) * width) = oldClr Then
-
-                    stack.Push(New Point(x1, p.Y + 1))
-                    spanBelow = True
-
-                    'If we encounter an unfillable pixel below we set spanBelow to False to allow
-                    'us to add another span on this same scanline if we eventually encounter
-                    'a fillable pixel. This is what allows us to fill around islands and other
-                    'complex arrangements
-                ElseIf spanBelow AndAlso p.Y < height - 1 AndAlso pixels(x1 + (p.Y + 1) * width) <> oldClr Then
-
-                    spanBelow = False
-
-                End If
+                'Find the leftmost pixel of the current span that 
+                'is in need of filling. This is where we start filling
+                'from
+                While x1 >= 0 AndAlso pixels(x1 + p.Y * width) = oldClr
+                    x1 -= 1
+                End While
 
                 x1 += 1
-            End While
-        Loop
 
-        'Write the changed pixels back to the image
-        WritePixels(image, pixels)
-    End Sub
+                spanAbove = False
+                spanBelow = False
 
-    Private Shared Function GetPixels(ByVal bm As Bitmap) As Integer()
+                While x1 < width AndAlso pixels(x1 + p.Y * width) = oldClr
 
-        Dim bmData As BitmapData = bm.LockBits(New Rectangle(0, 0, bm.Width, bm.Height),
+                    'Start filling
+                    pixels(x1 + p.Y * width) = newClr
+
+                    'Check above the current pixel for a fillable pixel
+                    If Not spanAbove AndAlso p.Y > 0 AndAlso pixels(x1 + (p.Y - 1) * width) = oldClr Then
+
+                        stack.Push(New Point(x1, p.Y - 1))
+                        spanAbove = True
+
+                        'If we encounter an unfillable pixel above we set spanAbove to False to allow
+                        'us to add another span on this same scanline if we eventually encounter
+                        'a fillable pixel. This is what allows us to fill around islands and other
+                        'complex arrangements
+                    ElseIf spanAbove AndAlso p.Y > 0 AndAlso pixels(x1 + (p.Y - 1) * width) <> oldClr Then
+
+                        spanAbove = False
+
+                    End If
+
+                    'Check below the current pixel for a fillable pixel
+                    If Not spanBelow AndAlso p.Y < height - 1 AndAlso pixels(x1 + (p.Y + 1) * width) = oldClr Then
+
+                        stack.Push(New Point(x1, p.Y + 1))
+                        spanBelow = True
+
+                        'If we encounter an unfillable pixel below we set spanBelow to False to allow
+                        'us to add another span on this same scanline if we eventually encounter
+                        'a fillable pixel. This is what allows us to fill around islands and other
+                        'complex arrangements
+                    ElseIf spanBelow AndAlso p.Y < height - 1 AndAlso pixels(x1 + (p.Y + 1) * width) <> oldClr Then
+
+                        spanBelow = False
+
+                    End If
+
+                    x1 += 1
+                End While
+            Loop
+
+            'Write the changed pixels back to the image
+            WritePixels(image, pixels)
+        End Sub
+
+        Private Shared Function GetPixels(ByVal bm As Bitmap) As Integer()
+
+            Dim bmData As BitmapData = bm.LockBits(New Rectangle(0, 0, bm.Width, bm.Height),
                                                ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb)
 
-        'For best performance we treat the image as an array of 32 bit Integers
-        Dim pixels As Integer() = New Integer((bm.Width * bm.Height) - 1) {}
+            'For best performance we treat the image as an array of 32 bit Integers
+            Dim pixels As Integer() = New Integer((bm.Width * bm.Height) - 1) {}
 
-        Marshal.Copy(bmData.Scan0, pixels, 0, pixels.Length)
+            Marshal.Copy(bmData.Scan0, pixels, 0, pixels.Length)
 
-        bm.UnlockBits(bmData)
+            bm.UnlockBits(bmData)
 
-        Return pixels
-    End Function
+            Return pixels
+        End Function
 
-    Private Shared Sub WritePixels(ByVal bm As Bitmap, ByVal pixels As Integer())
+        Private Shared Sub WritePixels(ByVal bm As Bitmap, ByVal pixels As Integer())
 
-        Dim bmData As BitmapData = bm.LockBits(New Rectangle(0, 0, bm.Width, bm.Height),
+            Dim bmData As BitmapData = bm.LockBits(New Rectangle(0, 0, bm.Width, bm.Height),
                              ImageLockMode.ReadWrite,
                              PixelFormat.Format32bppArgb)
 
-        Marshal.Copy(pixels, 0, bmData.Scan0, pixels.Length)
+            Marshal.Copy(pixels, 0, bmData.Scan0, pixels.Length)
 
-        bm.UnlockBits(bmData)
-    End Sub
+            bm.UnlockBits(bmData)
+        End Sub
 
-End Class
+    End Class
+End Namespace

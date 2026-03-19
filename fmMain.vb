@@ -242,7 +242,7 @@ Namespace JANIS
         Friend WithEvents Label10 As System.Windows.Forms.Label
         Friend WithEvents Label11 As System.Windows.Forms.Label
         Friend WithEvents tbAboutHeader As System.Windows.Forms.TextBox
-        Friend WithEvents TextBox2 As System.Windows.Forms.TextBox
+        Friend WithEvents tbAboutBody As System.Windows.Forms.TextBox
         Friend WithEvents Label12 As System.Windows.Forms.Label
         Friend WithEvents btnWhammy As System.Windows.Forms.Button
         Friend WithEvents btnClearSlideList As System.Windows.Forms.Button
@@ -587,7 +587,7 @@ Namespace JANIS
             Me.cbLoadDefaultHB = New System.Windows.Forms.CheckBox()
             Me.tpAbout = New System.Windows.Forms.TabPage()
             Me.tbAboutHeader = New System.Windows.Forms.TextBox()
-            Me.TextBox2 = New System.Windows.Forms.TextBox()
+            Me.tbAboutBody = New System.Windows.Forms.TextBox()
             Me.SlideTimer = New System.Windows.Forms.Timer(Me.components)
             Me.pnlRemoteViewer = New System.Windows.Forms.Panel()
             Me.cbMuteVideo = New System.Windows.Forms.CheckBox()
@@ -2985,7 +2985,7 @@ Namespace JANIS
             '
             Me.tpAbout.BackColor = System.Drawing.SystemColors.Window
             Me.tpAbout.Controls.Add(Me.tbAboutHeader)
-            Me.tpAbout.Controls.Add(Me.TextBox2)
+            Me.tpAbout.Controls.Add(Me.tbAboutBody)
             Me.tpAbout.Location = New System.Drawing.Point(4, 28)
             Me.tpAbout.Name = "tpAbout"
             Me.tpAbout.Size = New System.Drawing.Size(988, 372)
@@ -3009,21 +3009,21 @@ Namespace JANIS
     "" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "© 2004-2025 Easy Being Productions"
             Me.tbAboutHeader.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
             '
-            'TextBox2
+            'tbAboutBody
             '
-            Me.TextBox2.BackColor = System.Drawing.SystemColors.Window
-            Me.TextBox2.BorderStyle = System.Windows.Forms.BorderStyle.None
-            Me.TextBox2.Font = New System.Drawing.Font("Times New Roman", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-            Me.TextBox2.ForeColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(64, Byte), Integer))
-            Me.TextBox2.Location = New System.Drawing.Point(8, 132)
-            Me.TextBox2.Multiline = True
-            Me.TextBox2.Name = "TextBox2"
-            Me.TextBox2.ReadOnly = True
-            Me.TextBox2.Size = New System.Drawing.Size(972, 232)
-            Me.TextBox2.TabIndex = 232
-            Me.TextBox2.TabStop = False
-            Me.TextBox2.Text = resources.GetString("TextBox2.Text")
-            Me.TextBox2.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+            Me.tbAboutBody.BackColor = System.Drawing.SystemColors.Window
+            Me.tbAboutBody.BorderStyle = System.Windows.Forms.BorderStyle.None
+            Me.tbAboutBody.Font = New System.Drawing.Font("Times New Roman", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+            Me.tbAboutBody.ForeColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(64, Byte), Integer))
+            Me.tbAboutBody.Location = New System.Drawing.Point(8, 132)
+            Me.tbAboutBody.Multiline = True
+            Me.tbAboutBody.Name = "tbAboutBody"
+            Me.tbAboutBody.ReadOnly = True
+            Me.tbAboutBody.Size = New System.Drawing.Size(972, 232)
+            Me.tbAboutBody.TabIndex = 232
+            Me.tbAboutBody.TabStop = False
+            Me.tbAboutBody.Text = resources.GetString("tbAboutBody.Text")
+            Me.tbAboutBody.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
             '
             'SlideTimer
             '
@@ -3087,7 +3087,7 @@ Namespace JANIS
             '
             'CountdownTimer
             '
-            Me.CountdownTimer.Interval = 10
+            Me.CountdownTimer.Interval = 1000
             '
             'lblMediaLibraryCount
             '
@@ -3933,7 +3933,7 @@ Namespace JANIS
                 'Me.LS.SetLeft(monitor2TopLeft.X)
                 'Me.LS.SetTop(monitor2TopLeft.Y)
                 '* Me.LS.SetLeft(SystemInformation.PrimaryMonitorSize.Width)
-                Me.LS.SetTop(0)
+                'Me.LS.SetTop(0)
                 Me.Text = Me.Text & " - Arena Mode"
             Else
                 '* We're in test mode
@@ -5454,7 +5454,7 @@ Namespace JANIS
         End Sub
 
         Private Sub tbHBtext_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tbHBtext1.TextChanged, tbHBtext2.TextChanged, tbHBtext3.TextChanged, tbHBtext4.TextChanged, tbHBtext5.TextChanged, tbHBtext6.TextChanged, tbHBtext7.TextChanged, tbHBtext8.TextChanged, tbHBtext9.TextChanged, tbHBtext10.TextChanged
-            Dim buttonIndex As Integer = CInt(DirectCast(sender, Button).Tag)
+            Dim buttonIndex As Integer = CInt(DirectCast(sender, TextBox).Tag.ToString)
             Me.HotButton(buttonIndex).Text = MediaPrefix(Me.HotImage(buttonIndex).Text) & Me.HotText(buttonIndex).Text
             Me.HotButtonsChanged = True
         End Sub
