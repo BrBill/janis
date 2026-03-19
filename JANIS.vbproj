@@ -194,7 +194,25 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="BitmapFromDibStream.vb" />
-    <Compile Include="Preferences.vb" />
+    <Compile Include="fmMain.Slideshow.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="fmMain.MediaSearch.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="fmMain.5Things.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="fmMain.HotButtons.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="fmMain.Prefs.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="fmMain.Countdown.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PreferencesClass.vb" />
     <Compile Include="FloodFill.vb" />
     <Compile Include="fmClickWait.vb">
       <SubType>Form</SubType>

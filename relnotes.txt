@@ -4,6 +4,7 @@
   * BROKEN: video only plays from Media Search and Slideshow, not from LOAD FILE or hotbutton 
 
 Upcoming release, part 7:
+* Broke up the megafile fmMain.vb into modular partial class separate files.
 * Ensured that fmMain.PreviewSlideMedia() properly compares to see if the slide name
   has changed (avoids reloading already displayed preview).
 * Ensured that fmMain.tbSubstitutions_Leave() doesn't try to use a selected item
