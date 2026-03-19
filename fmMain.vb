@@ -3593,7 +3593,7 @@ Namespace JANIS
 #End Region
 
         Private Sub fmMain_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
-            Me.Opacity = 0          '* Make invisible until we finish loading
+            Me.Opacity = 0.0F          '* Make invisible until we finish loading
             If Me.AppAlreadyRunning() Then
                 '* An autoexit has already been configured with the slide timer.
                 Me.splash.Close()
@@ -3633,13 +3633,13 @@ Namespace JANIS
 
                 Me.splash.SetStatus("Building Image Library...")
                 Me.BuildMediaLibrary()
-                Me.Opacity = 100          '* Make visible again
+                Me.Opacity = 1.0F          '* Make visible again
             End If
         End Sub
 
         Private Sub fmMain_Closing(ByVal sender As System.Object, ByVal e As System.ComponentModel.CancelEventArgs) Handles MyBase.Closing
             If Not Me.SlideTimerTag = "AppAlreadyRunning" Then
-                CurrentPrefs = ReadPrefsFromUI()
+                Me.CurrentPrefs = ReadPrefsFromUI()
                 If Me.PrefsChanged() Then
                     Dim Ans As DialogResult = MessageBox.Show(Me, "Modifications to preferences have not been saved. Save them before closing?", "Preferences Have Changed", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button3)
                     If Ans = DialogResult.Cancel Then
@@ -3679,7 +3679,7 @@ Namespace JANIS
         End Sub
 
         Private Sub InitializeSettings()
-            PREFS_FILE = ROOT_SUPPORT_DIR & "\JANIS.ini"
+            PREFS_FILE = ROOT_SUPPORT_DIR & "\JANIS.json"
 
             '* Get the working dimensions of the primary monitor
             Dim workingArea As System.Drawing.Rectangle
@@ -4690,7 +4690,9 @@ Namespace JANIS
         End Sub
 
         Private Sub tbSubstitutions_Leave(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tbSubstitutions.Leave
-            Me.ThingSubs(Me.clbThings.SelectedIndex) = DirectCast(sender, TextBox).Text
+            If Me.clbThings.SelectedIndex >= 0 Then
+                Me.ThingSubs(Me.clbThings.SelectedIndex) = DirectCast(sender, TextBox).Text
+            End If
         End Sub
 
         Private Sub tbCurrentThing_Leave(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tbCurrentThing.Leave
@@ -4787,7 +4789,7 @@ Namespace JANIS
             Dim selectedItem As String = Me.lbSlideCandidates.SelectedItem.ToString
             Dim filenameToPreview As String = Me.tvSlideFolders.SelectedNode.Name & "\" & selectedItem
             If Me.lbSlideCandidates.SelectedItems.Count = 1 Then
-                If selectedItem <> PrevSelect Then
+                If filenameToPreview <> PrevSelect Then
                     PrevSelect = filenameToPreview
                     StopPreviewSlideVideo()  '* No-op if not playing
 
@@ -5548,43 +5550,178 @@ Namespace JANIS
             Me.SetDefaultPrefs()
         End Sub
         Private Sub btnSavePrefs_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnSavePrefs.Click
-            '* Write the prefs off to a file (JANIS.ini).
-            '*
             Me.SavePrefsToFile(PREFS_FILE)
         End Sub
         Private Sub btnRevertPrefs_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnRevertPrefs.Click
             '* The last saved values are restored.
-            Me.ApplyPrefsToUI(SavedPrefs)
+            Me.ApplyPrefsToUI(Me.SavedPrefs)
         End Sub
 
         Private Function PrefsChanged() As Boolean
-            If CurrentPrefs.LeftTeamColor <> SavedPrefs.LeftTeamColor Then Return True
-            If CurrentPrefs.RightTeamColor <> SavedPrefs.RightTeamColor Then Return True
-            If CurrentPrefs.DefaultFontSize <> SavedPrefs.DefaultFontSize Then Return True
-            If CurrentPrefs.ShadowsEnabled <> SavedPrefs.ShadowsEnabled Then Return True
-            If CurrentPrefs.DefaultImageDir <> SavedPrefs.DefaultImageDir Then Return True
-            If CurrentPrefs.DefaultImageFile <> SavedPrefs.DefaultImageFile Then Return True
-            If CurrentPrefs.DisplayDefaultImage <> SavedPrefs.DisplayDefaultImage Then Return True
-            If CurrentPrefs.DefaultHBFile <> SavedPrefs.DefaultHBFile Then Return True
-            If CurrentPrefs.LoadDefaultHB <> SavedPrefs.LoadDefaultHB Then Return True
-            If CurrentPrefs.DefaultSlideDelay <> SavedPrefs.DefaultSlideDelay Then Return True
-            If CurrentPrefs.DefaultSlideShow <> SavedPrefs.DefaultSlideShow Then Return True
-            If CurrentPrefs.PlaySlidesAtStart <> SavedPrefs.PlaySlidesAtStart Then Return True
-            If CurrentPrefs.LoadDefaultSlides <> SavedPrefs.LoadDefaultSlides Then Return True
-            If CurrentPrefs.DefaultCountdownHours <> SavedPrefs.DefaultCountdownHours Then Return True
-            If CurrentPrefs.DefaultCountdownMinutes <> SavedPrefs.DefaultCountdownMinutes Then Return True
-            If CurrentPrefs.DefaultCountdownSeconds <> SavedPrefs.DefaultCountdownSeconds Then Return True
+            If Me.CurrentPrefs.LeftTeamColor <> Me.SavedPrefs.LeftTeamColor Then Return True
+            If Me.CurrentPrefs.RightTeamColor <> Me.SavedPrefs.RightTeamColor Then Return True
+            If Me.CurrentPrefs.DefaultFontSize <> Me.SavedPrefs.DefaultFontSize Then Return True
+            If Me.CurrentPrefs.ShadowsEnabled <> Me.SavedPrefs.ShadowsEnabled Then Return True
+            If Me.CurrentPrefs.DefaultImageDir <> Me.SavedPrefs.DefaultImageDir Then Return True
+            If Me.CurrentPrefs.DefaultImageFile <> Me.SavedPrefs.DefaultImageFile Then Return True
+            If Me.CurrentPrefs.DisplayDefaultImage <> Me.SavedPrefs.DisplayDefaultImage Then Return True
+            If Me.CurrentPrefs.DefaultHBFile <> Me.SavedPrefs.DefaultHBFile Then Return True
+            If Me.CurrentPrefs.LoadDefaultHB <> Me.SavedPrefs.LoadDefaultHB Then Return True
+            If Me.CurrentPrefs.DefaultSlideDelay <> Me.SavedPrefs.DefaultSlideDelay Then Return True
+            If Me.CurrentPrefs.DefaultSlideShow <> Me.SavedPrefs.DefaultSlideShow Then Return True
+            If Me.CurrentPrefs.PlaySlidesAtStart <> Me.SavedPrefs.PlaySlidesAtStart Then Return True
+            If Me.CurrentPrefs.LoadDefaultSlides <> Me.SavedPrefs.LoadDefaultSlides Then Return True
+            If Me.CurrentPrefs.DefaultCountdownHours <> Me.SavedPrefs.DefaultCountdownHours Then Return True
+            If Me.CurrentPrefs.DefaultCountdownMinutes <> Me.SavedPrefs.DefaultCountdownMinutes Then Return True
+            If Me.CurrentPrefs.DefaultCountdownSeconds <> Me.SavedPrefs.DefaultCountdownSeconds Then Return True
             Return False
         End Function
 
+        '=================================================================================================
+        '* PREFERENCES FILE I/O  (JSON format as of v5)
+        '*
+        '* Colors cannot be serialized directly by DataContractJsonSerializer, so we store them as
+        '* their ARGB integer value — the same representation the old .ini format used.
+        '*
+        '* Legacy migration: if JANIS.json does not exist but JANIS.ini does, the old positional
+        '* text file is read automatically and the result is immediately saved as JANIS.json so the
+        '* upgrade is transparent to the user.
+
+        ' ── Thin DTO (Data Transfer Object) used only for JSON serialization ───────────────────────
+        <System.Runtime.Serialization.DataContract()>
+        Private Class PrefsJson
+            <System.Runtime.Serialization.DataMember()> Public LeftTeamColorArgb As Integer
+            <System.Runtime.Serialization.DataMember()> Public RightTeamColorArgb As Integer
+            <System.Runtime.Serialization.DataMember()> Public DefaultFontSize As String
+            <System.Runtime.Serialization.DataMember()> Public ShadowsEnabled As Boolean
+            <System.Runtime.Serialization.DataMember()> Public DefaultImageDir As String
+            <System.Runtime.Serialization.DataMember()> Public DefaultImageFile As String
+            <System.Runtime.Serialization.DataMember()> Public DisplayDefaultImage As Boolean
+            <System.Runtime.Serialization.DataMember()> Public DefaultHBFile As String
+            <System.Runtime.Serialization.DataMember()> Public LoadDefaultHB As Boolean
+            <System.Runtime.Serialization.DataMember()> Public DefaultSlideDelay As Integer
+            <System.Runtime.Serialization.DataMember()> Public DefaultSlideShow As String
+            <System.Runtime.Serialization.DataMember()> Public PlaySlidesAtStart As Boolean
+            <System.Runtime.Serialization.DataMember()> Public LoadDefaultSlides As Boolean
+            <System.Runtime.Serialization.DataMember()> Public DefaultCountdownHours As Integer
+            <System.Runtime.Serialization.DataMember()> Public DefaultCountdownMinutes As Integer
+            <System.Runtime.Serialization.DataMember()> Public DefaultCountdownSeconds As Integer
+        End Class
+
+        ' ── Convert between Preferences and the JSON DTO ───────────────────────────────────────────
+        Private Shared Function PrefsToDto(ByVal p As Preferences) As PrefsJson
+            Dim dto As New PrefsJson()
+            dto.LeftTeamColorArgb = p.LeftTeamColor.ToArgb()
+            dto.RightTeamColorArgb = p.RightTeamColor.ToArgb()
+            dto.DefaultFontSize = p.DefaultFontSize
+            dto.ShadowsEnabled = p.ShadowsEnabled
+            dto.DefaultImageDir = p.DefaultImageDir
+            dto.DefaultImageFile = p.DefaultImageFile
+            dto.DisplayDefaultImage = p.DisplayDefaultImage
+            dto.DefaultHBFile = p.DefaultHBFile
+            dto.LoadDefaultHB = p.LoadDefaultHB
+            dto.DefaultSlideDelay = CInt(p.DefaultSlideDelay)
+            dto.DefaultSlideShow = p.DefaultSlideShow
+            dto.PlaySlidesAtStart = p.PlaySlidesAtStart
+            dto.LoadDefaultSlides = p.LoadDefaultSlides
+            dto.DefaultCountdownHours = CInt(p.DefaultCountdownHours)
+            dto.DefaultCountdownMinutes = CInt(p.DefaultCountdownMinutes)
+            dto.DefaultCountdownSeconds = CInt(p.DefaultCountdownSeconds)
+            Return dto
+        End Function
+
+        Private Shared Function DtoToPrefs(ByVal dto As PrefsJson) As Preferences
+            Dim p As New Preferences()
+            p.LeftTeamColor = Color.FromArgb(dto.LeftTeamColorArgb)
+            p.RightTeamColor = Color.FromArgb(dto.RightTeamColorArgb)
+            p.DefaultFontSize = dto.DefaultFontSize
+            p.ShadowsEnabled = dto.ShadowsEnabled
+            p.DefaultImageDir = dto.DefaultImageDir
+            p.DefaultImageFile = dto.DefaultImageFile
+            p.DisplayDefaultImage = dto.DisplayDefaultImage
+            p.DefaultHBFile = dto.DefaultHBFile
+            p.LoadDefaultHB = dto.LoadDefaultHB
+            p.DefaultSlideDelay = dto.DefaultSlideDelay
+            p.DefaultSlideShow = dto.DefaultSlideShow
+            p.PlaySlidesAtStart = dto.PlaySlidesAtStart
+            p.LoadDefaultSlides = dto.LoadDefaultSlides
+            p.DefaultCountdownHours = dto.DefaultCountdownHours
+            p.DefaultCountdownMinutes = dto.DefaultCountdownMinutes
+            p.DefaultCountdownSeconds = dto.DefaultCountdownSeconds
+            Return p
+        End Function
+
+        ' ── Main load entry point ──────────────────────────────────────────────────────────────────
         Private Sub LoadPrefsFromFile(ByVal filename As String)
+            '* filename is the JSON path (JANIS.json).
+            '* If it doesn't exist, check for the legacy JANIS.ini alongside it.
+            '* If that exists, migrate it. If neither exists, write factory defaults.
+
+            Dim p As Preferences = Nothing
+
             If Not System.IO.File.Exists(filename) Then
-                Me.SetDefaultPrefs()
-                Me.SavePrefsToFile(filename)
-                Me.AllScreensToFront()
-                Return
+                Dim legacyFile As String = System.IO.Path.ChangeExtension(filename, ".ini")
+                If System.IO.File.Exists(legacyFile) Then
+                    p = Me.LoadLegacyPrefsFromFile(legacyFile)
+                    If p IsNot Nothing Then
+                        '* Auto-convert: immediately persist as JSON so we won't read .ini again
+                        '* Use WritePrefsToFile directly — SavePrefsToFile's change-guard would
+                        '* bail out here because SavedPrefs hasn't been set yet.
+                        Me.CurrentPrefs = p
+                        Me.WritePrefsToFile(filename, p)
+                    End If
+                End If
+
+                If p Is Nothing Then
+                    '* Truly first run — write factory defaults and we're done
+                    '* Same reason: bypass the change-guard.
+                    Dim defaults As New Preferences()
+                    Me.WritePrefsToFile(filename, defaults)
+                    Me.CurrentPrefs = defaults
+                    Me.ApplyPrefsToUI(defaults)
+                    Me.StorePrefs()
+                    Me.AllScreensToFront()
+                    Return
+                End If
+            Else
+                p = Me.LoadJsonPrefsFromFile(filename)
             End If
 
+            If p Is Nothing Then
+                Me.SetDefaultPrefs()
+            Else
+                Me.CurrentPrefs = p
+                Me.ApplyPrefsToUI(p)
+            End If
+
+            Me.StorePrefs()
+            Me.AllScreensToFront()
+        End Sub
+
+        ' ── Read the JSON format ───────────────────────────────────────────────────────────────────
+        Private Function LoadJsonPrefsFromFile(ByVal filename As String) As Preferences
+            Try
+                Dim serializer As New System.Runtime.Serialization.Json.DataContractJsonSerializer(GetType(PrefsJson))
+                Using stream As New System.IO.FileStream(filename, System.IO.FileMode.Open, System.IO.FileAccess.Read)
+                    Dim dto As PrefsJson = DirectCast(serializer.ReadObject(stream), PrefsJson)
+                    Return DtoToPrefs(dto)
+                End Using
+            Catch ex As Exception
+                MessageBox.Show(Me,
+                    "An error occurred reading preferences file '" & filename & "'." & vbCrLf &
+                    "Factory defaults will be used." & vbCrLf & vbCrLf &
+                    "Detail: " & ex.Message,
+                    "Preferences File Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                Return Nothing
+            End Try
+        End Function
+
+        ' ── Read the legacy positional-text format (JANIS.ini) ────────────────────────────────────
+        Private Function LoadLegacyPrefsFromFile(ByVal filename As String) As Preferences
+            '* This reader exists solely for one-time migration of pre-v5 preference files.
+            '* The .ini format is a sequence of bare values, one per line, in a fixed order.
+            '* Fields added in later versions (countdown, shadows) were appended at the end,
+            '* so we guard every late addition with a Nothing check before using it.
             Try
                 Dim lines As String() = System.IO.File.ReadAllLines(filename)
                 Dim i As Integer = 0
@@ -5612,6 +5749,7 @@ Namespace JANIS
                 p.DefaultSlideShow = ReadLine()
                 p.PlaySlidesAtStart = (ReadLine() = "True")
 
+                '* These fields were added after the initial release
                 Dim countdownHours As String = ReadLine()
                 If countdownHours IsNot Nothing Then
                     p.DefaultCountdownHours = CInt(countdownHours)
@@ -5622,47 +5760,27 @@ Namespace JANIS
                 Dim shadowsEnabled As String = ReadLine()
                 If shadowsEnabled IsNot Nothing Then p.ShadowsEnabled = (shadowsEnabled = "True")
 
-                CurrentPrefs = p
-                Me.ApplyPrefsToUI(p)
+                Return p
 
             Catch ex As Exception
-                MessageBox.Show(Me, "An error occurred reading preferences file '" & filename & "'.", "File Error")
-                Me.SetDefaultPrefs()
+                MessageBox.Show(Me,
+                    "An error occurred reading legacy preferences file '" & filename & "'." & vbCrLf &
+                    "Factory defaults will be used." & vbCrLf & vbCrLf &
+                    "Detail: " & ex.Message,
+                    "Preferences Migration Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                Return Nothing
             End Try
+        End Function
 
-            Me.StorePrefs()
-            Me.AllScreensToFront()
-        End Sub
+        ' ── Save in JSON format ────────────────────────────────────────────────────────────────────
         Private Sub SavePrefsToFile(ByVal filename As String)
+            '* SavePrefsToFile: guarded — skips write if nothing has changed.
+            '* Called from normal UI save paths (Save button, closing dialog).
             CurrentPrefs = ReadPrefsFromUI()
             If Not PrefsChanged() Then Exit Sub
 
             Dim RebuildMediaLibrary As Boolean = (CurrentPrefs.DefaultImageDir <> SavedPrefs.DefaultImageDir)
-
-            Try
-                Dim lines As New List(Of String) From {
-                    CurrentPrefs.LeftTeamColor.ToArgb().ToString(),
-                    CurrentPrefs.RightTeamColor.ToArgb().ToString(),
-                    CurrentPrefs.DefaultFontSize,
-                    CurrentPrefs.DefaultImageDir,
-                    CurrentPrefs.DisplayDefaultImage.ToString(),
-                    CurrentPrefs.DefaultImageFile,
-                    CurrentPrefs.LoadDefaultHB.ToString(),
-                    CurrentPrefs.DefaultHBFile,
-                    CurrentPrefs.DefaultSlideDelay.ToString(),
-                    CurrentPrefs.LoadDefaultSlides.ToString(),
-                    CurrentPrefs.DefaultSlideShow,
-                    CurrentPrefs.PlaySlidesAtStart.ToString(),
-                    CurrentPrefs.DefaultCountdownHours.ToString(),
-                    CurrentPrefs.DefaultCountdownMinutes.ToString(),
-                    CurrentPrefs.DefaultCountdownSeconds.ToString(),
-                    CurrentPrefs.ShadowsEnabled.ToString()
-                 }
-                System.IO.File.WriteAllLines(filename, lines)
-            Catch ex As Exception
-                MessageBox.Show(Me, "An error occurred saving preferences file '" & filename & "'.", "File Error")
-                Return
-            End Try
+            Me.WritePrefsToFile(filename, CurrentPrefs)
 
             Me.StorePrefs()
             Me.AllScreensToFront()
@@ -5671,13 +5789,38 @@ Namespace JANIS
                 Me.BuildMediaLibrary()
             End If
         End Sub
+
+        ' ── Unconditional JSON write — no change-guard, no UI read ────────────────────────────────
+        '* Used directly by LoadPrefsFromFile for first-run and legacy migration, where
+        '* SavedPrefs hasn't been populated yet and the change-guard would always bail out.
+        Private Sub WritePrefsToFile(ByVal filename As String, ByVal p As Preferences)
+            Try
+                Dim dto As PrefsJson = PrefsToDto(p)
+                Dim serializer As New System.Runtime.Serialization.Json.DataContractJsonSerializer(GetType(PrefsJson))
+
+                '* Write to a temp file first, then replace — avoids a corrupt prefs file if we
+                '* crash or lose power mid-write.
+                Dim tempFile As String = filename & ".tmp"
+                Using stream As New System.IO.FileStream(tempFile, System.IO.FileMode.Create, System.IO.FileAccess.Write)
+                    serializer.WriteObject(stream, dto)
+                End Using
+                System.IO.File.Delete(filename)
+                System.IO.File.Move(tempFile, filename)
+
+            Catch ex As Exception
+                MessageBox.Show(Me, "An error occurred saving preferences file '" & filename & "'." & vbCrLf &
+                    "Detail: " & ex.Message,
+                    "Preferences File Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            End Try
+        End Sub
+
         Private Sub SetDefaultPrefs()
             '* Reset the Preferences screen settings to factory defaults
-            CurrentPrefs = New Preferences()
-            Me.ApplyPrefsToUI(CurrentPrefs)
+            Me.CurrentPrefs = New Preferences()
+            Me.ApplyPrefsToUI(Me.CurrentPrefs)
         End Sub
         Private Sub StorePrefs()
-            Me.SavedPrefs = CurrentPrefs.Clone()
+            Me.SavedPrefs = Me.CurrentPrefs.Clone()
         End Sub
         Private Sub ApplyPrefsToUI(ByVal p As Preferences)
             Me.lblDefaultColorLeft.BackColor = p.LeftTeamColor
