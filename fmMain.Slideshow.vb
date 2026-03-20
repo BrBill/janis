@@ -402,7 +402,7 @@ Namespace JANIS
             If Me.SlidesStatus <> SLIDES_WHAMMY Then Me.SlidesStatus = SLIDES_PLAYING
             Me.StartSlideTimer()
         End Sub
-        Public Async Sub StopSlideShow()
+        Public Sub StopSlideShow()
             If Me.SlidesStatus = SLIDES_STOPPED Then Return
 
             Dim WhammyWasActive As Boolean = (Me.SlidesStatus = SLIDES_WHAMMY)
@@ -422,11 +422,16 @@ Namespace JANIS
             Else
                 Me.LS.StopVideo()
                 Me.VideoEventTimer.Stop()
-                Await Task.Delay(100)
+
+                '* Wait up to 100 ms for the video to stop; if we don't wait, can run into slide timing issues
+                Dim timeout As Integer = 0
+                While Me.LS.IsVideoPlaying() AndAlso timeout < 10
+                    System.Threading.Thread.Sleep(10)
+                    timeout += 1
+                End While
             End If
 
             Me.cbMuteVideo.Checked = Me.PreSlideshowMuteState
-
         End Sub
 
         Private Sub SetPauseButtonColor(ByVal pause_on As Boolean)

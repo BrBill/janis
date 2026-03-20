@@ -411,7 +411,7 @@
             Dim choose As New FolderBrowserDialog
             choose.Description = "Select a directory for this action."
             choose.ShowNewFolderButton = False
-            choose.RootFolder = Environment.SpecialFolder.Desktop
+            choose.RootFolder = Environment.SpecialFolder.MyComputer
             choose.SelectedPath = startdir
             If choose.ShowDialog() = DialogResult.OK Then
                 pickdir = choose.SelectedPath

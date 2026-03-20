@@ -3,6 +3,14 @@
   * setting up instant video play drag-and-drop to work by passing filename only
   * BROKEN: video only plays from Media Search and Slideshow, not from LOAD FILE or hotbutton 
 
+Upcoming release, part 8:
+* Stopped using Await command to pause for video persnickitude in play timing.
+  Using other methods for now, will be retooling all of video playback in future.
+* Modernized the detection of file extensions so it doesn't create a file object.
+* Root folder for file dialogs is now SpecialFolder.MyComputer.
+* Eliminated unnecessary keypress event handlers.
+* Stopped using old VB Collection() objects and used List() instead.
+
 Upcoming release, part 7:
 * Broke up the megafile fmMain.vb into modular partial class separate files.
 * Rewrote fmMain.tvSlideFolders_SetFolder() in a much less clunky, UI-dependent way.

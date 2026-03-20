@@ -59,7 +59,7 @@ Namespace JANIS
         '* NOTE: Many .MOV files are not playable by Windows Media Player w/o additional codecs (technically a purchased Microsoft Store app is required)
         Private VideoFileExtensions() As String = {".ASF", ".AVI", ".M2TS", ".M4V", ".MP4", ".MP4V", ".MPG", ".MPEG", ".WMV"}
         Private ImageFileExtensions() As String = {".BMP", ".GIF", ".JPG", ".JPEG", ".PNG", ".WMF", ".EXIF", ".TIFF"}
-        Private MediaLibrary As New Collection()
+        Private MediaLibrary As New List(Of FileID)
         Private MediaFileExtensions() As String = VideoFileExtensions.Concat(ImageFileExtensions).ToArray()
 
         Private LS As fmScreen      '* The audience screen
@@ -1929,9 +1929,8 @@ Namespace JANIS
             Me.lblHBinstructions.Name = "lblHBinstructions"
             Me.lblHBinstructions.Size = New System.Drawing.Size(168, 129)
             Me.lblHBinstructions.TabIndex = 136
-            Me.lblHBinstructions.Text = "Shortcuts that you can define for quick access to stored images and videos. Selec" &
-    "t a name && image or video for each button. Save lists of buttons for specific u" &
-    "ses."
+            Me.lblHBinstructions.Text = "Shortcuts that you can define for quick access to stored images and videos. Select a name" &
+                                        " && image or video for each button. Save lists of buttons for specific uses."
             Me.lblHBinstructions.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
             '
             'btnSaveHB
@@ -3901,21 +3900,6 @@ Namespace JANIS
             ElseIf tbox.Name = "tbRightFontSize" Then
                 Me.tbRightText.Font = New Font(Me.tbRightText.Font.Name, (fsiz / Me.DisplayToEntryFontRatio), Me.tbRightText.Font.Style)
             End If '* don't do anything for tbDefaultFontSize - that's a startup setting
-        End Sub
-        Private Sub tbFontSize_KeyPress(ByVal sender As System.Object, ByVal e As System.Windows.Forms.KeyPressEventArgs) Handles tbLeftFontSize.KeyPress, tbRightFontSize.KeyPress, tbDefaultFontSize.KeyPress
-            ' Chr(8) is BackSpace
-            If (e.KeyChar <> Chr(8)) And ((e.KeyChar < "0") Or (e.KeyChar > "9")) Then
-                'tbLeftText.Text = CStr(Asc(e.KeyChar))
-                e.Handled = True
-            End If
-        End Sub
-
-        Private Sub tbScore_KeyPress(ByVal sender As System.Object, ByVal e As KeyPressEventArgs) Handles tbLeftScore.KeyPress, tbRightScore.KeyPress
-            ' Chr(8) is BackSpace
-            If (e.KeyChar <> Chr(8)) And (e.KeyChar <> "-") And ((e.KeyChar < "0") Or (e.KeyChar > "9")) Then
-                'tbLeftText.Text = CStr(Asc(e.KeyChar))
-                e.Handled = True
-            End If
         End Sub
 
         Private Sub SetMonitorDisplayMode()

@@ -17,7 +17,6 @@ Namespace JANIS
             PreviousSelectedTab = TabControl1.SelectedTab
         End Sub
 
-
         Private Sub AssignImageToPictureBox(ByVal picture As PictureBox, ByVal Img As Image)
             If Img Is Nothing Then Exit Sub
             Me.ClearCurrentPictureboxImage(picture)
@@ -42,7 +41,7 @@ Namespace JANIS
             End If
         End Sub
 
-        Private Async Sub LaunchVideo(ByVal fnam As String, Optional ByVal KillSlideShow As Boolean = True)
+        Private Sub LaunchVideo(ByVal fnam As String, Optional ByVal KillSlideShow As Boolean = True)
             If KillSlideShow Then
                 Me.StopSlideShow()
             End If
@@ -65,7 +64,10 @@ Namespace JANIS
                     '* stop the slide timer so the video can play until it ends. The Video Timer will notice when it finishes and restart everything
                     '* however, we still want to look like we're playing slides.
                     Me.SlideTimer.Stop()
-                    Await Task.Delay(450) '* If this delay isn't here, the slideshow thinks the video is already over (WHY???)
+
+                    '* The following delay prevents the slideshow from giving up on the video before the video starts, which
+                    '* causes the slideshow to advance a slide immediately after starting the video. This is a kludge, but it works.
+                    Me.VideoEventTimer.Interval = 500 '* Give WMP time to transition to playing state (interval is reset in the Tick event)
                 End If
                 Me.ClearCurrentPictureboxImage(Me.picRemoteViewer)
                 Me.VideoEventTimer.Start()
@@ -74,6 +76,7 @@ Namespace JANIS
         End Sub
 
         Private Sub VideoEventTimer_Tick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles VideoEventTimer.Tick
+            Me.VideoEventTimer.Interval = 250  '* Reset to normal polling interval
             If Me.LS.IsVideoPlaying() Then
                 '* Update remoteviewer with snapshot (this is once a second, currently)
                 Me.ShowRemoteView()
@@ -153,12 +156,12 @@ Namespace JANIS
             Return fn
         End Function
 
-        Private Async Sub btnMediaLoadFile_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnMediaLoadFile.Click
+        Private Sub btnMediaLoadFile_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnMediaLoadFile.Click
             Dim fnam As String = SelectMediaFilename()
             If fnam = "" Then
                 Return
             ElseIf IsVideoFile(fnam) Then
-                Await Task.Delay(100)   '* Avoid failure if things happen too fast
+                System.Threading.Thread.Sleep(100)   '* Avoid failure if things happen too fast
                 Me.LaunchVideo(fnam)
                 Me.AssignImageToPictureBox(picRemoteViewer, Nothing)
             Else
@@ -250,10 +253,9 @@ Namespace JANIS
                 .SelectionLength = .Text.Length
             End With
 
-            Dim CheckFileName As FileID
             Dim UpdateStarted As Boolean = False
             CompareText = "*" & CompareText & "*"   '* wrap for fuzzy search
-            For Each CheckFileName In MediaLibrary
+            For Each CheckFileName As FileID In MediaLibrary
                 '* Does this filename contain the supplied text?
                 If CheckFileName.Name.ToLower Like CompareText Then
                     If Not UpdateStarted Then
@@ -276,12 +278,12 @@ Namespace JANIS
             Me.AcceptButton = Nothing  '* unassign "default button" behavior
         End Sub
 
-        Private Async Sub btnSearchMediaShow_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnSearchMediaShow.Click, lbMediaResults.DoubleClick
+        Private Sub btnSearchMediaShow_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnSearchMediaShow.Click, lbMediaResults.DoubleClick
             If Me.lbMediaResults.SelectedItem Is Nothing Then Exit Sub
             Dim mediaItem As String = Me.lbMediaResults.SelectedItem.ToString
 
             If IsVideoFile(mediaItem) Then
-                Await Task.Delay(100)  '* Avoid failure if double-clicked too fast after selecting
+                System.Threading.Thread.Sleep(100)  '* Avoid failure if double-clicked too fast after selecting
                 Me.LaunchVideo(mediaItem)
                 Me.AssignImageToPictureBox(picRemoteViewer, Nothing)
             Else '* is image file
@@ -456,7 +458,6 @@ Namespace JANIS
             Me.BuildMediaLibrary()
         End Sub
 
-
         Private Sub ProcessMediaDir(ByVal DirName As String)
             '* A recursive function to add all graphics file names into the MediaLibrary list.
             '* The list is for searching later.
@@ -498,36 +499,18 @@ Namespace JANIS
         End Sub
 
         Private Function IsImageFile(ByVal fnam As String) As Boolean
-            '* Match file extension against known image extensions.
-            '* If it matches, return true; else return false.
             If fnam Is Nothing OrElse fnam = "" Then Return False
-            Dim fi As New FileInfo(fnam)
-            Dim ext As String = fi.Extension.ToUpper
-
-            '* If the extension is in the global image extension list, return true.
-            Return (Array.IndexOf(Me.ImageFileExtensions, ext) >= 0)
+            Return (Array.IndexOf(Me.ImageFileExtensions, Path.GetExtension(fnam).ToUpper) >= 0)
         End Function
 
         Private Function IsVideoFile(ByVal fnam As String) As Boolean
-            '* Match file extension against known video extensions.
-            '* If it matches, return true; else return false.
             If fnam Is Nothing OrElse fnam = "" Then Return False
-            Dim fi As New FileInfo(fnam)
-            Dim ext As String = fi.Extension.ToUpper
-
-            '* If the extension is in the global image extension list, return true.
-            Return (Array.IndexOf(Me.VideoFileExtensions, ext) >= 0)
+            Return (Array.IndexOf(Me.VideoFileExtensions, Path.GetExtension(fnam).ToUpper) >= 0)
         End Function
 
         Private Function IsMediaFile(ByVal fnam As String) As Boolean
-            '* Match file extension against known image extensions.
-            '* If it matches, return true; else return false.
             If fnam Is Nothing OrElse fnam = "" Then Return False
-            Dim fi As New FileInfo(fnam)
-            Dim ext As String = fi.Extension.ToUpper
-
-            '* If the extension is in the global image extension list, return true.
-            Return (Array.IndexOf(Me.MediaFileExtensions, ext) >= 0)
+            Return (Array.IndexOf(Me.MediaFileExtensions, Path.GetExtension(fnam).ToUpper) >= 0)
         End Function
 
         Private Function GetMediaDuration(ByVal MediaFile As String) As Double
