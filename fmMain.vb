@@ -67,6 +67,7 @@ Namespace JANIS
         Private ThingSubs(MAX_THINGS) As String           '* Substitutions for 5 Things
         Private SlidesStatus As Integer = SLIDES_STOPPED  '* Keep track of whether Slideshow is running
         Private SlideTimerTag As String = ""
+        Private WhammyRandomizer As New Random
         Private PreSlideshowMuteState As Boolean = False  '* For returning to previous mute state in StopSlideShow()
         Private HotButtonsChanged As Boolean              '* Have we changed the hot buttons?
         Private BufferedSlide As Image = Nothing          '* For holding next whammy slide

@@ -88,13 +88,14 @@ Namespace JANIS
         Private Sub ShowPreviewSlideImage(fnam As String)
             Me.AxMediaSlidePreview.Hide()
             Me.AxMediaSlidePreview.close()
-            Me.ClearCurrentPictureboxImage(Me.picSlidePreview)
             Me.picSlidePreview.Show()
             Try
-                Me.picSlidePreview.Image = Image.FromFile(fnam)
+                Dim newImg As Image = Image.FromFile(fnam)
+                Me.ClearCurrentPictureboxImage(Me.picSlidePreview)
+                Me.picSlidePreview.Image = newImg
             Catch
                 '* If error, clear image display. I don't care what the error was about.
-                Me.picSlidePreview.Image = Nothing
+                Me.ClearCurrentPictureboxImage(Me.picSlidePreview)
             End Try
         End Sub
 
@@ -349,11 +350,10 @@ Namespace JANIS
 
         Private Sub PreSelectRandomSlide()
             '* Select a random slide and buffer it into BufferedSlide.
-            If Me.lbSlideList.Items.Count < 2 And Not (Me.BufferedSlide Is Nothing) Then Return
+            If Me.lbSlideList.Items.Count < 2 And (Me.BufferedSlide IsNot Nothing) Then Return
             Dim NewIndex As Integer
-            Dim MyRand As New Random()
             Do
-                NewIndex = MyRand.Next(Me.lbSlideList.Items.Count)
+                NewIndex = WhammyRandomizer.Next(Me.lbSlideList.Items.Count)
             Loop While NewIndex = Me.lbSlideList.SelectedIndex
             Me.lbSlideList.SelectedIndex = NewIndex
             Try

@@ -112,16 +112,16 @@ Namespace JANIS
             Me.LS.ShowImage(img)
         End Sub
 
-        Private Sub DisplayImageFile(ByVal fnam As String, Optional ByVal KillSlideShow As Boolean = True)
+        Private Function DisplayImageFile(ByVal fnam As String, Optional ByVal KillSlideShow As Boolean = True) As Boolean
             Dim img As Image
             Try
                 img = Image.FromFile(fnam)
             Catch ex As Exception
-                Return      '* Silently ignore this broken or missing file.
+                Return False
             End Try
             Me.Present_Image(img, KillSlideShow)
-            'End If
-        End Sub
+            Return True
+        End Function
 
         Private Sub ShowMediaFile(ByVal fnam As String, Optional ByVal KillSlideShow As Boolean = True)
             '* If the sender doesn't know if the filename is video or image, this is the subroutine they want.
@@ -129,8 +129,12 @@ Namespace JANIS
                 Return
             ElseIf IsVideoFile(fnam) Then
                 Me.LaunchVideo(fnam, KillSlideShow)
-            Else
-                Me.DisplayImageFile(fnam, KillSlideShow)
+            ElseIf Not Me.DisplayImageFile(fnam, KillSlideShow) AndAlso KillSlideShow Then
+                If File.Exists(fnam) Then
+                    MessageBox.Show(Me, "Could not load HotButton image '" & fnam & "'.", "Image Load Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                Else
+                    MessageBox.Show(Me, "Could not load HotButton image '" & fnam & "'. The file does not exist.", "Hotbutton Image Missing", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                End If
             End If
         End Sub
 
@@ -340,13 +344,14 @@ Namespace JANIS
             End Try
         End Sub
         Private Sub ShowPreviewSearchImage(fnam As String)
-            Me.ClearCurrentPictureboxImage(Me.picImgSearchPreview)
             Me.AxMediaSearchPreview.Hide()
             Me.picImgSearchPreview.Show()
             Try
-                Me.picImgSearchPreview.Image = Image.FromFile(fnam)
+                Dim newImg As Image = Image.FromFile(fnam)
+                Me.ClearCurrentPictureboxImage(Me.picImgSearchPreview)
+                Me.picImgSearchPreview.Image = newImg
             Catch
-                Me.picImgSearchPreview.Image = Nothing
+                Me.ClearCurrentPictureboxImage(Me.picImgSearchPreview)
             End Try
             Me.AxMediaSearchPreview.close()
         End Sub

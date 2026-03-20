@@ -108,24 +108,23 @@
         '* upgrade is transparent to the user.
 
         ' ── Thin DTO (Data Transfer Object) used only for JSON serialization ───────────────────────
-        <System.Runtime.Serialization.DataContract()>
         Private Class PrefsJson
-            <System.Runtime.Serialization.DataMember()> Public LeftTeamColorArgb As Integer
-            <System.Runtime.Serialization.DataMember()> Public RightTeamColorArgb As Integer
-            <System.Runtime.Serialization.DataMember()> Public DefaultFontSize As String
-            <System.Runtime.Serialization.DataMember()> Public ShadowsEnabled As Boolean
-            <System.Runtime.Serialization.DataMember()> Public DefaultImageDir As String
-            <System.Runtime.Serialization.DataMember()> Public DefaultImageFile As String
-            <System.Runtime.Serialization.DataMember()> Public DisplayDefaultImage As Boolean
-            <System.Runtime.Serialization.DataMember()> Public DefaultHBFile As String
-            <System.Runtime.Serialization.DataMember()> Public LoadDefaultHB As Boolean
-            <System.Runtime.Serialization.DataMember()> Public DefaultSlideDelay As Integer
-            <System.Runtime.Serialization.DataMember()> Public DefaultSlideShow As String
-            <System.Runtime.Serialization.DataMember()> Public PlaySlidesAtStart As Boolean
-            <System.Runtime.Serialization.DataMember()> Public LoadDefaultSlides As Boolean
-            <System.Runtime.Serialization.DataMember()> Public DefaultCountdownHours As Integer
-            <System.Runtime.Serialization.DataMember()> Public DefaultCountdownMinutes As Integer
-            <System.Runtime.Serialization.DataMember()> Public DefaultCountdownSeconds As Integer
+            Public Property LeftTeamColorArgb As Integer
+            Public Property RightTeamColorArgb As Integer
+            Public Property DefaultFontSize As String
+            Public Property ShadowsEnabled As Boolean
+            Public Property DefaultImageDir As String
+            Public Property DefaultImageFile As String
+            Public Property DisplayDefaultImage As Boolean
+            Public Property DefaultHBFile As String
+            Public Property LoadDefaultHB As Boolean
+            Public Property DefaultSlideDelay As Integer
+            Public Property DefaultSlideShow As String
+            Public Property PlaySlidesAtStart As Boolean
+            Public Property LoadDefaultSlides As Boolean
+            Public Property DefaultCountdownHours As Integer
+            Public Property DefaultCountdownMinutes As Integer
+            Public Property DefaultCountdownSeconds As Integer
         End Class
 
         ' ── Convert between Preferences and the JSON DTO ───────────────────────────────────────────
@@ -221,17 +220,14 @@
         ' ── Read the JSON format ───────────────────────────────────────────────────────────────────
         Private Function LoadJsonPrefsFromFile(ByVal filename As String) As Preferences
             Try
-                Dim serializer As New System.Runtime.Serialization.Json.DataContractJsonSerializer(GetType(PrefsJson))
-                Using stream As New System.IO.FileStream(filename, System.IO.FileMode.Open, System.IO.FileAccess.Read)
-                    Dim dto As PrefsJson = DirectCast(serializer.ReadObject(stream), PrefsJson)
-                    Return DtoToPrefs(dto)
-                End Using
+                Dim json As String = System.IO.File.ReadAllText(filename)
+                Dim dto As PrefsJson = System.Text.Json.JsonSerializer.Deserialize(Of PrefsJson)(json)
+                Return DtoToPrefs(dto)
             Catch ex As Exception
-                MessageBox.Show(Me,
-                    "An error occurred reading preferences file '" & filename & "'." & vbCrLf &
-                    "Factory defaults will be used." & vbCrLf & vbCrLf &
-                    "Detail: " & ex.Message,
-                    "Preferences File Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                MessageBox.Show(Me, "An error occurred reading preferences file '" & filename & "'." & vbCrLf &
+                                    "Factory defaults will be used." & vbCrLf & vbCrLf &
+                                    "Detail: " & ex.Message,
+                                    "Preferences File Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
                 Return Nothing
             End Try
         End Function
@@ -314,23 +310,29 @@
         '* Used directly by LoadPrefsFromFile for first-run and legacy migration, where
         '* SavedPrefs hasn't been populated yet and the change-guard would always bail out.
         Private Sub WritePrefsToFile(ByVal filename As String, ByVal p As Preferences)
+            Dim tempFile As String = filename & ".tmp"
+            Dim tempWritten As Boolean = False
             Try
                 Dim dto As PrefsJson = PrefsToDto(p)
-                Dim serializer As New System.Runtime.Serialization.Json.DataContractJsonSerializer(GetType(PrefsJson))
-
-                '* Write to a temp file first, then replace — avoids a corrupt prefs file if we
-                '* crash or lose power mid-write.
-                Dim tempFile As String = filename & ".tmp"
-                Using stream As New System.IO.FileStream(tempFile, System.IO.FileMode.Create, System.IO.FileAccess.Write)
-                    serializer.WriteObject(stream, dto)
+                Dim options As New System.Text.Json.JsonSerializerOptions With {.WriteIndented = True}
+                Dim json As String = System.Text.Json.JsonSerializer.Serialize(dto, options)
+                Using stream As New System.IO.StreamWriter(tempFile, False, System.Text.Encoding.UTF8)
+                    stream.Write(json)
                 End Using
-                System.IO.File.Delete(filename)
-                System.IO.File.Move(tempFile, filename)
-
+                tempWritten = True
+                If System.IO.File.Exists(filename) Then
+                    System.IO.File.Replace(tempFile, filename, filename & ".bak")
+                Else
+                    System.IO.File.Move(tempFile, filename)
+                End If
             Catch ex As Exception
                 MessageBox.Show(Me, "An error occurred saving preferences file '" & filename & "'." & vbCrLf &
-                    "Detail: " & ex.Message,
-                    "Preferences File Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                                    "Detail: " & ex.Message,
+                                    "Preferences File Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            Finally
+                If Not tempWritten Then
+                    If System.IO.File.Exists(tempFile) Then System.IO.File.Delete(tempFile)
+                End If
             End Try
         End Sub
 

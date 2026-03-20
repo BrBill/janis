@@ -3,6 +3,12 @@
   * setting up instant video play drag-and-drop to work by passing filename only
   * BROKEN: video only plays from Media Search and Slideshow, not from LOAD FILE or hotbutton 
 
+Upcoming release, part 9:
+* Better random seeding for WHAMMY.
+* Better image disposal in fmMain.ShowPreviewSlideImage() & fmMain.ShowPreviewSearchImage()
+* Warn user when Hotbutton image display can't load its file.
+* Pretty-print JSON in init file (C:\JANIS\JANIS.json).
+
 Upcoming release, part 8:
 * Stopped using Await command to pause for video persnickitude in play timing.
   Using other methods for now, will be retooling all of video playback in future.
@@ -152,7 +158,7 @@ v2.5.1: 2010-11-15
 
 v2.5: 2010-10-25
 *  New feature: The WHAMMY! plays a slideshow at high speed, allowing us to have an
-   audience-controlled game randomizer (or ay other slideshow randomizer).
+   audience-controlled game randomizer (or any other slideshow randomizer).
 *  Add Splash Screen, which displays while program is loading.
 *  Determines correct place to put JANIS files storage directory for Windows Vista and up.
 *  Allows drag-n-drop of images to Hotbuttons and audience screens.
