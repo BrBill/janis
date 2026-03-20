@@ -1,5 +1,6 @@
 ﻿Imports System.Collections.Generic
 Imports System.IO
+Imports System.Linq
 Imports System.Threading.Tasks
 
 Namespace JANIS
@@ -149,34 +150,40 @@ Namespace JANIS
         Private Sub tvSlideFolders_SetFolder(ByVal folder As String)
             '* Expand the tvSlideFolders to match the supplied path, by climbing up from the beginning of the path to the leaf node.
 
-            If (folder Is Nothing) OrElse (folder = "") OrElse (Not System.IO.Directory.Exists(folder)) Then Exit Sub
-
-            Dim CurrentTabPage As TabPage = Me.TabControl1.SelectedTab
-            Me.TabControl1.SelectedTab = tpSlides
-            Me.tvSlideFolders.CollapseAll()
+            If String.IsNullOrEmpty(folder) OrElse (Not System.IO.Directory.Exists(folder)) Then Return
 
             '* we're gonna be messing about with the selected node over and over, so let's hide some stuff
             'Me.tvSlideFolders.HideSelection = True
             'Me.lbMediaFiles.Visible = False
 
-            Dim path_chunks As String() = folder.Split("\"c)
+            Dim pathChunks As String() = folder.Split(Path.DirectorySeparatorChar)
+            Dim pathSoFar As String = ""
+            Dim currentNodes As TreeNodeCollection = Me.tvSlideFolders.Nodes
+            Dim lastFound As TreeNode = Nothing
 
-            Dim path_so_far As String = ""
-            Dim FoundNode As TreeNode()
-            For Each chunk As String In path_chunks
-                '* expand 'em one level at a time, following the tree to our destination folder
-                If path_so_far <> "" Then path_so_far = path_so_far & "\"
-                path_so_far = path_so_far & chunk
+            For Each chunk As String In pathChunks
+                If pathSoFar <> "" Then pathSoFar &= Path.DirectorySeparatorChar
+                pathSoFar &= chunk
 
-                '* there's only one, but this returns an array so we have to get the first one. This should autoexpand the node.
-                FoundNode = tvSlideFolders.Nodes.Find(path_so_far, True) '(0))
-                If (FoundNode Is Nothing) OrElse (FoundNode.Length = 0) Then Exit For
+                Dim found As TreeNode = Nothing
+                For Each node As TreeNode In currentNodes
+                    If node.Name.Equals(pathSoFar, StringComparison.OrdinalIgnoreCase) Then
+                        found = node
+                        Exit For
+                    End If
+                Next
 
-                Me.tvSlideFolders.SelectedNode = FoundNode(0)
-                Me.tvSlideFolders.SelectedNode.Toggle()
+                If found Is Nothing Then Exit For
+
+                '* Expand this node programmatically — fires BeforeExpand which populates children
+                found.Expand()
+                currentNodes = found.Nodes
+                lastFound = found
             Next
 
-            Me.TabControl1.SelectedTab = CurrentTabPage
+            If lastFound IsNot Nothing Then
+                Me.tvSlideFolders.SelectedNode = lastFound
+            End If
         End Sub
         Private Sub tvSlideFolders_BeforeExpand(ByVal sender As System.Object, ByVal e As System.Windows.Forms.TreeViewCancelEventArgs) Handles tvSlideFolders.BeforeExpand
             '* Expanding the folder nodes out one level

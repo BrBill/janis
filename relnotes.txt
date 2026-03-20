@@ -5,12 +5,13 @@
 
 Upcoming release, part 7:
 * Broke up the megafile fmMain.vb into modular partial class separate files.
+* Rewrote fmMain.tvSlideFolders_SetFolder() in a much less clunky, UI-dependent way.
 * Ensured that fmMain.PreviewSlideMedia() properly compares to see if the slide name
   has changed (avoids reloading already displayed preview).
 * Ensured that fmMain.tbSubstitutions_Leave() doesn't try to use a selected item
   index if no item is chosen (index would be -1, out of bounds). This actually can't
   happen; just for safety.
-* Me.Opacity is a Double with a range of 0.0-1.0. Stop setting it to 100.
+* Form.Opacity is a Double with a range of 0.0-1.0. Stop setting it to 100.
 * Migrated preference file (JANIS.INI) to JSON. Better but harder to read.
 
 Upcoming release, part 6:
