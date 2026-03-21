@@ -1,10 +1,37 @@
 ﻿Imports System.Collections.Generic
+Imports System.Linq
 
 Namespace JANIS
     Partial Public Class fmMain
 
         '=================================================================================================
         '* HOTBUTTONS STUFF
+
+        Private Class HotButtonJson
+            Public Property Title As String
+            Public Property File As String
+        End Class
+
+        Private Function HotButtonsToDto() As List(Of HotButtonJson)
+            Dim list As New List(Of HotButtonJson)
+            For i As Integer = 0 To 9
+                list.Add(New HotButtonJson With {
+                    .Title = Me.HotText(i).Text,
+                    .File = Me.HotButton(i).Tag.ToString
+                })
+            Next
+            Return list
+        End Function
+
+        Private Sub DtoToHotButtons(ByVal list As List(Of HotButtonJson))
+            For i As Integer = 0 To Math.Min(9, list.Count - 1)
+                Me.HotText(i).Text = list(i).Title
+                Me.HotButton(i).Tag = list(i).File
+                Me.HotImage(i).Text = list(i).File
+                Me.HotButton(i).Text = MediaPrefix(list(i).File) & list(i).Title
+            Next
+        End Sub
+
 
         Private Function HotButton(ByVal i As Integer) As Button
             Dim hotbtns() As Button = {Me.btnHot1, Me.btnHot2, Me.btnHot3, Me.btnHot4, Me.btnHot5, Me.btnHot6, Me.btnHot7, Me.btnHot8, Me.btnHot9, Me.btnHot10}
@@ -27,11 +54,16 @@ Namespace JANIS
             Next
         End Sub
 
+        Private Function IsLegacyHotButtonFile(ByVal hbfile As String) As Boolean
+            Dim firstLine As String = System.IO.File.ReadLines(hbfile).FirstOrDefault()
+            Return firstLine IsNot Nothing AndAlso Not firstLine.TrimStart().StartsWith("[")
+        End Function
+
         Private Function SelectHotButtonsFileName() As String
             Dim fn As String
             Dim [of] As New OpenFileDialog()
             With [of]
-                .Filter = "JANIS HotButtons File(*.JHB)|*.JHB"
+                .Filter = "JANIS HotButtons Files (*.JHB)|*.JHB"
                 .InitialDirectory = ROOT_SUPPORT_DIR & DEFAULT_HOTBUTTON_DIR
                 If .ShowDialog(Me) = DialogResult.OK Then fn = .FileName Else fn = ""
                 .Dispose()
@@ -41,24 +73,44 @@ Namespace JANIS
 
         Private Sub LoadHotButtons(ByVal hbfile As String)
             Try
-                Dim lines As String() = System.IO.File.ReadAllLines(hbfile)
-                Dim i As Integer = 0
-                For Each line As String In lines
-                    If i > 9 Then Exit For
-                    Dim info() As String = Split(line, "¶")
-                    If info.Length >= 2 Then
-                        Me.HotText(i).Text = info(0)
-                        Me.HotButton(i).Tag = info(1)
-                        Me.HotImage(i).Text = info(1)
-                        Me.HotButton(i).Text = MediaPrefix(info(1)) & info(0)
-                    End If
-                    i += 1
-                Next
+                If IsLegacyHotButtonFile(hbfile) Then
+                    LoadLegacyHotButtons(hbfile)
+                Else
+                    LoadJsonHotButtons(hbfile)
+                End If
                 Me.HotButtonsChanged = False
             Catch ex As Exception
                 MessageBox.Show(Me, "An error occurred opening HotButtons file '" & hbfile & "'.", "File Error")
             End Try
             Me.AllScreensToFront()
+        End Sub
+
+        Private Sub LoadJsonHotButtons(ByVal hbfile As String)
+            Dim json As String = System.IO.File.ReadAllText(hbfile)
+            Dim options As New System.Text.Json.JsonSerializerOptions With {.PropertyNameCaseInsensitive = True}
+            Dim list As List(Of HotButtonJson) = System.Text.Json.JsonSerializer.Deserialize(Of List(Of HotButtonJson))(json, options)
+            DtoToHotButtons(list)
+        End Sub
+
+        Private Sub LoadLegacyHotButtons(ByVal hbfile As String)
+            Dim lines As String() = System.IO.File.ReadAllLines(hbfile)
+            Dim list As New List(Of HotButtonJson)
+            For Each line As String In lines
+                Dim info() As String = Split(line, "¶")
+                If info.Length >= 2 Then
+                    list.Add(New HotButtonJson With {
+                        .Title = info(0),
+                        .File = info(1)
+                    })
+                End If
+            Next
+            DtoToHotButtons(list)
+
+            '* Recycle the old file because we're gonna stomp it.
+            Microsoft.VisualBasic.FileIO.FileSystem.DeleteFile(hbfile, Microsoft.VisualBasic.FileIO.UIOption.OnlyErrorDialogs, Microsoft.VisualBasic.FileIO.RecycleOption.SendToRecycleBin)
+
+            '* Rewrite as JSON
+            WriteHotButtonsToFile(hbfile, list)
         End Sub
 
         Private Sub SaveHotButtons()
@@ -67,23 +119,40 @@ Namespace JANIS
             End If
             Dim sf As New SaveFileDialog()
             With sf
-                .Filter = "JANIS HotButtons File(*.JHB)|*.JHB"
+                .Filter = "JANIS HotButtons File (*.JHB)|*.JHB"
                 .InitialDirectory = ROOT_SUPPORT_DIR & DEFAULT_HOTBUTTON_DIR
                 If .ShowDialog(Me) = DialogResult.OK Then
-                    Try
-                        Dim lines As New List(Of String)
-                        For i As Integer = 0 To 9
-                            lines.Add(Me.HotText(i).Text.ToString & "¶" & Me.HotButton(i).Tag.ToString)
-                        Next
-                        System.IO.File.WriteAllLines(.FileName, lines)
-                        Me.HotButtonsChanged = False
-                    Catch ex As Exception
-                        MessageBox.Show(Me, "An error occurred saving HotButtons file '" & .FileName & "'.", "File Error")
-                    End Try
+                    WriteHotButtonsToFile(.FileName, HotButtonsToDto())
+                    Me.HotButtonsChanged = False
                 End If
                 .Dispose()
             End With
             Me.AllScreensToFront()
+        End Sub
+
+        Private Sub WriteHotButtonsToFile(ByVal filename As String, ByVal list As List(Of HotButtonJson))
+            Dim tempFile As String = filename & ".tmp"
+            Dim tempWritten As Boolean = False
+            Try
+                Dim options As New System.Text.Json.JsonSerializerOptions With {.WriteIndented = True}
+                Dim json As String = System.Text.Json.JsonSerializer.Serialize(list, options)
+                Using stream As New System.IO.StreamWriter(tempFile, False, System.Text.Encoding.UTF8)
+                    stream.Write(json)
+                End Using
+                tempWritten = True
+                If System.IO.File.Exists(filename) Then
+                    System.IO.File.Replace(tempFile, filename, filename & ".bak")
+                Else
+                    System.IO.File.Move(tempFile, filename)
+                End If
+            Catch ex As Exception
+                MessageBox.Show(Me, "An error occurred saving HotButtons file '" & filename & "'." & vbCrLf & "Detail: " & ex.Message,
+                                    "HotButtons File Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            Finally
+                If Not tempWritten Then
+                    If System.IO.File.Exists(tempFile) Then System.IO.File.Delete(tempFile)
+                End If
+            End Try
         End Sub
 
         Private Sub btnSaveHB_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnSaveHB.Click
