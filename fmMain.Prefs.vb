@@ -78,23 +78,7 @@
         End Sub
 
         Private Function PrefsChanged() As Boolean
-            If Me.CurrentPrefs.LeftTeamColor <> Me.SavedPrefs.LeftTeamColor Then Return True
-            If Me.CurrentPrefs.RightTeamColor <> Me.SavedPrefs.RightTeamColor Then Return True
-            If Me.CurrentPrefs.DefaultFontSize <> Me.SavedPrefs.DefaultFontSize Then Return True
-            If Me.CurrentPrefs.ShadowsEnabled <> Me.SavedPrefs.ShadowsEnabled Then Return True
-            If Me.CurrentPrefs.DefaultImageDir <> Me.SavedPrefs.DefaultImageDir Then Return True
-            If Me.CurrentPrefs.DefaultImageFile <> Me.SavedPrefs.DefaultImageFile Then Return True
-            If Me.CurrentPrefs.DisplayDefaultImage <> Me.SavedPrefs.DisplayDefaultImage Then Return True
-            If Me.CurrentPrefs.DefaultHBFile <> Me.SavedPrefs.DefaultHBFile Then Return True
-            If Me.CurrentPrefs.LoadDefaultHB <> Me.SavedPrefs.LoadDefaultHB Then Return True
-            If Me.CurrentPrefs.DefaultSlideDelay <> Me.SavedPrefs.DefaultSlideDelay Then Return True
-            If Me.CurrentPrefs.DefaultSlideShow <> Me.SavedPrefs.DefaultSlideShow Then Return True
-            If Me.CurrentPrefs.PlaySlidesAtStart <> Me.SavedPrefs.PlaySlidesAtStart Then Return True
-            If Me.CurrentPrefs.LoadDefaultSlides <> Me.SavedPrefs.LoadDefaultSlides Then Return True
-            If Me.CurrentPrefs.DefaultCountdownHours <> Me.SavedPrefs.DefaultCountdownHours Then Return True
-            If Me.CurrentPrefs.DefaultCountdownMinutes <> Me.SavedPrefs.DefaultCountdownMinutes Then Return True
-            If Me.CurrentPrefs.DefaultCountdownSeconds <> Me.SavedPrefs.DefaultCountdownSeconds Then Return True
-            Return False
+            Return Not Me.CurrentPrefs.Equals(Me.SavedPrefs)
         End Function
 
         '=================================================================================================

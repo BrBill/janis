@@ -79,8 +79,10 @@ Namespace JANIS
             Me.AxMediaSlidePreview.Show()
             Try
                 Me.AxMediaSlidePreview.URL = fnam
-                Me.AxMediaSlidePreview.Ctlcontrols.currentPosition = GetMediaDuration(fnam) / 4
-                Me.AxMediaSlidePreview.Ctlcontrols.play()
+                If Me.AxMediaSlidePreview.currentMedia IsNot Nothing Then
+                    Me.AxMediaSlidePreview.Ctlcontrols.currentPosition = Me.AxMediaSlidePreview.currentMedia.duration / 4
+                    Me.AxMediaSlidePreview.Ctlcontrols.play()
+                End If
             Catch ex As Exception
                 Me.AxMediaSlidePreview.close()
             End Try
@@ -238,12 +240,11 @@ Namespace JANIS
             Me.lbSlideCandidates.Items.Clear()
             If System.IO.Directory.Exists(Folder) Then
                 Try
-                    For Each ext As String In MediaFileExtensions
-                        'For Each foundfile As String In My.Computer.FileSystem.GetFiles(Folder, FileIO.SearchOption.SearchTopLevelOnly, "*" & ext).Select()
-                        For Each foundfile As String In Directory.GetFiles(Folder, "*" & ext)
-                            Dim newindex As Integer = Me.lbSlideCandidates.Items.Add(My.Computer.FileSystem.GetFileInfo(foundfile).Name)
+                    For Each foundfile As String In Directory.GetFiles(Folder)
+                        If IsMediaFile(System.IO.Path.GetExtension(foundfile)) Then
+                            Me.lbSlideCandidates.Items.Add(System.IO.Path.GetFileName(foundfile))
                             'Me.lbMediaFiles.Items(newindex)
-                        Next
+                        End If
                     Next
                 Catch ex As UnauthorizedAccessException
                     MessageBox.Show(Me, "JANIS does not have access to '" & Folder & "'.", "Permission Denied", MessageBoxButtons.OK)

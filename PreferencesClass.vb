@@ -40,5 +40,26 @@
         Public Function Clone() As Preferences
             Return DirectCast(Me.MemberwiseClone(), Preferences)
         End Function
+
+        Public Overrides Function Equals(obj As Object) As Boolean
+            If obj Is Nothing OrElse Not (TypeOf obj Is Preferences) Then Return False
+            Dim other As Preferences = DirectCast(obj, Preferences)
+            Return LeftTeamColor = other.LeftTeamColor AndAlso
+                   RightTeamColor = other.RightTeamColor AndAlso
+                   DefaultFontSize = other.DefaultFontSize AndAlso
+                   ShadowsEnabled = other.ShadowsEnabled AndAlso
+                   DefaultImageDir = other.DefaultImageDir AndAlso
+                   DefaultImageFile = other.DefaultImageFile AndAlso
+                   DisplayDefaultImage = other.DisplayDefaultImage AndAlso
+                   DefaultHBFile = other.DefaultHBFile AndAlso
+                   LoadDefaultHB = other.LoadDefaultHB AndAlso
+                   DefaultSlideDelay = other.DefaultSlideDelay AndAlso
+                   DefaultSlideShow = other.DefaultSlideShow AndAlso
+                   PlaySlidesAtStart = other.PlaySlidesAtStart AndAlso
+                   LoadDefaultSlides = other.LoadDefaultSlides AndAlso
+                   DefaultCountdownHours = other.DefaultCountdownHours AndAlso
+                   DefaultCountdownMinutes = other.DefaultCountdownMinutes AndAlso
+                   DefaultCountdownSeconds = other.DefaultCountdownSeconds
+        End Function
     End Class
 End Namespace
