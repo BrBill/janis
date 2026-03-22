@@ -160,14 +160,6 @@ Namespace JANIS
         Friend WithEvents tbLeftScore As System.Windows.Forms.TextBox
         Friend WithEvents tbRightScore As System.Windows.Forms.TextBox
         Friend WithEvents btnShowScore As System.Windows.Forms.Button
-        Friend WithEvents MainMenu1 As System.Windows.Forms.MainMenu
-        Friend WithEvents menuSubtract1Left As System.Windows.Forms.MenuItem
-        Friend WithEvents menuAdd5Left As System.Windows.Forms.MenuItem
-        Friend WithEvents menuSubtract5Left As System.Windows.Forms.MenuItem
-        Friend WithEvents menuAdd1Right As System.Windows.Forms.MenuItem
-        Friend WithEvents menuSubtract1Right As System.Windows.Forms.MenuItem
-        Friend WithEvents menuAdd5Right As System.Windows.Forms.MenuItem
-        Friend WithEvents menuSubtract5Right As System.Windows.Forms.MenuItem
         Friend WithEvents grpInstantMedia As GroupBox
         Friend WithEvents picRemoteViewer As System.Windows.Forms.PictureBox
         Friend WithEvents btnMediaLoadFile As System.Windows.Forms.Button
@@ -238,8 +230,6 @@ Namespace JANIS
         Friend WithEvents Label8 As System.Windows.Forms.Label
         Friend WithEvents Label9 As System.Windows.Forms.Label
         Friend WithEvents nudDelay As System.Windows.Forms.NumericUpDown
-        Friend WithEvents menuDummy As System.Windows.Forms.MenuItem
-        Friend WithEvents menuAdd1Left As System.Windows.Forms.MenuItem
         Friend WithEvents Label10 As System.Windows.Forms.Label
         Friend WithEvents Label11 As System.Windows.Forms.Label
         Friend WithEvents tbAboutHeader As System.Windows.Forms.TextBox
@@ -250,7 +240,6 @@ Namespace JANIS
         Friend WithEvents btnShowLeftText As System.Windows.Forms.Button
         Friend WithEvents btnDocLoadRight As System.Windows.Forms.Button
         Friend WithEvents btnDocLoadLeft As System.Windows.Forms.Button
-        Friend WithEvents EasterEgg1 As System.Windows.Forms.MenuItem
         Friend WithEvents btnPrevSlide As System.Windows.Forms.Button
         Friend WithEvents btnNextSlide As System.Windows.Forms.Button
         Friend WithEvents btnPauseSlides As System.Windows.Forms.Button
@@ -387,17 +376,6 @@ Namespace JANIS
             Me.tbLeftScore = New System.Windows.Forms.TextBox()
             Me.tbRightScore = New System.Windows.Forms.TextBox()
             Me.btnShowScore = New System.Windows.Forms.Button()
-            Me.MainMenu1 = New System.Windows.Forms.MainMenu(Me.components)
-            Me.menuDummy = New System.Windows.Forms.MenuItem()
-            Me.menuAdd1Left = New System.Windows.Forms.MenuItem()
-            Me.menuSubtract1Left = New System.Windows.Forms.MenuItem()
-            Me.menuAdd5Left = New System.Windows.Forms.MenuItem()
-            Me.menuSubtract5Left = New System.Windows.Forms.MenuItem()
-            Me.menuAdd1Right = New System.Windows.Forms.MenuItem()
-            Me.menuSubtract1Right = New System.Windows.Forms.MenuItem()
-            Me.menuAdd5Right = New System.Windows.Forms.MenuItem()
-            Me.menuSubtract5Right = New System.Windows.Forms.MenuItem()
-            Me.EasterEgg1 = New System.Windows.Forms.MenuItem()
             Me.btnMediaLoadFile = New System.Windows.Forms.Button()
             Me.btnLeftScoreColor = New System.Windows.Forms.Button()
             Me.btnRightScoreColor = New System.Windows.Forms.Button()
@@ -781,71 +759,6 @@ Namespace JANIS
             Me.btnShowScore.TabIndex = 18
             Me.btnShowScore.Text = "SCORE!"
             Me.ToolTip1.SetToolTip(Me.btnShowScore, "Hover over scores to see scoring hot keys")
-            '
-            'MainMenu1
-            '
-            Me.MainMenu1.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.menuDummy})
-            '
-            'menuDummy
-            '
-            Me.menuDummy.Index = 0
-            Me.menuDummy.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.menuAdd1Left, Me.menuSubtract1Left, Me.menuAdd5Left, Me.menuSubtract5Left, Me.menuAdd1Right, Me.menuSubtract1Right, Me.menuAdd5Right, Me.menuSubtract5Right, Me.EasterEgg1})
-            Me.menuDummy.Text = "Dummy"
-            Me.menuDummy.Visible = False
-            '
-            'menuAdd1Left
-            '
-            Me.menuAdd1Left.Index = 0
-            Me.menuAdd1Left.Shortcut = System.Windows.Forms.Shortcut.F1
-            Me.menuAdd1Left.Text = "+1 Left"
-            '
-            'menuSubtract1Left
-            '
-            Me.menuSubtract1Left.Index = 1
-            Me.menuSubtract1Left.Shortcut = System.Windows.Forms.Shortcut.F2
-            Me.menuSubtract1Left.Text = "-1 Left"
-            '
-            'menuAdd5Left
-            '
-            Me.menuAdd5Left.Index = 2
-            Me.menuAdd5Left.Shortcut = System.Windows.Forms.Shortcut.F3
-            Me.menuAdd5Left.Text = "+5 Left"
-            '
-            'menuSubtract5Left
-            '
-            Me.menuSubtract5Left.Index = 3
-            Me.menuSubtract5Left.Shortcut = System.Windows.Forms.Shortcut.F4
-            Me.menuSubtract5Left.Text = "-5 Left"
-            '
-            'menuAdd1Right
-            '
-            Me.menuAdd1Right.Index = 4
-            Me.menuAdd1Right.Shortcut = System.Windows.Forms.Shortcut.F5
-            Me.menuAdd1Right.Text = "+1 Right"
-            '
-            'menuSubtract1Right
-            '
-            Me.menuSubtract1Right.Index = 5
-            Me.menuSubtract1Right.Shortcut = System.Windows.Forms.Shortcut.F6
-            Me.menuSubtract1Right.Text = "-1 Right"
-            '
-            'menuAdd5Right
-            '
-            Me.menuAdd5Right.Index = 6
-            Me.menuAdd5Right.Shortcut = System.Windows.Forms.Shortcut.F7
-            Me.menuAdd5Right.Text = "+5 Right"
-            '
-            'menuSubtract5Right
-            '
-            Me.menuSubtract5Right.Index = 7
-            Me.menuSubtract5Right.Shortcut = System.Windows.Forms.Shortcut.F8
-            Me.menuSubtract5Right.Text = "-5 Right"
-            '
-            'EasterEgg1
-            '
-            Me.EasterEgg1.Index = 8
-            Me.EasterEgg1.Shortcut = System.Windows.Forms.Shortcut.CtrlShiftB
-            Me.EasterEgg1.Text = "Bill Loves Betse!"
             '
             'btnMediaLoadFile
             '
@@ -1930,8 +1843,9 @@ Namespace JANIS
             Me.lblHBinstructions.Name = "lblHBinstructions"
             Me.lblHBinstructions.Size = New System.Drawing.Size(168, 129)
             Me.lblHBinstructions.TabIndex = 136
-            Me.lblHBinstructions.Text = "Shortcuts that you can define for quick access to stored images and videos. Select a name" &
-                                        " && image or video for each button. Save lists of buttons for specific uses."
+            Me.lblHBinstructions.Text = "Shortcuts that you can define for quick access to stored images and videos. Selec" &
+    "t a name && image or video for each button. Save lists of buttons for specific u" &
+    "ses."
             Me.lblHBinstructions.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
             '
             'btnSaveHB
@@ -3005,8 +2919,8 @@ Namespace JANIS
             Me.tbAboutHeader.Size = New System.Drawing.Size(972, 105)
             Me.tbAboutHeader.TabIndex = 230
             Me.tbAboutHeader.TabStop = False
-            Me.tbAboutHeader.Text = "JANIS v5.0.0 ALPHA" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Released Oct. 6, 2025" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "by Bill Cernansky (boctorbill@gmail.com)" &
-    "" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "© 2004-2025 Easy Being Productions"
+            Me.tbAboutHeader.Text = "JANIS v5.0.0 ALPHA" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Released Oct. 6, 2025" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "by Bill Cernansky (boctorbill@gmail.co" &
+    "m)" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "© 2004-2025 Easy Being Productions"
             Me.tbAboutHeader.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
             '
             'tbAboutBody
@@ -3022,7 +2936,6 @@ Namespace JANIS
             Me.tbAboutBody.Size = New System.Drawing.Size(972, 232)
             Me.tbAboutBody.TabIndex = 232
             Me.tbAboutBody.TabStop = False
-            Me.tbAboutBody.Text = resources.GetString("tbAboutBody.Text")
             Me.tbAboutBody.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
             '
             'SlideTimer
@@ -3534,10 +3447,10 @@ Namespace JANIS
             Me.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
             Me.ForeColor = System.Drawing.SystemColors.WindowText
             Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
+            Me.KeyPreview = True
             Me.Location = New System.Drawing.Point(220, 30)
             Me.MaximizeBox = False
             Me.MaximumSize = New System.Drawing.Size(1012, 738)
-            Me.Menu = Me.MainMenu1
             Me.MinimumSize = New System.Drawing.Size(1012, 738)
             Me.Name = "fmMain"
             Me.StartPosition = System.Windows.Forms.FormStartPosition.Manual
@@ -3732,6 +3645,34 @@ Namespace JANIS
             If MyDir = "" Then MkDir(ROOT_SUPPORT_DIR & DEFAULT_SLIDESHOW_DIR)
             MyDir = Dir(ROOT_SUPPORT_DIR & DEFAULT_HOTBUTTON_DIR, FileAttribute.Directory)
             If MyDir = "" Then MkDir(ROOT_SUPPORT_DIR & DEFAULT_HOTBUTTON_DIR)
+        End Sub
+
+        Private Sub fmMain_KeyDown(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles MyBase.KeyDown
+            '* Shortcut keys
+            Select Case e.KeyCode
+                Case Keys.F1
+                    Me.AddScore("Left", 1)
+                Case Keys.F2
+                    Me.AddScore("Left", -1)
+                Case Keys.F3
+                    Me.AddScore("Left", 5)
+                Case Keys.F4
+                    Me.AddScore("Left", -5)
+                Case Keys.F5
+                    Me.AddScore("Right", 1)
+                Case Keys.F6
+                    Me.AddScore("Right", -1)
+                Case Keys.F7
+                    Me.AddScore("Right", 5)
+                Case Keys.F8
+                    Me.AddScore("Right", -5)
+                Case Keys.B
+                    If e.Modifiers = (Keys.Control Or Keys.Shift) Then  '* Mathematical Or = both at same time
+                        MessageBox.Show(Me, "Pass it on...", "BILL LOVES BETSE", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button1)
+                    ElseIf e.Modifiers = Keys.Alt Then
+                        Me.btnBlackout_Click(sender, e)
+                    End If
+            End Select
         End Sub
 
         Private Sub ListBox_KeyPress(ByVal sender As System.Object, ByVal e As KeyPressEventArgs) Handles lbSlideCandidates.KeyPress, lbSlideList.KeyPress
@@ -3983,14 +3924,6 @@ Namespace JANIS
             Me.DisplayScore()
         End Sub
 
-        Private Sub menuChangeScore(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles menuAdd1Left.Click, menuSubtract1Left.Click, menuAdd5Left.Click, menuSubtract5Left.Click, menuAdd1Right.Click, menuSubtract1Right.Click, menuAdd5Right.Click, menuSubtract5Right.Click
-            'This is the function that does function-key mod of the score.
-            'The function keys are bound to this (invisible) main menu object group
-            Dim MenuInfo() As String = Split(DirectCast(sender, MenuItem).Text)
-            Dim Points As Integer = CInt(MenuInfo(0))
-            Me.AddScore(MenuInfo(1), Points)
-        End Sub
-
         Private Function PickColor(ByVal X As Integer, ByVal Y As Integer, ByVal hue As Color) As Color
             Dim choose As New fmColorDialog()
             X += Me.Left
@@ -4021,13 +3954,6 @@ Namespace JANIS
 
             Return response
         End Function
-
-
-        '=================================================================================================
-
-        Private Sub EasterEgg1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles EasterEgg1.Click
-            MessageBox.Show(Me, "Pass it on...", "BILL LOVES BETSE", MessageBoxButtons.OK, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button1)
-        End Sub
 
     End Class
 End Namespace
