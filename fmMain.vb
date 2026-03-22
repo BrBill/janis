@@ -3787,17 +3787,17 @@ Namespace JANIS
 
         Private Function LoadDoc() As String
             Dim Doc As String = ""
-            Dim [of] As New OpenFileDialog()
-            [of].Filter = "Text File (*.TXT)|*.TXT"
-            [of].InitialDirectory = ROOT_SUPPORT_DIR
-            If [of].ShowDialog(Me) = DialogResult.OK Then
+            Dim openDialog As New OpenFileDialog()
+            openDialog.Filter = "Text File (*.TXT)|*.TXT"
+            openDialog.InitialDirectory = ROOT_SUPPORT_DIR
+            If openDialog.ShowDialog(Me) = DialogResult.OK Then
                 Try
-                    Doc = System.IO.File.ReadAllText([of].FileName)
+                    Doc = System.IO.File.ReadAllText(openDialog.FileName)
                 Catch ex As Exception
-                    MessageBox.Show(Me, "An error occurred opening file '" & [of].FileName & "'.", "File Error")
+                    MessageBox.Show(Me, "An error occurred opening file '" & openDialog.FileName & "'.", "File Error")
                 End Try
             End If
-            [of].Dispose()
+            openDialog.Dispose()
             Return Doc
         End Function
 

@@ -294,8 +294,8 @@ Namespace JANIS
 
         Private Function SelectSlideShowFileName() As String
             Dim fn As String
-            Dim [of] As New OpenFileDialog()
-            With [of]
+            Dim openDialog As New OpenFileDialog()
+            With openDialog
                 .Filter = "JANIS SlideShow(*.JSL)|*.JSL"
                 .InitialDirectory = ROOT_SUPPORT_DIR & DEFAULT_SLIDESHOW_DIR
                 If .ShowDialog(Me) = DialogResult.OK Then fn = .FileName Else fn = ""

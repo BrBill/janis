@@ -148,8 +148,8 @@ Namespace JANIS
             '* trim off the last semicolon
             If fileFilter.EndsWith(";") Then fileFilter = fileFilter.Substring(0, fileFilter.Length - 1)
 
-            Dim [of] As New OpenFileDialog()
-            With [of]
+            Dim openDialog As New OpenFileDialog()
+            With openDialog
                 .Filter = "Media Files(" & fileFilter & ")|" & fileFilter
                 .InitialDirectory = Me.tbDefaultImageDir.Text
                 If .ShowDialog(Me) = DialogResult.OK Then

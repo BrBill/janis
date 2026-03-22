@@ -61,8 +61,8 @@ Namespace JANIS
 
         Private Function SelectHotButtonsFileName() As String
             Dim fn As String
-            Dim [of] As New OpenFileDialog()
-            With [of]
+            Dim openDialog As New OpenFileDialog()
+            With openDialog
                 .Filter = "JANIS HotButtons Files (*.JHB)|*.JHB"
                 .InitialDirectory = ROOT_SUPPORT_DIR & DEFAULT_HOTBUTTON_DIR
                 If .ShowDialog(Me) = DialogResult.OK Then fn = .FileName Else fn = ""

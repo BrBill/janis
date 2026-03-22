@@ -7,6 +7,9 @@ Upcoming release, part 10:
 * Converted ImageFileExtensions, VideoFileExtensions, and MediaFileExtensions from arrays
   to Hashsets.
 * Replaced very dated gLabel.dll with new native ShadowLabel control code.
+* Stopped using Menus for global hotkeys, and used global keydown event instead.
+* Migrated away from Microsoft.VisualBasic function calls to .NET calls in preparation
+  for move from .NET Framework 4.8 to .NET Core.
 
 Upcoming release, part 9:
 * Better random seeding for WHAMMY.
