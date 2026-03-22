@@ -34,6 +34,7 @@ Namespace JANIS
                 End If
             End If
             MyBase.Dispose(disposing)
+            MyBase.Dispose(disposing)
         End Sub
 
         'Required by the Windows Form Designer
@@ -45,7 +46,7 @@ Namespace JANIS
         Friend WithEvents FadeTimer As System.Windows.Forms.Timer
         Friend WithEvents AxMediaPlayer As AxWMPLib.AxWindowsMediaPlayer
         Friend WithEvents picGraphic As System.Windows.Forms.PictureBox
-        Friend WithEvents lblMsg As gLabel.gLabel
+        Friend WithEvents lblMsg As ShadowLabel
         Friend WithEvents lblCountdown As System.Windows.Forms.Label
         Friend WithEvents lblTeamLocLeft As System.Windows.Forms.Label
         Friend WithEvents lblTeamNameLeft As System.Windows.Forms.Label
@@ -56,7 +57,7 @@ Namespace JANIS
         <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
             Me.components = New System.ComponentModel.Container()
             Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(fmScreen))
-            Me.lblMsg = New gLabel.gLabel()
+            Me.lblMsg = New ShadowLabel()
             Me.lblCountdown = New System.Windows.Forms.Label()
             Me.lblTeamLocLeft = New System.Windows.Forms.Label()
             Me.lblTeamNameLeft = New System.Windows.Forms.Label()
@@ -76,15 +77,15 @@ Namespace JANIS
             Me.lblMsg.BackColor = System.Drawing.Color.Transparent
             Me.lblMsg.Font = New System.Drawing.Font("Arial", 185.0!, System.Drawing.FontStyle.Bold)
             Me.lblMsg.ForeColor = System.Drawing.Color.White
-            Me.lblMsg.GlowState = False
             Me.lblMsg.Location = New System.Drawing.Point(0, 0)
             Me.lblMsg.Name = "lblMsg"
             Me.lblMsg.ShadowColor = System.Drawing.Color.Black
-            Me.lblMsg.ShadowOffset = New System.Drawing.Point(3, 3)
+            Me.lblMsg.ShadowOffset = New System.Drawing.Point(10, 10)
             Me.lblMsg.ShadowState = True
             Me.lblMsg.Size = New System.Drawing.Size(1920, 1080)
             Me.lblMsg.TabIndex = 1
             Me.lblMsg.Text = "Welcome to JANIS"
+            Me.lblMsg.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
             '
             'lblCountdown
             '

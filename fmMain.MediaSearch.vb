@@ -455,7 +455,7 @@ Namespace JANIS
 
         Private Sub ShowMediaLibraryCount()
             Me.lblMediaLibraryCount.Text = "Items in Media Library: " & Me.MediaLibrary.Count.ToString
-            System.Windows.Forms.Application.DoEvents()
+            lblMediaLibraryCount.Refresh()   '* Incrementally display count for big libraries
         End Sub
 
         Private Sub btnReIndexImgLib_Click(sender As System.Object, e As System.EventArgs) Handles btnReIndexImgLib.Click
@@ -505,31 +505,17 @@ Namespace JANIS
 
         Private Function IsImageFile(ByVal fnam As String) As Boolean
             If fnam Is Nothing OrElse fnam = "" Then Return False
-            Return (Array.IndexOf(Me.ImageFileExtensions, Path.GetExtension(fnam).ToUpper) >= 0)
+            Return Me.ImageFileExtensions.Contains(Path.GetExtension(fnam))
         End Function
 
         Private Function IsVideoFile(ByVal fnam As String) As Boolean
             If fnam Is Nothing OrElse fnam = "" Then Return False
-            Return (Array.IndexOf(Me.VideoFileExtensions, Path.GetExtension(fnam).ToUpper) >= 0)
+            Return Me.VideoFileExtensions.Contains(Path.GetExtension(fnam))
         End Function
 
         Private Function IsMediaFile(ByVal fnam As String) As Boolean
             If fnam Is Nothing OrElse fnam = "" Then Return False
-            Return (Array.IndexOf(Me.MediaFileExtensions, Path.GetExtension(fnam).ToUpper) >= 0)
+            Return Me.MediaFileExtensions.Contains(Path.GetExtension(fnam))
         End Function
-
-        Private Function GetMediaDuration(ByVal MediaFile As String) As Double
-            Dim w As WMPLib.WindowsMediaPlayer = Nothing
-            Try
-                w = New WMPLib.WindowsMediaPlayer
-                Dim m As WMPLib.IWMPMedia = w.newMedia(MediaFile)
-                Return m.duration
-            Catch ex As Exception
-                Return 0
-            Finally
-                If w IsNot Nothing Then w.close()
-            End Try
-        End Function
-
     End Class
 End Namespace

@@ -57,10 +57,10 @@ Namespace JANIS
         Dim COUNTDOWN_WARN_COLOR As System.Drawing.Color = System.Drawing.Color.FromArgb(CType(CType(192, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(0, Byte), Integer))
 
         '* NOTE: Many .MOV files are not playable by Windows Media Player w/o additional codecs (technically a purchased Microsoft Store app is required)
-        Private VideoFileExtensions() As String = {".ASF", ".AVI", ".M2TS", ".M4V", ".MP4", ".MP4V", ".MPG", ".MPEG", ".WMV"}
-        Private ImageFileExtensions() As String = {".BMP", ".GIF", ".JPG", ".JPEG", ".PNG", ".WMF", ".EXIF", ".TIFF"}
+        Private VideoFileExtensions As New HashSet(Of String)(StringComparer.OrdinalIgnoreCase) From {".ASF", ".AVI", ".M2TS", ".M4V", ".MP4", ".MP4V", ".MPG", ".MPEG", ".WMV"}
+        Private ImageFileExtensions As New HashSet(Of String)(StringComparer.OrdinalIgnoreCase) From {".BMP", ".GIF", ".JPG", ".JPEG", ".PNG", ".WMF", ".EXIF", ".TIFF"}
+        Private MediaFileExtensions As New HashSet(Of String)(StringComparer.OrdinalIgnoreCase)
         Private MediaLibrary As New List(Of FileID)
-        Private MediaFileExtensions() As String = VideoFileExtensions.Concat(ImageFileExtensions).ToArray()
 
         Private LS As fmScreen      '* The audience screen
 
@@ -3680,6 +3680,9 @@ Namespace JANIS
 
         Private Sub InitializeSettings()
             PREFS_FILE = ROOT_SUPPORT_DIR & "\JANIS.json"
+
+            Me.MediaFileExtensions.UnionWith(Me.VideoFileExtensions)
+            Me.MediaFileExtensions.UnionWith(Me.ImageFileExtensions)
 
             '* Get the working dimensions of the primary monitor
             Dim workingArea As System.Drawing.Rectangle

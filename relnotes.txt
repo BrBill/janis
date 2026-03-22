@@ -3,11 +3,20 @@
   * setting up instant video play drag-and-drop to work by passing filename only
   * BROKEN: video only plays from Media Search and Slideshow, not from LOAD FILE or hotbutton 
 
+Upcoming release, part 10:
+* Converted ImageFileExtensions, VideoFileExtensions, and MediaFileExtensions from arrays
+  to Hashsets.
+* Replaced very dated gLabel.dll with new native ShadowLabel control code.
+
 Upcoming release, part 9:
 * Better random seeding for WHAMMY.
 * Better image disposal in fmMain.ShowPreviewSlideImage() & fmMain.ShowPreviewSearchImage()
 * Warn user when Hotbutton image display can't load its file.
 * Pretty-print JSON in init file (C:\JANIS\JANIS.json).
+* HotButtons files now saved in JSON format, but still "*.JHB". Legacy files rewritten.
+* Made it easier to check if preferences have changed.
+* Removed redundant Media Player instances to check video length.
+* Refreshing library count with .Refresh() instead of DoEvents() during library build.
 
 Upcoming release, part 8:
 * Stopped using Await command to pause for video persnickitude in play timing.
