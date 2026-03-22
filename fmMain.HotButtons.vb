@@ -96,7 +96,7 @@ Namespace JANIS
             Dim lines As String() = System.IO.File.ReadAllLines(hbfile)
             Dim list As New List(Of HotButtonJson)
             For Each line As String In lines
-                Dim info() As String = Split(line, "¶")
+                Dim info() As String = line.Split("¶"c)
                 If info.Length >= 2 Then
                     list.Add(New HotButtonJson With {
                         .Title = info(0),

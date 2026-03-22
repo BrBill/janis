@@ -30,6 +30,8 @@ Namespace JANIS
         Const SLIDES_PAUSED As Integer = 1
         Const SLIDES_PLAYING As Integer = 2
         Const SLIDES_WHAMMY As Integer = 3
+        Private ReadOnly CTRL_A As Char = Convert.ToChar(1)
+        Private ReadOnly BACKSPACE As Char = Convert.ToChar(8)
 
         Private Class FileID   ' Used by the image indexing system
             Public Path As String = ""   ' The directory it sits in.
@@ -3527,8 +3529,8 @@ Namespace JANIS
                 Me.ApplyPrefs()
 
                 '* Here's the wacky way you change font sizes in VB.NET. 
-                Me.tbLeftText.Font = New Font(Me.tbLeftText.Font.Name, CSng(Val(Me.tbLeftFontSize.Text) / DisplayToEntryFontRatio), Me.tbLeftText.Font.Style)
-                Me.tbRightText.Font = New Font(Me.tbRightText.Font.Name, CSng(Val(Me.tbRightFontSize.Text) / DisplayToEntryFontRatio), Me.tbRightText.Font.Style)
+                Me.tbLeftText.Font = New Font(Me.tbLeftText.Font.Name, CSng(Single.Parse(Me.tbLeftFontSize.Text) / DisplayToEntryFontRatio), Me.tbLeftText.Font.Style)
+                Me.tbRightText.Font = New Font(Me.tbRightText.Font.Name, CSng(Single.Parse(Me.tbRightFontSize.Text) / DisplayToEntryFontRatio), Me.tbRightText.Font.Style)
 
                 Me.SetMonitorDisplayMode()
 
@@ -3639,12 +3641,9 @@ Namespace JANIS
 
         Private Sub VerifyInfrastructure()
             '* If the default support dirs aren't there, create them
-            Dim MyDir As String = Dir(ROOT_SUPPORT_DIR, FileAttribute.Directory)
-            If MyDir = "" Then MkDir(ROOT_SUPPORT_DIR)
-            MyDir = Dir(ROOT_SUPPORT_DIR & DEFAULT_SLIDESHOW_DIR, FileAttribute.Directory)
-            If MyDir = "" Then MkDir(ROOT_SUPPORT_DIR & DEFAULT_SLIDESHOW_DIR)
-            MyDir = Dir(ROOT_SUPPORT_DIR & DEFAULT_HOTBUTTON_DIR, FileAttribute.Directory)
-            If MyDir = "" Then MkDir(ROOT_SUPPORT_DIR & DEFAULT_HOTBUTTON_DIR)
+            If Not System.IO.Directory.Exists(ROOT_SUPPORT_DIR) Then System.IO.Directory.CreateDirectory(ROOT_SUPPORT_DIR)
+            If Not System.IO.Directory.Exists(ROOT_SUPPORT_DIR & DEFAULT_SLIDESHOW_DIR) Then System.IO.Directory.CreateDirectory(ROOT_SUPPORT_DIR & DEFAULT_SLIDESHOW_DIR)
+            If Not System.IO.Directory.Exists(ROOT_SUPPORT_DIR & DEFAULT_HOTBUTTON_DIR) Then System.IO.Directory.CreateDirectory(ROOT_SUPPORT_DIR & DEFAULT_HOTBUTTON_DIR)
         End Sub
 
         Private Sub fmMain_KeyDown(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles MyBase.KeyDown
@@ -3677,8 +3676,7 @@ Namespace JANIS
 
         Private Sub ListBox_KeyPress(ByVal sender As System.Object, ByVal e As KeyPressEventArgs) Handles lbSlideCandidates.KeyPress, lbSlideList.KeyPress
             Dim lbox As ListBox = DirectCast(sender, ListBox)
-            ' Ctrl-A will select all.
-            If e.KeyChar = Chr(1) Then
+            If e.KeyChar = CTRL_A Then   '* SELECT ALL
                 If lbox.SelectionMode.ToString Like "*Multi*" Then
                     '* Walk through and select all items in the listbox
                     Dim i As Integer
@@ -3690,18 +3688,16 @@ Namespace JANIS
             End If
         End Sub
         Private Sub NumericEntry_KeyPress(ByVal sender As System.Object, ByVal e As System.Windows.Forms.KeyPressEventArgs) Handles tbLeftFontSize.KeyPress, tbRightFontSize.KeyPress, tbDefaultFontSize.KeyPress, tbLeftScore.KeyPress, tbRightScore.KeyPress
-            ' Chr(1) is Ctrl-A. Chr(8) is BackSpace.
-            If e.KeyChar = Chr(1) Then
+            If e.KeyChar = CTRL_A Then   '* SELECT ALL
                 DirectCast(sender, TextBox).SelectAll()
                 e.Handled = True
-            ElseIf (e.KeyChar <> Chr(8)) And (e.KeyChar <> "-") And ((e.KeyChar < "0") Or (e.KeyChar > "9")) Then
+            ElseIf (e.KeyChar <> BACKSPACE) And (e.KeyChar <> "-") And ((e.KeyChar < "0") Or (e.KeyChar > "9")) Then
                 'Keep this for later easy debugging of keystrokes: tbLeftText.Text = CStr(Asc(e.KeyChar))
                 e.Handled = True
             End If
         End Sub
         Private Sub tbTextEntry_KeyPress(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyPressEventArgs) Handles tbLeftText.KeyPress, tbRightText.KeyPress, tbLeftTeam.KeyPress, tbRightTeam.KeyPress, comboImgSearchText.KeyPress, tbSubstitutions.KeyPress, tbNewThing.KeyPress, tbHBtext1.KeyPress, tbHBtext2.KeyPress, tbHBtext3.KeyPress, tbHBtext4.KeyPress, tbHBtext5.KeyPress, tbHBtext6.KeyPress, tbHBtext7.KeyPress, tbHBtext8.KeyPress, tbHBtext9.KeyPress, tbHBtext10.KeyPress
-            ' Ctrl-A will select all.
-            If e.KeyChar = Chr(1) Then
+            If e.KeyChar = CTRL_A Then   '* SELECT ALL
                 DirectCast(sender, TextBox).SelectAll()
                 e.Handled = True
             End If

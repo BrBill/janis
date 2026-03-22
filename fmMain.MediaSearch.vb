@@ -57,7 +57,7 @@ Namespace JANIS
                     End If
                     Me.StopSlideShow()
                 Else
-                    MsgBox(resultMessage, MsgBoxStyle.Exclamation, "Video Playback Error")
+                    MessageBox.Show(Me, resultMessage, "Video Playback Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
                 End If
             Else
                 If Me.SlidesStatus = SLIDES_PLAYING Then
@@ -299,7 +299,7 @@ Namespace JANIS
 
         Private Sub btnSearchMediaAddSlide_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnSearchMediaAddSlide.Click
             Me.lbSlideList.Items.Add(Me.lbMediaResults.SelectedItem)
-            'MsgBox("Media player thinks its mute value is " & Me.LS.GetVideoMute().ToString & " and volume is " & Me.LS.AxMediaPlayer.settings.volume)
+            'MessageBox(Me, "Media player thinks its mute value is " & Me.LS.GetVideoMute().ToString & " and volume is " & Me.LS.AxMediaPlayer.settings.volume, "Mute Value", MessageBoxButtons.OK, MessageBoxIcon.Information)
         End Sub
 
 
@@ -360,7 +360,7 @@ Namespace JANIS
             Me.PreviewSearchMedia()
         End Sub
         Private Sub lbMediaResults_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles lbMediaResults.MouseDown
-            'MsgBox("lbMediaResults_SelectedIndex is " & Str(lbMediaResults.SelectedIndex) & vbCrLf & "value is: " & lbMediaResults.SelectedItem)
+            'MessageBox(Me, "lbMediaResults_SelectedIndex is " & Str(lbMediaResults.SelectedIndex) & vbCrLf & "value is: " & lbMediaResults.SelectedItem, "SelectedIndex", MessageBoxButtons.OK, MessageBoxIcon.Information)
             ' ----- Prepare the draggable content.
             If Me.lbMediaResults.SelectedIndex >= 0 Then
                 Me.PreviewSearchMedia()
