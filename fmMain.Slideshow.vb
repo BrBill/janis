@@ -69,27 +69,24 @@ Namespace JANIS
         End Sub
 
         Private Sub StopPreviewSlideVideo()
-            If AxMediaSlidePreview.playState = WMPLib.WMPPlayState.wmppsPlaying Then
-                AxMediaSlidePreview.Ctlcontrols.stop()
-                AxMediaSlidePreview.close()
-            End If
+            Me._slidePreviewVideoPlayer.Stop()
+            Me._slidePreviewVideoView.Hide()
         End Sub
         Private Sub PlayPreviewSlideVideo(fnam As String)
             Me.picSlidePreview.Hide()
-            Me.AxMediaSlidePreview.Show()
+            Me._slidePreviewVideoView.Show()
             Try
-                Me.AxMediaSlidePreview.URL = fnam
-                If Me.AxMediaSlidePreview.currentMedia IsNot Nothing Then
-                    Me.AxMediaSlidePreview.Ctlcontrols.currentPosition = Me.AxMediaSlidePreview.currentMedia.duration / 4
-                    Me.AxMediaSlidePreview.Ctlcontrols.play()
-                End If
+                Dim media As New LibVLCSharp.Shared.Media(Me._libVLC, fnam, LibVLCSharp.Shared.FromType.FromPath)
+                Me._slidePreviewVideoPlayer.Play(media)
+                media.Dispose()
             Catch ex As Exception
-                Me.AxMediaSlidePreview.close()
+                Me._slidePreviewVideoPlayer.Stop()
+                Me._slidePreviewVideoView.Hide()
             End Try
         End Sub
         Private Sub ShowPreviewSlideImage(fnam As String)
-            Me.AxMediaSlidePreview.Hide()
-            Me.AxMediaSlidePreview.close()
+            Me.StopPreviewSlideVideo()
+            Me._slidePreviewVideoView.Hide()
             Me.picSlidePreview.Show()
             Try
                 Dim newImg As Image = Image.FromFile(fnam)

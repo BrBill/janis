@@ -11,6 +11,11 @@ Namespace JANIS
         Private LeftFadeIncrements() As Integer = {0, 16, 16, 5}     '* A R G B (for base default blue)   If any of these had to decrease to reach the goal color,
         Private RightFadeIncrements() As Integer = {0, 8, 16, 16}    '* A R G B (for base default red)    the numbers would be negative, but that would break AddColorIncrement()
 
+        '* LibVLC video playback
+        Private _libVLC As LibVLCSharp.Shared.LibVLC
+        Private _mediaPlayer As LibVLCSharp.Shared.MediaPlayer
+        Private _videoView As LibVLCSharp.WinForms.VideoView
+
         Const MAX_SCORE As Integer = 999
         Const MIN_SCORE As Integer = -99
 
@@ -32,8 +37,11 @@ Namespace JANIS
                 If Not (components Is Nothing) Then
                     components.Dispose()
                 End If
+                Me._mediaPlayer?.Stop()
+                Me._videoView?.Dispose()
+                Me._mediaPlayer?.Dispose()
+                Me._libVLC?.Dispose()
             End If
-            MyBase.Dispose(disposing)
             MyBase.Dispose(disposing)
         End Sub
 
@@ -44,7 +52,6 @@ Namespace JANIS
         'It can be modified using the Windows Form Designer.
         'Do not modify it using the code editor.
         Friend WithEvents FadeTimer As System.Windows.Forms.Timer
-        Friend WithEvents AxMediaPlayer As AxWMPLib.AxWindowsMediaPlayer
         Friend WithEvents picGraphic As System.Windows.Forms.PictureBox
         Friend WithEvents lblMsg As ShadowLabel
         Friend WithEvents lblCountdown As System.Windows.Forms.Label
@@ -67,9 +74,7 @@ Namespace JANIS
             Me.lblTeamNameRight = New System.Windows.Forms.Label()
             Me.FadeTimer = New System.Windows.Forms.Timer(Me.components)
             Me.picGraphic = New System.Windows.Forms.PictureBox()
-            Me.AxMediaPlayer = New AxWMPLib.AxWindowsMediaPlayer()
             CType(Me.picGraphic, System.ComponentModel.ISupportInitialize).BeginInit()
-            CType(Me.AxMediaPlayer, System.ComponentModel.ISupportInitialize).BeginInit()
             Me.SuspendLayout()
             '
             'lblMsg
@@ -194,18 +199,6 @@ Namespace JANIS
             Me.picGraphic.TabIndex = 0
             Me.picGraphic.TabStop = False
             '
-            'AxMediaPlayer
-            '
-            Me.AxMediaPlayer.Enabled = True
-            Me.AxMediaPlayer.Location = New System.Drawing.Point(0, 0)
-            Me.AxMediaPlayer.MaximumSize = New System.Drawing.Size(1920, 1080)
-            Me.AxMediaPlayer.MinimumSize = New System.Drawing.Size(1920, 1080)
-            Me.AxMediaPlayer.Name = "AxMediaPlayer"
-            Me.AxMediaPlayer.OcxState = CType(resources.GetObject("AxMediaPlayer.OcxState"), System.Windows.Forms.AxHost.State)
-            Me.AxMediaPlayer.Size = New System.Drawing.Size(1920, 1080)
-            Me.AxMediaPlayer.TabIndex = 14
-            Me.AxMediaPlayer.TabStop = False
-            '
             'fmScreen
             '
             Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None
@@ -220,7 +213,6 @@ Namespace JANIS
             Me.Controls.Add(Me.lblMsg)
             Me.Controls.Add(Me.picGraphic)
             Me.Controls.Add(Me.lblCountdown)
-            Me.Controls.Add(Me.AxMediaPlayer)
             Me.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!)
             Me.ForeColor = System.Drawing.Color.White
             Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None
@@ -232,7 +224,6 @@ Namespace JANIS
             Me.StartPosition = System.Windows.Forms.FormStartPosition.Manual
             Me.TopMost = True
             CType(Me.picGraphic, System.ComponentModel.ISupportInitialize).EndInit()
-            CType(Me.AxMediaPlayer, System.ComponentModel.ISupportInitialize).EndInit()
             Me.ResumeLayout(False)
 
         End Sub
@@ -241,9 +232,23 @@ Namespace JANIS
 
         Public Sub fmScreen_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
             Me.FadeTimer.Stop()     '* this shouldn't be running but it seems to launch at start
-            Me.AxMediaPlayer.Hide()
-            Me.AxMediaPlayer.uiMode = "none"
 
+            '* Initialize LibVLC
+            Me._libVLC = New LibVLCSharp.Shared.LibVLC()
+            Me._mediaPlayer = New LibVLCSharp.Shared.MediaPlayer(Me._libVLC)
+            Me._mediaPlayer.Mute = False
+            Me._mediaPlayer.Volume = 100
+
+            '* Create and configure the VideoView control
+            Me._videoView = New LibVLCSharp.WinForms.VideoView()
+            Me._videoView.MediaPlayer = Me._mediaPlayer
+            Me._videoView.Location = Me.lblMsg.Location
+            Me._videoView.Size = Me.lblMsg.Size
+            Me._videoView.BackColor = Color.Black
+            Me._videoView.Visible = False
+            Me.Controls.Add(_videoView)
+
+            '* Load custom fonts
             Me.lblScoreLeft.Font = CustomFont.GetInstance(Me.lblScoreLeft.Font.Size, FontStyle.Bold)
             Me.lblScoreRight.Font = Me.lblScoreLeft.Font
             Me.lblTeamNameLeft.Font = CustomFont.GetInstance(Me.lblTeamNameLeft.Font.Size, FontStyle.Bold)
@@ -251,7 +256,7 @@ Namespace JANIS
             Me.lblTeamLocLeft.Font = Me.lblTeamNameLeft.Font
             Me.lblTeamLocRight.Font = Me.lblTeamNameLeft.Font
             '* Let's get all the elements stacked in the right order.
-            ' Me.AxMediaPlayer.BringToFront()  No need to do this, because we want it in back.
+            Me._videoView.SendToBack()
             Me.picGraphic.BringToFront()
             Me.lblMsg.BringToFront()
             Me.lblTeamLocLeft.BringToFront()
@@ -261,21 +266,6 @@ Namespace JANIS
             Me.lblScoreLeft.BringToFront()
             Me.lblScoreRight.BringToFront()
             Me.lblCountdown.BringToFront()
-
-            With Me.AxMediaPlayer
-                .Ctlenabled = False
-                .uiMode = "none"
-                .fullScreen = False
-                .stretchToFit = True
-                With .settings
-                    .mute = False
-                    .autoStart = True
-                    .invokeURLs = False
-                    .playCount = 1
-                    .volume = 100
-                End With
-            End With
-
         End Sub
 
         Public Sub fmScreen_MouseEnter(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.MouseEnter, picGraphic.MouseEnter, lblMsg.MouseEnter
@@ -366,10 +356,10 @@ Namespace JANIS
                 .picGraphic.Top = CInt(.picGraphic.Top / sRatio)
                 .picGraphic.Height = CInt(.picGraphic.Height / sRatio)
                 .picGraphic.Width = CInt(.picGraphic.Width / sRatio)
-                .AxMediaPlayer.Left = .picGraphic.Left
-                .AxMediaPlayer.Top = .picGraphic.Top
-                .AxMediaPlayer.Height = .picGraphic.Height
-                .AxMediaPlayer.Width = .picGraphic.Width
+                _videoView.Left = .picGraphic.Left
+                _videoView.Top = .picGraphic.Top
+                _videoView.Height = .picGraphic.Height
+                _videoView.Width = .picGraphic.Width
             End With
         End Sub
 
@@ -475,7 +465,7 @@ Namespace JANIS
             '* Returns an error message if there was a problem, otherwise returns Nothing
             '* NEVER modify the mute or volume settings here. They were set before we got here and that's what we want.
 
-            Static FirstInvoke As Boolean = True '* the first time a video is played, it takes a few milliseconds to start
+            'Static FirstInvoke As Boolean = True '* the first time a video is played, it takes a few milliseconds to start
             Dim resultMessage As String = Nothing
             Me.StopVideo()
             Me.lblTeamLocLeft.Hide()
@@ -486,56 +476,40 @@ Namespace JANIS
             Me.lblScoreRight.Hide()
             Me.lblMsg.Hide()
             Me.picGraphic.Hide()
-            Me.AxMediaPlayer.Show()
-
-
-            Me.AxMediaPlayer.URL = fnam
-            If FirstInvoke Then
-                '* The first time a video is launched, it can take a few milliseconds to start. Only need to do this once (I think).
-                System.Threading.Thread.Sleep(100)
-                Application.DoEvents()
-                FirstInvoke = False
-            End If
 
             Try
-                Me.AxMediaPlayer.Ctlcontrols.play()
-                ' Application.DoEvents()
+                Dim media As New LibVLCSharp.Shared.Media(Me._libVLC, fnam, LibVLCSharp.Shared.FromType.FromPath)
+                _mediaPlayer.Play(media)
+                media.Dispose()
+                Me._videoView.Show()
             Catch ex As Exception
-                resultMessage = "Error playing video file '" & fnam & "':" & vbCrLf & ex.Message ' & vbCrLf
+                resultMessage = "Error playing video file '" & fnam & "':" & vbCrLf & ex.Message
                 Me.StopVideo()
             End Try
 
             Return resultMessage
         End Function
         Public Function IsVideoPlaying() As Boolean
-            Return (Me.AxMediaPlayer.playState = WMPLib.WMPPlayState.wmppsPlaying)
-            ' Or Me.AxMediaPlayer.playState = WMPLib.WMPPlayState.wmppsTransitioning)
+            Return Me._mediaPlayer.IsPlaying
         End Function
 
         Public Sub SetVideoMute(ByVal newMuteSetting As Boolean)
-            '* NEVER CHANGE the AxMediaPlayer.settings.mute property. It's hella broken. Once it's set to True, it STAYS muted regardless of further settings changes.
-            '* Always manage it with volume.
-            If newMuteSetting Then
-                Me.AxMediaPlayer.settings.volume = 0
-            Else
-                Me.AxMediaPlayer.settings.volume = 100
-            End If
+            If Me._mediaPlayer Is Nothing Then Return
+            Me._mediaPlayer.Mute = newMuteSetting
         End Sub
         Public Function GetVideoMute() As Boolean
-            Return (Me.AxMediaPlayer.settings.volume.Equals(0))
+            Return Me._mediaPlayer.Mute
         End Function
 
         Public Sub PauseVideo()
-            Me.AxMediaPlayer.Ctlcontrols.pause()
+            Me._mediaPlayer.Pause()
         End Sub
         Public Function ResumeVideo() As String
             '* Returns an error message if there was a problem, otherwise returns Nothing
             Dim resultMessage As String = Nothing
 
-            '* Can only resume if it's currently paused
-            If Me.AxMediaPlayer.playState <> WMPLib.WMPPlayState.wmppsPaused Then
-                Return resultMessage
-            End If
+            '* Can only resume if it's currently paused (CanPause is false)
+            If Not Me._mediaPlayer.CanPause Then Return resultMessage
 
             Me.lblTeamLocLeft.Hide()
             Me.lblTeamLocRight.Hide()
@@ -545,20 +519,21 @@ Namespace JANIS
             Me.lblScoreRight.Hide()
             Me.lblMsg.Hide()
             Me.picGraphic.Hide()
-            Me.AxMediaPlayer.Show()
 
             Try
-                Me.AxMediaPlayer.Ctlcontrols.play()
+                Me._mediaPlayer.Play()
+                Me._videoView.Show()
             Catch ex As Exception
-                resultMessage = "Error playing video file:" & vbCrLf & ex.Message ' & vbCrLf
+                resultMessage = "Error resuming video:" & vbCrLf & ex.Message
                 Me.StopVideo()
             End Try
+
             Return resultMessage
         End Function
         Public Sub StopVideo()
-            Me.AxMediaPlayer.Hide()
-            Me.AxMediaPlayer.Ctlcontrols.stop()
-            Me.AxMediaPlayer.close()
+            If Me._mediaPlayer Is Nothing Then Return
+            Me._mediaPlayer.Stop()
+            Me._videoView.Hide()
         End Sub
 
         Public Sub ShowCountdownText(ByVal CountdownText As String, ByVal BackColor As System.Drawing.Color, ByVal CountdownVisible As Boolean)

@@ -7,7 +7,6 @@ Imports System.Linq
 
 'Imports System.Runtime.InteropServices
 Imports System.Threading.Tasks
-Imports AxWMPLib
 
 Namespace JANIS
     Public Class fmMain
@@ -66,6 +65,13 @@ Namespace JANIS
 
         Private LS As fmScreen      '* The audience screen
 
+        '* LibVLC preview players only
+        Private _libVLC As LibVLCSharp.Shared.LibVLC
+        Private _searchPreviewVideoPlayer As LibVLCSharp.Shared.MediaPlayer
+        Private _searchPreviewVideoView As LibVLCSharp.WinForms.VideoView
+        Private _slidePreviewVideoPlayer As LibVLCSharp.Shared.MediaPlayer
+        Private _slidePreviewVideoView As LibVLCSharp.WinForms.VideoView
+
         Private ThingSubs(MAX_THINGS) As String           '* Substitutions for 5 Things
         Private SlidesStatus As Integer = SLIDES_STOPPED  '* Keep track of whether Slideshow is running
         Private SlideTimerTag As String = ""
@@ -113,6 +119,13 @@ Namespace JANIS
                 If Not (components Is Nothing) Then
                     components.Dispose()
                 End If
+                Me._searchPreviewVideoPlayer?.Stop()
+                Me._slidePreviewVideoPlayer?.Stop()
+                Me._searchPreviewVideoView?.Dispose()
+                Me._slidePreviewVideoView?.Dispose()
+                Me._searchPreviewVideoPlayer?.Dispose()
+                Me._slidePreviewVideoPlayer?.Dispose()
+                Me._libVLC?.Dispose()
             End If
             MyBase.Dispose(disposing)
         End Sub
@@ -225,8 +238,7 @@ Namespace JANIS
         Friend WithEvents btnFirstSlide As System.Windows.Forms.Button
         Friend WithEvents pnlMediaSearchPreview As Panel
         Friend WithEvents picSlidePreview As System.Windows.Forms.PictureBox
-        Friend WithEvents AxMediaSearchPreview As AxWMPLib.AxWindowsMediaPlayer
-        Friend WithEvents AxMediaSlidePreview As AxWMPLib.AxWindowsMediaPlayer
+
         Friend WithEvents SlideTimer As System.Windows.Forms.Timer
         Friend WithEvents Label7 As System.Windows.Forms.Label
         Friend WithEvents Label8 As System.Windows.Forms.Label
@@ -417,7 +429,6 @@ Namespace JANIS
             Me.tpMediaSearch = New System.Windows.Forms.TabPage()
             Me.pnlMediaSearchPreview = New System.Windows.Forms.Panel()
             Me.picImgSearchPreview = New System.Windows.Forms.PictureBox()
-            Me.AxMediaSearchPreview = New AxWMPLib.AxWindowsMediaPlayer()
             Me.Label32 = New System.Windows.Forms.Label()
             Me.Label21 = New System.Windows.Forms.Label()
             Me.lbMediaResults = New System.Windows.Forms.ListBox()
@@ -468,7 +479,6 @@ Namespace JANIS
             Me.btnFirstSlide = New System.Windows.Forms.Button()
             Me.lbSlideList = New System.Windows.Forms.ListBox()
             Me.picSlidePreview = New System.Windows.Forms.PictureBox()
-            Me.AxMediaSlidePreview = New AxWMPLib.AxWindowsMediaPlayer()
             Me.tpHotButtons = New System.Windows.Forms.TabPage()
             Me.btnClearHB = New System.Windows.Forms.Button()
             Me.lblHBinstructions = New System.Windows.Forms.Label()
@@ -620,13 +630,11 @@ Namespace JANIS
             Me.tpMediaSearch.SuspendLayout()
             Me.pnlMediaSearchPreview.SuspendLayout()
             CType(Me.picImgSearchPreview, System.ComponentModel.ISupportInitialize).BeginInit()
-            CType(Me.AxMediaSearchPreview, System.ComponentModel.ISupportInitialize).BeginInit()
             Me.tp5Things.SuspendLayout()
             Me.grpThingsColor.SuspendLayout()
             Me.tpSlides.SuspendLayout()
             CType(Me.nudDelay, System.ComponentModel.ISupportInitialize).BeginInit()
             CType(Me.picSlidePreview, System.ComponentModel.ISupportInitialize).BeginInit()
-            CType(Me.AxMediaSlidePreview, System.ComponentModel.ISupportInitialize).BeginInit()
             Me.tpHotButtons.SuspendLayout()
             Me.gbHB.SuspendLayout()
             Me.tpPrefs.SuspendLayout()
@@ -1212,7 +1220,6 @@ Namespace JANIS
             'pnlMediaSearchPreview
             '
             Me.pnlMediaSearchPreview.Controls.Add(Me.picImgSearchPreview)
-            Me.pnlMediaSearchPreview.Controls.Add(Me.AxMediaSearchPreview)
             Me.pnlMediaSearchPreview.Location = New System.Drawing.Point(316, 24)
             Me.pnlMediaSearchPreview.Name = "pnlMediaSearchPreview"
             Me.pnlMediaSearchPreview.Size = New System.Drawing.Size(240, 135)
@@ -1227,17 +1234,6 @@ Namespace JANIS
             Me.picImgSearchPreview.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
             Me.picImgSearchPreview.TabIndex = 69
             Me.picImgSearchPreview.TabStop = False
-            '
-            'AxMediaSearchPreview
-            '
-            Me.AxMediaSearchPreview.Enabled = True
-            Me.AxMediaSearchPreview.Location = New System.Drawing.Point(0, 0)
-            Me.AxMediaSearchPreview.Name = "AxMediaSearchPreview"
-            Me.AxMediaSearchPreview.OcxState = CType(resources.GetObject("AxMediaSearchPreview.OcxState"), System.Windows.Forms.AxHost.State)
-            Me.AxMediaSearchPreview.Size = New System.Drawing.Size(240, 135)
-            Me.AxMediaSearchPreview.TabIndex = 70
-            Me.AxMediaSearchPreview.TabStop = False
-            Me.AxMediaSearchPreview.Visible = False
             '
             'Label32
             '
@@ -1541,7 +1537,6 @@ Namespace JANIS
             Me.tpSlides.Controls.Add(Me.btnFirstSlide)
             Me.tpSlides.Controls.Add(Me.lbSlideList)
             Me.tpSlides.Controls.Add(Me.picSlidePreview)
-            Me.tpSlides.Controls.Add(Me.AxMediaSlidePreview)
             Me.tpSlides.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
             Me.tpSlides.Location = New System.Drawing.Point(4, 28)
             Me.tpSlides.Name = "tpSlides"
@@ -1799,17 +1794,6 @@ Namespace JANIS
             Me.picSlidePreview.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
             Me.picSlidePreview.TabIndex = 4
             Me.picSlidePreview.TabStop = False
-            '
-            'AxMediaSlidePreview
-            '
-            Me.AxMediaSlidePreview.Enabled = True
-            Me.AxMediaSlidePreview.Location = New System.Drawing.Point(268, 20)
-            Me.AxMediaSlidePreview.Name = "AxMediaSlidePreview"
-            Me.AxMediaSlidePreview.OcxState = CType(resources.GetObject("AxMediaSlidePreview.OcxState"), System.Windows.Forms.AxHost.State)
-            Me.AxMediaSlidePreview.Size = New System.Drawing.Size(184, 121)
-            Me.AxMediaSlidePreview.TabIndex = 135
-            Me.AxMediaSlidePreview.TabStop = False
-            Me.AxMediaSlidePreview.Visible = False
             '
             'tpHotButtons
             '
@@ -3468,14 +3452,12 @@ Namespace JANIS
             Me.tpMediaSearch.ResumeLayout(False)
             Me.pnlMediaSearchPreview.ResumeLayout(False)
             CType(Me.picImgSearchPreview, System.ComponentModel.ISupportInitialize).EndInit()
-            CType(Me.AxMediaSearchPreview, System.ComponentModel.ISupportInitialize).EndInit()
             Me.tp5Things.ResumeLayout(False)
             Me.tp5Things.PerformLayout()
             Me.grpThingsColor.ResumeLayout(False)
             Me.tpSlides.ResumeLayout(False)
             CType(Me.nudDelay, System.ComponentModel.ISupportInitialize).EndInit()
             CType(Me.picSlidePreview, System.ComponentModel.ISupportInitialize).EndInit()
-            CType(Me.AxMediaSlidePreview, System.ComponentModel.ISupportInitialize).EndInit()
             Me.tpHotButtons.ResumeLayout(False)
             Me.gbHB.ResumeLayout(False)
             Me.gbHB.PerformLayout()
@@ -3566,6 +3548,7 @@ Namespace JANIS
                 End If
             End If
         End Sub
+
         Private Function AppAlreadyRunning() As Boolean
             ' Check for the name of the current applications process and see whether or not there are
             ' more than 1x instance loaded. This code is similar to Visual Basic 6.0's App.Previnstance feature.
@@ -3621,8 +3604,7 @@ Namespace JANIS
             Me.cbMuteVideo.Checked = False
             Me.cbMuteVideo.BackgroundImage = My.Resources.sound_on_green
 
-            InitPreviewMediaPlayerCtl(Me.AxMediaSearchPreview)
-            InitPreviewMediaPlayerCtl(Me.AxMediaSlidePreview)
+            Me.InitializePreviewPlayers()
         End Sub
 
         Private Sub InitializeButtonGlyphs()
@@ -3639,20 +3621,35 @@ Namespace JANIS
             btnSlideDown.Text = Convert.ToChar(&HEB0F)
         End Sub
 
-        Private Sub InitPreviewMediaPlayerCtl(ByRef AxCtl As AxWindowsMediaPlayer)
-            With AxCtl
-                .Ctlenabled = False
-                .uiMode = "none"
-                .fullScreen = False
-                .stretchToFit = True
-                With .settings
-                    .mute = True
-                    .autoStart = False
-                    .invokeURLs = False
-                    .playCount = 1
-                    .volume = 0
-                End With
-            End With
+        Private Sub InitializePreviewPlayers()
+            '* Shared LibVLC instance for both preview players (no audio at all, won't affect audience video)
+            Me._libVLC = New LibVLCSharp.Shared.LibVLC("--no-audio")
+
+            '* DO NOT TRUST that .Mute works for th
+
+            '* Media Search preview
+            Me._searchPreviewVideoPlayer = New LibVLCSharp.Shared.MediaPlayer(Me._libVLC)
+            Me._searchPreviewVideoPlayer.Volume = 0
+            Me._searchPreviewVideoPlayer.Mute = True
+            Me._searchPreviewVideoView = New LibVLCSharp.WinForms.VideoView()
+            Me._searchPreviewVideoView.MediaPlayer = Me._searchPreviewVideoPlayer
+            Me._searchPreviewVideoView.Location = New Point(0, 0)
+            Me._searchPreviewVideoView.Size = Me.pnlMediaSearchPreview.Size
+            Me._searchPreviewVideoView.BackColor = Color.Black
+            Me._searchPreviewVideoView.Visible = False
+            Me.pnlMediaSearchPreview.Controls.Add(Me._searchPreviewVideoView)
+
+            '* Slideshow preview
+            Me._slidePreviewVideoPlayer = New LibVLCSharp.Shared.MediaPlayer(Me._libVLC)
+            Me._slidePreviewVideoPlayer.Volume = 0
+            Me._slidePreviewVideoPlayer.Mute = True
+            Me._slidePreviewVideoView = New LibVLCSharp.WinForms.VideoView()
+            Me._slidePreviewVideoView.MediaPlayer = Me._slidePreviewVideoPlayer
+            Me._slidePreviewVideoView.Location = Me.picSlidePreview.Location
+            Me._slidePreviewVideoView.Size = Me.picSlidePreview.Size
+            Me._slidePreviewVideoView.BackColor = Color.Black
+            Me._slidePreviewVideoView.Visible = False
+            Me.tpSlides.Controls.Add(Me._slidePreviewVideoView)
         End Sub
 
         Private Sub VerifyInfrastructure()

@@ -299,9 +299,7 @@ Namespace JANIS
 
         Private Sub btnSearchMediaAddSlide_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnSearchMediaAddSlide.Click
             Me.lbSlideList.Items.Add(Me.lbMediaResults.SelectedItem)
-            'MessageBox(Me, "Media player thinks its mute value is " & Me.LS.GetVideoMute().ToString & " and volume is " & Me.LS.AxMediaPlayer.settings.volume, "Mute Value", MessageBoxButtons.OK, MessageBoxIcon.Information)
         End Sub
-
 
         Private Sub PreviewSearchMedia()
             Static PrevSelect As String
@@ -325,26 +323,24 @@ Namespace JANIS
         End Sub
 
         Private Sub StopPreviewSearchVideo()
-            If AxMediaSearchPreview.playState = WMPLib.WMPPlayState.wmppsPlaying Then
-                AxMediaSearchPreview.Ctlcontrols.stop()
-                AxMediaSearchPreview.close()
-            End If
+            Me._searchPreviewVideoPlayer.Stop()
+            Me._searchPreviewVideoView.Hide()
         End Sub
         Private Sub PlayPreviewSearchVideo(fnam As String)
             Me.picImgSearchPreview.Hide()
-            Me.AxMediaSearchPreview.Show()
+            Me._searchPreviewVideoView.Show()
             Try
-                Me.AxMediaSearchPreview.URL = fnam
-                If Me.AxMediaSearchPreview.currentMedia IsNot Nothing Then
-                    Me.AxMediaSearchPreview.Ctlcontrols.currentPosition = Me.AxMediaSearchPreview.currentMedia.duration / 4
-                End If
-                Me.AxMediaSearchPreview.Ctlcontrols.play()
+                Dim media As New LibVLCSharp.Shared.Media(Me._libVLC, fnam, LibVLCSharp.Shared.FromType.FromPath)
+                Me._searchPreviewVideoPlayer.Play(media)
+                media.Dispose()
             Catch ex As Exception
-                Me.AxMediaSearchPreview.close()
+                Me._searchPreviewVideoPlayer.Stop()
+                Me._searchPreviewVideoView.Hide()
             End Try
         End Sub
         Private Sub ShowPreviewSearchImage(fnam As String)
-            Me.AxMediaSearchPreview.Hide()
+            Me.StopPreviewSearchVideo()
+            Me._searchPreviewVideoView.Hide()
             Me.picImgSearchPreview.Show()
             Try
                 Dim newImg As Image = Image.FromFile(fnam)
@@ -353,7 +349,6 @@ Namespace JANIS
             Catch
                 Me.ClearCurrentPictureboxImage(Me.picImgSearchPreview)
             End Try
-            Me.AxMediaSearchPreview.close()
         End Sub
 
         Private Sub lbMediaResults_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles lbMediaResults.SelectedIndexChanged
