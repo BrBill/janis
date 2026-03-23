@@ -844,7 +844,7 @@ Namespace JANIS
             '
             'btnShowLeftText
             '
-            Me.btnShowLeftText.Font = New System.Drawing.Font("Wingdings", 27.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
+            Me.btnShowLeftText.Font = New System.Drawing.Font("Wingdings", 27.75!, System.Drawing.FontStyle.Bold)
             Me.btnShowLeftText.Location = New System.Drawing.Point(168, 305)
             Me.btnShowLeftText.Name = "btnShowLeftText"
             Me.btnShowLeftText.Padding = New System.Windows.Forms.Padding(4, 0, 0, 0)
@@ -1499,21 +1499,21 @@ Namespace JANIS
             '
             'btnThingDown
             '
-            Me.btnThingDown.Font = New System.Drawing.Font("Webdings", 20.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
+            Me.btnThingDown.Font = New System.Drawing.Font("Segoe MDL2 Assets", 14.25!, System.Drawing.FontStyle.Bold)
             Me.btnThingDown.Location = New System.Drawing.Point(22, 193)
             Me.btnThingDown.Name = "btnThingDown"
             Me.btnThingDown.Size = New System.Drawing.Size(40, 41)
             Me.btnThingDown.TabIndex = 102
-            Me.btnThingDown.Text = "6"
+            Me.btnThingDown.Text = ""
             '
             'btnThingUp
             '
-            Me.btnThingUp.Font = New System.Drawing.Font("Webdings", 20.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
+            Me.btnThingUp.Font = New System.Drawing.Font("Segoe MDL2 Assets", 14.25!, System.Drawing.FontStyle.Bold)
             Me.btnThingUp.Location = New System.Drawing.Point(22, 126)
             Me.btnThingUp.Name = "btnThingUp"
             Me.btnThingUp.Size = New System.Drawing.Size(40, 41)
             Me.btnThingUp.TabIndex = 100
-            Me.btnThingUp.Text = "5"
+            Me.btnThingUp.Text = ""
             '
             'tpSlides
             '
@@ -1586,33 +1586,33 @@ Namespace JANIS
             '
             'btnPauseSlides
             '
-            Me.btnPauseSlides.Font = New System.Drawing.Font("Webdings", 15.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
+            Me.btnPauseSlides.Font = New System.Drawing.Font("Segoe MDL2 Assets", 14.25!, System.Drawing.FontStyle.Bold)
             Me.btnPauseSlides.ForeColor = System.Drawing.Color.Blue
             Me.btnPauseSlides.Location = New System.Drawing.Point(822, 333)
             Me.btnPauseSlides.Name = "btnPauseSlides"
             Me.btnPauseSlides.Size = New System.Drawing.Size(36, 33)
             Me.btnPauseSlides.TabIndex = 131
-            Me.btnPauseSlides.Text = ";"
+            Me.btnPauseSlides.Text = ""
             Me.ToolTip1.SetToolTip(Me.btnPauseSlides, "Pause")
             '
             'btnNextSlide
             '
-            Me.btnNextSlide.Font = New System.Drawing.Font("Webdings", 14.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
+            Me.btnNextSlide.Font = New System.Drawing.Font("Segoe MDL2 Assets", 14.25!, System.Drawing.FontStyle.Bold)
             Me.btnNextSlide.Location = New System.Drawing.Point(906, 333)
             Me.btnNextSlide.Name = "btnNextSlide"
             Me.btnNextSlide.Size = New System.Drawing.Size(36, 33)
             Me.btnNextSlide.TabIndex = 133
-            Me.btnNextSlide.Text = "8"
+            Me.btnNextSlide.Text = ""
             Me.ToolTip1.SetToolTip(Me.btnNextSlide, "Next slide")
             '
             'btnPrevSlide
             '
-            Me.btnPrevSlide.Font = New System.Drawing.Font("Webdings", 14.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
+            Me.btnPrevSlide.Font = New System.Drawing.Font("Segoe MDL2 Assets", 14.25!, System.Drawing.FontStyle.Bold)
             Me.btnPrevSlide.Location = New System.Drawing.Point(738, 333)
             Me.btnPrevSlide.Name = "btnPrevSlide"
             Me.btnPrevSlide.Size = New System.Drawing.Size(36, 33)
             Me.btnPrevSlide.TabIndex = 129
-            Me.btnPrevSlide.Text = "7"
+            Me.btnPrevSlide.Text = ""
             Me.ToolTip1.SetToolTip(Me.btnPrevSlide, "Back to previous slide")
             '
             'btnClearSlideList
@@ -1720,63 +1720,62 @@ Namespace JANIS
             '
             'btnSlideDown
             '
-            Me.btnSlideDown.Font = New System.Drawing.Font("Webdings", 20.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
+            Me.btnSlideDown.Font = New System.Drawing.Font("Segoe MDL2 Assets", 14.25!, System.Drawing.FontStyle.Bold)
             Me.btnSlideDown.Location = New System.Drawing.Point(577, 80)
             Me.btnSlideDown.Name = "btnSlideDown"
             Me.btnSlideDown.Size = New System.Drawing.Size(40, 36)
             Me.btnSlideDown.TabIndex = 118
-            Me.btnSlideDown.Text = "6"
             '
             'btnSlideUp
             '
-            Me.btnSlideUp.Font = New System.Drawing.Font("Webdings", 20.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
+            Me.btnSlideUp.Font = New System.Drawing.Font("Segoe MDL2 Assets", 14.25!, System.Drawing.FontStyle.Bold)
             Me.btnSlideUp.Location = New System.Drawing.Point(577, 19)
             Me.btnSlideUp.Name = "btnSlideUp"
             Me.btnSlideUp.Size = New System.Drawing.Size(40, 36)
             Me.btnSlideUp.TabIndex = 116
-            Me.btnSlideUp.Text = "5"
+            Me.btnSlideUp.Text = ""
             '
             'btnStopSlides
             '
-            Me.btnStopSlides.Font = New System.Drawing.Font("Webdings", 14.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
+            Me.btnStopSlides.Font = New System.Drawing.Font("Segoe MDL2 Assets", 14.25!, System.Drawing.FontStyle.Bold)
             Me.btnStopSlides.ForeColor = System.Drawing.Color.Red
             Me.btnStopSlides.Location = New System.Drawing.Point(864, 333)
             Me.btnStopSlides.Name = "btnStopSlides"
             Me.btnStopSlides.Size = New System.Drawing.Size(36, 33)
             Me.btnStopSlides.TabIndex = 132
-            Me.btnStopSlides.Text = "<"
+            Me.btnStopSlides.Text = "" & Global.Microsoft.VisualBasic.ChrW(9)
             Me.ToolTip1.SetToolTip(Me.btnStopSlides, "Stop")
             '
             'btnLastSlide
             '
-            Me.btnLastSlide.Font = New System.Drawing.Font("Webdings", 14.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
+            Me.btnLastSlide.Font = New System.Drawing.Font("Segoe MDL2 Assets", 14.25!, System.Drawing.FontStyle.Bold)
             Me.btnLastSlide.Location = New System.Drawing.Point(948, 333)
             Me.btnLastSlide.Name = "btnLastSlide"
             Me.btnLastSlide.Size = New System.Drawing.Size(36, 33)
             Me.btnLastSlide.TabIndex = 134
-            Me.btnLastSlide.Text = ":"
+            Me.btnLastSlide.Text = ""
             Me.ToolTip1.SetToolTip(Me.btnLastSlide, "Jump to last slide")
             '
             'btnPlaySlides
             '
-            Me.btnPlaySlides.Font = New System.Drawing.Font("Webdings", 14.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
+            Me.btnPlaySlides.Font = New System.Drawing.Font("Segoe MDL2 Assets", 14.25!, System.Drawing.FontStyle.Bold)
             Me.btnPlaySlides.ForeColor = System.Drawing.Color.Green
             Me.btnPlaySlides.Location = New System.Drawing.Point(780, 333)
             Me.btnPlaySlides.Name = "btnPlaySlides"
             Me.btnPlaySlides.RightToLeft = System.Windows.Forms.RightToLeft.No
             Me.btnPlaySlides.Size = New System.Drawing.Size(36, 33)
             Me.btnPlaySlides.TabIndex = 130
-            Me.btnPlaySlides.Text = "4"
+            Me.btnPlaySlides.Text = ""
             Me.ToolTip1.SetToolTip(Me.btnPlaySlides, "Play")
             '
             'btnFirstSlide
             '
-            Me.btnFirstSlide.Font = New System.Drawing.Font("Webdings", 14.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
+            Me.btnFirstSlide.Font = New System.Drawing.Font("Segoe MDL2 Assets", 14.25!, System.Drawing.FontStyle.Bold)
             Me.btnFirstSlide.Location = New System.Drawing.Point(693, 333)
             Me.btnFirstSlide.Name = "btnFirstSlide"
             Me.btnFirstSlide.Size = New System.Drawing.Size(36, 33)
             Me.btnFirstSlide.TabIndex = 128
-            Me.btnFirstSlide.Text = "9"
+            Me.btnFirstSlide.Text = ""
             Me.ToolTip1.SetToolTip(Me.btnFirstSlide, "Jump back to first slide")
             '
             'lbSlideList
@@ -2133,103 +2132,103 @@ Namespace JANIS
             '
             'btnHBSelect10
             '
-            Me.btnHBSelect10.Font = New System.Drawing.Font("Wingdings", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
+            Me.btnHBSelect10.Font = New System.Drawing.Font("Segoe MDL2 Assets", 14.25!, System.Drawing.FontStyle.Bold)
             Me.btnHBSelect10.Location = New System.Drawing.Point(748, 330)
             Me.btnHBSelect10.Name = "btnHBSelect10"
             Me.btnHBSelect10.Size = New System.Drawing.Size(44, 26)
             Me.btnHBSelect10.TabIndex = 182
             Me.btnHBSelect10.Tag = "9"
-            Me.btnHBSelect10.Text = "1"
+            Me.btnHBSelect10.Text = ""
             '
             'btnHBSelect9
             '
-            Me.btnHBSelect9.Font = New System.Drawing.Font("Wingdings", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
+            Me.btnHBSelect9.Font = New System.Drawing.Font("Segoe MDL2 Assets", 14.25!, System.Drawing.FontStyle.Bold)
             Me.btnHBSelect9.Location = New System.Drawing.Point(748, 297)
             Me.btnHBSelect9.Name = "btnHBSelect9"
             Me.btnHBSelect9.Size = New System.Drawing.Size(44, 26)
             Me.btnHBSelect9.TabIndex = 178
             Me.btnHBSelect9.Tag = "8"
-            Me.btnHBSelect9.Text = "1"
+            Me.btnHBSelect9.Text = ""
             '
             'btnHBSelect8
             '
-            Me.btnHBSelect8.Font = New System.Drawing.Font("Wingdings", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
+            Me.btnHBSelect8.Font = New System.Drawing.Font("Segoe MDL2 Assets", 14.25!, System.Drawing.FontStyle.Bold)
             Me.btnHBSelect8.Location = New System.Drawing.Point(748, 264)
             Me.btnHBSelect8.Name = "btnHBSelect8"
             Me.btnHBSelect8.Size = New System.Drawing.Size(44, 26)
             Me.btnHBSelect8.TabIndex = 174
             Me.btnHBSelect8.Tag = "7"
-            Me.btnHBSelect8.Text = "1"
+            Me.btnHBSelect8.Text = ""
             '
             'btnHBSelect7
             '
-            Me.btnHBSelect7.Font = New System.Drawing.Font("Wingdings", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
+            Me.btnHBSelect7.Font = New System.Drawing.Font("Segoe MDL2 Assets", 14.25!, System.Drawing.FontStyle.Bold)
             Me.btnHBSelect7.Location = New System.Drawing.Point(748, 231)
             Me.btnHBSelect7.Name = "btnHBSelect7"
             Me.btnHBSelect7.Size = New System.Drawing.Size(44, 26)
             Me.btnHBSelect7.TabIndex = 170
             Me.btnHBSelect7.Tag = "6"
-            Me.btnHBSelect7.Text = "1"
+            Me.btnHBSelect7.Text = ""
             '
             'btnHBSelect6
             '
-            Me.btnHBSelect6.Font = New System.Drawing.Font("Wingdings", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
+            Me.btnHBSelect6.Font = New System.Drawing.Font("Segoe MDL2 Assets", 14.25!, System.Drawing.FontStyle.Bold)
             Me.btnHBSelect6.Location = New System.Drawing.Point(748, 198)
             Me.btnHBSelect6.Name = "btnHBSelect6"
             Me.btnHBSelect6.Size = New System.Drawing.Size(44, 26)
             Me.btnHBSelect6.TabIndex = 166
             Me.btnHBSelect6.Tag = "5"
-            Me.btnHBSelect6.Text = "1"
+            Me.btnHBSelect6.Text = ""
             '
             'btnHBSelect5
             '
-            Me.btnHBSelect5.Font = New System.Drawing.Font("Wingdings", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
+            Me.btnHBSelect5.Font = New System.Drawing.Font("Segoe MDL2 Assets", 14.25!, System.Drawing.FontStyle.Bold)
             Me.btnHBSelect5.Location = New System.Drawing.Point(748, 165)
             Me.btnHBSelect5.Name = "btnHBSelect5"
             Me.btnHBSelect5.Size = New System.Drawing.Size(44, 26)
             Me.btnHBSelect5.TabIndex = 162
             Me.btnHBSelect5.Tag = "4"
-            Me.btnHBSelect5.Text = "1"
+            Me.btnHBSelect5.Text = ""
             '
             'btnHBSelect4
             '
-            Me.btnHBSelect4.Font = New System.Drawing.Font("Wingdings", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
+            Me.btnHBSelect4.Font = New System.Drawing.Font("Segoe MDL2 Assets", 14.25!, System.Drawing.FontStyle.Bold)
             Me.btnHBSelect4.Location = New System.Drawing.Point(748, 132)
             Me.btnHBSelect4.Name = "btnHBSelect4"
             Me.btnHBSelect4.Size = New System.Drawing.Size(44, 26)
             Me.btnHBSelect4.TabIndex = 158
             Me.btnHBSelect4.Tag = "3"
-            Me.btnHBSelect4.Text = "1"
+            Me.btnHBSelect4.Text = ""
             '
             'btnHBSelect3
             '
-            Me.btnHBSelect3.Font = New System.Drawing.Font("Wingdings", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
+            Me.btnHBSelect3.Font = New System.Drawing.Font("Segoe MDL2 Assets", 14.25!, System.Drawing.FontStyle.Bold)
             Me.btnHBSelect3.Location = New System.Drawing.Point(748, 99)
             Me.btnHBSelect3.Name = "btnHBSelect3"
             Me.btnHBSelect3.Size = New System.Drawing.Size(44, 26)
             Me.btnHBSelect3.TabIndex = 154
             Me.btnHBSelect3.Tag = "2"
-            Me.btnHBSelect3.Text = "1"
+            Me.btnHBSelect3.Text = ""
             '
             'btnHBSelect2
             '
-            Me.btnHBSelect2.Font = New System.Drawing.Font("Wingdings", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
+            Me.btnHBSelect2.Font = New System.Drawing.Font("Segoe MDL2 Assets", 14.25!, System.Drawing.FontStyle.Bold)
             Me.btnHBSelect2.Location = New System.Drawing.Point(748, 66)
             Me.btnHBSelect2.Name = "btnHBSelect2"
             Me.btnHBSelect2.Size = New System.Drawing.Size(44, 26)
             Me.btnHBSelect2.TabIndex = 150
             Me.btnHBSelect2.Tag = "1"
-            Me.btnHBSelect2.Text = "1"
+            Me.btnHBSelect2.Text = ""
             '
             'btnHBSelect1
             '
-            Me.btnHBSelect1.Font = New System.Drawing.Font("Wingdings", 11.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
+            Me.btnHBSelect1.Font = New System.Drawing.Font("Segoe MDL2 Assets", 14.25!, System.Drawing.FontStyle.Bold)
             Me.btnHBSelect1.Location = New System.Drawing.Point(748, 33)
             Me.btnHBSelect1.Name = "btnHBSelect1"
             Me.btnHBSelect1.Size = New System.Drawing.Size(44, 26)
             Me.btnHBSelect1.TabIndex = 146
             Me.btnHBSelect1.Tag = "0"
-            Me.btnHBSelect1.Text = "1"
+            Me.btnHBSelect1.Text = ""
             '
             'tbHBtext10
             '
@@ -2500,13 +2499,13 @@ Namespace JANIS
             '
             'btnChooseDefaultImageDir
             '
-            Me.btnChooseDefaultImageDir.Font = New System.Drawing.Font("Wingdings", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
+            Me.btnChooseDefaultImageDir.Font = New System.Drawing.Font("Segoe MDL2 Assets", 14.25!, System.Drawing.FontStyle.Bold)
             Me.btnChooseDefaultImageDir.Location = New System.Drawing.Point(415, 168)
             Me.btnChooseDefaultImageDir.Name = "btnChooseDefaultImageDir"
             Me.btnChooseDefaultImageDir.Size = New System.Drawing.Size(56, 26)
             Me.btnChooseDefaultImageDir.TabIndex = 207
             Me.btnChooseDefaultImageDir.Tag = "0"
-            Me.btnChooseDefaultImageDir.Text = "1"
+            Me.btnChooseDefaultImageDir.Text = ""
             '
             'Label18
             '
@@ -2810,13 +2809,13 @@ Namespace JANIS
             'btnChooseDefaultSlideShow
             '
             Me.btnChooseDefaultSlideShow.Enabled = False
-            Me.btnChooseDefaultSlideShow.Font = New System.Drawing.Font("Wingdings", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
+            Me.btnChooseDefaultSlideShow.Font = New System.Drawing.Font("Segoe MDL2 Assets", 14.25!, System.Drawing.FontStyle.Bold)
             Me.btnChooseDefaultSlideShow.Location = New System.Drawing.Point(918, 143)
             Me.btnChooseDefaultSlideShow.Name = "btnChooseDefaultSlideShow"
             Me.btnChooseDefaultSlideShow.Size = New System.Drawing.Size(56, 26)
             Me.btnChooseDefaultSlideShow.TabIndex = 218
             Me.btnChooseDefaultSlideShow.Tag = "0"
-            Me.btnChooseDefaultSlideShow.Text = "1"
+            Me.btnChooseDefaultSlideShow.Text = ""
             '
             'tbDefaultHBFile
             '
@@ -2833,13 +2832,13 @@ Namespace JANIS
             'btnChooseDefaultHB
             '
             Me.btnChooseDefaultHB.Enabled = False
-            Me.btnChooseDefaultHB.Font = New System.Drawing.Font("Wingdings", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
+            Me.btnChooseDefaultHB.Font = New System.Drawing.Font("Segoe MDL2 Assets", 14.25!, System.Drawing.FontStyle.Bold)
             Me.btnChooseDefaultHB.Location = New System.Drawing.Point(415, 282)
             Me.btnChooseDefaultHB.Name = "btnChooseDefaultHB"
             Me.btnChooseDefaultHB.Size = New System.Drawing.Size(56, 26)
             Me.btnChooseDefaultHB.TabIndex = 213
             Me.btnChooseDefaultHB.Tag = "0"
-            Me.btnChooseDefaultHB.Text = "1"
+            Me.btnChooseDefaultHB.Text = ""
             '
             'tbDefaultImageFile
             '
@@ -2856,13 +2855,13 @@ Namespace JANIS
             'btnChooseDefaultImage
             '
             Me.btnChooseDefaultImage.Enabled = False
-            Me.btnChooseDefaultImage.Font = New System.Drawing.Font("Wingdings", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
+            Me.btnChooseDefaultImage.Font = New System.Drawing.Font("Segoe MDL2 Assets", 14.25!, System.Drawing.FontStyle.Bold)
             Me.btnChooseDefaultImage.Location = New System.Drawing.Point(415, 225)
             Me.btnChooseDefaultImage.Name = "btnChooseDefaultImage"
             Me.btnChooseDefaultImage.Size = New System.Drawing.Size(56, 26)
             Me.btnChooseDefaultImage.TabIndex = 210
             Me.btnChooseDefaultImage.Tag = "0"
-            Me.btnChooseDefaultImage.Text = "1"
+            Me.btnChooseDefaultImage.Text = ""
             '
             'cbDisplayDefaultImage
             '
@@ -2921,15 +2920,15 @@ Namespace JANIS
             Me.tbAboutHeader.Size = New System.Drawing.Size(972, 105)
             Me.tbAboutHeader.TabIndex = 230
             Me.tbAboutHeader.TabStop = False
-            Me.tbAboutHeader.Text = "JANIS v5.0.0 ALPHA" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Released Oct. 6, 2025" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "by Bill Cernansky (boctorbill@gmail.co" &
-    "m)" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "© 2004-2025 Easy Being Productions"
+            Me.tbAboutHeader.Text = "JANIS v5.0.0.1 ALPHA" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Released March 30, 2026" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "by Bill Cernansky (boctorbill@gmai" &
+    "l.com)" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "© 2004-2026 Easy Being Productions"
             Me.tbAboutHeader.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
             '
             'tbAboutBody
             '
             Me.tbAboutBody.BackColor = System.Drawing.SystemColors.Window
             Me.tbAboutBody.BorderStyle = System.Windows.Forms.BorderStyle.None
-            Me.tbAboutBody.Font = New System.Drawing.Font("Times New Roman", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+            Me.tbAboutBody.Font = New System.Drawing.Font("Arial", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
             Me.tbAboutBody.ForeColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(64, Byte), Integer))
             Me.tbAboutBody.Location = New System.Drawing.Point(8, 132)
             Me.tbAboutBody.Multiline = True
@@ -2938,6 +2937,7 @@ Namespace JANIS
             Me.tbAboutBody.Size = New System.Drawing.Size(972, 232)
             Me.tbAboutBody.TabIndex = 232
             Me.tbAboutBody.TabStop = False
+            Me.tbAboutBody.Text = resources.GetString("tbAboutBody.Text")
             Me.tbAboutBody.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
             '
             'SlideTimer
@@ -3196,12 +3196,12 @@ Namespace JANIS
             Me.btnReIndexImgLib.BackColor = System.Drawing.Color.DarkTurquoise
             Me.btnReIndexImgLib.FlatAppearance.BorderSize = 0
             Me.btnReIndexImgLib.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-            Me.btnReIndexImgLib.Font = New System.Drawing.Font("Wingdings 3", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(2, Byte))
+            Me.btnReIndexImgLib.Font = New System.Drawing.Font("Segoe MDL2 Assets", 8.0!, System.Drawing.FontStyle.Bold)
             Me.btnReIndexImgLib.Location = New System.Drawing.Point(966, 226)
             Me.btnReIndexImgLib.Name = "btnReIndexImgLib"
             Me.btnReIndexImgLib.Size = New System.Drawing.Size(24, 22)
             Me.btnReIndexImgLib.TabIndex = 36
-            Me.btnReIndexImgLib.Text = "Q"
+            Me.btnReIndexImgLib.Text = ""
             Me.btnReIndexImgLib.TextAlign = System.Drawing.ContentAlignment.TopCenter
             Me.ToolTip1.SetToolTip(Me.btnReIndexImgLib, "Click here to re-index the image library" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "if you've added or deleted image files." &
         "")
@@ -3210,7 +3210,7 @@ Namespace JANIS
             'btnHot10
             '
             Me.btnHot10.AllowDrop = True
-            Me.btnHot10.BackColor = System.Drawing.Color.Gray
+            Me.btnHot10.BackColor = System.Drawing.Color.FromArgb(CType(CType(98, Byte), Integer), CType(CType(126, Byte), Integer), CType(CType(152, Byte), Integer))
             Me.btnHot10.Font = New System.Drawing.Font("Segoe UI Emoji", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
             Me.btnHot10.ForeColor = System.Drawing.Color.White
             Me.btnHot10.Location = New System.Drawing.Point(895, 266)
@@ -3224,7 +3224,7 @@ Namespace JANIS
             'btnHot9
             '
             Me.btnHot9.AllowDrop = True
-            Me.btnHot9.BackColor = System.Drawing.Color.Gray
+            Me.btnHot9.BackColor = System.Drawing.Color.FromArgb(CType(CType(98, Byte), Integer), CType(CType(126, Byte), Integer), CType(CType(152, Byte), Integer))
             Me.btnHot9.Font = New System.Drawing.Font("Segoe UI Emoji", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
             Me.btnHot9.ForeColor = System.Drawing.Color.White
             Me.btnHot9.Location = New System.Drawing.Point(796, 266)
@@ -3238,7 +3238,7 @@ Namespace JANIS
             'btnHot8
             '
             Me.btnHot8.AllowDrop = True
-            Me.btnHot8.BackColor = System.Drawing.Color.Gray
+            Me.btnHot8.BackColor = System.Drawing.Color.FromArgb(CType(CType(98, Byte), Integer), CType(CType(126, Byte), Integer), CType(CType(152, Byte), Integer))
             Me.btnHot8.Font = New System.Drawing.Font("Segoe UI Emoji", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
             Me.btnHot8.ForeColor = System.Drawing.Color.White
             Me.btnHot8.Location = New System.Drawing.Point(697, 266)
@@ -3252,7 +3252,7 @@ Namespace JANIS
             'btnHot7
             '
             Me.btnHot7.AllowDrop = True
-            Me.btnHot7.BackColor = System.Drawing.Color.Gray
+            Me.btnHot7.BackColor = System.Drawing.Color.FromArgb(CType(CType(98, Byte), Integer), CType(CType(126, Byte), Integer), CType(CType(152, Byte), Integer))
             Me.btnHot7.Font = New System.Drawing.Font("Segoe UI Emoji", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
             Me.btnHot7.ForeColor = System.Drawing.Color.White
             Me.btnHot7.Location = New System.Drawing.Point(598, 266)
@@ -3266,7 +3266,7 @@ Namespace JANIS
             'btnHot6
             '
             Me.btnHot6.AllowDrop = True
-            Me.btnHot6.BackColor = System.Drawing.Color.Gray
+            Me.btnHot6.BackColor = System.Drawing.Color.FromArgb(CType(CType(98, Byte), Integer), CType(CType(126, Byte), Integer), CType(CType(152, Byte), Integer))
             Me.btnHot6.Font = New System.Drawing.Font("Segoe UI Emoji", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
             Me.btnHot6.ForeColor = System.Drawing.Color.White
             Me.btnHot6.Location = New System.Drawing.Point(499, 266)
@@ -3280,7 +3280,7 @@ Namespace JANIS
             'btnHot5
             '
             Me.btnHot5.AllowDrop = True
-            Me.btnHot5.BackColor = System.Drawing.Color.Gray
+            Me.btnHot5.BackColor = System.Drawing.Color.FromArgb(CType(CType(98, Byte), Integer), CType(CType(126, Byte), Integer), CType(CType(152, Byte), Integer))
             Me.btnHot5.Font = New System.Drawing.Font("Segoe UI Emoji", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
             Me.btnHot5.ForeColor = System.Drawing.Color.White
             Me.btnHot5.Location = New System.Drawing.Point(399, 266)
@@ -3294,7 +3294,7 @@ Namespace JANIS
             'btnHot4
             '
             Me.btnHot4.AllowDrop = True
-            Me.btnHot4.BackColor = System.Drawing.Color.Gray
+            Me.btnHot4.BackColor = System.Drawing.Color.FromArgb(CType(CType(98, Byte), Integer), CType(CType(126, Byte), Integer), CType(CType(152, Byte), Integer))
             Me.btnHot4.Font = New System.Drawing.Font("Segoe UI Emoji", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
             Me.btnHot4.ForeColor = System.Drawing.Color.White
             Me.btnHot4.Location = New System.Drawing.Point(300, 266)
@@ -3308,7 +3308,7 @@ Namespace JANIS
             'btnHot3
             '
             Me.btnHot3.AllowDrop = True
-            Me.btnHot3.BackColor = System.Drawing.Color.Gray
+            Me.btnHot3.BackColor = System.Drawing.Color.FromArgb(CType(CType(98, Byte), Integer), CType(CType(126, Byte), Integer), CType(CType(152, Byte), Integer))
             Me.btnHot3.Font = New System.Drawing.Font("Segoe UI Emoji", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
             Me.btnHot3.ForeColor = System.Drawing.Color.White
             Me.btnHot3.Location = New System.Drawing.Point(202, 266)
@@ -3322,7 +3322,7 @@ Namespace JANIS
             'btnHot2
             '
             Me.btnHot2.AllowDrop = True
-            Me.btnHot2.BackColor = System.Drawing.Color.Gray
+            Me.btnHot2.BackColor = System.Drawing.Color.FromArgb(CType(CType(98, Byte), Integer), CType(CType(126, Byte), Integer), CType(CType(152, Byte), Integer))
             Me.btnHot2.Font = New System.Drawing.Font("Segoe UI Emoji", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
             Me.btnHot2.ForeColor = System.Drawing.Color.White
             Me.btnHot2.Location = New System.Drawing.Point(103, 266)
@@ -3336,7 +3336,7 @@ Namespace JANIS
             'btnHot1
             '
             Me.btnHot1.AllowDrop = True
-            Me.btnHot1.BackColor = System.Drawing.Color.Gray
+            Me.btnHot1.BackColor = System.Drawing.Color.FromArgb(CType(CType(98, Byte), Integer), CType(CType(126, Byte), Integer), CType(CType(152, Byte), Integer))
             Me.btnHot1.Font = New System.Drawing.Font("Segoe UI Emoji", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
             Me.btnHot1.ForeColor = System.Drawing.Color.White
             Me.btnHot1.Location = New System.Drawing.Point(4, 266)
@@ -3606,6 +3606,8 @@ Namespace JANIS
             Me.Top = workingArea.Top
             Me.Left = SystemInformation.PrimaryMonitorSize.Width - Me.Size.Width
 
+            Me.InitializeButtonGlyphs()
+
             '* Here's what we want to see or hide.
             Me.tbCurrentThing.Visible = False
             Me.tbSubstitutions.Visible = False
@@ -3621,6 +3623,20 @@ Namespace JANIS
 
             InitPreviewMediaPlayerCtl(Me.AxMediaSearchPreview)
             InitPreviewMediaPlayerCtl(Me.AxMediaSlidePreview)
+        End Sub
+
+        Private Sub InitializeButtonGlyphs()
+            btnPlaySlides.Text = Convert.ToChar(&HF5B0)
+            btnStopSlides.Text = Convert.ToChar(&HE009)
+            btnPauseSlides.Text = Convert.ToChar(&HF8AE)
+            btnPrevSlide.Text = Convert.ToChar(&HE96F)
+            btnNextSlide.Text = Convert.ToChar(&HE970)
+            btnFirstSlide.Text = Convert.ToChar(&HF8AC)
+            btnLastSlide.Text = Convert.ToChar(&HF8AD)
+            btnThingUp.Text = Convert.ToChar(&HEB11)
+            btnThingDown.Text = Convert.ToChar(&HEB0F)
+            btnSlideUp.Text = Convert.ToChar(&HEB11)
+            btnSlideDown.Text = Convert.ToChar(&HEB0F)
         End Sub
 
         Private Sub InitPreviewMediaPlayerCtl(ByRef AxCtl As AxWindowsMediaPlayer)
