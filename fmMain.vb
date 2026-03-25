@@ -50,12 +50,13 @@ Namespace JANIS
         Private CurrentPrefs As New Preferences()
         Private SavedPrefs As New Preferences()
         Private splash As fmSplash
+        Private ScreenReady As Boolean = False
         Private TestMode As Boolean = False
         Dim DisplayModeAdjustment As Single = 0.7     ' Divide font setting by this for display. Differs for test/arena mode.
         Dim DisplayToEntryFontRatio As Single = 123 / 42  ' This is the size ratio of fonts in the display vs. in the textbox
         Dim DisplayFontRatio As Single = 33 / 80          ' The "should be" size ratio of display to what I once thought it was.
-        Dim COUNTDOWN_DEFAULT_COLOR As System.Drawing.Color = System.Drawing.Color.FromArgb(CType(CType(42, Byte), Integer), CType(CType(42, Byte), Integer), CType(CType(42, Byte), Integer))
-        Dim COUNTDOWN_WARN_COLOR As System.Drawing.Color = System.Drawing.Color.FromArgb(CType(CType(192, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(0, Byte), Integer))
+        Private ReadOnly COUNTDOWN_DEFAULT_COLOR As System.Drawing.Color = System.Drawing.Color.FromArgb(CType(CType(42, Byte), Integer), CType(CType(42, Byte), Integer), CType(CType(42, Byte), Integer))
+        Private ReadOnly COUNTDOWN_WARN_COLOR As System.Drawing.Color = System.Drawing.Color.FromArgb(CType(CType(192, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(0, Byte), Integer))
 
         '* NOTE: Many .MOV files are not playable by Windows Media Player w/o additional codecs (technically a purchased Microsoft Store app is required)
         Private VideoFileExtensions As New HashSet(Of String)(StringComparer.OrdinalIgnoreCase) From {".ASF", ".AVI", ".M2TS", ".M4V", ".MP4", ".MP4V", ".MPG", ".MPEG", ".WMV"}
@@ -63,7 +64,7 @@ Namespace JANIS
         Private MediaFileExtensions As New HashSet(Of String)(StringComparer.OrdinalIgnoreCase)
         Private MediaLibrary As New List(Of FileID)
 
-        Private LS As fmScreen      '* The audience screen
+        Private WithEvents LS As fmScreen      '* The audience screen
 
         '* LibVLC preview players only
         Private _libVLC As LibVLCSharp.Shared.LibVLC
@@ -99,7 +100,7 @@ Namespace JANIS
             ' The code to show itself is integrated in the constructor of the splashscreen.
             ' This line is the only line that needs to be added when using fmSplash. The rest
             ' is generated automatically when adding a new form.
-            '   Dim splash as New fmSplashScreen(Me)
+            '   Dim splash as New fmSplash(Me)
             ' This example splashscreen also has the ability to show itself for a minimum
             ' number of seconds. For example, if you want to show the splash for at least 6
             ' seconds, change the code above to:
@@ -119,6 +120,9 @@ Namespace JANIS
                 If Not (components Is Nothing) Then
                     components.Dispose()
                 End If
+                Me.SlideTimer?.Stop()
+                Me.CountdownTimer?.Stop()
+                Me.VideoEventTimer?.Stop()
                 Me._searchPreviewVideoPlayer?.Stop()
                 Me._slidePreviewVideoPlayer?.Stop()
                 Me._searchPreviewVideoView?.Dispose()
@@ -3525,6 +3529,7 @@ Namespace JANIS
 
                 '* Show the audience display early, so loading image library doesn't delay its appearance
                 Me.LS.Show()
+                Me.ScreenReady = True
 
                 Me.tvSlideFolders_Init(Me.tbDefaultImageDir.Text)
 
@@ -3711,9 +3716,17 @@ Namespace JANIS
         End Sub
         Private Sub tbTextEntry_KeyPress(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyPressEventArgs) Handles tbLeftText.KeyPress, tbRightText.KeyPress, tbLeftTeam.KeyPress, tbRightTeam.KeyPress, comboImgSearchText.KeyPress, tbSubstitutions.KeyPress, tbNewThing.KeyPress, tbHBtext1.KeyPress, tbHBtext2.KeyPress, tbHBtext3.KeyPress, tbHBtext4.KeyPress, tbHBtext5.KeyPress, tbHBtext6.KeyPress, tbHBtext7.KeyPress, tbHBtext8.KeyPress, tbHBtext9.KeyPress, tbHBtext10.KeyPress
             If e.KeyChar = CTRL_A Then   '* SELECT ALL
-                DirectCast(sender, TextBox).SelectAll()
+                If TypeOf sender Is TextBox Then
+                    DirectCast(sender, TextBox).SelectAll()
+                ElseIf TypeOf sender Is ComboBox Then
+                    DirectCast(sender, ComboBox).SelectAll()
+                End If
                 e.Handled = True
             End If
+        End Sub
+
+        Private Sub LS_ScoreUpdateComplete() Handles LS.ScoreUpdateComplete
+            Me.ShowRemoteView()
         End Sub
 
         Private Sub ClearCurrentPictureboxImage(myPicBox As PictureBox)
@@ -3724,7 +3737,7 @@ Namespace JANIS
         End Sub
 
         Private Sub ShowRemoteView()
-            Application.DoEvents()
+            Me.LS.Update()
             Me.ClearCurrentPictureboxImage(Me.picRemoteViewer)
             Me.picRemoteViewer.Image = Me.LS.CaptureScreenImage()
         End Sub
@@ -3909,7 +3922,7 @@ Namespace JANIS
         End Sub
 
         Private Sub DisplayScore()
-            '* First, stop the slideshow if it's running.
+            If Not Me.ScreenReady Then Return
             Me.StopSlideShow()
             Me.ClearCurrentPictureboxImage(Me.picRemoteViewer)
             If Me.tbLeftScore.Text = "" Then Me.tbLeftScore.Text = "0"

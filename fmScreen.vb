@@ -1,6 +1,10 @@
+Imports System.Net.NetworkInformation
+
 Namespace JANIS
     Public Class fmScreen
         Inherits System.Windows.Forms.Form
+
+        Public Event ScoreUpdateComplete()
 
         Private ScoreboardBitMap As Bitmap = DirectCast(Global.JANIS.My.Resources.ScoreTemplate.Clone, Bitmap)
         Private ScoreboardColorAnchorLeft As Point = New Point(70, 110)    ' These are the scoreboard background locations that
@@ -14,8 +18,8 @@ Namespace JANIS
         '* LibVLC video playback
         Private _libVLC As LibVLCSharp.Shared.LibVLC
         Private _mediaPlayer As LibVLCSharp.Shared.MediaPlayer
-        Private _videoView As LibVLCSharp.WinForms.VideoView
 
+        '* Limit these so they always fit in the display area
         Const MAX_SCORE As Integer = 999
         Const MIN_SCORE As Integer = -99
 
@@ -28,7 +32,7 @@ Namespace JANIS
             InitializeComponent()
 
             'Add any initialization after the InitializeComponent() call
-
+            Me.FadeTimer.Stop()     '* this shouldn't be running but it seems to launch at start
         End Sub
 
         'Form overrides dispose to clean up the component list.
@@ -37,6 +41,7 @@ Namespace JANIS
                 If Not (components Is Nothing) Then
                     components.Dispose()
                 End If
+                Me.ScoreboardBitMap?.Dispose()
                 Me._mediaPlayer?.Stop()
                 Me._videoView?.Dispose()
                 Me._mediaPlayer?.Dispose()
@@ -61,9 +66,9 @@ Namespace JANIS
         Friend WithEvents lblScoreRight As System.Windows.Forms.Label
         Friend WithEvents lblTeamLocRight As System.Windows.Forms.Label
         Friend WithEvents lblTeamNameRight As System.Windows.Forms.Label
+        Friend WithEvents _videoView As LibVLCSharp.WinForms.VideoView
         <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
             Me.components = New System.ComponentModel.Container()
-            Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(fmScreen))
             Me.lblMsg = New ShadowLabel()
             Me.lblCountdown = New System.Windows.Forms.Label()
             Me.lblTeamLocLeft = New System.Windows.Forms.Label()
@@ -74,7 +79,9 @@ Namespace JANIS
             Me.lblTeamNameRight = New System.Windows.Forms.Label()
             Me.FadeTimer = New System.Windows.Forms.Timer(Me.components)
             Me.picGraphic = New System.Windows.Forms.PictureBox()
+            Me._videoView = New LibVLCSharp.WinForms.VideoView()
             CType(Me.picGraphic, System.ComponentModel.ISupportInitialize).BeginInit()
+            CType(Me._videoView, System.ComponentModel.ISupportInitialize).BeginInit()
             Me.SuspendLayout()
             '
             'lblMsg
@@ -199,6 +206,18 @@ Namespace JANIS
             Me.picGraphic.TabIndex = 0
             Me.picGraphic.TabStop = False
             '
+            '_videoView
+            '
+            Me._videoView.BackColor = System.Drawing.Color.Black
+            Me._videoView.ForeColor = System.Drawing.Color.Turquoise
+            Me._videoView.Location = New System.Drawing.Point(0, 0)
+            Me._videoView.MediaPlayer = Nothing
+            Me._videoView.Name = "_videoView"
+            Me._videoView.Size = New System.Drawing.Size(1920, 1080)
+            Me._videoView.TabIndex = 14
+            Me._videoView.Text = ""
+            Me._videoView.Visible = False
+            '
             'fmScreen
             '
             Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None
@@ -213,6 +232,7 @@ Namespace JANIS
             Me.Controls.Add(Me.lblMsg)
             Me.Controls.Add(Me.picGraphic)
             Me.Controls.Add(Me.lblCountdown)
+            Me.Controls.Add(Me._videoView)
             Me.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!)
             Me.ForeColor = System.Drawing.Color.White
             Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None
@@ -224,6 +244,7 @@ Namespace JANIS
             Me.StartPosition = System.Windows.Forms.FormStartPosition.Manual
             Me.TopMost = True
             CType(Me.picGraphic, System.ComponentModel.ISupportInitialize).EndInit()
+            CType(Me._videoView, System.ComponentModel.ISupportInitialize).EndInit()
             Me.ResumeLayout(False)
 
         End Sub
@@ -231,22 +252,12 @@ Namespace JANIS
 #End Region
 
         Public Sub fmScreen_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
-            Me.FadeTimer.Stop()     '* this shouldn't be running but it seems to launch at start
-
-            '* Initialize LibVLC
+            '* Initialize LibVLC for video
             Me._libVLC = New LibVLCSharp.Shared.LibVLC()
             Me._mediaPlayer = New LibVLCSharp.Shared.MediaPlayer(Me._libVLC)
             Me._mediaPlayer.Mute = False
             Me._mediaPlayer.Volume = 100
-
-            '* Create and configure the VideoView control
-            Me._videoView = New LibVLCSharp.WinForms.VideoView()
             Me._videoView.MediaPlayer = Me._mediaPlayer
-            Me._videoView.Location = Me.lblMsg.Location
-            Me._videoView.Size = Me.lblMsg.Size
-            Me._videoView.BackColor = Color.Black
-            Me._videoView.Visible = False
-            Me.Controls.Add(_videoView)
 
             '* Load custom fonts
             Me.lblScoreLeft.Font = CustomFont.GetInstance(Me.lblScoreLeft.Font.Size, FontStyle.Bold)
@@ -255,17 +266,8 @@ Namespace JANIS
             Me.lblTeamNameRight.Font = Me.lblTeamNameLeft.Font
             Me.lblTeamLocLeft.Font = Me.lblTeamNameLeft.Font
             Me.lblTeamLocRight.Font = Me.lblTeamNameLeft.Font
-            '* Let's get all the elements stacked in the right order.
-            Me._videoView.SendToBack()
-            Me.picGraphic.BringToFront()
-            Me.lblMsg.BringToFront()
-            Me.lblTeamLocLeft.BringToFront()
-            Me.lblTeamLocRight.BringToFront()
-            Me.lblTeamNameLeft.BringToFront()
-            Me.lblTeamNameRight.BringToFront()
-            Me.lblScoreLeft.BringToFront()
-            Me.lblScoreRight.BringToFront()
-            Me.lblCountdown.BringToFront()
+
+            Me.SetZOrder()
         End Sub
 
         Public Sub fmScreen_MouseEnter(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.MouseEnter, picGraphic.MouseEnter, lblMsg.MouseEnter
@@ -368,15 +370,15 @@ Namespace JANIS
 
             Me.BackColor = System.Drawing.Color.Black
             Me.StopVideo()
-            Me.picGraphic.Hide()
+            Me.picGraphic.Visible = False
             Me.DisposeCurrentGraphicImage()
-            Me.lblMsg.Hide()
-            Me.lblTeamLocLeft.Hide()
-            Me.lblTeamLocRight.Hide()
-            Me.lblTeamNameLeft.Hide()
-            Me.lblTeamNameRight.Hide()
-            Me.lblScoreLeft.Hide()
-            Me.lblScoreRight.Hide()
+            Me.lblMsg.Visible = False
+            Me.lblTeamLocLeft.Visible = False
+            Me.lblTeamLocRight.Visible = False
+            Me.lblTeamNameLeft.Visible = False
+            Me.lblTeamNameRight.Visible = False
+            Me.lblScoreLeft.Visible = False
+            Me.lblScoreRight.Visible = False
         End Sub
 
         Public Function CaptureScreenImage() As Bitmap
@@ -392,23 +394,23 @@ Namespace JANIS
 
         Public Sub ShowText(ByVal txt As String, ByVal BackColor As System.Drawing.Color, ByVal fontsize As Single)
             Me.StopVideo()
-            Me.lblTeamLocLeft.Hide()
-            Me.lblTeamLocRight.Hide()
-            Me.lblTeamNameLeft.Hide()
-            Me.lblTeamNameRight.Hide()
-            Me.lblScoreLeft.Hide()
-            Me.lblScoreRight.Hide()
-            Me.picGraphic.Hide()
+            Me.lblTeamLocLeft.Visible = False
+            Me.lblTeamLocRight.Visible = False
+            Me.lblTeamNameLeft.Visible = False
+            Me.lblTeamNameRight.Visible = False
+            Me.lblScoreLeft.Visible = False
+            Me.lblScoreRight.Visible = False
+            Me.picGraphic.Visible = False
             Me.DisposeCurrentGraphicImage()
 
             Me.lblMsg.Font = New Font(Me.lblMsg.Font.Name, fontsize, Me.lblMsg.Font.Style)
             Me.lblMsg.BackColor = BackColor
             Me.lblMsg.Text = txt
-            Me.lblMsg.Show()
+            Me.lblMsg.Visible = True
         End Sub
 
         Public Sub ShowScore(ByVal scrLeft As String, ByVal locLeft As String, ByVal nameLeft As String, ByVal scrRight As String, ByVal locRight As String, ByVal nameRight As String)
-
+            Dim ScoreBkgndAlreadySet As Boolean = Me.picGraphic.Image Is Me.ScoreboardBitMap
             Me.lblTeamLocLeft.BackColor = LeftTeamColor
             Me.lblTeamNameLeft.BackColor = LeftTeamColor
             Me.lblTeamLocLeft.Text = locLeft
@@ -417,30 +419,44 @@ Namespace JANIS
             Me.lblTeamNameRight.BackColor = RightTeamColor
             Me.lblTeamLocRight.Text = locRight
             Me.lblTeamNameRight.Text = nameRight
-            Me.picGraphic.Hide()
-            Me.DisposeCurrentGraphicImage()
+            If Not ScoreBkgndAlreadySet Then
+                Me.picGraphic.Visible = False
+                Me.DisposeCurrentGraphicImage() '* This will never dispose ScoreboardBitMap
+            End If
 
             Me.StopVideo()
-            Me.lblMsg.Hide()
-            '* Must clone the score bitmap; otherwise disposing it later will dispose the referenced original (BAD).
-            Me.picGraphic.Image = DirectCast(Me.ScoreboardBitMap.Clone(), Image)
-            Me.picGraphic.Show()
+            Me.lblMsg.Visible = False
 
-            Me.lblTeamLocLeft.Show()
-            Me.lblTeamNameLeft.Show()
-            Me.lblTeamLocRight.Show()
-            Me.lblTeamNameRight.Show()
+            '* If the scoreboard background is already there, skip reassignment and component
+            '* redisplays so that we don't get unwanted blinking
+            If Not ScoreBkgndAlreadySet Then Me.picGraphic.Image = Me.ScoreboardBitMap
+            If Not Me.picGraphic.Visible = True Then Me.picGraphic.Visible = True
 
+            If Not Me.lblTeamLocLeft.Visible = True Then Me.lblTeamLocLeft.Visible = True
+            If Not Me.lblTeamNameLeft.Visible = True Then Me.lblTeamNameLeft.Visible = True
+            If Not Me.lblTeamLocRight.Visible = True Then Me.lblTeamLocRight.Visible = True
+            If Not Me.lblTeamNameRight.Visible = True Then Me.lblTeamNameRight.Visible = True
+            SetZOrder()
+
+            Dim fadeStarted As Boolean = False
             If Me.lblScoreLeft.Text <> scrLeft Then
                 Me.lblScoreLeft.Text = Me.Limited_Score(scrLeft)
                 FadeBuff(Me.lblScoreLeft, LeftTeamColor)
+                fadeStarted = True
+            Else
+                Me.lblScoreLeft.ForeColor = SCORE_TEXT_COLOR
             End If
             If Me.lblScoreRight.Text <> scrRight Then
                 Me.lblScoreRight.Text = Me.Limited_Score(scrRight)
                 FadeBuff(Me.lblScoreRight, RightTeamColor)
+                fadeStarted = True
+            Else
+                Me.lblScoreRight.ForeColor = SCORE_TEXT_COLOR
             End If
-            Me.lblScoreLeft.Show()
-            Me.lblScoreRight.Show()
+            Me.lblScoreLeft.Visible = True
+            Me.lblScoreRight.Visible = True
+
+            If Not fadeStarted Then RaiseEvent ScoreUpdateComplete()
         End Sub
 
         Public Sub ShowImage(ByVal Img As Image)
@@ -448,17 +464,17 @@ Namespace JANIS
 
             Me.BackColor = System.Drawing.Color.Black
             Me.StopVideo()
-            Me.lblTeamLocLeft.Hide()
-            Me.lblTeamLocRight.Hide()
-            Me.lblTeamNameLeft.Hide()
-            Me.lblTeamNameRight.Hide()
-            Me.lblScoreLeft.Hide()
-            Me.lblScoreRight.Hide()
-            Me.lblMsg.Hide()
+            Me.lblTeamLocLeft.Visible = False
+            Me.lblTeamLocRight.Visible = False
+            Me.lblTeamNameLeft.Visible = False
+            Me.lblTeamNameRight.Visible = False
+            Me.lblScoreLeft.Visible = False
+            Me.lblScoreRight.Visible = False
+            Me.lblMsg.Visible = False
             Me.DisposeCurrentGraphicImage()
 
             Me.picGraphic.Image = New Bitmap(Img)   '* Own copy; caller manages the original
-            Me.picGraphic.Show()
+            Me.picGraphic.Visible = True
         End Sub
 
         Public Function LaunchVideo(ByVal fnam As String) As String
@@ -468,20 +484,20 @@ Namespace JANIS
             'Static FirstInvoke As Boolean = True '* the first time a video is played, it takes a few milliseconds to start
             Dim resultMessage As String = Nothing
             Me.StopVideo()
-            Me.lblTeamLocLeft.Hide()
-            Me.lblTeamLocRight.Hide()
-            Me.lblTeamNameLeft.Hide()
-            Me.lblTeamNameRight.Hide()
-            Me.lblScoreLeft.Hide()
-            Me.lblScoreRight.Hide()
-            Me.lblMsg.Hide()
-            Me.picGraphic.Hide()
+            Me.lblTeamLocLeft.Visible = False
+            Me.lblTeamLocRight.Visible = False
+            Me.lblTeamNameLeft.Visible = False
+            Me.lblTeamNameRight.Visible = False
+            Me.lblScoreLeft.Visible = False
+            Me.lblScoreRight.Visible = False
+            Me.lblMsg.Visible = False
+            Me.picGraphic.Visible = False
 
             Try
                 Dim media As New LibVLCSharp.Shared.Media(Me._libVLC, fnam, LibVLCSharp.Shared.FromType.FromPath)
                 _mediaPlayer.Play(media)
                 media.Dispose()
-                Me._videoView.Show()
+                Me._videoView.Visible = True
             Catch ex As Exception
                 resultMessage = "Error playing video file '" & fnam & "':" & vbCrLf & ex.Message
                 Me.StopVideo()
@@ -511,18 +527,18 @@ Namespace JANIS
             '* Can only resume if it's currently paused (CanPause is false)
             If Not Me._mediaPlayer.CanPause Then Return resultMessage
 
-            Me.lblTeamLocLeft.Hide()
-            Me.lblTeamLocRight.Hide()
-            Me.lblTeamNameLeft.Hide()
-            Me.lblTeamNameRight.Hide()
-            Me.lblScoreLeft.Hide()
-            Me.lblScoreRight.Hide()
-            Me.lblMsg.Hide()
-            Me.picGraphic.Hide()
+            Me.lblTeamLocLeft.Visible = False
+            Me.lblTeamLocRight.Visible = False
+            Me.lblTeamNameLeft.Visible = False
+            Me.lblTeamNameRight.Visible = False
+            Me.lblScoreLeft.Visible = False
+            Me.lblScoreRight.Visible = False
+            Me.lblMsg.Visible = False
+            Me.picGraphic.Visible = False
 
             Try
                 Me._mediaPlayer.Play()
-                Me._videoView.Show()
+                Me._videoView.Visible = True
             Catch ex As Exception
                 resultMessage = "Error resuming video:" & vbCrLf & ex.Message
                 Me.StopVideo()
@@ -533,7 +549,7 @@ Namespace JANIS
         Public Sub StopVideo()
             If Me._mediaPlayer Is Nothing Then Return
             Me._mediaPlayer.Stop()
-            Me._videoView.Hide()
+            Me._videoView.Visible = False
         End Sub
 
         Public Sub ShowCountdownText(ByVal CountdownText As String, ByVal BackColor As System.Drawing.Color, ByVal CountdownVisible As Boolean)
@@ -553,8 +569,22 @@ Namespace JANIS
 
 
 #Region "Private Functions and Subs"
+        Private Sub SetZOrder()
+            '* Let's get all the elements stacked in the right order.
+            Me.picGraphic.SendToBack()
+            Me._videoView.SendToBack()
+            Me.lblMsg.BringToFront()
+            Me.lblTeamLocLeft.BringToFront()
+            Me.lblTeamLocRight.BringToFront()
+            Me.lblTeamNameLeft.BringToFront()
+            Me.lblTeamNameRight.BringToFront()
+            Me.lblScoreLeft.BringToFront()
+            Me.lblScoreRight.BringToFront()
+            Me.lblCountdown.BringToFront()
+        End Sub
+
         Private Sub DisposeCurrentGraphicImage()
-            If Me.picGraphic.Image IsNot Nothing Then
+            If Me.picGraphic.Image IsNot Nothing AndAlso Me.picGraphic.Image IsNot Me.ScoreboardBitMap Then
                 Me.picGraphic.Image.Dispose()
                 Me.picGraphic.Image = Nothing
             End If
@@ -587,20 +617,25 @@ Namespace JANIS
 
         Private Sub FadeBuff(ByVal lbl As System.Windows.Forms.Label, ByVal buffcolor As System.Drawing.Color)
             lbl.ForeColor = buffcolor
-            If Not Me.FadeTimer.Enabled Then Me.FadeTimer.Start()
+            Me.FadeTimer.Stop()
+            Me.FadeTimer.Start()
         End Sub
 
         Private Sub FadeTimer_Tick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles FadeTimer.Tick
             Dim changed As Boolean = False
-            If Not Me.lblScoreLeft.ForeColor.Equals(SCORE_TEXT_COLOR) Then
+            If Not (Me.lblScoreLeft.ForeColor.ToArgb() = SCORE_TEXT_COLOR.ToArgb()) Then
                 Me.lblScoreLeft.ForeColor = Me.AddColorIncrement(Me.lblScoreLeft.ForeColor, LeftFadeIncrements)
                 changed = True
             End If
-            If Not Me.lblScoreRight.ForeColor.Equals(SCORE_TEXT_COLOR) Then
+            If Not (Me.lblScoreRight.ForeColor.ToArgb() = SCORE_TEXT_COLOR.ToArgb()) Then
                 Me.lblScoreRight.ForeColor = Me.AddColorIncrement(Me.lblScoreRight.ForeColor, RightFadeIncrements)
                 changed = True
             End If
-            If Not changed Then Me.FadeTimer.Stop()
+
+            If Not changed Then
+                Me.FadeTimer.Stop()
+                RaiseEvent ScoreUpdateComplete()
+            End If
         End Sub
 
 #End Region
