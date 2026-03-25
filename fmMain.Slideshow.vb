@@ -462,12 +462,6 @@ Namespace JANIS
         End Sub
 
         Private Sub SlideTimer_Tick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles SlideTimer.Tick
-            '* I "misuse" the slide timer at startup to check if there is already an instance of the app running
-            If Me.SlideTimerTag = "AppAlreadyRunning" Then
-                Me.Close()
-                Return
-            End If
-
             With Me.lbSlideList
                 If .Items.Count < 1 Then
                     Me.StopSlideShow()

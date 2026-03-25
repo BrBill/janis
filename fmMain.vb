@@ -75,7 +75,6 @@ Namespace JANIS
 
         Private ThingSubs(MAX_THINGS) As String           '* Substitutions for 5 Things
         Private SlidesStatus As Integer = SLIDES_STOPPED  '* Keep track of whether Slideshow is running
-        Private SlideTimerTag As String = ""
         Private WhammyRandomizer As New Random
         Private PreSlideshowMuteState As Boolean = False  '* For returning to previous mute state in StopSlideShow()
         Private HotButtonsChanged As Boolean              '* Have we changed the hot buttons?
@@ -85,6 +84,7 @@ Namespace JANIS
         Private CountdownSeconds As Integer = 300
         Private CountdownWarnSeconds As Integer
         Private PreviousSelectedTab As TabPage = Nothing
+        Private DuplicateInstanceShutdownTimer As New System.Windows.Forms.Timer
         Public ComponentsDoneInitializing As Boolean = False
 
 
@@ -123,6 +123,7 @@ Namespace JANIS
                 Me.SlideTimer?.Stop()
                 Me.CountdownTimer?.Stop()
                 Me.VideoEventTimer?.Stop()
+                Me.DuplicateInstanceShutdownTimer?.Dispose()
                 Me._searchPreviewVideoPlayer?.Stop()
                 Me._slidePreviewVideoPlayer?.Stop()
                 Me._searchPreviewVideoView?.Dispose()
@@ -3540,16 +3541,14 @@ Namespace JANIS
         End Sub
 
         Private Sub fmMain_Closing(ByVal sender As System.Object, ByVal e As System.ComponentModel.CancelEventArgs) Handles MyBase.Closing
-            If Not Me.SlideTimerTag = "AppAlreadyRunning" Then
-                Me.CurrentPrefs = ReadPrefsFromUI()
-                If Me.PrefsChanged() Then
-                    Dim Ans As DialogResult = MessageBox.Show(Me, "Modifications to preferences have not been saved. Save them before closing?", "Preferences Have Changed", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button3)
-                    If Ans = DialogResult.Cancel Then
-                        e.Cancel = True
-                        Return
-                    ElseIf Ans = DialogResult.Yes Then
-                        Me.SavePrefsToFile(PREFS_FILE)
-                    End If
+            Me.CurrentPrefs = ReadPrefsFromUI()
+            If Me.PrefsChanged() Then
+                Dim Ans As DialogResult = MessageBox.Show(Me, "Modifications to preferences have not been saved. Save them before closing?", "Preferences Have Changed", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button3)
+                If Ans = DialogResult.Cancel Then
+                    e.Cancel = True
+                    Return
+                ElseIf Ans = DialogResult.Yes Then
+                    Me.SavePrefsToFile(PREFS_FILE)
                 End If
             End If
         End Sub
@@ -3575,10 +3574,12 @@ Namespace JANIS
             MessageBox.Show(Me, "A previous instance of JANIS is already open!", "Already Running", MessageBoxButtons.OK, MessageBoxIcon.Information)
 
             ' This instance will self-destruct in 5 seconds.
-            Me.SlideTimer.Interval = 5000
-            Me.SlideTimerTag = "AppAlreadyRunning"
-            Me.SlideTimer.Enabled = True
-            Me.SlideTimer.Start()
+            Me.DuplicateInstanceShutdownTimer.Interval = 5000
+            AddHandler Me.DuplicateInstanceShutdownTimer.Tick, Sub()
+                                                                   DuplicateInstanceShutdownTimer.Stop()
+                                                                   Me.Close()
+                                                               End Sub
+            Me.DuplicateInstanceShutdownTimer.Start()
         End Sub
 
         Private Sub InitializeSettings()
