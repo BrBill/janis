@@ -48,10 +48,10 @@
 
         If ShadowState Then
             Dim shadowRect As New System.Drawing.Rectangle(
-        Me.ClientRectangle.X + ShadowOffset.X,
-        Me.ClientRectangle.Y + ShadowOffset.Y,
-        Me.ClientRectangle.Width,
-        Me.ClientRectangle.Height)
+                Me.ClientRectangle.X + ShadowOffset.X,
+                Me.ClientRectangle.Y + ShadowOffset.Y,
+                Me.ClientRectangle.Width,
+                Me.ClientRectangle.Height)
 
             Using shadowBrush As New System.Drawing.SolidBrush(ShadowColor)
                 e.Graphics.DrawString(Me.Text, Me.Font, shadowBrush, shadowRect, sf)
