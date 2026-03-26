@@ -76,7 +76,7 @@ Namespace JANIS
         End Sub
 
         Private Sub VideoEventTimer_Tick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles VideoEventTimer.Tick
-            Me.VideoEventTimer.Interval = 250  '* Reset to normal polling interval
+            Me.VideoEventTimer.Interval = 500  '* Reset to normal polling interval
             If Me.LS.IsVideoPlaying() Then
                 '* Update remoteviewer with snapshot (this is once a second, currently)
                 Me.ShowRemoteView()

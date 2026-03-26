@@ -3635,8 +3635,6 @@ Namespace JANIS
             '* Shared LibVLC instance for both preview players (no audio at all, won't affect audience video)
             Me._libVLC = New LibVLCSharp.Shared.LibVLC("--no-audio")
 
-            '* DO NOT TRUST that .Mute works for th
-
             '* Media Search preview
             Me._searchPreviewVideoPlayer = New LibVLCSharp.Shared.MediaPlayer(Me._libVLC)
             Me._searchPreviewVideoPlayer.Volume = 0
@@ -3968,8 +3966,6 @@ Namespace JANIS
             Me.LS.Select()
             Me.LS.BringToFront()
             Me.Select()
-            'Me.BringToFront()
-            'Me.Activate()
         End Sub
 
         Public Function AskIfSure(ByVal prompt As String) As Boolean

@@ -93,7 +93,7 @@ Namespace JANIS
         End Sub
 
         Private Sub LoadLegacyHotButtons(ByVal hbfile As String)
-            Dim lines As String() = System.IO.File.ReadAllLines(hbfile)
+            Dim lines As String() = System.IO.File.ReadAllLines(hbfile, System.Text.Encoding.GetEncoding("iso-8859-1"))
             Dim list As New List(Of HotButtonJson)
             For Each line As String In lines
                 Dim info() As String = line.Split("¶"c)

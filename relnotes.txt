@@ -3,6 +3,10 @@
   * setting up instant video play drag-and-drop to work by passing filename only
   * BROKEN: video only plays from Media Search and Slideshow, not from LOAD FILE or hotbutton 
 
+Upcoming release, part 11:
+* Replace duplicate instance detection code to use Mutex.
+* Provide separate timer for clean shutdown of duplicate instances.
+
 Upcoming release, part 10:
 * Converted ImageFileExtensions, VideoFileExtensions, and MediaFileExtensions from arrays
   to Hashsets.
@@ -10,7 +14,8 @@ Upcoming release, part 10:
 * Stopped using Menus for global hotkeys, and used global keydown event instead.
 * Migrated away from Microsoft.VisualBasic function calls to .NET calls in preparation
   for move from .NET Framework 4.8 to .NET Core.
-* Stop using Wingdings font for most glyphs. Use Segoe MDL2 Assets, etc., instead.
+* Stop using Wingdings font for most glyphs. Use Segoe MDL2 Assets unicode chars instead.
+* Migrate from old Windows Media PLayer to LibVLC for video playback.
 
 Upcoming release, part 9:
 * Better random seeding for WHAMMY.
