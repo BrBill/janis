@@ -84,6 +84,8 @@ Namespace JANIS
         Private CountdownSeconds As Integer = 300
         Private CountdownWarnSeconds As Integer
         Private PreviousSelectedTab As TabPage = Nothing
+
+        Private _instanceMutex As System.Threading.Mutex
         Private DuplicateInstanceShutdownTimer As New System.Windows.Forms.Timer
         Public ComponentsDoneInitializing As Boolean = False
 
@@ -131,6 +133,8 @@ Namespace JANIS
                 Me._searchPreviewVideoPlayer?.Dispose()
                 Me._slidePreviewVideoPlayer?.Dispose()
                 Me._libVLC?.Dispose()
+                Me._instanceMutex?.ReleaseMutex()
+                Me._instanceMutex?.Dispose()
             End If
             MyBase.Dispose(disposing)
         End Sub
@@ -3554,16 +3558,15 @@ Namespace JANIS
         End Sub
 
         Private Function AppAlreadyRunning() As Boolean
-            ' Check for the name of the current applications process and see whether or not there are
-            ' more than 1x instance loaded. This code is similar to Visual Basic 6.0's App.Previnstance feature.
-            Dim appName As String = Process.GetCurrentProcess.ProcessName
-            Dim sameProcessTotal As Integer = Process.GetProcessesByName(appName).Length
-
-            If sameProcessTotal > 1 Then
-                Return True
-            End If
-
-            Return False
+            Dim createdNew As Boolean
+            Try
+                _instanceMutex = New System.Threading.Mutex(True, "Global\JANIS_SingleInstance", createdNew)
+            Catch ex As System.Threading.AbandonedMutexException
+                '* Previous instance crashed without releasing the mutex.
+                '* We now own it, so we can proceed normally.
+                createdNew = True
+            End Try
+            Return Not createdNew
         End Function
         Private Sub InitiateQuietShutdown()
             '* Make the main form tiny = apparently invisible. Setting visible property to false doesn't work.
