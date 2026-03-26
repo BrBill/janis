@@ -3558,9 +3558,10 @@ Namespace JANIS
         End Sub
 
         Private Function AppAlreadyRunning() As Boolean
+            '* We don't want to have multiple instances running
             Dim createdNew As Boolean
             Try
-                _instanceMutex = New System.Threading.Mutex(True, "Global\JANIS_SingleInstance", createdNew)
+                _instanceMutex = New System.Threading.Mutex(True, "Global\JANIS", createdNew)
             Catch ex As System.Threading.AbandonedMutexException
                 '* Previous instance crashed without releasing the mutex.
                 '* We now own it, so we can proceed normally.
