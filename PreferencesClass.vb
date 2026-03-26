@@ -61,5 +61,26 @@
                    DefaultCountdownMinutes = other.DefaultCountdownMinutes AndAlso
                    DefaultCountdownSeconds = other.DefaultCountdownSeconds
         End Function
+
+        Public Overrides Function GetHashCode() As Integer
+            Dim hash As Integer = 17
+            hash = hash * 31 + LeftTeamColor.GetHashCode()
+            hash = hash * 31 + RightTeamColor.GetHashCode()
+            hash = hash * 31 + If(DefaultFontSize IsNot Nothing, DefaultFontSize.GetHashCode(), 0)
+            hash = hash * 31 + ShadowsEnabled.GetHashCode()
+            hash = hash * 31 + If(DefaultImageDir IsNot Nothing, DefaultImageDir.GetHashCode(), 0)
+            hash = hash * 31 + If(DefaultImageFile IsNot Nothing, DefaultImageFile.GetHashCode(), 0)
+            hash = hash * 31 + DisplayDefaultImage.GetHashCode()
+            hash = hash * 31 + If(DefaultHBFile IsNot Nothing, DefaultHBFile.GetHashCode(), 0)
+            hash = hash * 31 + LoadDefaultHB.GetHashCode()
+            hash = hash * 31 + DefaultSlideDelay.GetHashCode()
+            hash = hash * 31 + If(DefaultSlideShow IsNot Nothing, DefaultSlideShow.GetHashCode(), 0)
+            hash = hash * 31 + PlaySlidesAtStart.GetHashCode()
+            hash = hash * 31 + LoadDefaultSlides.GetHashCode()
+            hash = hash * 31 + DefaultCountdownHours.GetHashCode()
+            hash = hash * 31 + DefaultCountdownMinutes.GetHashCode()
+            hash = hash * 31 + DefaultCountdownSeconds.GetHashCode()
+            Return hash
+        End Function
     End Class
 End Namespace
