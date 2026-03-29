@@ -2913,8 +2913,10 @@ Namespace JANIS
             Me.tbAboutHeader.Size = New System.Drawing.Size(972, 105)
             Me.tbAboutHeader.TabIndex = 230
             Me.tbAboutHeader.TabStop = False
-            Me.tbAboutHeader.Text = "JANIS v5.0.0.1 ALPHA" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Released March 30, 2026" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "by Bill Cernansky (boctorbill@gmai" &
-    "l.com)" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "© 2004-2026 Easy Being Productions"
+            Me.tbAboutHeader.Text = "JANIS v5.0.1" & vbCrLf &
+                                    "Released March 30, 2026" & vbCrLf &
+                                    "by Bill Cernansky (boctorbill@gmail.com)" & vbCrLf &
+                                    "© 2004-2026 Easy Being Productions"
             Me.tbAboutHeader.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
             '
             'tbAboutBody

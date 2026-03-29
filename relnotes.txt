@@ -6,6 +6,7 @@
 Upcoming release, part 11:
 * Replace duplicate instance detection code to use Mutex.
 * Provide separate timer for clean shutdown of duplicate instances.
+* Fix gifs not animating on audience display.
 
 Upcoming release, part 10:
 * Converted ImageFileExtensions, VideoFileExtensions, and MediaFileExtensions from arrays

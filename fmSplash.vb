@@ -6,9 +6,9 @@ Namespace JANIS
             Public Title As String = "JANIS"
             Public MajorVersion As Integer = 5
             Public MinorVersion As Integer = 0
-            Public Iteration As Integer = 0
+            Public Iteration As Integer = 1
             Public ProductName As String = "SINGLE SCREEN"
-            Public Copyright As String = "2004-2025"
+            Public Copyright As String = "2004-2026"
         End Class
 
 
@@ -39,13 +39,13 @@ Namespace JANIS
         'Do not modify it using the code editor.
         <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
             Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(fmSplash))
-            Me.PictureBox1 = New System.Windows.Forms.PictureBox
-            Me.lblAuthor = New System.Windows.Forms.Label
-            Me.lblStatus = New System.Windows.Forms.Label
-            Me.lblCopyright = New System.Windows.Forms.Label
-            Me.lblVersionInfo = New System.Windows.Forms.Label
-            Me.lblAppDesc = New System.Windows.Forms.Label
-            Me.lblAppTitle = New System.Windows.Forms.Label
+            Me.PictureBox1 = New System.Windows.Forms.PictureBox()
+            Me.lblAuthor = New System.Windows.Forms.Label()
+            Me.lblStatus = New System.Windows.Forms.Label()
+            Me.lblCopyright = New System.Windows.Forms.Label()
+            Me.lblVersionInfo = New System.Windows.Forms.Label()
+            Me.lblAppDesc = New System.Windows.Forms.Label()
+            Me.lblAppTitle = New System.Windows.Forms.Label()
             CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
             Me.SuspendLayout()
             '
@@ -88,7 +88,7 @@ Namespace JANIS
             Me.lblCopyright.Name = "lblCopyright"
             Me.lblCopyright.Size = New System.Drawing.Size(209, 16)
             Me.lblCopyright.TabIndex = 10
-            Me.lblCopyright.Text = "Copyright 2004-2024"
+            Me.lblCopyright.Text = "Copyright 2004-2026"
             Me.lblCopyright.TextAlign = System.Drawing.ContentAlignment.TopRight
             '
             'lblVersionInfo
@@ -107,7 +107,7 @@ Namespace JANIS
             Me.lblAppDesc.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
             Me.lblAppDesc.Location = New System.Drawing.Point(343, 66)
             Me.lblAppDesc.Name = "lblAppDesc"
-            Me.lblAppDesc.Size = New System.Drawing.Size(133, 16)
+            Me.lblAppDesc.Size = New System.Drawing.Size(132, 16)
             Me.lblAppDesc.TabIndex = 8
             Me.lblAppDesc.Text = "The Improv Assistant"
             Me.lblAppDesc.TextAlign = System.Drawing.ContentAlignment.TopRight

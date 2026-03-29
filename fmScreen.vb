@@ -215,7 +215,6 @@ Namespace JANIS
             Me._videoView.Name = "_videoView"
             Me._videoView.Size = New System.Drawing.Size(1920, 1080)
             Me._videoView.TabIndex = 14
-            Me._videoView.Text = ""
             Me._videoView.Visible = False
             '
             'fmScreen
@@ -473,7 +472,8 @@ Namespace JANIS
             Me.lblMsg.Visible = False
             Me.DisposeCurrentGraphicImage()
 
-            Me.picGraphic.Image = New Bitmap(Img)   '* Own copy; caller manages the original
+            '* The Image has to be cloned. If it is just an object copy, animation info is lost
+            Me.picGraphic.Image = DirectCast(Img.Clone(), Image)
             Me.picGraphic.Visible = True
         End Sub
 
