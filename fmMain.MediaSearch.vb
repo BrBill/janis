@@ -24,19 +24,18 @@ Namespace JANIS
             picture.Visible = True
         End Sub
 
-        Private Sub Present_Image(ByVal img As Image, Optional ByVal KillSlideShow As Boolean = True)
+        Private Sub Present_Image(ByVal sImg As SharedImage, Optional ByVal KillSlideShow As Boolean = True)
             '* Display this image to the display and also the operator remote view box.
 
-            If img IsNot Nothing Then
+            If sImg IsNot Nothing Then
                 If KillSlideShow Then Me.StopSlideShow()
 
-                '* Show displays first for speed.
-                Me.LS.ShowImage(img)
+                '* Show audience first for speed.
+                Me.LS.ShowImage(sImg)
                 If Me.SlidesStatus <> SLIDES_WHAMMY Then
                     '* Let the operator see what's showing remotely
-                    Me.AssignImageToPictureBox(Me.picRemoteViewer, New Bitmap(img))
+                    Me.AssignImageToPictureBox(Me.picRemoteViewer, sImg)
                 End If
-
                 Me.AllScreensToFront()
             End If
         End Sub
@@ -46,8 +45,8 @@ Namespace JANIS
                 Me.StopSlideShow()
             End If
 
-            '* Audio only ever plays if slideshow's not active AND cbMutVideo is unchecked
-            'Me.LS.SetVideoMute((Me.SlidesStatus <> SLIDES_STOPPED) Or cbMuteVideo.Checked)
+            '* Audio only ever plays if slideshow's not active AND cbMuteVideo is unchecked
+            Me.LS.SetVideoMute(cbMuteVideo.Checked)
             Dim resultMessage As String = Me.LS.LaunchVideo(fnam)
 
             If resultMessage IsNot Nothing Then
@@ -103,23 +102,22 @@ Namespace JANIS
                 cbMuteVideo.BackgroundImage = My.Resources.sound_on_green
                 ToolTip1.SetToolTip(cbMuteVideo, "Video sound is ON")
             End If
-            Me.LS.SetVideoMute(cbMuteVideo.Checked)
+            Me.LS?.SetVideoMute(cbMuteVideo.Checked)
         End Sub
 
 
-        Private Sub DisplayRawImage(ByVal img As Image)
-            If img Is Nothing Then Exit Sub
-            Me.LS.ShowImage(img)
+        Private Sub DisplayRawImage(ByVal sImg As SharedImage)
+            If sImg Is Nothing Then Exit Sub
+            Me.LS.ShowImage(sImg)
         End Sub
 
         Private Function DisplayImageFile(ByVal fnam As String, Optional ByVal KillSlideShow As Boolean = True) As Boolean
-            Dim img As Image
             Try
-                img = Image.FromFile(fnam)
+                Dim sImg As New SharedImage(Image.FromFile(fnam))
+                Me.Present_Image(sImg, KillSlideShow)
             Catch ex As Exception
                 Return False
             End Try
-            Me.Present_Image(img, KillSlideShow)
             Return True
         End Function
 
@@ -167,12 +165,11 @@ Namespace JANIS
             ElseIf IsVideoFile(fnam) Then
                 System.Threading.Thread.Sleep(100)   '* Avoid failure if things happen too fast
                 Me.LaunchVideo(fnam)
-                Me.AssignImageToPictureBox(picRemoteViewer, Nothing)
+                Me.ClearCurrentPictureboxImage(picRemoteViewer)
             Else
-                Dim img As Image
                 Try
-                    img = Image.FromFile(fnam)
-                    Me.Present_Image(img)
+                    Dim sImg As New SharedImage(Image.FromFile(fnam))
+                    Me.Present_Image(sImg)
                 Catch ex As Exception
                     MessageBox.Show(Me, "Could not load image '" & fnam & "'." & vbCrLf & ex.Message, "Image Load Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
                 End Try
@@ -183,8 +180,8 @@ Namespace JANIS
             '* If there's a bitmap in the clipboard, paste it to the screens.
             '* It only works for images
             If Clipboard.GetDataObject.GetDataPresent(GetType(System.Drawing.Bitmap)) Then
-                Dim img As Image = CType(Clipboard.GetDataObject.GetData(GetType(System.Drawing.Bitmap)), Bitmap)
-                Me.Present_Image(img)
+                Dim sImg As New SharedImage(CType(Clipboard.GetDataObject.GetData(GetType(System.Drawing.Bitmap)), Bitmap))
+                Me.Present_Image(sImg)
             Else
                 MessageBox.Show(Me, "There Is no usable image In the clipboard. Please copy an image To the clipboard And Try again.", "Can't Paste Image")
             End If
@@ -193,21 +190,21 @@ Namespace JANIS
         Private Sub picDisplay_DragDrop(ByVal sender As Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles btnMediaLoadFile.DragDrop, btnPasteMedia.DragDrop, picRemoteViewer.DragDrop
             '* Drag-drop an image from an external source onto one of these picture boxes and have it
             '* display there. This works really well with Firefox.
-            Dim img As Image
+            Dim sImg As SharedImage
 
             '* We've limited this to only 2 kinds of data in picDisplay_DragEnter.
             If e.Data.GetDataPresent(DataFormats.Bitmap) Then
                 '* Standard bitmap
-                img = CType(e.Data.GetData(GetType(System.Drawing.Bitmap)), Bitmap)
+                sImg = New SharedImage(CType(e.Data.GetData(GetType(System.Drawing.Bitmap)), Bitmap))
             Else
                 '* Device Independent Bitmap
                 Dim myStream As Stream = DirectCast(e.Data.GetData(DataFormats.Dib), Stream)
                 Using bmp As New BitmapFromDibStream(myStream)
-                    img = New Bitmap(bmp)
+                    sImg = New SharedImage(New Bitmap(bmp))
                 End Using
             End If
 
-            Me.Present_Image(img)
+            Me.Present_Image(sImg)
         End Sub
 
         Private Sub picDisplay_DragEnter(ByVal sender As Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles picRemoteViewer.DragEnter, btnMediaLoadFile.DragEnter, btnPasteMedia.DragEnter
@@ -289,10 +286,10 @@ Namespace JANIS
             If IsVideoFile(mediaItem) Then
                 System.Threading.Thread.Sleep(100)  '* Avoid failure if double-clicked too fast after selecting
                 Me.LaunchVideo(mediaItem)
-                Me.AssignImageToPictureBox(picRemoteViewer, Nothing)
+                Me.ClearCurrentPictureboxImage(picRemoteViewer)
             Else '* is image file
-                If Me.picImgSearchPreview.Image IsNot Nothing Then
-                    Me.Present_Image(Me.picImgSearchPreview.Image)
+                If SharedImagesDict.ContainsKey(Me.picImgSearchPreview) Then
+                    Me.Present_Image(SharedImagesDict(Me.picImgSearchPreview))
                 End If
             End If
         End Sub
@@ -343,9 +340,9 @@ Namespace JANIS
             Me._searchPreviewVideoView.Hide()
             Me.picImgSearchPreview.Show()
             Try
-                Dim newImg As Image = Image.FromFile(fnam)
-                Me.ClearCurrentPictureboxImage(Me.picImgSearchPreview)
-                Me.picImgSearchPreview.Image = newImg
+                Dim sImg As New SharedImage(Image.FromFile(fnam))
+                '* Probably delete this       Me.ClearCurrentPictureboxImage(Me.picImgSearchPreview)
+                Me.AssignImageToPictureBox(picImgSearchPreview, sImg)
             Catch
                 Me.ClearCurrentPictureboxImage(Me.picImgSearchPreview)
             End Try

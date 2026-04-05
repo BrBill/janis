@@ -257,6 +257,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="BitmapFromDibStream.vb" />
+    <Compile Include="SharedImageClass.vb" />
     <Compile Include="ShadowLabel.vb">
       <SubType>Component</SubType>
     </Compile>

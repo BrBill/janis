@@ -6,7 +6,8 @@ Namespace JANIS
 
         Public Event ScoreUpdateComplete()
 
-        Private ScoreboardBitMap As Bitmap = DirectCast(Global.JANIS.My.Resources.ScoreTemplate.Clone, Bitmap)
+        Private _currentSharedImage As SharedImage = Nothing
+        Private ScoreboardBitMap As Bitmap = Global.JANIS.My.Resources.ScoreTemplate
         Private ScoreboardColorAnchorLeft As Point = New Point(70, 110)    ' These are the scoreboard background locations that
         Private ScoreboardColorAnchorRight As Point = New Point(1210, 110) ' get flood-filled when team color changes
         Private LeftTeamColor As System.Drawing.Color = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(176, Byte), Integer))
@@ -458,8 +459,8 @@ Namespace JANIS
             If Not fadeStarted Then RaiseEvent ScoreUpdateComplete()
         End Sub
 
-        Public Sub ShowImage(ByVal Img As Image)
-            If Img Is Nothing Then Exit Sub
+        Public Sub ShowImage(ByVal sImg As SharedImage)
+            If sImg Is Nothing OrElse sImg.Image Is Nothing Then Exit Sub
 
             Me.BackColor = System.Drawing.Color.Black
             Me.StopVideo()
@@ -472,8 +473,8 @@ Namespace JANIS
             Me.lblMsg.Visible = False
             Me.DisposeCurrentGraphicImage()
 
-            '* The Image has to be cloned. If it is just an object copy, animation info is lost
-            Me.picGraphic.Image = DirectCast(Img.Clone(), Image)
+            Me._currentSharedImage = sImg
+            Me.picGraphic.Image = sImg.Acquire()
             Me.picGraphic.Visible = True
         End Sub
 
@@ -585,13 +586,14 @@ Namespace JANIS
 
         Private Sub DisposeCurrentGraphicImage()
             If Me.picGraphic.Image IsNot Nothing AndAlso Me.picGraphic.Image IsNot Me.ScoreboardBitMap Then
-                Me.picGraphic.Image.Dispose()
+                Me._currentSharedImage?.Release()
+                Me._currentSharedImage = Nothing
                 Me.picGraphic.Image = Nothing
             End If
         End Sub
 
         Private Function Limited_Score(ByVal score As String) As String
-            '* If the score is too big or too small, it will be too wide to display
+            '* If the score takes up too many characters, it will be too wide to display
             If score = "" Then Return ""
             Return Math.Min(Math.Max(Convert.ToInt32(score), MIN_SCORE), MAX_SCORE).ToString
         End Function

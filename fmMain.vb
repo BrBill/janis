@@ -64,7 +64,8 @@ Namespace JANIS
         Private MediaFileExtensions As New HashSet(Of String)(StringComparer.OrdinalIgnoreCase)
         Private MediaLibrary As New List(Of FileID)
 
-        Private WithEvents LS As fmScreen      '* The audience screen
+        Private WithEvents LS As fmScreen                       '* The audience screen
+        Private SharedImagesDict As New Dictionary(Of PictureBox, SharedImage)  '* This tracks shared pictureBox images for proper disposal
 
         '* LibVLC preview players only
         Private _libVLC As LibVLCSharp.Shared.LibVLC
@@ -78,14 +79,14 @@ Namespace JANIS
         Private WhammyRandomizer As New Random
         Private PreSlideshowMuteState As Boolean = False  '* For returning to previous mute state in StopSlideShow()
         Private HotButtonsChanged As Boolean              '* Have we changed the hot buttons?
-        Private BufferedSlide As Image = Nothing          '* For holding next whammy slide
+        Private BufferedSlide As SharedImage = Nothing    '* For holding next whammy slide
         Private DragBounds As Rectangle
         Private DragMethod As String
         Private CountdownSeconds As Integer = 300
         Private CountdownWarnSeconds As Integer
         Private PreviousSelectedTab As TabPage = Nothing
 
-        Private _instanceMutex As System.Threading.Mutex
+        Private _instanceMutex As System.Threading.Mutex  '* For checking if the program is already running
         Private DuplicateInstanceShutdownTimer As New System.Windows.Forms.Timer
         Public ComponentsDoneInitializing As Boolean = False
 
@@ -2913,10 +2914,8 @@ Namespace JANIS
             Me.tbAboutHeader.Size = New System.Drawing.Size(972, 105)
             Me.tbAboutHeader.TabIndex = 230
             Me.tbAboutHeader.TabStop = False
-            Me.tbAboutHeader.Text = "JANIS v5.0.1" & vbCrLf &
-                                    "Released March 30, 2026" & vbCrLf &
-                                    "by Bill Cernansky (boctorbill@gmail.com)" & vbCrLf &
-                                    "© 2004-2026 Easy Being Productions"
+            Me.tbAboutHeader.Text = "JANIS v5.0.1" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Released April 4, 2026" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "by Bill Cernansky (boctorbill@gmail.com)" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "©" &
+    " 2004-2026 Easy Being Productions"
             Me.tbAboutHeader.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
             '
             'tbAboutBody
@@ -3613,8 +3612,8 @@ Namespace JANIS
             Me.picRemoteViewer.AllowDrop = True
             Me.PreviousSelectedTab = TabControl1.SelectedTab
 
-            Me.cbMuteVideo.Checked = False
-            Me.cbMuteVideo.BackgroundImage = My.Resources.sound_on_green
+            Me.cbMuteVideo.Checked = True
+            Me.cbMuteVideo.BackgroundImage = My.Resources.sound_off_red
 
             Me.InitializePreviewPlayers()
         End Sub
@@ -3734,11 +3733,21 @@ Namespace JANIS
             Me.ShowRemoteView()
         End Sub
 
-        Private Sub ClearCurrentPictureboxImage(myPicBox As PictureBox)
-            If myPicBox.Image IsNot Nothing Then
-                myPicBox.Image.Dispose()
-                myPicBox.Image = Nothing
+        Private Sub ClearCurrentPictureboxImage(pBox As PictureBox)
+            If pBox.Image Is Nothing Then Exit Sub
+            If SharedImagesDict.ContainsKey(pBox) Then
+                SharedImagesDict(pBox).Release()
+                SharedImagesDict.Remove(pBox)
             End If
+            pBox.Image = Nothing
+        End Sub
+
+        Private Sub AssignImageToPictureBox(pBox As PictureBox, sImg As SharedImage)
+            If sImg Is Nothing Then Exit Sub
+            ClearCurrentPictureboxImage(pBox)
+            pBox.Image = sImg.Acquire()
+            Me.SharedImagesDict(pBox) = sImg
+            pBox.Visible = True
         End Sub
 
         Private Sub ShowRemoteView()
@@ -3979,6 +3988,5 @@ Namespace JANIS
 
             Return response
         End Function
-
     End Class
 End Namespace

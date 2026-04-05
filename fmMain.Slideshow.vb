@@ -89,9 +89,8 @@ Namespace JANIS
             Me._slidePreviewVideoView.Hide()
             Me.picSlidePreview.Show()
             Try
-                Dim newImg As Image = Image.FromFile(fnam)
-                Me.ClearCurrentPictureboxImage(Me.picSlidePreview)
-                Me.picSlidePreview.Image = newImg
+                Dim sImg As New SharedImage(Image.FromFile(fnam))
+                Me.AssignImageToPictureBox(Me.picSlidePreview, sImg)
             Catch
                 '* If error, clear image display. I don't care what the error was about.
                 Me.ClearCurrentPictureboxImage(Me.picSlidePreview)
@@ -355,7 +354,7 @@ Namespace JANIS
             Loop While NewIndex = Me.lbSlideList.SelectedIndex
             Me.lbSlideList.SelectedIndex = NewIndex
             Try
-                Me.BufferedSlide = Image.FromFile(Me.lbSlideList.SelectedItem.ToString)
+                Me.BufferedSlide = New SharedImage(Image.FromFile(Me.lbSlideList.SelectedItem.ToString))
             Catch ex As Exception
                 Me.BufferedSlide = Nothing
             End Try
@@ -405,6 +404,8 @@ Namespace JANIS
 
             Dim WhammyWasActive As Boolean = (Me.SlidesStatus = SLIDES_WHAMMY)
             Me.SlideTimer.Stop()
+            Me.BufferedSlide?.Release()
+            Me.BufferedSlide = Nothing
             Me.SetPauseButtonColor(False)
             Me.SetPlayButtonColor(False)
             Me.lbSlideList.SelectionMode = SelectionMode.MultiExtended

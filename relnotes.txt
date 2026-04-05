@@ -6,15 +6,18 @@
 Upcoming release, part 11:
 * Replace duplicate instance detection code to use Mutex.
 * Provide separate timer for clean shutdown of duplicate instances.
-* Fix gifs not animating on audience display.
+* Stop creating clones of image objects for every purpose; re-use loaded images across
+  the application with reference-counting SharedImage class.
+* Fix audience display gifs animating slowly or not at all.
+* Mute video sound by default.
 
 Upcoming release, part 10:
 * Converted ImageFileExtensions, VideoFileExtensions, and MediaFileExtensions from arrays
   to Hashsets.
 * Replaced very dated gLabel.dll with new native ShadowLabel control code.
 * Stopped using Menus for global hotkeys, and used global keydown event instead.
-* Migrated away from Microsoft.VisualBasic function calls to .NET calls in preparation
-  for move from .NET Framework 4.8 to .NET Core.
+* Migrated away from most Microsoft.VisualBasic function calls to .NET calls to prep
+  for future move from .NET Framework 4.8 to .NET Core.
 * Stop using Wingdings font for most glyphs. Use Segoe MDL2 Assets unicode chars instead.
 * Migrate from old Windows Media PLayer to LibVLC for video playback.
 
